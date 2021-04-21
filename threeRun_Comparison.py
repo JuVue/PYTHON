@@ -1,7 +1,7 @@
 ###
 ###
 ### SCRIPT TO READ IN UM, IFS, and UM-CASIM model data
-###
+###  loads in the raw model data (UM + IFS) for e.g., Fig 2 (radiation timeseries) in the paper
 ###
 
 from __future__ import print_function
@@ -10,7 +10,6 @@ import datetime
 import numpy as np
 import pandas as pd
 from netCDF4 import Dataset
-import numpy as np
 import diags_MOCCHA as diags
 import diags_varnames as varnames
 import cartopy.crs as ccrs
