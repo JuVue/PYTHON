@@ -1,7 +1,7 @@
 ###
 ###
 ### SCRIPT TO READ IN UM, IFS, and UM-CASIM model data
-###
+### loads in the Cloudnet data and the raw model data for the cloudnet figures
 ###     ### test change
 
 from __future__ import print_function
