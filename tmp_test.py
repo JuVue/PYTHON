@@ -2,7 +2,7 @@
 import datetime
 
 import sys
-sys.path.insert(1, '../py_functions/')
+sys.path.insert(1, './py_functions/')
 from time_functions import datenum2date, date2datenum
 
 
