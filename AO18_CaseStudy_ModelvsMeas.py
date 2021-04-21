@@ -1,9 +1,9 @@
 ### SCRIPT TO COMPARE MODEL TO MEASURMENTS
+from __future__ import print_function
 import time
 import datetime
 import numpy as np
 from netCDF4 import Dataset
-from __future__ import print_function
 
 
 #### import python functions
@@ -166,3 +166,17 @@ def main():
     np.save('working_data1', data1)
     np.save('working_data2', data2)
     np.save('working_data3', data3)
+
+    # -------------------------------------------------------------
+    # FIN.
+    # -------------------------------------------------------------
+    END_TIME = time.time()
+    print ('******')
+    print ('')
+    print ('End: ' + time.strftime("%c"))
+    print ('')
+
+
+if __name__ == '__main__':
+
+    main()
