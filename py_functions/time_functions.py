@@ -9,9 +9,33 @@ import time
 import datetime
 import numpy as np
 import pandas as pd
+from datetime import datetime as dt
+from datetime import timedelta
+
+def date2datenum(d):
+ ##  Convert python datetime to Matlab datenum
+ ##:    input: Date as python datetime object
+ ##:    return: corresponding datenum
+    return 366 + d.toordinal() + (d - dt.fromordinal(d.toordinal())).total_seconds()/(24*60*60)
+
+def datenum2date(datenum)
+   ##Convert Matlab datenum into Python datetime.
+   ##:input  datenum Date in datenum format
+   ##:return:Datetime object corresponding to datenum.
+    days = datenum % 1
+    hours = days % 1 * 24
+    minutes = hours % 1 * 60
+    seconds = minutes % 1 * 60
+    mseconds = seconds % 1 * 60
+    return datetime.fromordinal(int(datenum)) \
+           + timedelta(days=int(days)) \
+           + timedelta(hours=int(hours)) \
+           + timedelta(minutes=int(minutes)) \
+           + timedelta(seconds=int(seconds)) \
+           + timedelta(milliseconds=round(mseconds)) \
+           - timedelta(days=366)
 
 def calcTime_Mat2DOY(matlab_time):
-
         #### EXAMPLE OF USE:
         #### pytime = calcTime_Mat2DOY(matlab_time)
 
@@ -23,7 +47,6 @@ def calcTime_Mat2DOY(matlab_time):
     return python_time
 
 def calcTime_Date2DOY(date):
-
     ####        date should be forematted as YYYYmmDD
 
     print ('Converting date to DOY:')
