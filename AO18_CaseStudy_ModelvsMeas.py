@@ -95,6 +95,7 @@ def main():
     data1['time'] = datenum + (nc1.variables['forecast_time'][:]/24.0)
     data2['time'] = datenum + (nc2.variables['forecast_time'][:]/24.0)
     data3['time'] = datenum + (nc3.variables['forecast_time'][:]/24.0)
+    # else:
     #     time_um1 = float(filename_um1[-16:-14]) + (nc1.variables['forecast_time'][:]/24.0)
     #     time_um2 = float(filename_um2[-16:-14]) + (nc2.variables['forecast_time'][:]/24.0)
     #     if ifs_flag: time_um3 = float(filename_um3[-16:-14]) + (nc3.variables['time'][:]/24.0)
@@ -125,43 +126,43 @@ def main():
         elif np.ndim(nc2.variables[var_list2[j]]) >= 1:
             data2[var_list2[j]] = nc2.variables[var_list2[j]][:]
     nc2.close()
-print ('Starting on t=0 RA2T data, initialising:')
-for j in range(0,len(var_list1)):
+    print ('Starting on t=0 RA2T data, initialising:')
+    for j in range(0,len(var_list1)):
     # print (var_list4[j])
-    if var_list3[j] in nc3.variables:
-        if np.ndim(nc3.variables[var_list3[j]]) == 0:     # ignore horizontal_resolution
-            continue
-        elif np.ndim(nc3.variables[var_list3[j]]) >= 1:
-            data3[var_list3[j]] = nc4.variables[var_list3[j]][:]
-nc3.close()
+        if var_list3[j] in nc3.variables:
+            if np.ndim(nc3.variables[var_list3[j]]) == 0:     # ignore horizontal_resolution
+                continue
+            elif np.ndim(nc3.variables[var_list3[j]]) >= 1:
+                data3[var_list3[j]] = nc4.variables[var_list3[j]][:]
+    nc3.close()
 
-#################################################################
-## create labels for figure legends - done here so only needs to be done once!
-#################################################################
-label1 = 'undefined_label'
-if out_dir1[:10] == '25_u-cc568': label1 = 'UM_RA2M'
-if out_dir1[:10] == '24_u-cc324': label1 = 'UM_RA2T_' + out_dir1[-4:-1]
-if out_dir1[:10] == '23_u-cc278': label1 = 'UM_CASIM-100_GA6alb'
+    #################################################################
+    ## create labels for figure legends - done here so only needs to be done once!
+    #################################################################
+    label1 = 'undefined_label'
+    if out_dir1[:10] == '25_u-cc568': label1 = 'UM_RA2M'
+    if out_dir1[:10] == '24_u-cc324': label1 = 'UM_RA2T_' + out_dir1[-4:-1]
+    if out_dir1[:10] == '23_u-cc278': label1 = 'UM_CASIM-100_GA6alb'
 
-label2 = 'undefined_label'
-if out_dir2[:10] == '25_u-cc568': label2 = 'UM_RA2M'
-if out_dir2[:10] == '24_u-cc324': label2 = 'UM_RA2T_' + out_dir2[-4:-1]
-if out_dir2[:10] == '23_u-cc278': label2 = 'UM_CASIM-100_GA6alb'
+    label2 = 'undefined_label'
+    if out_dir2[:10] == '25_u-cc568': label2 = 'UM_RA2M'
+    if out_dir2[:10] == '24_u-cc324': label2 = 'UM_RA2T_' + out_dir2[-4:-1]
+    if out_dir2[:10] == '23_u-cc278': label2 = 'UM_CASIM-100_GA6alb'
 
-label3 = 'undefined_label'
-if out_dir3 == 'OUT_25H/': label3 = 'ECMWF_IFS'
-if out_dir3[:10] == '25_u-cc568': label3 = 'UM_RA2M'
-if out_dir3[:10] == '24_u-cc324': label3 = 'UM_RA2T_' + out_dir3[-4:-1]
-if out_dir3[:10] == '23_u-cc278': label3 = 'UM_CASIM-100_GA6alb'
+    label3 = 'undefined_label'
+    if out_dir3 == 'OUT_25H/': label3 = 'ECMWF_IFS'
+    if out_dir3[:10] == '25_u-cc568': label3 = 'UM_RA2M'
+    if out_dir3[:10] == '24_u-cc324': label3 = 'UM_RA2T_' + out_dir3[-4:-1]
+    if out_dir3[:10] == '23_u-cc278': label3 = 'UM_CASIM-100_GA6alb'
 
-label4 = 'undefined_label'
-if out_dir4[:10] == '25_u-cc568': label4 = 'UM_RA2M'
-if out_dir4[:10] == '24_u-cc324': label4 = 'UM_RA2T_' + out_dir4[-4:-1]
-if out_dir4[:10] == '23_u-cc278': label4 = 'UM_CASIM-100_GA6alb'
+    label4 = 'undefined_label'
+    if out_dir4[:10] == '25_u-cc568': label4 = 'UM_RA2M'
+    if out_dir4[:10] == '24_u-cc324': label4 = 'UM_RA2T_' + out_dir4[-4:-1]
+    if out_dir4[:10] == '23_u-cc278': label4 = 'UM_CASIM-100_GA6alb'
 
-# -------------------------------------------------------------
-# save out working data for debugging purposes
-# -------------------------------------------------------------
-np.save('working_data1', data1)
-np.save('working_data2', data2)
-np.save('working_data3', data3)
+    # -------------------------------------------------------------
+    # save out working data for debugging purposes
+    # -------------------------------------------------------------
+    np.save('working_data1', data1)
+    np.save('working_data2', data2)
+    np.save('working_data3', data3)
