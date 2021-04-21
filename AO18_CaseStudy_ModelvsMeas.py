@@ -155,11 +155,6 @@ def main():
     if out_dir3[:10] == '24_u-cc324': label3 = 'UM_RA2T_' + out_dir3[-4:-1]
     if out_dir3[:10] == '23_u-cc278': label3 = 'UM_CASIM-100_GA6alb'
 
-    label4 = 'undefined_label'
-    if out_dir4[:10] == '25_u-cc568': label4 = 'UM_RA2M'
-    if out_dir4[:10] == '24_u-cc324': label4 = 'UM_RA2T_' + out_dir4[-4:-1]
-    if out_dir4[:10] == '23_u-cc278': label4 = 'UM_CASIM-100_GA6alb'
-
     # -------------------------------------------------------------
     # save out working data for debugging purposes
     # -------------------------------------------------------------
