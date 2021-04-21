@@ -45,7 +45,7 @@ def main():
     ### define input filename
     ### -------------------------------------------------------------------------
 
-    strdate = str(DATES[i])
+    strdate = str(DATES)
     datenum = date2datenum(datetime.datetime(strdate))
 
     filename_um1 = um_root_dir + out_dir1 + strdate + 'metum.nc'
