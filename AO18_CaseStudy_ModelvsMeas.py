@@ -48,9 +48,9 @@ def main():
     strdate = str(DATES)
     datenum = date2datenum(datetime.datetime.fromtimestamp(DATES))
 
-    filename_um1 = um_root_dir + out_dir1 + strdate + 'metum.nc'
-    filename_um2 = um_root_dir + out_dir2 + strdate + 'metum.nc'
-    filename_um3 = um_root_dir + out_dir3 + strdate + 'metum.nc'
+    filename_um1 = um_root_dir + out_dir1 + strdate + '_metum.nc'
+    filename_um2 = um_root_dir + out_dir2 + strdate + '_metum.nc'
+    filename_um3 = um_root_dir + out_dir3 + strdate + '_metum.nc'
 
     print (filename_um1)
     print (filename_um2)
