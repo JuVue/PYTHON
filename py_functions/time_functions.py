@@ -18,7 +18,7 @@ def date2datenum(d):
  ##:    return: corresponding datenum
     return 366 + d.toordinal() + (d - dt.fromordinal(d.toordinal())).total_seconds()/(24*60*60)
 
-def datenum2date(datenum)
+def datenum2date(datenum):
    ##Convert Matlab datenum into Python datetime.
    ##:input  datenum Date in datenum format
    ##:return:Datetime object corresponding to datenum.
