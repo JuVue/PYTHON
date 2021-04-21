@@ -133,7 +133,7 @@ def main():
             if np.ndim(nc3.variables[var_list3[j]]) == 0:     # ignore horizontal_resolution
                 continue
             elif np.ndim(nc3.variables[var_list3[j]]) >= 1:
-                data3[var_list3[j]] = nc4.variables[var_list3[j]][:]
+                data3[var_list3[j]] = nc3.variables[var_list3[j]][:]
     nc3.close()
 
     #################################################################
