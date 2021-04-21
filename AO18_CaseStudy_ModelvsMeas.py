@@ -15,7 +15,7 @@ from physFuncts import calcThetaE, calcThetaVL
 from pyFixes import py3_FixNPLoad
 
 
-def plot_paperRadiation(data1, data2, data3, out_dir1, out_dir2, out_dir3, obs, doy, label1, label2, label3, label4):
+def plot_paperRadiation(data1, data2, data3, out_dir1, out_dir2, out_dir3, DATES, label1, label2, label3):
 
     import iris.plot as iplt
     import iris.quickplot as qplt
@@ -25,11 +25,6 @@ def plot_paperRadiation(data1, data2, data3, out_dir1, out_dir2, out_dir3, obs, 
     import matplotlib.cm as mpl_cm
     from time_functions import calcTime_Mat2DOY
 
-        # from matplotlib.patches import Polygon
-
-    ###################################
-    ## PLOT MAP
-    ###################################
 
     print ('******')
     print ('')
@@ -37,9 +32,7 @@ def plot_paperRadiation(data1, data2, data3, out_dir1, out_dir2, out_dir3, obs, 
     print ('')
 
     ##################################################
-    ##################################################
     #### 	CARTOPY
-    ##################################################
     ##################################################
 
     SMALL_SIZE = 12
@@ -52,35 +45,6 @@ def plot_paperRadiation(data1, data2, data3, out_dir1, out_dir2, out_dir3, obs, 
     plt.rc('xtick',labelsize=MED_SIZE)
     plt.rc('ytick',labelsize=MED_SIZE)
     plt.rc('legend',fontsize=MED_SIZE)
-    # plt.figure(figsize=(9,10))
-    # # plt.rc('figure',titlesize=LARGE_SIZE)
-    # plt.subplots_adjust(top = 0.95, bottom = 0.08, right = 0.95, left = 0.08,
-    #         hspace = 0.4, wspace = 0.13)
-
-    #################################################################
-    ## sort out obs['obs_temp']ervations' timestamp
-    #################################################################
-    # 0: Tship / (1)                         (time: 2324)
-    # 1: LWdice / (1)                        (time3: 1293)
-    # 2: LWuice / (1)                        (time3: 1293)
-    # 3: precip / (1)                        (time4: 2352)
-    # 4: Tice / (1)                          (time1: 1296)
-    # 5: SWdship / (1)                       (time2: 2348)
-    # 6: LWdship / (1)                       (time2: 2348)
-    # 7: SWdice / (1)                        (time3: 1293)
-    # 8: SWuice / (1)                        (time3: 1293)
-
-    # datenums_radice = obs['obs_temp'].variables['time3'][:] ### radiation on different timestep
-    # time_radice_all = calcTime_Mat2DOY(datenums_radice)
-    #
-    # datenums_tice = obs['obs_temp'].variables['time1'][:] ### ice camp data on different timestep
-    # time_tice = calcTime_Mat2DOY(datenums_tice)
-
-    ### set diagnostic naming flags for if IFS being used
-    if np.logical_or(out_dir3 == 'OUT_25H/', out_dir3 == 'ECMWF_IFS/'):
-        ifs_flag = True
-    else:
-        ifs_flag = False
 
     # UM -> um2 comparisons:
     # 1. snowfall_flux -> sfc_ls_snow
@@ -115,20 +79,6 @@ def plot_paperRadiation(data1, data2, data3, out_dir1, out_dir2, out_dir3, obs, 
     # obs['fixed_radiation']['SWnet_ice'] = netSW
     # obs['fixed_radiation']['LWnet_ice'] = netLW
 
-
-    #########-------------------------------------------------------------------------------------------
-    ####       DEFINE PERIODS
-    ####               all model data share a timestamp
-    p3 = np.where(np.logical_and(data1['time_hrly'] >= doy[0], data1['time_hrly'] <= 230.0))
-    p4 = np.where(np.logical_and(data1['time_hrly'] >= 230.0, data1['time_hrly'] <= 240.0))
-    p5 = np.where(np.logical_and(data1['time_hrly'] >= 240.0, data1['time_hrly'] <= 247.0))
-    p6 = np.where(np.logical_and(data1['time_hrly'] >= 247.0, data1['time_hrly'] <= 251.0))
-    p7 = np.where(np.logical_and(data1['time_hrly'] >= 251.0, data1['time_hrly'] <= 255.5))
-    p8 = np.where(data1['time_hrly'] >= 255.5)
-
-    ### for reference in figures
-    zeros = np.zeros(len(data2['time']))
-
     #################################################################
     ## create figure and axes instances
     #################################################################
@@ -138,24 +88,15 @@ def plot_paperRadiation(data1, data2, data3, out_dir1, out_dir2, out_dir3, obs, 
     fig = plt.figure(figsize=(18,12))
 
     ax  = fig.add_axes([0.07,0.7,0.53,0.22])   # left, bottom, width, height
-
     ax = plt.gca()
     yB = [-10, 120]
-    plt.plot([240.0,240.0],[yB[0],yB[-1]],'--', color='grey')
-    plt.plot(data2['time'], zeros,'--', color='lightgrey')
-    # plt.plot(data1['time_hrly'][:-3], data1['fixed_radiation']['SWnet'].data, color = 'darkblue', label = label1)
     plt.plot(data1['time'], data1['surface_net_SW_radiation'].data, color = 'darkblue', label = label1)
-    plt.plot(data4['time'], data4['surface_net_SW_radiation'].data, color = 'steelblue', label = label4[:-4])
+    plt.plot(data3['time'], data3['surface_net_SW_radiation'].data, color = 'steelblue', label = label3[:-4])
     plt.plot(data2['time'], data2['surface_net_SW_radiation'].data, color = 'mediumseagreen', label = label2)
-    if ifs_flag == True:
-        plt.plot(data3['time'], data3['sfc_net_sw'].data, color = 'gold', label = label3)
-    else:
-        plt.plot(data3['time'], data3['surface_net_SW_radiation'].data, color = 'gold', label = label3)
-    plt.plot(obs['fixed_radiation']['time_ice'], obs['fixed_radiation']['SWnet_ice'], color = 'grey', linewidth = 3, label = 'Ice_station')
-    plt.plot(obs['fixed_radiation']['time_ship'], obs['fixed_radiation']['SWnet_ship'], color = 'k', linewidth = 2, label = 'Ship')
     plt.ylabel('SW$_{net}$ [W m$^{-2}$]')
     plt.legend(bbox_to_anchor=(-0.08, 0.67, 1., .102), loc=4, ncol=3)
-    ax.set_xlim([doy[0],doy[-1]])
+    ax.set_xlim([DATES DATES+1])
+
     plt.xticks([230,235,240,245,250,255])
     ax.set_xticklabels(['18 Aug','23 Aug','28 Aug','2 Sep','7 Sep','12 Sep'])
     plt.ylim([-3,120])
