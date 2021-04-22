@@ -85,7 +85,7 @@ def plot_paperRadiation(data1, data2, data3, out_dir1, out_dir2, out_dir3, DATES
     ### -------------------------------
     ### Build figure (timeseries)
     ### -------------------------------
-    fig = plt.figure(figsize=(18,12))
+    fig = plt.figure(figsize=(18,12 ))
 
     ax  = fig.add_axes([0.07,0.7,0.53,0.22])   # left, bottom, width, height
     ax = plt.gca()
