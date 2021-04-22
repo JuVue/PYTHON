@@ -1,39 +1,34 @@
 ### SCRIPT TO COMPARE MODEL TO MEASURMENTS
-from __future__ import print_function
+from  __future__ import print_function
 import time
 import datetime
 import numpy as np
+#import pandas as pd
 from netCDF4 import Dataset
+#import diags_MOCCHA as diags
+#import diags_varnames as varnames
+#import cartopy.crs as ccrs
+#import iris
+import matplotlib.pyplot as plt
+#import matplotlib.cm as mpl_cm
 import os
+#import seaborn as sns
 
-#### import python functions
+### import python functions
 import sys
 sys.path.insert(1, './py_functions/')
-from time_functions import datenum2date, date2datenum, calcTime_Mat2DOY, calcTime_Date2DOY
-from readMAT import readMatlabStruct
-from physFuncts import calcThetaE, calcThetaVL
-from pyFixes import py3_FixNPLoad
+from time_functions import datenum2date, date2datenum #calcTime_Mat2DOY, calcTime_Date2DOY
+#from readMAT import readMatlabStruct
+#from physFuncts import calcThetaE, calcThetaVL
+#from pyFixes import py3_FixNPLoad
 
 
-def plot_paperRadiation(data1, data2, data3, out_dir1, out_dir2, out_dir3, DATES, label1, label2, label3):
-
-    import iris.plot as iplt
-    import iris.quickplot as qplt
-    import iris.analysis.cartography
-    import cartopy.crs as ccrs
-    import cartopy
-    import matplotlib.cm as mpl_cm
-    from time_functions import calcTime_Mat2DOY
-
+def plot_paperRadiation(data1, data2, data3, out_dir1, out_dir2, out_dir3, datenum, label1, label2, label3,plot_out_dir):
 
     print ('******')
     print ('')
     print ('Plotting combined timeseries and PDFs of radiation terms:')
     print ('')
-
-    ##################################################
-    #### 	CARTOPY
-    ##################################################
 
     SMALL_SIZE = 12
     MED_SIZE = 14
@@ -86,20 +81,28 @@ def plot_paperRadiation(data1, data2, data3, out_dir1, out_dir2, out_dir3, DATES
     ### Build figure (timeseries)
     ### -------------------------------
     fig = plt.figure(figsize=(18,12 ))
-
     ax  = fig.add_axes([0.07,0.7,0.53,0.22])   # left, bottom, width, height
     ax = plt.gca()
     yB = [-10, 120]
-    plt.plot(data1['time'], data1['surface_net_SW_radiation'].data, color = 'darkblue', label = label1)
-    plt.plot(data3['time'], data3['surface_net_SW_radiation'].data, color = 'steelblue', label = label3[:-4])
-    plt.plot(data2['time'], data2['surface_net_SW_radiation'].data, color = 'mediumseagreen', label = label2)
+    plt.plot(data1['time'], data1['surface_net_SW_radiation'], color = 'darkblue', label = label1)
+    plt.plot(data3['time'], data3['surface_net_SW_radiation'], color = 'steelblue', label = label3[:-4])
+    plt.plot(data2['time'], data2['surface_net_SW_radiation'], color = 'mediumseagreen', label = label2)
     plt.ylabel('SW$_{net}$ [W m$^{-2}$]')
     plt.legend(bbox_to_anchor=(-0.08, 0.67, 1., .102), loc=4, ncol=3)
-    ax.set_xlim([datenum datenum+1])
-
+    ax.set_xlim([datenum, datenum+1])
+    #ax.xaxis.set_major_formatter(plt.dates.DateFormatter('%H%M')
+    plt.ion()
+    plt.show()
     #plt.xticks([230,235,240,245,250,255])
     #ax.set_xticklabels(['18 Aug','23 Aug','28 Aug','2 Sep','7 Sep','12 Sep'])
-    plt.ylim([-3,120])
+#    plt.ylim([-3,120])
+
+
+
+
+
+
+
     #
     # ax  = fig.add_axes([0.07,0.4,0.53,0.22])   # left, bottom, width, height
     # ax = plt.gca()
@@ -379,9 +382,10 @@ def plot_paperRadiation(data1, data2, data3, out_dir1, out_dir2, out_dir3, DATES
     print ('')
     print ('Finished plotting! :)')
     print ('')
+    
+    date=datenum2date(datenum)
 
-
-    fileout = os.path.join(plot_out_dir, strdate '_netSW_netLW_netRad_line.png')
+    fileout = os.path.join(plot_out_dir,date.strftime('%Y%m%d') , '_netSW_netLW_netRad_line.png')
     # plt.savefig(fileout)
     plt.show()
 
@@ -541,7 +545,7 @@ def main():
     # Plot paper figures
     # -------------------------------------------------------------
     # figure = plot_paperFluxes(data1, data2, data3, month_flag, missing_files, out_dir1, out_dir2, out_dir3, obs, doy, label1, label2, label3)
-    figure = plot_paperRadiation(data1, data2, data3, data4, month_flag, missing_files, out_dir1, out_dir2, out_dir3, obs, doy, label1, label2, label3, label4)
+    figure = plot_paperRadiation(data1, data2, data3, out_dir1, out_dir2, out_dir3,datenum,label1,label2,label3,plot_out_dir)
     # figure = plot_Precipitation(data1, data2, data3, data4, month_flag, missing_files, out_dir1, out_dir2, out_dir3, obs, doy, label1, label2, label3, label4)
     # figure = plot_BLDepth(data1, data2, data3, month_flag, missing_files, out_dir1, out_dir2, out_dir3, obs, doy, label1, label2, label3)
     # figure = plot_BLType(data1, data2, data3, month_flag, missing_files, out_dir1, out_dir2, out_dir3, obs, doy, label1, label2, label3)
