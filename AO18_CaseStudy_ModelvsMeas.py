@@ -95,7 +95,7 @@ def plot_paperRadiation(data1, data2, data3, out_dir1, out_dir2, out_dir3, DATES
     plt.plot(data2['time'], data2['surface_net_SW_radiation'].data, color = 'mediumseagreen', label = label2)
     plt.ylabel('SW$_{net}$ [W m$^{-2}$]')
     plt.legend(bbox_to_anchor=(-0.08, 0.67, 1., .102), loc=4, ncol=3)
-    ax.set_xlim(datenum datenum+1])
+    ax.set_xlim([datenum datenum+1])
 
     #plt.xticks([230,235,240,245,250,255])
     #ax.set_xticklabels(['18 Aug','23 Aug','28 Aug','2 Sep','7 Sep','12 Sep'])
