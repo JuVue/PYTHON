@@ -240,14 +240,14 @@ def main():
     obs_ice = {}
     obs_ship = {}
 
-        print ('Load temporary ice station data from Jutta...')
-        #obs_ice['TRH'] = {}
-        #obs_ice['mast'] = {}
-        obs_ice['metalley'] = {}
-        filename = 'AO2018_metalley_01min_v3.0.mat'
-        obs_ice['metalley'] = readMatlabStruct(obs_met_dir + filename)
+    print ('Load temporary ice station data from Jutta...')
+    #obs_ice['TRH'] = {}
+    #obs_ice['mast'] = {}
+    obs_ice['metalley'] = {}
+    filename = 'AO2018_metalley_01min_v3.0.mat'
+    obs_ice['metalley'] = readMatlabStruct(obs_met_dir + filename)
 
-        print(obs_ice['metalley'].keys())
+    print(obs_ice['metalley'].keys())
 
         #obs_ice['obs_temp'] = Dataset(obs_met_root_dir + 'MetData_Gillian_V3_30minres.nc','r')
         #print ('Load ice station flux data from Jutta...')
