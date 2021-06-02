@@ -73,8 +73,8 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     ### Build figure (timeseries)
     ### -------------------------------
     fig = plt.figure(figsize=(18,12 ))
-    #ax  = fig.add_axes([0.07,0.7,0.53,0.22])   # left, bottom, width, height
-    plt.subplots(5,1)
+    ax  = fig.add_axes([0.07,0.7,0.53,0.22])   # left, bottom, width, height
+    #plt.subplots(5,1)
     ax = plt.gca()
     yB = [-10, 120]
     plt.plot(data1['time'], data1['air_temperature_at_1.5m'].data, color = 'darkblue', label = label1)
@@ -86,10 +86,9 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     ax.set_xlim([datenum, datenum+1])
 
     #plt.xticks(np.arange(datenum, datenum+1,step=0.3))
-    plt.ion()
-    plt.show()
-    from IPython import embed; embed()
-    ax.xaxis.set_minor_locator(mdates.HourLocator)
+    #plt.ion()
+    #plt.show()
+    ax.xaxis.set_minor_locator(mdates.HourLocator(inteval=1))
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=3))
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
     #plt.xticks([230,235,240,245,250,255])
@@ -107,8 +106,8 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     print ('')
 
     date=datenum2date(datenum)
-
-    fileout = os.path.join(plot_out_dir,date.strftime('%Y%m%d') , '_netSW_netLW_netRad_line.png')
+    from IPython import embed; embed()
+    fileout = os.path.join(plot_out_dir,date.strftime('%Y%m%d') , '_testplot_line.png')
     # plt.savefig(fileout)
     plt.show()
 
