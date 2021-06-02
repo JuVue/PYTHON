@@ -88,7 +88,7 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     #plt.xticks(np.arange(datenum, datenum+1,step=0.3))
     #plt.ion()
     #plt.show()
-    ax.xaxis.set_minor_locator(mdates.HourLocator(inteval=1))
+    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=3))
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
     #plt.xticks([230,235,240,245,250,255])
