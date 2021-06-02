@@ -69,6 +69,8 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     ### -------------------------------
     ### Build figure (timeseries)
     ### -------------------------------
+    from IPython import embed; embed()
+
     fig = plt.figure(figsize=(18,12 ))
     #ax  = fig.add_axes([0.07,0.7,0.53,0.22])   # left, bottom, width, height
     plt.subplots(5,1)
