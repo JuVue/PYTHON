@@ -23,7 +23,7 @@ from readMAT import readMatlabStruct
 #from pyFixes import py3_FixNPLoad
 
 
-def plot_surfaceVariables(data1, data2, data3, out_dir1, out_dir2, out_dir3, datenum, label1, label2, label3,plot_out_dir):
+def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3, datenum, label1, label2, label3,plot_out_dir):
 
     print ('******')
     print ('')
