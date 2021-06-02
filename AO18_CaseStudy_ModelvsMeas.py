@@ -80,14 +80,18 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     plt.plot(data1['time'], data1['air_temperature_at_1.5m'].data, color = 'darkblue', label = label1)
     plt.plot(data3['time'], data3['air_temperature_at_1.5m'].data, color = 'steelblue', label = label3[:-4])
     plt.plot(data2['time'], data2['air_temperature_at_1.5m'].data, color = 'mediumseagreen', label = label2)
-    #plt.plot(obs['metalley']['mday'], obs['metalley']['temperature'].data, color = 'black', label = 'obs metalley')#plt.ylabel('SW$_{net}$ [W m$^{-2}$]')
+    plt.plot(obs['metalley']['mday'], obs['metalley']['t'].data, color = 'black', label = 'obs metalley')#plt.ylabel('SW$_{net}$ [W m$^{-2}$]')
     plt.ylabel('T [$^\circ$C]')
     plt.legend(bbox_to_anchor=(-0.08, 0.67, 1., .102), loc=4, ncol=3)
     ax.set_xlim([datenum, datenum+1])
+
+    plt.xticks(np.arange(datenum, datenum+1,step=0.3)
     plt.ion()
     plt.show()
     from IPython import embed; embed()
-    ax.xaxis.set_major_formatter(mdates.dates.DateFormatter('%H%M'))
+    ax.xaxis.set_minor_locator(mdates.HourLocator)
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=3))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
     #plt.xticks([230,235,240,245,250,255])
     #ax.set_xticklabels(['18 Aug','23 Aug','28 Aug','2 Sep','7 Sep','12 Sep'])
 #    plt.ylim([-3,120])
@@ -152,7 +156,7 @@ def main():
     ### -------------------------------------------------------------------------
 
     strdate = str(DATES)
-    datenum = date2datenum(datetime.datetime.fromtimestamp(DATES))
+    datenum = date2datenum(datetime.datetime.strptime(strdate,'%Y%m%d'))
 
     filename_um1 = um_root_dir + out_dir1 + strdate + '_oden_metum.nc'
     filename_um2 = um_root_dir + out_dir2 + strdate + '_oden_metum.nc'
