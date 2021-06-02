@@ -173,7 +173,7 @@ def main():
     ##  for var in nc.variables: print (var)
     #### LOAD IN SPECIFIC DIAGNOSTICS
     ### BASE UM RUNS (UM_RA2M/UM_RA2T)
-    var_list1 = ['u_10m','v_10m', 'air_temperature_at_1.5m','q_1.5m','rh_1.5m','visibility','dew_point_temperature_at_1.5m','LWP','IWP']
+    var_list1 = ['u_10m','v_10m', 'air_temperature_at_1.5m','q_1.5m','rh_1.5m','visibility','dew_point_temperature_at_1.5m','LWP','IWP',
                 'surface_net_SW_radiation','surface_net_LW_radiation','surface_downwelling_LW_radiation','surface_downwelling_SW_radiation',
                 'sensible_heat_flux','latent_heat_flux']
                 #PLOT FROM CLOUDNET:
