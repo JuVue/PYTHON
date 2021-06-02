@@ -261,8 +261,8 @@ def main():
     obs['hatpro']['lwp'] = np.squeeze(obs['hatpro']['lwp'])
     obs['hatpro']['lwpflag'] = np.squeeze(obs['hatpro']['lwp_corflag'])
     obs['hatpro']['iwvflag'] = np.squeeze(obs['hatpro']['iwv_corflag'])
-    obs['hatpro']['lwpflagread'] = np.squeeze(obs['hatpro']['lwp_corflag_readme'])
-    obs['hatpro']['iwvflagread'] = np.squeeze(obs['hatpro']['iwv_corflag_readme'])
+    #obs['hatpro']['lwpflagread'] = np.squeeze(obs['hatpro']['lwp_corflag_readme'])
+    #obs['hatpro']['iwvflagread'] = np.squeeze(obs['hatpro']['iwv_corflag_readme'])
     obs['hatpro']['rainflag'] = np.squeeze(obs['hatpro']['rainflag'])
     obs['hatpro']['doy'] = calcTime_Mat2DOY(obs['hatpro']['mday'])
 
