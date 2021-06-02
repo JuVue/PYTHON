@@ -238,17 +238,13 @@ def main():
             #### 7th deck: temperature, surface temperature, RH, downwelling SW, downwelling LW
                     #### 7thDeck/ACAS_AO2018_WX_30min_v2_0.nc
 
-    obs_ice = {}
+    obs = {}
     obs_ship = {}
 
     print ('Load temporary ice station data from Jutta...')
-    #obs_ice['TRH'] = {}
-    #obs_ice['mast'] = {}
-    obs_ice['metalley'] = {}
     filename = 'AO2018_metalley_01min_v3.0.mat'
-    obs_ice['metalley'] = readMatlabStruct(obs_met_dir + filename)
-
-    print(obs_ice['metalley'].keys())
+    obs['metalley'] = readMatlabStruct(obs_met_dir + filename)
+    print(obs['metalley'].keys())
 
     from IPython import embed; embed()
         #obs_ice['obs_temp'] = Dataset(obs_met_root_dir + 'MetData_Gillian_V3_30minres.nc','r')
@@ -257,12 +253,12 @@ def main():
 
     print ('Load HATPRO data used by Cloudnet...')
     filename='HATPRO_LWP_IWV_30s_V3_userready.mat'
-    obs['hatpro'] = readMatlabStruct(dirname + file)
-    print (IWVtemp.keys())
-    obs['hatpro']['IWV'] = np.squeeze(IWVtemp['IWV'])
-    obs['hatpro']['mday'] = np.squeeze(IWVtemp['mday'])
-    obs['hatpro']['LWP'] = np.squeeze(IWVtemp['IWV'])
-    obs['hatpro']['rainflag'] = np.squeeze(IWVtemp['rainflag'])
+    obs['hatpro'] = readMatlabStruct(obs_hatpro_dir + file)
+    print (obs['hatpro'].keys())
+    obs['hatpro']['IWV'] = np.squeeze(obs['hatpro']['IWV'])
+    obs['hatpro']['mday'] = np.squeeze(obs['hatpro']['mday'])
+    obs['hatpro']['LWP'] = np.squeeze(obs['hatpro']['IWV'])
+    obs['hatpro']['rainflag'] = np.squeeze(obs['hatpro']['rainflag'])
     obs['hatpro']['doy'] = calcTime_Mat2DOY(obs['hatpro']['mday'])
 
     print ('Load albedo estimates from Michael...')
