@@ -83,13 +83,11 @@ def plot_surfaceVariables(data1, data2, data3, out_dir1, out_dir2, out_dir3, dat
     ax.set_xlim([datenum, datenum+1])
     from IPython import embed; embed()
 
-    plt.ion()
-    plt.show()
 
 
     ax.xaxis.set_major_formatter(plt.dates.DateFormatter('%H%M')
-    #plt.ion()
-    #plt.show()
+    plt.ion()
+    plt.show()
     #plt.xticks([230,235,240,245,250,255])
     #ax.set_xticklabels(['18 Aug','23 Aug','28 Aug','2 Sep','7 Sep','12 Sep'])
 #    plt.ylim([-3,120])
