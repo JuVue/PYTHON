@@ -92,7 +92,7 @@ def plot_surfaceVariables(data1, data2, data3, out_dir1, out_dir2, out_dir3, dat
     # ax = plt.gca()
     # yC = [-90, 10]
 
-
+    from IPython import embed; embed()
     print ('******')
     print ('')
     print ('Finished plotting! :)')
@@ -122,7 +122,7 @@ def main():
     obs_acas_dir='/nfs/a96/MOCCHA/data/ACAS/ACAS_AO2018_v2_May2019/';
     obs_rs_dir='/nfs/a96//MOCCHA/working/jutta/final_data/radiosondes/';
     obs_hatpro_dir='/nfs/a96/MOCCHA/working/jutta/final_data/HATPRO/';
-
+    obs_albedo_dir='/nfs/a96/MOCCHA/working/data/'
     ### CHOSEN RUN
     out_dir1 = '25_u-cc568_RA2M_CON/'
     out_dir2 = '23_u-cc278_RA1M_CASIM/'
@@ -257,47 +257,35 @@ def main():
 
     print ('Load HATPRO data used by Cloudnet...')
     filename='HATPRO_LWP_IWV_30s_V3_userready.mat'
-
-
-
-    dirname = '/home/gillian/MOCCHA/ODEN/DATA/hatpro/'
-    dir = os.listdir(dirname)
-    obs['hatpro'] = {}
-    for file in dir:
-        IWVtemp = readMatlabStruct(dirname + file)
-        print (IWVtemp.keys())
-        if file == '20180814_IWV_30s_V2.mat':       ### if it is the first file
-            obs['hatpro']['IWV'] = np.squeeze(IWVtemp['IWV'])
-            obs['hatpro']['mday'] = np.squeeze(IWVtemp['mday'])
-            obs['hatpro']['LWP'] = np.squeeze(IWVtemp['IWV'])
-            obs['hatpro']['rainflag'] = np.squeeze(IWVtemp['rainflag'])
-        else:
-            obs['hatpro']['IWV'] = np.append(np.squeeze(obs['hatpro']['IWV']),np.squeeze(IWVtemp['IWV']))
-            obs['hatpro']['mday'] = np.append(np.squeeze(obs['hatpro']['mday']),np.squeeze(IWVtemp['mday']))
-            obs['hatpro']['LWP'] = np.append(np.squeeze(obs['hatpro']['LWP']),np.squeeze(IWVtemp['LWP']))
-            obs['hatpro']['rainflag'] = np.append(np.squeeze(obs['hatpro']['rainflag']),np.squeeze(IWVtemp['rainflag']))
+    obs['hatpro']=
+    obs['hatpro'] = readMatlabStruct(dirname + file)
+    print (IWVtemp.keys())
+    obs['hatpro']['IWV'] = np.squeeze(IWVtemp['IWV'])
+    obs['hatpro']['mday'] = np.squeeze(IWVtemp['mday'])
+    obs['hatpro']['LWP'] = np.squeeze(IWVtemp['IWV'])
+    obs['hatpro']['rainflag'] = np.squeeze(IWVtemp['rainflag'])
     obs['hatpro']['doy'] = calcTime_Mat2DOY(obs['hatpro']['mday'])
 
     print ('Load albedo estimates from Michael...')
-    obs['albedo'] = readMatlabStruct(obs_root_dir + 'MOCCHA_Albedo_estimates_Michael.mat')
+    obs['albedo'] = readMatlabStruct(obs_albedo_dir + 'MOCCHA_Albedo_estimates_Michael.mat')
 
     ### print ('Load ice station radiation data from Jutta...')
     ### obs['ice_station_radiation'] = readMatlabStruct(obs_root_dir + 'ice_station/mast_radiation_30min_v2.3.mat')
 
     print ('Load radiosonde data from Jutta...')
-    obs['sondes'] = readMatlabStruct(obs_root_dir + 'radiosondes/SondeData_h10int_V02.mat')
+    obs['sondes'] = readMatlabStruct(obs_rs_dir + '/SondeData_h10int_V03.mat')
 
     print ('Load observations inversion height data from Jutta...')
-    obs['inversions'] = readMatlabStruct(obs_root_dir + 'radiosondes/InversionHeights_RSh05int_final_V03.mat')
+    obs['inversions'] = readMatlabStruct(obs_rs_dir + '/InversionHeights_RSh05int_final_V03.mat')
 
-    print ('Load foremast data from John...')
-    obs['foremast'] = Dataset(obs_root_dir + 'foremast/ACAS_AO2018_foremast_30min_v2_0.nc','r')
+    #print ('Load foremast data from John...')
+    #obs['foremast'] = Dataset(obs_acas_dir + '/ACAS_AO2018_foremast_30min_v2_0.nc','r')
 
-    print ('Load 7th deck weather station data from John...')
-    obs['deck7th'] = Dataset(obs_root_dir + '7thDeck/ACAS_AO2018_WX_30min_v2_0.nc','r')
+    #print ('Load 7th deck weather station data from John...')
+    #obs['deck7th'] = Dataset(obs_root_dir + '7thDeck/ACAS_AO2018_WX_30min_v2_0.nc','r')
 
     print ('Load weather sensor data from John...')
-    obs['pws'] = readMatlabStruct(obs_root_dir + '7thDeck/ACAS_AO2018_PWD_30min_v1_0.mat')
+    obs['pwd'] = readMatlabStruct(obs_acas_dir + 'ACAS_AO2018_PWD_30min_v1_0.mat')
 
     print ('...')
 
@@ -325,7 +313,7 @@ def main():
     # -------------------------------------------------------------
     # Plot paper figures
     # -------------------------------------------------------------
-     figure = plot_surfaceVariables(data1, data2, data3, out_dir1, out_dir2, out_dir3,datenum,label1,label2,label3,plot_out_dir)
+    figure = plot_surfaceVariables(data1, data2, data3, out_dir1, out_dir2, out_dir3,datenum,label1,label2,label3,plot_out_dir)
     # figure = plot_paperFluxes(data1, data2, data3, month_flag, missing_files, out_dir1, out_dir2, out_dir3, obs, doy, label1, label2, label3)
     # figure = plot_paperRadiation(data1, data2, data3, out_dir1, out_dir2, out_dir3,datenum,label1,label2,label3,plot_out_dir)
     # figure = plot_Precipitation(data1, data2, data3, data4, month_flag, missing_files, out_dir1, out_dir2, out_dir3, obs, doy, label1, label2, label3, label4)
