@@ -81,10 +81,11 @@ def plot_surfaceVariables(data1, data2, data3, out_dir1, out_dir2, out_dir3, dat
     plt.ylabel('T [$^\circ$C]')
     plt.legend(bbox_to_anchor=(-0.08, 0.67, 1., .102), loc=4, ncol=3)
     ax.set_xlim([datenum, datenum+1])
+    from IPython import embed; embed()
+
     plt.ion()
     plt.show()
 
-    from IPython import embed; embed()
 
     ax.xaxis.set_major_formatter(plt.dates.DateFormatter('%H%M')
     #plt.ion()
@@ -92,7 +93,6 @@ def plot_surfaceVariables(data1, data2, data3, out_dir1, out_dir2, out_dir3, dat
     #plt.xticks([230,235,240,245,250,255])
     #ax.set_xticklabels(['18 Aug','23 Aug','28 Aug','2 Sep','7 Sep','12 Sep'])
 #    plt.ylim([-3,120])
-    from IPython import embed; embed()
 
     #
     # ax  = fig.add_axes([0.07,0.4,0.53,0.22])   # left, bottom, width, height
