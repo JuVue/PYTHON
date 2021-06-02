@@ -118,9 +118,10 @@ def main():
 
     ### INPUT FOLDERS
     um_root_dir = '/nfs/a96/MOCCHA/working/jutta/CloudNet/Oden/data/calibrated/metum/'
-    obs_met_dir='/nfs/a96/MOCCHA/working/jutta/final_data/met_alley/concatenated/';
+    obs_met_dir= '/nfs/a96/MOCCHA/working/jutta/final_data/met_alley/concatenated/';
     obs_acas_dir='/nfs/a96/MOCCHA/data/ACAS/ACAS_AO2018_v2_May2019/';
-    obs_rs_dir='/nfs/a96//MOCCHA/working/jutta/final_data/radiosondes';
+    obs_rs_dir='/nfs/a96//MOCCHA/working/jutta/final_data/radiosondes/';
+    obs_hatpro_dir='/nfs/a96/MOCCHA/working/jutta/final_data/HATPRO/';
 
     ### CHOSEN RUN
     out_dir1 = '25_u-cc568_RA2M_CON/'
@@ -173,7 +174,7 @@ def main():
     ##  for var in nc.variables: print (var)
     #### LOAD IN SPECIFIC DIAGNOSTICS
     ### BASE UM RUNS (UM_RA2M/UM_RA2T)
-    var_list1 = ['u_10m','v_10m', 'air_temperature_at_1.5m','q_1.5m','rh_1.5m','visibility','dew_point_temperature_at_1.5m','LWP','IWP']
+    var_list1 = ['u_10m','v_10m', 'air_temperature_at_1.5m','q_1.5m','rh_1.5m','visibility','dew_point_temperature_at_1.5m','LWP','IWP',
                 'surface_net_SW_radiation','surface_net_LW_radiation','surface_downwelling_LW_radiation','surface_downwelling_SW_radiation',
                 'sensible_heat_flux','latent_heat_flux']
                 #PLOT FROM CLOUDNET:
@@ -249,31 +250,36 @@ def main():
 
     print(obs_ice['metalley'].keys())
 
+     from IPython import embed; embed()
         #obs_ice['obs_temp'] = Dataset(obs_met_root_dir + 'MetData_Gillian_V3_30minres.nc','r')
         #print ('Load ice station flux data from Jutta...')
         #obs_ice['ice_station_fluxes'] = readMatlabStruct(obs_root_dir + 'ice_station/flux30qc_trhwxrel.mat')
 
-        print ('Load HATPRO data used by Cloudnet...')
-        dirname = '/home/gillian/MOCCHA/ODEN/DATA/hatpro/'
-        dir = os.listdir(dirname)
-        obs['hatpro'] = {}
-        for file in dir:
-            IWVtemp = readMatlabStruct(dirname + file)
-            print (IWVtemp.keys())
-            if file == '20180814_IWV_30s_V2.mat':       ### if it is the first file
-                obs['hatpro']['IWV'] = np.squeeze(IWVtemp['IWV'])
-                obs['hatpro']['mday'] = np.squeeze(IWVtemp['mday'])
-                obs['hatpro']['LWP'] = np.squeeze(IWVtemp['IWV'])
-                obs['hatpro']['rainflag'] = np.squeeze(IWVtemp['rainflag'])
-            else:
-                obs['hatpro']['IWV'] = np.append(np.squeeze(obs['hatpro']['IWV']),np.squeeze(IWVtemp['IWV']))
-                obs['hatpro']['mday'] = np.append(np.squeeze(obs['hatpro']['mday']),np.squeeze(IWVtemp['mday']))
-                obs['hatpro']['LWP'] = np.append(np.squeeze(obs['hatpro']['LWP']),np.squeeze(IWVtemp['LWP']))
-                obs['hatpro']['rainflag'] = np.append(np.squeeze(obs['hatpro']['rainflag']),np.squeeze(IWVtemp['rainflag']))
-        obs['hatpro']['doy'] = calcTime_Mat2DOY(obs['hatpro']['mday'])
+    print ('Load HATPRO data used by Cloudnet...')
+    filename='HATPRO_LWP_IWV_30s_V3_userready.mat'
 
-        print ('Load albedo estimates from Michael...')
-        obs['albedo'] = readMatlabStruct(obs_root_dir + 'MOCCHA_Albedo_estimates_Michael.mat')
+
+
+    dirname = '/home/gillian/MOCCHA/ODEN/DATA/hatpro/'
+    dir = os.listdir(dirname)
+    obs['hatpro'] = {}
+    for file in dir:
+        IWVtemp = readMatlabStruct(dirname + file)
+        print (IWVtemp.keys())
+        if file == '20180814_IWV_30s_V2.mat':       ### if it is the first file
+            obs['hatpro']['IWV'] = np.squeeze(IWVtemp['IWV'])
+            obs['hatpro']['mday'] = np.squeeze(IWVtemp['mday'])
+            obs['hatpro']['LWP'] = np.squeeze(IWVtemp['IWV'])
+            obs['hatpro']['rainflag'] = np.squeeze(IWVtemp['rainflag'])
+        else:
+            obs['hatpro']['IWV'] = np.append(np.squeeze(obs['hatpro']['IWV']),np.squeeze(IWVtemp['IWV']))
+            obs['hatpro']['mday'] = np.append(np.squeeze(obs['hatpro']['mday']),np.squeeze(IWVtemp['mday']))
+            obs['hatpro']['LWP'] = np.append(np.squeeze(obs['hatpro']['LWP']),np.squeeze(IWVtemp['LWP']))
+            obs['hatpro']['rainflag'] = np.append(np.squeeze(obs['hatpro']['rainflag']),np.squeeze(IWVtemp['rainflag']))
+    obs['hatpro']['doy'] = calcTime_Mat2DOY(obs['hatpro']['mday'])
+
+    print ('Load albedo estimates from Michael...')
+    obs['albedo'] = readMatlabStruct(obs_root_dir + 'MOCCHA_Albedo_estimates_Michael.mat')
 
     ### print ('Load ice station radiation data from Jutta...')
     ### obs['ice_station_radiation'] = readMatlabStruct(obs_root_dir + 'ice_station/mast_radiation_30min_v2.3.mat')
