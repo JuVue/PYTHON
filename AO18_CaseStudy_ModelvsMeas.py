@@ -79,7 +79,7 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     plt.plot(data1['time'], data1['air_temperature_at_1.5m'], color = 'darkblue', label = label1)
     plt.plot(data3['time'], data3['air_temperature_at_1.5m'], color = 'steelblue', label = label3[:-4])
     plt.plot(data2['time'], data2['air_temperature_at_1.5m'], color = 'mediumseagreen', label = label2)
-    plt.plot(obs['metalley']['time'], obs['metalley']['temperature'], color = 'black', label = 'obs metalley')#plt.ylabel('SW$_{net}$ [W m$^{-2}$]')
+    plt.plot(obs['metalley']['mday'], obs['metalley']['temperature'], color = 'black', label = 'obs metalley')#plt.ylabel('SW$_{net}$ [W m$^{-2}$]')
     plt.ylabel('T [$^\circ$C]')
     plt.legend(bbox_to_anchor=(-0.08, 0.67, 1., .102), loc=4, ncol=3)
     ax.set_xlim([datenum, datenum+1])
