@@ -77,9 +77,9 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     #plt.subplots(5,1)
     ax = plt.gca()
     yB = [-10, 120]
-    plt.plot(data1['time'], data1['air_temperature_at_1.5m'].data, color = 'darkblue', label = label1)
-    plt.plot(data3['time'], data3['air_temperature_at_1.5m'].data, color = 'steelblue', label = label3[:-4])
-    plt.plot(data2['time'], data2['air_temperature_at_1.5m'].data, color = 'mediumseagreen', label = label2)
+    plt.plot(data1['time'], data1['air_temperature_at_1.5m'].data-273.15, color = 'darkblue', label = label1)
+    plt.plot(data3['time'], data3['air_temperature_at_1.5m'].data-273.15, color = 'steelblue', label = label3[:-4])
+    plt.plot(data2['time'], data2['air_temperature_at_1.5m'].data-273.15, color = 'mediumseagreen', label = label2)
     plt.plot(obs['metalley']['mday'], obs['metalley']['t'].data, color = 'black', label = 'obs metalley')#plt.ylabel('SW$_{net}$ [W m$^{-2}$]')
     plt.ylabel('T [$^\circ$C]')
     plt.legend(bbox_to_anchor=(-0.08, 0.67, 1., .102), loc=4, ncol=3)
@@ -93,7 +93,7 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
     #plt.xticks([230,235,240,245,250,255])
     #ax.set_xticklabels(['18 Aug','23 Aug','28 Aug','2 Sep','7 Sep','12 Sep'])
-#    plt.ylim([-3,120])
+    plt.ylim([-20,0])
 
     #
     # ax  = fig.add_axes([0.07,0.4,0.53,0.22])   # left, bottom, width, height
