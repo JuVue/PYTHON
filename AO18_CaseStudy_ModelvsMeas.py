@@ -71,13 +71,14 @@ def plot_surfaceVariables(data1, data2, data3, out_dir1, out_dir2, out_dir3, dat
     ### -------------------------------
     fig = plt.figure(figsize=(18,12 ))
     #ax  = fig.add_axes([0.07,0.7,0.53,0.22])   # left, bottom, width, height
-    plot.subplots(5,1)
+    plt.subplots(5,1)
     ax[0] = plt.gca()
     yB = [-10, 120]
     plt.plot(data1['time'], data1['temperature'], color = 'darkblue', label = label1)
-    plt.plot(data3['time'], data3['surface_net_SW_radiation'], color = 'steelblue', label = label3[:-4])
-    plt.plot(data2['time'], data2['surface_net_SW_radiation'], color = 'mediumseagreen', label = label2)
-    plt.ylabel('SW$_{net}$ [W m$^{-2}$]')
+    plt.plot(data3['time'], data3['temperature'], color = 'steelblue', label = label3[:-4])
+    plt.plot(data2['time'], data2['temperature'], color = 'mediumseagreen', label = label2)
+    #plt.ylabel('SW$_{net}$ [W m$^{-2}$]')
+    plt.ylabel('T [$^\circ$C]')
     plt.legend(bbox_to_anchor=(-0.08, 0.67, 1., .102), loc=4, ncol=3)
     ax.set_xlim([datenum, datenum+1])
     #ax.xaxis.set_major_formatter(plt.dates.DateFormatter('%H%M')
@@ -86,6 +87,7 @@ def plot_surfaceVariables(data1, data2, data3, out_dir1, out_dir2, out_dir3, dat
     #plt.xticks([230,235,240,245,250,255])
     #ax.set_xticklabels(['18 Aug','23 Aug','28 Aug','2 Sep','7 Sep','12 Sep'])
 #    plt.ylim([-3,120])
+    from IPython import embed; embed()
 
     #
     # ax  = fig.add_axes([0.07,0.4,0.53,0.22])   # left, bottom, width, height
@@ -254,7 +256,6 @@ def main():
     filename='HATPRO_LWP_IWV_30s_V3_userready.mat'
     obs['hatpro'] = readMatlabStruct(obs_hatpro_dir + filename)
     print (obs['hatpro'].keys())
-    from IPython import embed; embed()
 
     obs['hatpro']['iwv'] = np.squeeze(obs['hatpro']['iwv'])
     obs['hatpro']['mday'] = np.squeeze(obs['hatpro']['mday'])
