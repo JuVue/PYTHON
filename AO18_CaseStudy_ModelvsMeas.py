@@ -72,7 +72,7 @@ def plot_surfaceVariables(data1, data2, data3, out_dir1, out_dir2, out_dir3, dat
     fig = plt.figure(figsize=(18,12 ))
     #ax  = fig.add_axes([0.07,0.7,0.53,0.22])   # left, bottom, width, height
     plt.subplots(5,1)
-    ax[0] = plt.gca()
+    ax = plt.gca()
     yB = [-10, 120]
     plt.plot(data1['time'], data1['temperature'], color = 'darkblue', label = label1)
     plt.plot(data3['time'], data3['temperature'], color = 'steelblue', label = label3[:-4])
