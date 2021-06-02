@@ -257,7 +257,6 @@ def main():
 
     print ('Load HATPRO data used by Cloudnet...')
     filename='HATPRO_LWP_IWV_30s_V3_userready.mat'
-    obs['hatpro']=
     obs['hatpro'] = readMatlabStruct(dirname + file)
     print (IWVtemp.keys())
     obs['hatpro']['IWV'] = np.squeeze(IWVtemp['IWV'])
