@@ -73,7 +73,7 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     ### Build figure (timeseries)
     ### -------------------------------
     #from IPython import embed; embed()
-
+    plt.ion()
     fig = plt.figure(figsize=(18,12 ))
     #ax  = fig.add_axes([0.07,0.7,0.53,0.22])   # left, bottom, width, height
     plt.subplot(3,1,1)
@@ -106,7 +106,7 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=3))
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-    plt.ylim([50,100])
+    plt.ylim([80,110])
 
     #
     # ax  = fig.add_axes([0.07,0.4,0.53,0.22])   # left, bottom, width, height
@@ -121,9 +121,9 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     date=datenum2date(datenum)
     #from IPython import embed; embed()
     fileout = os.path.join(plot_out_dir,date.strftime('%Y%m%d') , '_testplot_line.png')
-    # plt.savefig(fileout)
-    plt.ion()
-    plt.show()
+     plt.savefig(fileout)
+    #plt.ion()
+    #plt.show()
     from IPython import embed; embed()
 
 
