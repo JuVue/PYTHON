@@ -72,11 +72,11 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     ### -------------------------------
     ### Build figure (timeseries)
     ### -------------------------------
-    from IPython import embed; embed()
+    #from IPython import embed; embed()
 
     fig = plt.figure(figsize=(18,12 ))
     #ax  = fig.add_axes([0.07,0.7,0.53,0.22])   # left, bottom, width, height
-    plt.subplots(3,1,1)
+    plt.subplot(3,1,1)
     ax = plt.gca()
     yB = [-10, 120]
     plt.plot(data1['time'], data1['air_temperature_at_1.5m']-273.15, color = 'darkblue', label = label1)
@@ -92,7 +92,7 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
     plt.ylim([-10,0])
 
-    plt.subplots(3,1,2)
+    plt.subplot(3,1,2)
     ax = plt.gca()
     yB = [-10, 120]
     plt.plot(data1['time'], data1['rh_1.5m'], color = 'darkblue', label = label1)
