@@ -250,7 +250,7 @@ def main():
 
     print(obs_ice['metalley'].keys())
 
-     from IPython import embed; embed()
+    from IPython import embed; embed()
         #obs_ice['obs_temp'] = Dataset(obs_met_root_dir + 'MetData_Gillian_V3_30minres.nc','r')
         #print ('Load ice station flux data from Jutta...')
         #obs_ice['ice_station_fluxes'] = readMatlabStruct(obs_root_dir + 'ice_station/flux30qc_trhwxrel.mat')
