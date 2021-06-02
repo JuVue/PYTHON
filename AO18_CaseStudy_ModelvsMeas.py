@@ -75,27 +75,38 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     from IPython import embed; embed()
 
     fig = plt.figure(figsize=(18,12 ))
-    ax  = fig.add_axes([0.07,0.7,0.53,0.22])   # left, bottom, width, height
-    #plt.subplots(5,1)
+    #ax  = fig.add_axes([0.07,0.7,0.53,0.22])   # left, bottom, width, height
+    plt.subplots(3,1,1)
     ax = plt.gca()
     yB = [-10, 120]
-    plt.plot(data1['time'], data1['air_temperature_at_1.5m'].data-273.15, color = 'darkblue', label = label1)
-    plt.plot(data3['time'], data3['air_temperature_at_1.5m'].data-273.15, color = 'steelblue', label = label3[:-4])
-    plt.plot(data2['time'], data2['air_temperature_at_1.5m'].data-273.15, color = 'mediumseagreen', label = label2)
-    plt.plot(obs['metalley']['mday'], obs['metalley']['t'].data, color = 'black', label = 'obs metalley')#plt.ylabel('SW$_{net}$ [W m$^{-2}$]')
+    plt.plot(data1['time'], data1['air_temperature_at_1.5m']-273.15, color = 'darkblue', label = label1)
+    plt.plot(data3['time'], data3['air_temperature_at_1.5m']-273.15, color = 'steelblue', label = label3[:-4])
+    plt.plot(data2['time'], data2['air_temperature_at_1.5m']-273.15, color = 'mediumseagreen', label = label2[:-7])
+    plt.plot(obs['metalley']['mday'], obs['metalley']['t'], color = 'black', label = 'Obs')#plt.ylabel('SW$_{net}$ [W m$^{-2}$]')
     plt.ylabel('T [$^\circ$C]')
     plt.legend(bbox_to_anchor=(-0.08, 0.67, 1., .102), loc=4, ncol=3)
     ax.set_xlim([datenum, datenum+1])
-
-    #plt.xticks(np.arange(datenum, datenum+1,step=0.3))
-    #plt.ion()
-    #plt.show()
+    plt.grid()
     ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=3))
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-    #plt.xticks([230,235,240,245,250,255])
-    #ax.set_xticklabels(['18 Aug','23 Aug','28 Aug','2 Sep','7 Sep','12 Sep'])
-    plt.ylim([-20,0])
+    plt.ylim([-10,0])
+
+    plt.subplots(3,1,2)
+    ax = plt.gca()
+    yB = [-10, 120]
+    plt.plot(data1['time'], data1['rh_1.5m'], color = 'darkblue', label = label1)
+    plt.plot(data3['time'], data3['rh_1.5m'], color = 'steelblue', label = label3[:-4])
+    plt.plot(data2['time'], data2['rh_1.5m'], color = 'mediumseagreen', label = label2[:-7])
+    plt.plot(obs['metalley']['mday'], obs['metalley']['rh'], color = 'black', label = 'Obs')#plt.ylabel('SW$_{net}$ [W m$^{-2}$]')
+    plt.ylabel('RH [$%]')
+    #plt.legend(bbox_to_anchor=(-0.08, 0.67, 1., .102), loc=4, ncol=3)
+    ax.set_xlim([datenum, datenum+1])
+    plt.grid()
+    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=3))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+    plt.ylim([50,100])
 
     #
     # ax  = fig.add_axes([0.07,0.4,0.53,0.22])   # left, bottom, width, height
@@ -108,7 +119,7 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     print ('')
 
     date=datenum2date(datenum)
-    from IPython import embed; embed()
+    #from IPython import embed; embed()
     fileout = os.path.join(plot_out_dir,date.strftime('%Y%m%d') , '_testplot_line.png')
     # plt.savefig(fileout)
     plt.show()
@@ -305,18 +316,18 @@ def main():
     label1 = 'undefined_label'
     if out_dir1[:10] == '25_u-cc568': label1 = 'UM_RA2M'
     if out_dir1[:10] == '24_u-cc324': label1 = 'UM_RA2T_' + out_dir1[-4:-1]
-    if out_dir1[:10] == '23_u-cc278': label1 = 'UM_CASIM-100_GA6alb'
+    if out_dir1[:10] == '23_u-cc278': label1 = 'UM_CASIM-100'
 
     label2 = 'undefined_label'
     if out_dir2[:10] == '25_u-cc568': label2 = 'UM_RA2M'
     if out_dir2[:10] == '24_u-cc324': label2 = 'UM_RA2T_' + out_dir2[-4:-1]
-    if out_dir2[:10] == '23_u-cc278': label2 = 'UM_CASIM-100_GA6alb'
+    if out_dir2[:10] == '23_u-cc278': label2 = 'UM_CASIM-100'
 
     label3 = 'undefined_label'
     if out_dir3 == 'OUT_25H/': label3 = 'ECMWF_IFS'
     if out_dir3[:10] == '25_u-cc568': label3 = 'UM_RA2M'
     if out_dir3[:10] == '24_u-cc324': label3 = 'UM_RA2T_' + out_dir3[-4:-1]
-    if out_dir3[:10] == '23_u-cc278': label3 = 'UM_CASIM-100_GA6alb'
+    if out_dir3[:10] == '23_u-cc278': label3 = 'UM_CASIM-100'
 
     # -------------------------------------------------------------
     # Plot paper figures
