@@ -84,7 +84,7 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     plt.plot(data2['time'], data2['air_temperature_at_1.5m']-273.15, color = 'mediumseagreen', label = label2[:-7])
     plt.plot(obs['metalley']['mday'], obs['metalley']['t'], color = 'black', label = 'Obs')#plt.ylabel('SW$_{net}$ [W m$^{-2}$]')
     plt.ylabel('T [$^\circ$C]')
-    plt.legend(bbox_to_anchor=(-0.08, 0.67, 1., .102), loc=4, ncol=3)
+    plt.legend(bbox_to_anchor=(-0.08, 0.67, 1., .102), loc=4, ncol=4)
     ax.set_xlim([datenum, datenum+1])
     plt.grid()
     ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
@@ -99,7 +99,7 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     plt.plot(data3['time'], data3['rh_1.5m'], color = 'steelblue', label = label3[:-4])
     plt.plot(data2['time'], data2['rh_1.5m'], color = 'mediumseagreen', label = label2[:-7])
     plt.plot(obs['metalley']['mday'], obs['metalley']['rh'], color = 'black', label = 'Obs')#plt.ylabel('SW$_{net}$ [W m$^{-2}$]')
-    plt.ylabel('RH [$%]')
+    plt.ylabel('RH [$\%]')
     #plt.legend(bbox_to_anchor=(-0.08, 0.67, 1., .102), loc=4, ncol=3)
     ax.set_xlim([datenum, datenum+1])
     plt.grid()
@@ -122,7 +122,11 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     #from IPython import embed; embed()
     fileout = os.path.join(plot_out_dir,date.strftime('%Y%m%d') , '_testplot_line.png')
     # plt.savefig(fileout)
+    plt.ion()
     plt.show()
+    from IPython import embed; embed()
+
+
 
 
 
