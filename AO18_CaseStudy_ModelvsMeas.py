@@ -10,6 +10,7 @@ from netCDF4 import Dataset
 #import cartopy.crs as ccrs
 #import iris
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 #import matplotlib.cm as mpl_cm
 import os
 #import seaborn as sns
@@ -40,6 +41,8 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     plt.rc('xtick',labelsize=MED_SIZE)
     plt.rc('ytick',labelsize=MED_SIZE)
     plt.rc('legend',fontsize=MED_SIZE)
+    plt.subplots_adjust(top = 0.95, bottom = 0.05, right = 0.95, left = 0.05,
+            hspace = 0.4, wspace = 0.13)
 
     ##############################################################################
     ####        need the following if NOT using check_Radiation
@@ -69,17 +72,15 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     ### -------------------------------
     ### Build figure (timeseries)
     ### -------------------------------
-    from IPython import embed; embed()
-
     fig = plt.figure(figsize=(18,12 ))
     #ax  = fig.add_axes([0.07,0.7,0.53,0.22])   # left, bottom, width, height
     plt.subplots(5,1)
     ax = plt.gca()
     yB = [-10, 120]
-    plt.plot(data1['time'], data1['air_temperature_at_1.5m'], color = 'darkblue', label = label1)
-    plt.plot(data3['time'], data3['air_temperature_at_1.5m'], color = 'steelblue', label = label3[:-4])
-    plt.plot(data2['time'], data2['air_temperature_at_1.5m'], color = 'mediumseagreen', label = label2)
-    plt.plot(obs['metalley']['mday'], obs['metalley']['temperature'], color = 'black', label = 'obs metalley')#plt.ylabel('SW$_{net}$ [W m$^{-2}$]')
+    plt.plot(data1['time'], data1['air_temperature_at_1.5m'].data, color = 'darkblue', label = label1)
+    plt.plot(data3['time'], data3['air_temperature_at_1.5m'].data, color = 'steelblue', label = label3[:-4])
+    plt.plot(data2['time'], data2['air_temperature_at_1.5m'].data, color = 'mediumseagreen', label = label2)
+    plt.plot(obs['metalley']['mday'], obs['metalley']['temperature'].data, color = 'black', label = 'obs metalley')#plt.ylabel('SW$_{net}$ [W m$^{-2}$]')
     plt.ylabel('T [$^\circ$C]')
     plt.legend(bbox_to_anchor=(-0.08, 0.67, 1., .102), loc=4, ncol=3)
     ax.set_xlim([datenum, datenum+1])
