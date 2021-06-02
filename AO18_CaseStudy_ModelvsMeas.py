@@ -246,7 +246,6 @@ def main():
     obs['metalley'] = readMatlabStruct(obs_met_dir + filename)
     print(obs['metalley'].keys())
 
-    from IPython import embed; embed()
         #obs_ice['obs_temp'] = Dataset(obs_met_root_dir + 'MetData_Gillian_V3_30minres.nc','r')
         #print ('Load ice station flux data from Jutta...')
         #obs_ice['ice_station_fluxes'] = readMatlabStruct(obs_root_dir + 'ice_station/flux30qc_trhwxrel.mat')
@@ -255,7 +254,9 @@ def main():
     filename='HATPRO_LWP_IWV_30s_V3_userready.mat'
     obs['hatpro'] = readMatlabStruct(obs_hatpro_dir + filename)
     print (obs['hatpro'].keys())
-    obs['hatpro']['HATPRO_LWP_IWV_30s_V3_userready'] = np.squeeze(obs['hatpro']['iwv'])
+    from IPython import embed; embed()
+
+    obs['hatpro']['iwv'] = np.squeeze(obs['hatpro']['iwv'])
     obs['hatpro']['mday'] = np.squeeze(obs['hatpro']['mday'])
     obs['hatpro']['lwp'] = np.squeeze(obs['hatpro']['lwp'])
     obs['hatpro']['lwpflag'] = np.squeeze(obs['hatpro']['lwp_corflag'])
