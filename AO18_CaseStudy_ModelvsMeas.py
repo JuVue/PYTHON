@@ -119,9 +119,9 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     print ('')
 
     date=datenum2date(datenum)
-    #from IPython import embed; embed()
-    fnameout=[date.strftime('%Y%m%d') , '_testplot_line.png']
-    fileout = os.path.join(plot_out_dir,fnameout)
+    from IPython import embed; embed()
+    #fnameout=[date.strftime('%Y%m%d') , '_testplot_line.png']
+    #fileout = os.path.join(plot_out_dir,fnameout)
     plt.savefig(fileout)
     #plt.ion()
     #plt.show()
