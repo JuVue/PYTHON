@@ -118,9 +118,9 @@ def main():
 
     ### INPUT FOLDERS
     um_root_dir = '/nfs/a96/MOCCHA/working/jutta/CloudNet/Oden/data/calibrated/metum/'
-    obs_met_dir= '/nfs/a96/MOCCHA/working/jutta/final_data/met_alley/concatenated/';
-    obs_acas_dir='/nfs/a96/MOCCHA/data/ACAS/ACAS_AO2018_v2_May2019/';
-    obs_rs_dir='/nfs/a96//MOCCHA/working/jutta/final_data/radiosondes/';
+    obs_met_dir=  '/nfs/a96/MOCCHA/working/jutta/final_data/met_alley/concatenated/';
+    obs_acas_dir= '/nfs/a96/MOCCHA/data/ACAS/ACAS_AO2018_v2_May2019/';
+    obs_rs_dir=   '/nfs/a96/MOCCHA/working/jutta/final_data/radiosondes/V3/';
     obs_hatpro_dir='/nfs/a96/MOCCHA/working/jutta/final_data/HATPRO/';
     obs_albedo_dir='/nfs/a96/MOCCHA/working/data/'
     ### CHOSEN RUN
