@@ -253,7 +253,7 @@ def main():
 
     print ('Load HATPRO data used by Cloudnet...')
     filename='HATPRO_LWP_IWV_30s_V3_userready.mat'
-    obs['hatpro'] = readMatlabStruct(obs_hatpro_dir + file)
+    obs['hatpro'] = readMatlabStruct(obs_hatpro_dir + filename)
     print (obs['hatpro'].keys())
     obs['hatpro']['IWV'] = np.squeeze(obs['hatpro']['IWV'])
     obs['hatpro']['mday'] = np.squeeze(obs['hatpro']['mday'])
