@@ -215,7 +215,7 @@ def main():
     out_dir3 = '24_u-cc324_RA2T_CON/'
 
     ### CHOOSE DATES TO PLOT
-    DATES = 20180913
+    DATES = 2018091300
     ENDDATE=2018091315
 
     ### SET OUTPUT DIRECTORY FOR PLOTS
@@ -236,7 +236,7 @@ def main():
 
     strdate = str(DATES)
     estrdate=str(ENDDATE)
-    datenum = date2datenum(datetime.datetime.strptime(strdate,'%Y%m%d'))
+    datenum = date2datenum(datetime.datetime.strptime(strdate,'%Y%m%d%H'))
     edatenum = date2datenum(datetime.datetime.strptime(estrdate,'%Y%m%d%H'))
     filename_um1 = um_root_dir + out_dir1 + strdate + '_oden_metum.nc'
     filename_um2 = um_root_dir + out_dir2 + strdate + '_oden_metum.nc'
