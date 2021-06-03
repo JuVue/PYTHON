@@ -123,7 +123,7 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
 
 
 
-def plot_sradiation(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3, datenum, label1, label2, label3,plot_out_dir):
+def plot_radiation(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3, datenum, label1, label2, label3,plot_out_dir):
     print ('******')
     print ('')
     print ('Plotting combined timeseries and PDFs of radiation terms:')
@@ -470,24 +470,19 @@ def main():
     obs['metalley'] = readMatlabStruct(obs_met_dir + filename)
     print(obs['metalley'].keys())
 
-        #obs_ice['obs_temp'] = Dataset(obs_met_root_dir + 'MetData_Gillian_V3_30minres.nc','r')
-        #print ('Load ice station flux data from Jutta...')
-        #obs_ice['ice_station_fluxes'] = readMatlabStruct(obs_root_dir + 'ice_station/flux30qc_trhwxrel.mat')
+    # print ('Load HATPRO data used by Cloudnet...')
+    # filename='HATPRO_LWP_IWV_30s_V3_userready.mat'
+    # obs['hatpro'] = readMatlabStruct(obs_hatpro_dir + filename)
+    # print (obs['hatpro'].keys())
+    #
+    # obs['hatpro']['iwv'] = np.squeeze(obs['hatpro']['iwv'])
+    # obs['hatpro']['mday'] = np.squeeze(obs['hatpro']['mday'])
+    # obs['hatpro']['lwp'] = np.squeeze(obs['hatpro']['lwp'])
+    # obs['hatpro']['lwpflag'] = np.squeeze(obs['hatpro']['lwp_corflag'])
+    # obs['hatpro']['iwvflag'] = np.squeeze(obs['hatpro']['iwv_corflag'])
+    # obs['hatpro']['rainflag'] = np.squeeze(obs['hatpro']['rainflag'])
+    # obs['hatpro']['doy'] = calcTime_Mat2DOY(obs['hatpro']['mday'])
 
-    print ('Load HATPRO data used by Cloudnet...')
-    filename='HATPRO_LWP_IWV_30s_V3_userready.mat'
-    obs['hatpro'] = readMatlabStruct(obs_hatpro_dir + filename)
-    print (obs['hatpro'].keys())
-
-    obs['hatpro']['iwv'] = np.squeeze(obs['hatpro']['iwv'])
-    obs['hatpro']['mday'] = np.squeeze(obs['hatpro']['mday'])
-    obs['hatpro']['lwp'] = np.squeeze(obs['hatpro']['lwp'])
-    obs['hatpro']['lwpflag'] = np.squeeze(obs['hatpro']['lwp_corflag'])
-    obs['hatpro']['iwvflag'] = np.squeeze(obs['hatpro']['iwv_corflag'])
-    #obs['hatpro']['lwpflagread'] = np.squeeze(obs['hatpro']['lwp_corflag_readme'])
-    #obs['hatpro']['iwvflagread'] = np.squeeze(obs['hatpro']['iwv_corflag_readme'])
-    obs['hatpro']['rainflag'] = np.squeeze(obs['hatpro']['rainflag'])
-    obs['hatpro']['doy'] = calcTime_Mat2DOY(obs['hatpro']['mday'])
 
     print ('Load albedo estimates from Michael...')
     obs['albedo'] = readMatlabStruct(obs_albedo_dir + 'MOCCHA_Albedo_estimates_Michael.mat')
@@ -512,6 +507,7 @@ def main():
 
     print ('...')
 
+    from IPython import embed; embed()
 
 
     #################################################################
