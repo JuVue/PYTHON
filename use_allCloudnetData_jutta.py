@@ -20,7 +20,7 @@ from scipy.interpolate import interp1d
 
 #### import python functions
 import sys
-sys.path.insert(1, '../py_functions/')
+sys.path.insert(1, './py_functions/')
 from time_functions import calcTime_Mat2DOY
 from readMAT import readMatlabStruct
 from physFuncts import calcThetaE, calcThetaVL
