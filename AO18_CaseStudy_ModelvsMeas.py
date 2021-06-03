@@ -97,7 +97,7 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     plt.savefig(fileout)
     #plt.ion()
 
-def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3, datenum, label1, label2, label3,plot_out_dir):
+def plot_radiation(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3, datenum, label1, label2, label3,plot_out_dir):
 
     print ('******')
     print ('')
@@ -188,7 +188,7 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     print ('')
 
     date=datenum2date(datenum)
-    
+
     fileout = os.path.join(plot_out_dir,date.strftime('%Y%m%d') + '_radiation_ts.png')
     plt.savefig(fileout)
 
