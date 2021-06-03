@@ -7926,56 +7926,56 @@ def main():
             #### 7th deck: temperature, surface temperature, RH, downwelling SW, downwelling LW
                     #### 7thDeck/ACAS_AO2018_WX_30min_v2_0.nc
 
-    obs = {}
-
-    if platform == 'LAPTOP':
-        print ('Load temporary ice station data from Jutta...')
-        obs['obs_temp'] = Dataset(obs_root_dir + 'MET_DATA/MetData_Gillian_V3_30minres.nc','r')
-        print ('Load ice station flux data from Jutta...')
-        obs['ice_station_fluxes'] = readMatlabStruct(obs_root_dir + 'ice_station/flux30qc_trhwxrel.mat')
-
-        print ('Load HATPRO data used by Cloudnet...')
-        dirname = '/home/gillian/MOCCHA/ODEN/DATA/hatpro/'
-        dir = os.listdir(dirname)
-        obs['hatpro'] = {}
-        for file in dir:
-            if file == 'V1': continue
-            print (file)
-            IWVtemp = readMatlabStruct(dirname + file)
-            print (IWVtemp.keys())
-            if file == '20180814_IWV_30s_V2.mat':       ### if it is the first file
-                obs['hatpro']['IWV'] = np.squeeze(IWVtemp['iwv'])
-                obs['hatpro']['mday'] = np.squeeze(IWVtemp['mday'])
-                obs['hatpro']['LWP'] = np.squeeze(IWVtemp['lwp'])
-                obs['hatpro']['rainflag'] = np.squeeze(IWVtemp['rainflag'])
-            else:
-                obs['hatpro']['IWV'] = np.append(np.squeeze(obs['hatpro']['IWV']),np.squeeze(IWVtemp['iwv']))
-                obs['hatpro']['mday'] = np.append(np.squeeze(obs['hatpro']['mday']),np.squeeze(IWVtemp['mday']))
-                obs['hatpro']['LWP'] = np.append(np.squeeze(obs['hatpro']['LWP']),np.squeeze(IWVtemp['lwp']))
-                obs['hatpro']['rainflag'] = np.append(np.squeeze(obs['hatpro']['rainflag']),np.squeeze(IWVtemp['rainflag']))
-        obs['hatpro']['doy'] = calcTime_Mat2DOY(obs['hatpro']['mday'])
-
-        print ('Load albedo estimates from Michael...')
-        obs['albedo'] = readMatlabStruct(obs_root_dir + 'MOCCHA_Albedo_estimates_Michael.mat')
-    ### print ('Load ice station radiation data from Jutta...')
-    ### obs['ice_station_radiation'] = readMatlabStruct(obs_root_dir + 'ice_station/mast_radiation_30min_v2.3.mat')
-
-    print ('Load radiosonde data from Jutta...')
-    obs['sondes'] = readMatlabStruct(obs_root_dir + 'radiosondes/SondeData_h10int_V02.mat')
-
-    print ('Load observations inversion height data from Jutta...')
-    obs['inversions'] = readMatlabStruct(obs_root_dir + 'radiosondes/InversionHeights_RSh05int_final_V03.mat')
-
-    print ('Load foremast data from John...')
-    obs['foremast'] = Dataset(obs_root_dir + 'foremast/ACAS_AO2018_foremast_30min_v2_0.nc','r')
-
-    print ('Load 7th deck weather station data from John...')
-    obs['deck7th'] = Dataset(obs_root_dir + '7thDeck/ACAS_AO2018_WX_30min_v2_0.nc','r')
-
-    print ('Load weather sensor data from John...')
-    obs['pws'] = readMatlabStruct(obs_root_dir + '7thDeck/ACAS_AO2018_PWD_30min_v1_0.mat')
-
-    print ('...')
+    # obs = {}
+    #
+    # if platform == 'LAPTOP':
+    #     print ('Load temporary ice station data from Jutta...')
+    #     obs['obs_temp'] = Dataset(obs_root_dir + 'MET_DATA/MetData_Gillian_V3_30minres.nc','r')
+    #     print ('Load ice station flux data from Jutta...')
+    #     obs['ice_station_fluxes'] = readMatlabStruct(obs_root_dir + 'ice_station/flux30qc_trhwxrel.mat')
+    #
+    #     print ('Load HATPRO data used by Cloudnet...')
+    #     dirname = '/home/gillian/MOCCHA/ODEN/DATA/hatpro/'
+    #     dir = os.listdir(dirname)
+    #     obs['hatpro'] = {}
+    #     for file in dir:
+    #         if file == 'V1': continue
+    #         print (file)
+    #         IWVtemp = readMatlabStruct(dirname + file)
+    #         print (IWVtemp.keys())
+    #         if file == '20180814_IWV_30s_V2.mat':       ### if it is the first file
+    #             obs['hatpro']['IWV'] = np.squeeze(IWVtemp['iwv'])
+    #             obs['hatpro']['mday'] = np.squeeze(IWVtemp['mday'])
+    #             obs['hatpro']['LWP'] = np.squeeze(IWVtemp['lwp'])
+    #             obs['hatpro']['rainflag'] = np.squeeze(IWVtemp['rainflag'])
+    #         else:
+    #             obs['hatpro']['IWV'] = np.append(np.squeeze(obs['hatpro']['IWV']),np.squeeze(IWVtemp['iwv']))
+    #             obs['hatpro']['mday'] = np.append(np.squeeze(obs['hatpro']['mday']),np.squeeze(IWVtemp['mday']))
+    #             obs['hatpro']['LWP'] = np.append(np.squeeze(obs['hatpro']['LWP']),np.squeeze(IWVtemp['lwp']))
+    #             obs['hatpro']['rainflag'] = np.append(np.squeeze(obs['hatpro']['rainflag']),np.squeeze(IWVtemp['rainflag']))
+    #     obs['hatpro']['doy'] = calcTime_Mat2DOY(obs['hatpro']['mday'])
+    #
+    #     print ('Load albedo estimates from Michael...')
+    #     obs['albedo'] = readMatlabStruct(obs_root_dir + 'MOCCHA_Albedo_estimates_Michael.mat')
+    # ### print ('Load ice station radiation data from Jutta...')
+    # ### obs['ice_station_radiation'] = readMatlabStruct(obs_root_dir + 'ice_station/mast_radiation_30min_v2.3.mat')
+    #
+    # print ('Load radiosonde data from Jutta...')
+    # obs['sondes'] = readMatlabStruct(obs_root_dir + 'radiosondes/SondeData_h10int_V02.mat')
+    #
+    # print ('Load observations inversion height data from Jutta...')
+    # obs['inversions'] = readMatlabStruct(obs_root_dir + 'radiosondes/InversionHeights_RSh05int_final_V03.mat')
+    #
+    # print ('Load foremast data from John...')
+    # obs['foremast'] = Dataset(obs_root_dir + 'foremast/ACAS_AO2018_foremast_30min_v2_0.nc','r')
+    #
+    # print ('Load 7th deck weather station data from John...')
+    # obs['deck7th'] = Dataset(obs_root_dir + '7thDeck/ACAS_AO2018_WX_30min_v2_0.nc','r')
+    #
+    # print ('Load weather sensor data from John...')
+    # obs['pws'] = readMatlabStruct(obs_root_dir + '7thDeck/ACAS_AO2018_PWD_30min_v1_0.mat')
+    #
+    # print ('...')
 
 ###################################################################################################################
 ###################################################################################################################
