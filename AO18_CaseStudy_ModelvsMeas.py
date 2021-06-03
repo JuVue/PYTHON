@@ -417,7 +417,8 @@ def main():
                     #### obs['foremast']/ACAS_AO2018_obs['foremast']_30min_v2_0.nc
             #### 7th deck: temperature, surface temperature, RH, downwelling SW, downwelling LW
                     #### 7thDeck/ACAS_AO2018_WX_30min_v2_0.nc
-
+    obs={}
+    
     print ('Load ice station data from Jutta...')
     filename = 'AO2018_metalley_01min_v3.0.mat'
     obs['metalley'] = readMatlabStruct(obs_met_dir + filename)
