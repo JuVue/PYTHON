@@ -7802,8 +7802,8 @@ def main():
     ### -----------------------------------------------------------------
     ### CHOSEN RUN - MODEL DATA
     out_dir1 = '25_u-cc568_RA2M_CON/'
-    out_dir2 = '24_u-cc324_RA2T_CON/'
-    out_dir3 = '23_u-cc278_RA1M_CASIM/'
+    out_dir3 = '24_u-cc324_RA2T_CON/'
+    out_dir2 = '23_u-cc278_RA1M_CASIM/'
 
     ### -----------------------------------------------------------------
     ### CHOSEN RUN - CLOUDNET DATA
@@ -7839,21 +7839,21 @@ def main():
         datenum = date2datenum(names[0:7])
 
         print ('load cloudnet data:')
-        cn_filename_um1 = [cn_um_dir + out_dir1 + cn_um_out_dir[0] + names[i] + cn_um_out_dir[0][-31:-6] + '.nc',
+        cn_filename_um = [cn_um_dir + out_dir1 + cn_um_out_dir[0] + names[i] + cn_um_out_dir[0][-31:-6] + '.nc',
                         cn_um_dir + out_dir1 + cn_um_out_dir[1] + names[i] + cn_um_out_dir[1][-27:-6] + '.nc',
                         cn_um_dir + out_dir1 + cn_um_out_dir[2] + names[i] + cn_um_out_dir[2][-24:-6] + '.nc']
-        cn_filename_um2 = [cn_um_dir + out_dir2 + cn_um_out_dir[0] + names[i] + cn_um_out_dir[0][-31:-6] + '.nc',
+        cn_filename_misc = [cn_um_dir + out_dir2 + cn_um_out_dir[0] + names[i] + cn_um_out_dir[0][-31:-6] + '.nc',
                         cn_um_dir + out_dir2 + cn_um_out_dir[1] + names[i] + cn_um_out_dir[1][-27:-6] + '.nc',
                         cn_um_dir + out_dir2 + cn_um_out_dir[2] + names[i] + cn_um_out_dir[2][-24:-6] + '.nc']
-        cn_filename_um3 = [cn_um_dir + out_dir3 + cn_um_out_dir[0] + names[i] + cn_um_out_dir[0][-31:-6] + '.nc',
+        cn_filename_ra2t = [cn_um_dir + out_dir3 + cn_um_out_dir[0] + names[i] + cn_um_out_dir[0][-31:-6] + '.nc',
                         cn_um_dir + out_dir3 + cn_um_out_dir[1] + names[i] + cn_um_out_dir[1][-27:-6] + '.nc',
                         cn_um_dir + out_dir3 + cn_um_out_dir[2] + names[i] + cn_um_out_dir[2][-24:-6] + '.nc']
         cn_filename_obs = [cn_obs_dir + cn_obs_out_dir[0] + names[i] + cn_obs_out_dir[0][:-6] + '.nc',
                         cn_obs_dir + cn_obs_out_dir[1] + names[i] + cn_obs_out_dir[1][:-6] + '.nc',
                         cn_obs_dir + cn_obs_out_dir[2] + names[i] + cn_obs_out_dir[2][:-6] + '.nc']
-        print (cn_filename_um1)
-        print (cn_filename_um2)
-        print (cn_filename_um3)
+        print (cn_filename_um)
+        print (cn_filename_misc)
+        print (cn_filename_ra2t)
         print (cn_filename_obs)
         print ('')
 
@@ -7864,10 +7864,11 @@ def main():
         cn_nc1 = {}
         cn_nc2 = {}
         cn_nc3 = {}
+        cn_nc0 = {}
         for c in range(0,3):
-            cn_nc1[c] = Dataset(cn_filename_um1[c],'r')
-            cn_nc2[c] = Dataset(cn_filename_um2[c],'r')
-            cn_nc3[c] = Dataset(cn_filename_um3[c],'r')
+            cn_nc1[c] = Dataset(cn_filename_um[c],'r')
+            cn_nc2[c] = Dataset(cn_filename_misc[c],'r')
+            cn_nc3[c] = Dataset(cn_filename_ra2t[c],'r')
             cn_nc0[c] = Dataset(cn_filename_obs[c],'r')
 
         # -------------------------------------------------------------
@@ -7892,9 +7893,9 @@ def main():
             ### --------------------------------------------------------------------
             ### initialise cloudnet data dictionaries
             ### --------------------------------------------------------------------
-            um1_data = {}
-            um2_data = {}
-            um3_data = {}
+            um_data = {}
+            misc_data = {}
+            ra2t_data = {}
             obs_data = {}
             ### --------------------------------------------------------------------
             ### create time arrays for all cloudnet data
@@ -7903,9 +7904,9 @@ def main():
                 time_obs = datenum[i] + ((cn_nc0[1].variables['time'][:])/24.0)
             else:
                 time_obs = datenum[i] + ((cn_nc0[0].variables['time'][:])/24.0)
-            time_um1 = datenum[i] + ((cn_nc1[0].variables['time'][:])/24.0)
-            time_um2 = datenum[i] + ((cn_nc2[0].variables['time'][:])/24.0)
-            time_um3 = datenum[i] + ((cn_nc3[0].variables['time'][:])/24.0)
+            time_um = datenum[i] + ((cn_nc1[0].variables['time'][:])/24.0)
+            time_misc = datenum[i] + ((cn_nc2[0].variables['time'][:])/24.0)
+            time_ra2t = datenum[i] + ((cn_nc3[0].variables['time'][:])/24.0)
 
             ### --------------------------------------------------------------------
             ### loop over each Cloudnet class
@@ -7933,9 +7934,9 @@ def main():
                 ### --------------------------------------------------------------------
                 for j in range(0,len(um_var_list[c])):
                     if np.ndim(cn_nc1[c].variables[um_var_list[c][j]]) == 1:  # 1d timeseries only
-                        um1_data[um_var_list[c][j]] = cn_nc1[c].variables[um_var_list[c][j]][:]
+                        um_data[um_var_list[c][j]] = cn_nc1[c].variables[um_var_list[c][j]][:]
                     else:                                   # 2d column um_data
-                        um1_data[um_var_list[c][j]] = cn_nc1[c].variables[um_var_list[c][j]][:]
+                        um_data[um_var_list[c][j]] = cn_nc1[c].variables[um_var_list[c][j]][:]
                 ### --------------------------------------------------------------------
                 ### load in initial UM_CASIM-100 data
                 ### --------------------------------------------------------------------
@@ -7961,9 +7962,7 @@ def main():
             else:
                 time_obs = np.append(time_obs, doy[i] + ((cn_nc0[0].variables['time'][:])/24.0))
             time_um = np.append(time_um, doy[i] + ((cn_nc1[0].variables['time'][:])/24.0))
-            if cn_misc_flag == 1: time_misc = np.append(time_misc, doy[i] + ((cn_nc2[0].variables['forecast_time'][:])/24.0))
             if cn_misc_flag == 0: time_misc = np.append(time_misc, doy[i] + ((cn_nc2[0].variables['time'][:])/24.0))
-            time_ifs = np.append(time_ifs, doy[i] + ((cn_nc3[0].variables['time'][:])/24.0))
             time_ra2t = np.append(time_ra2t, doy[i] + ((cn_nc4[0].variables['time'][:])/24.0))
 
             ### --------------------------------------------------------------------
@@ -8008,14 +8007,6 @@ def main():
                     else:
                         misc_data[misc_var_list[c][j]] = np.append(misc_data[misc_var_list[c][j]],cn_nc2[c].variables[misc_var_list[c][j]][:],0)
                 ### --------------------------------------------------------------------
-                ### append rest of ECMWF_IFS data
-                ### --------------------------------------------------------------------
-                for j in range(0,len(ifs_var_list[c])):
-                    if np.ndim(cn_nc3[c].variables[ifs_var_list[c][j]]) == 1:
-                        ifs_data[ifs_var_list[c][j]] = np.append(ifs_data[ifs_var_list[c][j]],cn_nc3[c].variables[ifs_var_list[c][j]][:])
-                    else:
-                        ifs_data[ifs_var_list[c][j]] = np.append(ifs_data[ifs_var_list[c][j]],cn_nc3[c].variables[ifs_var_list[c][j]][:],0)
-                ### --------------------------------------------------------------------
                 ### append rest of UM_RA2T data
                 ### --------------------------------------------------------------------
                 for j in range(0,len(ra2t_var_list[c])):
@@ -8031,7 +8022,6 @@ def main():
         for c in range(0,3): cn_nc0[c].close()
         for c in range(0,3): cn_nc1[c].close()
         for c in range(0,3): cn_nc2[c].close()
-        for c in range(0,3): cn_nc3[c].close()
         for c in range(0,3): cn_nc4[c].close()
 
     # print (lwp.shape)
@@ -8047,7 +8037,7 @@ def main():
         print ('')
         print ('*************** NEXT:')
         print ('')
-
+        from IPython import embed; embed()
     #################################################################
     ## save time to dictionaries now we're not looping over all diags anymore
     #################################################################
