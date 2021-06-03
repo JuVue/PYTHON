@@ -8834,6 +8834,7 @@ def main():
     if out_dir4[:9] == '4_u-bg610': label4 = 'UM_RA2M'
     if out_dir4 == 'UM_RA2M/': label4 = 'UM_RA2M'
 
+    from IPython import embed; embed()
     # -------------------------------------------------------------
     # save out working data for debugging purposes
     # -------------------------------------------------------------
