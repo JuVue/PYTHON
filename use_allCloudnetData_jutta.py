@@ -7785,8 +7785,8 @@ def main():
 
 
     names = ['20180912_oden','20180913_oden_']
-    sdate = datetime.datetime.strptime('2018091222','%Y%m%d')
-    edate = datetime.datetime.strptime('2018091315','%Y%m%d')
+    sdate = datetime.datetime.strptime('2018091222','%Y%m%d%H')
+    edate = datetime.datetime.strptime('2018091315','%Y%m%d%H')
     dates = np.arange(sdate,edate)        ## set DOY for full drift figures (over which we have cloudnet data)
     moccha_missing_files = ['20180813_oden_','20180910_oden_']   ### cloud radar not working    #,'20180914_oden_'
 
