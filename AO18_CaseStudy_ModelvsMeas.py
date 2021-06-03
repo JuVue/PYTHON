@@ -386,7 +386,6 @@ def main():
     #### um2
     print ('Starting on t=0 CASIM data:')
     for j in range(0,len(var_list2)):
-        print (var_list2[j])
         if np.ndim(nc2.variables[var_list2[j]]) == 0:     # ignore horizontal_resolution
             continue
         elif np.ndim(nc2.variables[var_list2[j]]) >= 1:
@@ -401,11 +400,14 @@ def main():
             elif np.ndim(nc3.variables[var_list1[j]]) >= 1:
                 data3[var_list1[j]] = nc3.variables[var_list1[j]][:]
     nc3.close()
-
+    print('')
+    print (var_list2[j])
+    print('')
 # -------------------------------------------------------------
 # Load observations
 # -------------------------------------------------------------
     print ('Loading observations:')
+    print('')
             # -------------------------------------------------------------
             # Which file does what?
             # -------------------------------------------------------------
@@ -416,10 +418,7 @@ def main():
             #### 7th deck: temperature, surface temperature, RH, downwelling SW, downwelling LW
                     #### 7thDeck/ACAS_AO2018_WX_30min_v2_0.nc
 
-    obs = {}
-    obs_ship = {}
-
-    print ('Load metalley ice station data from Jutta...')
+    print ('Load ice station data from Jutta...')
     filename = 'AO2018_metalley_01min_v3.0.mat'
     obs['metalley'] = readMatlabStruct(obs_met_dir + filename)
     print(obs['metalley'].keys())
@@ -442,6 +441,9 @@ def main():
     #obs['albedo'] = readMatlabStruct(obs_albedo_dir + 'MOCCHA_Albedo_estimates_Michael.mat')
 
     print ('Load cleaned and pre processed radiation data ..')
+    obs['ship_rad']={}
+    obs['ice_rad']={}
+
     nc4 =Dataset(obs_rad_dir + 'MetData_Gillian_V3_30minres.nc','r')
 
     var_list_srad=(['SWdship', 'LWdship', 'SWnetship', 'LWnetship', 'SWuship'])
@@ -449,13 +451,17 @@ def main():
 
     obs['ship_rad']['time']=nc4.variables['time2']
     for j in range(0,len(var_list_srad)):
-        obs['rad'][var_list_srad[j]] = nc4.variables[var_list_srad[j]][:]
+        obs['ship_rad'][var_list_srad[j]] = nc4.variables[var_list_srad[j]][:]
 
     obs['ice_rad']['time']=nc4.variables['time3']
     for j in range(0,len(var_list_irad)):
         obs['ice_rad'][var_list_irad[j]] = nc4.variables[var_list_irad[j]][:]
     nc4.close
 
+    print('')
+    print(obs['ice_rad'].keys())
+    print(obs['ship_rad'].keys())
+    print('')
     print ('Load radiosonde data from Jutta...')
     obs['sondes'] = readMatlabStruct(obs_rs_dir + '/SondeData_h10int_V03.mat')
 
