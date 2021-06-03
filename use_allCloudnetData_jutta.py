@@ -7787,8 +7787,7 @@ def main():
     names = ['20180912_oden','20180913_oden_']
     sdate = datetime.datetime.strptime('2018091222','%Y%m%d%H')
     edate = datetime.datetime.strptime('2018091315','%Y%m%d%H')
-    from IPython import embed; embed()
-    dates = np.arange(sdate,edate)        ## set DOY for full drift figures (over which we have cloudnet data)
+    dates = [date2datenum(sdate),date2datenum(edate)]
     moccha_missing_files = ['20180813_oden_','20180910_oden_']   ### cloud radar not working    #,'20180914_oden_'
 
 
@@ -7837,7 +7836,8 @@ def main():
     print (' ')
 
     for i in range(0,len(names)):
-        datenum = date2datenum(names[0:7])
+        dstr=names[i][0:8]
+        datenum = date2datenum(datetime.datetime.strptime(dstr,'%Y%m%d'))
 
         print ('load cloudnet data:')
         cn_filename_um = [cn_um_dir + out_dir1 + cn_um_out_dir[0] + names[i] + cn_um_out_dir[0][-31:-6] + '.nc',
