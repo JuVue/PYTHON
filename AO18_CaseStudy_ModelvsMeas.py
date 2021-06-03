@@ -52,9 +52,9 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     ### Build figure (timeseries)
     ### -------------------------------
     #from IPython import embed; embed()
-    fig = plt.figure(figsize=(12,10 ))
+    fig = plt.figure(figsize=(18,10 ))
     #ax  = fig.add_axes([0.07,0.7,0.53,0.22])   # left, bottom, width, height
-    plt.subplot(2,1,1)
+    ax  = fig.add_axes([0.07,0.7,0.7,0.22])   # left, bottom, width, height
     ax = plt.gca()
     yB = [-10, 120]
     plt.plot(data1['time'], data1['air_temperature_at_1.5m']-273.15, color = 'darkblue', label = label1)
@@ -70,7 +70,7 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
     plt.ylim([-10,0])
 
-    plt.subplot(2,1,2)
+    ax  = fig.add_axes([0.07,0.4,0.7,0.22])   # left, bottom, width, height
     ax = plt.gca()
     yB = [-10, 120]
     plt.plot(data1['time'], data1['rh_1.5m'], color = 'darkblue', label = label1)
@@ -85,6 +85,7 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=3))
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
     plt.ylim([80,110])
+    plt.xlabel('Time [UTC]')
 
     print ('******')
     print ('')
@@ -175,11 +176,11 @@ def plot_radiation(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3, daten
     plt.plot(data2['time'], data2['surface_net_LW_radiation'], color = 'mediumseagreen', label = label2[:-7])
     plt.ylabel('LWnet [W/m2]')
     ax.set_xlim([datenum, edatenum])
-    plt.grid()
+    plt.grid(which='both')
     ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=3))
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-    plt.ylim([-70,10])
+    plt.ylim([-40,10])
     plt.xlabel('Time [UTC]')
 
     print ('******')
