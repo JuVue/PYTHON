@@ -1,8 +1,5 @@
-###
-###
 ### SCRIPT TO READ IN UM, IFS, and UM-CASIM model data
 ### loads in the Cloudnet data and the raw model data for the cloudnet figures
-###     ### test change
 
 from __future__ import print_function
 import time
@@ -7775,6 +7772,9 @@ def check_Radiation(data1, data2, data3, data4, obs, doy, out_dir1):
 
     return data1, data2, data3, data4, obs
 
+
+################################################################################
+################################################################################
 def main():
 
     START_TIME = time.time()
@@ -7783,127 +7783,38 @@ def main():
     print ('Start: ' + time.strftime("%c"))
     print ('')
 
-    ### CHOOSE PLATFORM (OPTIONS BELOW)
-    platform = 'LAPTOP'
+
+    names = ['20180912_oden','20180913_oden_']
+    sdate = '2018091222'
+    edate = '2018091315'
+    dates = np.arange(date2datenum(sdate),date2ddatenum(edate)        ## set DOY for full drift figures (over which we have cloudnet data)
+    moccha_missing_files = ['20180813_oden_','20180910_oden_']   ### cloud radar not working    #,'20180914_oden_'
+
 
     ### Choose observations vertical gridding used in Cloudnet processing (UM/IFS/RADAR)
     obs_switch = 'UM'
 
-    ### only works on laptop for now
-
-    ### JASMIN
-    ### LAPTOP
-    ### MONSOON
-    ### DESKTOP
-
-    if platform == 'JASMIN':
-        um_root_dir = '/gws/nopw/j04/ncas_weather/gyoung/MOCCHA/processed_models/'
-        ship_filename = '/gws/nopw/j04/ncas_weather/gyoung/MOCCHA/ODEN/DATA/2018_shipposition_1hour.txt'
-        ifs_root_dir = '/gws/nopw/j04/ncas_weather/gyoung/MOCCHA/processed_models/'
-        obs_root_dir = '/gws/nopw/j04/ncas_weather/gyoung/MOCCHA/ODEN/DATA/'
-        cn_um_dir = '/gws/nopw/j04/ncas_weather/gyoung/MOCCHA/Cloudnet/UM_RA2M/'
-        cn_ifs_dir = '/gws/nopw/j04/ncas_weather/gyoung/MOCCHA/Cloudnet/ECMWF_IFS/'
-        # cn_misc_dir = '/gws/nopw/j04/ncas_weather/gyoung/MOCCHA/UM/DATA/'; cn_misc_flag = 1              ### FOR NON-CLOUDNET UM DATA
-        cn_misc_dir = '/gws/nopw/j04/ncas_weather/gyoung/MOCCHA/Cloudnet/UM_CASIM-100/'; cn_misc_flag = 0  ### FOR CLOUDNET UM DATA
-        cn_obs_dir = '/gws/nopw/j04/ncas_weather/gyoung/MOCCHA/Cloudnet/Observations/'
-    if platform == 'LAPTOP':
-        um_root_dir = '/home/gillian/MOCCHA/UM/DATA/'
-        ifs_root_dir = '/home/gillian/MOCCHA/ECMWF/'
-        obs_root_dir = '/home/gillian/MOCCHA/ODEN/DATA/'
-        ship_filename = '~/MOCCHA/ODEN/DATA/2018_shipposition_1hour.txt'
-        cn_um_dir = '/home/gillian/MOCCHA/Cloudnet/UM_DATA/'
-        cn_ifs_dir = '/home/gillian/MOCCHA/Cloudnet/IFS_DATA/'
-        # cn_ifs_dir = '/home/gillian/MOCCHA/Cloudnet/OBS_DATA/'
-        # cn_misc_dir = '/home/gillian/MOCCHA/UM/DATA/'; cn_misc_flag = 1              ### FOR NON-CLOUDNET UM DATA
-        cn_misc_dir = '/home/gillian/MOCCHA/Cloudnet/UM_DATA/'; cn_misc_flag = 0  ### FOR CLOUDNET UM DATA
-        if obs_switch == 'UM':
-            cn_obs_dir = '/home/gillian/MOCCHA/Cloudnet/OBS_DATA/measurements_V7/' #QF30_metum/14_CASIM-100_QF30/' # QF30_metum/JV_LWPTesting/' #
-        elif obs_switch == 'IFS':
-            cn_obs_dir = '/home/gillian/MOCCHA/Cloudnet/OBS_DATA/QF10_ecmwf/'
-        else:
-            cn_obs_dir = '/home/gillian/MOCCHA/Cloudnet/OBS_DATA/measurements_V7/'
-    if platform == 'MONSOON':
-        root_dir = '~/cylc-run/u-bg610/share/cycle/20160401T0000Z/HighArctic/1p5km/RA2M_CON/um/'
-    if platform == 'DESKTOP':
-        root_dir = '/nfs/a96/MOCCHA/working/gillian/UM/DATA/'
-        ship_filename = '/nfs/a96/MOCCHA/working/gillian/ship/2018_shipposition_1hour.txt'
-        position_filename = 'AUX_DATA/POSITION_UNROTATED.csv'
+    um_root_dir = '/nfs/a96/MOCCHA/working/jutta/CloudNet/Oden/data/calibrated/metum/'
+    #obs_root_dir = '/gws/nopw/j04/ncas_weather/gyoung/MOCCHA/ODEN/DATA/'
+    cn_um_dir = '/nfs/a96/MOCCHA/working/jutta/CloudNet/Oden/output/metum/V7/'
+    cn_obs_dir = '/nfs/a96/MOCCHA/working/jutta/CloudNet/Oden/output/Halo/measurements_V7/'
 
     ### -----------------------------------------------------------------
     ### CHOSEN RUN - MODEL DATA
-    if platform == 'LAPTOP':
-        ### model directories
-        out_dir1 = '25_u-cc568_RA2M_CON/OUT_R0/'
-        out_dir2 = '23_u-cc278_RA1M_CASIM/OUT_R0/'
-        out_dir3 = 'OUT_25H/'
-        out_dir4 = '24_u-cc324_RA2T_CON/OUT_R0_LAM/'
-        ### cloudnet directories
-        cloudnet_um1 = '4_u-bg610_RA2M_CON/'
-        cloudnet_um2 = '23_u-cc278_RA1M_CASIM/'
-        cloudnet_um4 = '7_u-bn068_RA2T_CON/'
-    elif platform == 'JASMIN':
-        out_dir1 = 'UM_RA2M/'
-        out_dir2 = 'UM_CASIM-100/'
-        out_dir3 = 'ECMWF_IFS/'
-
-    ### IFS: OUT_25H/
-    ### 4_u-bg610_RA2M_CON/OUT_R1/
-    ### 5_u-bl661_RA1M_CASIM/OUT_R0/            # 100/cc accum mode aerosol
-    ### 6_u-bm410_RA1M_CASIM/                   # 200/cc accum mode aerosol
-    ### 7_u-bn068_RA2T_CON/OUT_R2_lam/              # RA2T_CON nest + global 4D stash
-    ### 7_u-bn068_RA2T_CON/OUT_R2_glm/              # RA2T_CON nest + global 4D stash
-    ### 8_u-bp738_RA2M_CON/OUT_R0/              # ERAI
-    ### 10_u-bq791_RA1M_CASIM/OUT_R0/      # CASIM with 100/cc accum mode soluble aerosol w/Fletcher Nice param
-    ### 11_u-bq798_RA1M_CASIM/OUT_R0/      # CASIM with 100/cc accum mode soluble aerosol w/Meyers Nice param
-    ### 12_u-br210_RA1M_CASIM/OUT_R0/           # UKCA daily averaged aerosol profiles, identical suite = u-bm507
-    ### 13_u-br409_RA1M_CASIM/OUT_R0/           # 100/cc accum mode aerosol; ARG + Cooper; passive aerosol processing
-    ### 14_u-bu570_RA1M_CASIM/OUT_R0(_RadPA_25h)/           # 100/cc accum mode aerosol; ARG + Cooper; new RHcrit
-    ### 15_u-bu687_RA2M_CON/OUT_24h/           # Wilson and Ballard 1999 uphys; new RHcrit
-    ### 16_u-bv926_RA2T_CON/OUT_R0/              # RA2T_CON nest + global 4D stash + no subgrid mp production
+    out_dir1 = '25_u-cc568_RA2M_CON/'
+    out_dir2 = '24_u-cc324_RA2T_CON/'
+    out_dir3 = '23_u-cc278_RA1M_CASIM/'
 
     ### -----------------------------------------------------------------
     ### CHOSEN RUN - CLOUDNET DATA
-    if platform == 'LAPTOP':
-        cn_um_out_dir = [cloudnet_um1 + 'cloud-fraction-metum-grid/2018/',
-                        cloudnet_um1 + 'lwc-scaled-metum-grid/2018/',
-                        cloudnet_um1 + 'iwc-Z-T-metum-grid/2018/']
-        cn_ifs_out_dir = ['cloud-fraction-ecmwf-grid/2018/',
-                    'lwc-scaled-ecmwf-grid/2018/',
-                    'iwc-Z-T-ecmwf-grid/2018/']
-        if obs_switch == 'IFS':
-            cn_obs_out_dir = ['cloud-fraction-ecmwf-grid/2018/',
-                        'lwc-scaled-ecmwf-grid/2018/', #'lwc-adiabatic-ecmwf-grid/2018/',
-                        'iwc-Z-T-ecmwf-grid/2018/']
-        elif obs_switch == 'UM':
-            cn_obs_out_dir = ['cloud-fraction-metum-grid/2018/',
-                        'lwc-adiabatic-metum-grid/2018/',#'lwc-scaled-metum-grid/2018/',
-                        'iwc-Z-T-metum-grid/2018/']
-        elif obs_switch == 'RADAR':
-            cn_obs_out_dir = ['cloud-fraction-metum-grid/2018/',
+    cn_um_out_dir = ['cloud-fraction-metum-grid/2018/',
+                     'lwc-scaled-metum-grid/2018/',
+                     'iwc-Z-T-metum-grid/2018/']
+    cn_obs_out_dir = ['cloud-fraction-metum-grid/2018/',
                         'lwc-adiabatic-method/2018/',
                         'iwc-Z-T-method/2018/']
-        if cn_misc_flag == 0:       ## flag to compare cloudnet model data
-            cn_misc_out_dir = [cloudnet_um2 + 'cloud-fraction-metum-grid/2018/',
-                            cloudnet_um2 + 'lwc-scaled-metum-grid/2018/',
-                            cloudnet_um2 + 'iwc-Z-T-metum-grid/2018/']
-        elif cn_misc_flag == 1:       ## flag to compare non-cloudnet model data
-            cn_misc_out_dir = '12_u-br210_RA1M_CASIM/OUT_R0/'
-        cn_ra2t_out_dir = [cloudnet_um4 + 'cloud-fraction-metum-grid/2018/',
-                        cloudnet_um4 + 'lwc-scaled-metum-grid/2018/',
-                        cloudnet_um4 + 'iwc-Z-T-metum-grid/2018/']
-    elif platform == 'JASMIN':
-        cn_um_out_dir = 'cloud-fraction-metum-grid/2018/'
-        cn_ifs_out_dir = 'cloud-fraction-ecmwf-grid/2018/'
-        if obs_switch == 'IFS':
-            cn_obs_out_dir = cn_ifs_out_dir
-        if cn_misc_flag == 0:       ## flag to compare cloudnet model data
-            cn_misc_out_dir = cn_um_out_dir
-        elif cn_misc_flag == 1:       ## flag to compare non-cloudnet model data
-            cn_misc_out_dir = '12_u-br210_RA1M_CASIM/OUT_R0/'
-        cn_ra2t_out_dir = 'cloud-fraction-metum-grid/2018/'
-
     ######## lwc-adiabatic-metum-grid/2018/
-    ########             -> liquid water content derived using measurements averaged on to model grid
+    ########-> liquid water content derived using measurements averaged on to model grid
     ### cloud-fraction-metum-grid/2018/ + cloud-fraction-ecmwf-grid/2018/
     ###             -> cloud fraction both from a forecast model and derived from the high-resolution observations on the grid of that model.
     ### lwc-scaled-metum-grid/2018/ + lwc-scaled-ecmwf-grid/2018/ + lwc-scaled-adiabatic/2018/
@@ -7916,96 +7827,6 @@ def main():
     ###                 model. It also contains the ice water content from that model, so may be used to calculate statistics quantifying the
     ###                 model performance.
 
-    print ('Misc_flag = ' + str(cn_misc_flag) + '... so third simulation for Cloudnet comparison is:')
-    if cn_misc_flag == 0: print ('Cloudnet-ed data!')
-    if cn_misc_flag == 1: print ('standard model output!')
-
-    print ('******')
-    print ('')
-    print ('Identifying .nc file: ')
-    print ('')
-
-    # -------------------------------------------------------------
-    # Load ship track
-    # -------------------------------------------------------------
-    print ('******')
-    print ('')
-    print ('Load in ship track file:')
-    print ('')
-    ship_data = readfile(ship_filename)
-    columns = assignColumns(ship_data)
-
-###################################################################################################################
-###################################################################################################################
-
-    # -------------------------------------------------------------
-    # Load observations
-    # -------------------------------------------------------------
-    print ('Loading observations:')
-            # -------------------------------------------------------------
-            # Which file does what?
-            # -------------------------------------------------------------
-            #### ice station: net LW / net SW
-                    #### obs['ice_station_fluxes']/mast_radiation_30min_v2.3.mat
-            #### obs['foremast']:
-                    #### obs['foremast']/ACAS_AO2018_obs['foremast']_30min_v2_0.nc
-            #### 7th deck: temperature, surface temperature, RH, downwelling SW, downwelling LW
-                    #### 7thDeck/ACAS_AO2018_WX_30min_v2_0.nc
-
-    obs = {}
-
-    if platform == 'LAPTOP':
-        print ('Load temporary ice station data from Jutta...')
-        obs['obs_temp'] = Dataset(obs_root_dir + 'MET_DATA/MetData_Gillian_V3_30minres.nc','r')
-        print ('Load ice station flux data from Jutta...')
-        obs['ice_station_fluxes'] = readMatlabStruct(obs_root_dir + 'ice_station/flux30qc_trhwxrel.mat')
-
-        print ('Load HATPRO data used by Cloudnet...')
-        dirname = '/home/gillian/MOCCHA/ODEN/DATA/hatpro/'
-        dir = os.listdir(dirname)
-        obs['hatpro'] = {}
-        for file in dir:
-            if file == 'V1': continue
-            print (file)
-            IWVtemp = readMatlabStruct(dirname + file)
-            print (IWVtemp.keys())
-            if file == '20180814_IWV_30s_V2.mat':       ### if it is the first file
-                obs['hatpro']['IWV'] = np.squeeze(IWVtemp['iwv'])
-                obs['hatpro']['mday'] = np.squeeze(IWVtemp['mday'])
-                obs['hatpro']['LWP'] = np.squeeze(IWVtemp['lwp'])
-                obs['hatpro']['rainflag'] = np.squeeze(IWVtemp['rainflag'])
-            else:
-                obs['hatpro']['IWV'] = np.append(np.squeeze(obs['hatpro']['IWV']),np.squeeze(IWVtemp['iwv']))
-                obs['hatpro']['mday'] = np.append(np.squeeze(obs['hatpro']['mday']),np.squeeze(IWVtemp['mday']))
-                obs['hatpro']['LWP'] = np.append(np.squeeze(obs['hatpro']['LWP']),np.squeeze(IWVtemp['lwp']))
-                obs['hatpro']['rainflag'] = np.append(np.squeeze(obs['hatpro']['rainflag']),np.squeeze(IWVtemp['rainflag']))
-        obs['hatpro']['doy'] = calcTime_Mat2DOY(obs['hatpro']['mday'])
-
-        print ('Load albedo estimates from Michael...')
-        obs['albedo'] = readMatlabStruct(obs_root_dir + 'MOCCHA_Albedo_estimates_Michael.mat')
-    ### print ('Load ice station radiation data from Jutta...')
-    ### obs['ice_station_radiation'] = readMatlabStruct(obs_root_dir + 'ice_station/mast_radiation_30min_v2.3.mat')
-
-    print ('Load radiosonde data from Jutta...')
-    obs['sondes'] = readMatlabStruct(obs_root_dir + 'radiosondes/SondeData_h10int_V02.mat')
-
-    print ('Load observations inversion height data from Jutta...')
-    obs['inversions'] = readMatlabStruct(obs_root_dir + 'radiosondes/InversionHeights_RSh05int_final_V03.mat')
-
-    print ('Load foremast data from John...')
-    obs['foremast'] = Dataset(obs_root_dir + 'foremast/ACAS_AO2018_foremast_30min_v2_0.nc','r')
-
-    print ('Load 7th deck weather station data from John...')
-    obs['deck7th'] = Dataset(obs_root_dir + '7thDeck/ACAS_AO2018_WX_30min_v2_0.nc','r')
-
-    print ('Load weather sensor data from John...')
-    obs['pws'] = readMatlabStruct(obs_root_dir + '7thDeck/ACAS_AO2018_PWD_30min_v1_0.mat')
-
-    print ('...')
-
-###################################################################################################################
-###################################################################################################################
-
     # # -------------------------------------------------------------
     # # Load cube
     # # -------------------------------------------------------------
@@ -8014,685 +7835,206 @@ def main():
     print ('Begin nc read in at ' + time.strftime("%c"))
     print (' ')
 
-    ### -------------------------------------------------------------------------
-    ### define input filename
-    ### -------------------------------------------------------------------------
-    # tempnames = ['umnsaa_pa012_r0.nc','umnsaa_pb012_r0.nc','umnsaa_pc011_r0.nc','umnsaa_pd011_r0.nc','20180812_oden_metum.nc']
-    Aug_names = ['20180813_oden_','20180814_oden_','20180815_oden_','20180816_oden_',
-            '20180817_oden_','20180818_oden_','20180819_oden_','20180820_oden_',
-            '20180821_oden_','20180822_oden_','20180823_oden_','20180824_oden_',
-            '20180825_oden_','20180826_oden_','20180827_oden_','20180828_oden_',
-            '20180829_oden_','20180830_oden_','20180831_oden_']
-
-    Sep_names = ['20180901_oden_','20180902_oden_','20180903_oden_','20180904_oden_',
-            '20180905_oden_','20180906_oden_','20180907_oden_','20180908_oden_',
-            '20180909_oden_','20180910_oden_','20180911_oden_','20180912_oden_',
-            '20180913_oden_','20180914_oden_']
-
-    moccha_names = ['20180814_oden_','20180815_oden_','20180816_oden_',
-            '20180817_oden_','20180818_oden_','20180819_oden_','20180820_oden_',
-            '20180821_oden_','20180822_oden_','20180823_oden_','20180824_oden_',
-            '20180825_oden_','20180826_oden_','20180827_oden_','20180828_oden_',
-            '20180829_oden_','20180830_oden_','20180831_oden_','20180901_oden_',
-            '20180902_oden_','20180903_oden_','20180904_oden_','20180905_oden_',
-            '20180906_oden_','20180907_oden_','20180908_oden_','20180909_oden_',
-            '20180910_oden_','20180911_oden_','20180912_oden_','20180913_oden_',
-            '20180914_oden_']
-
-    Aug_missing_files = []
-
-    Sep_missing_files = []
-
-    moccha_missing_files = ['20180813_oden_','20180910_oden_']   ### cloud radar not working    #,'20180914_oden_'
-    missing_files = [225,253]    # manually set missing files doy for now ## 230, , 257
-
-    doy = np.arange(226,259)        ## set DOY for full drift figures (over which we have cloudnet data)
-    # doy = np.arange(228,259)        ## set DOY for full drift figures (over which we have cloudnet data)
-    # doy = np.arange(226,244)        ## set DOY for Aug dates
-    # doy = np.arange(240,251)        ## set DOY for subset of drift figures (presentations)
-    # doy = np.arange(240,248)        ## set DOY for RA2T  (28th Aug to 4th Sep)
-    # doy = np.arange(243,250)        ## set DOY for ERAI-GLM  (31st Aug to 5th Sep)
-    # doy = np.arange(244,256)        ## set DOY for CASIM-AeroProf (1st Sep to 11th Sep)
-
-    # names = ['umnsaa_pa000','umnsaa_pc000.nc']       ### DEFAULT OUTPUT NAMES FOR TESTING
-
-    ## Choose month:
-    names = moccha_names
-    # missing_files = moccha_missing_files
-    month_flag = -1
-
-
-###################################################################################################################
-###################################################################################################################
-###################################################################################################################
-###################################################################################################################
-###################################################################################################################
-###################################################################################################################
-
     for i in range(0,len(names)):
+        datenum = date2datenum(names[0:7])
 
-        ### --------------------------------------------------------------------
-        #### DEFINE FILENAMES TO BE READ IN
-        ### --------------------------------------------------------------------
-        print ('Load raw model data first: ')
-        filename_um1 = um_root_dir + out_dir1 + names[i] + 'metum.nc'
-        filename_um2 = um_root_dir + out_dir2 + names[i] + 'metum.nc'
-        if np.logical_or(out_dir3 == 'OUT_25H/',out_dir3 == 'ECMWF_IFS/'):
-            print( '***IFS being compared***')
-            ifs_flag = True
-            filename_um3 = ifs_root_dir + out_dir3 + names[i] + 'ecmwf.nc'
-        else:
-            print ('***IFS NOT being compared***')
-            filename_um3 = um_root_dir + out_dir3 + names[i] + 'metum.nc'
-            ifs_flag = False
-        filename_um4 = um_root_dir + out_dir4 + names[i] + 'metum.nc'
-        print (filename_um1)
-        print (filename_um2)
-        print (filename_um3)
-        print (filename_um4)
-        print ('')
-
-        ### --------------------------------------------------------------------
-        #### CHOOSE MODEL DIAGNOSTICS FIRST
-        ### --------------------------------------------------------------------
-        var_list1 = ['temperature','surface_net_SW_radiation','surface_net_LW_radiation','surface_downwelling_LW_radiation','surface_downwelling_SW_radiation',
-            'sensible_heat_flux','latent_heat_flux','rainfall_flux','snowfall_flux','q','pressure','bl_depth','bl_type','qliq','qice','IWP'] #'temp_1.5m',
-        var_list2 = ['temperature','surface_net_SW_radiation','surface_net_LW_radiation','surface_downwelling_LW_radiation','surface_downwelling_SW_radiation',
-            'sensible_heat_flux','latent_heat_flux','rainfall_flux','snowfall_flux','q','pressure','bl_depth','bl_type','qliq','qice','IWP'] # 'temp_1.5m',
-        if ifs_flag: var_list3 = ['height', 'flx_height', 'temperature','sfc_net_sw','sfc_net_lw','sfc_down_lat_heat_flx','sfc_down_sens_heat_flx',
-            'sfc_temp_2m','flx_ls_rain','flx_conv_rain','flx_ls_snow','q','pressure','sfc_bl_height','ql','qi','sfc_down_lw', 'sfc_down_sw', 'sfc_albedo']
-        if not ifs_flag: var_list3 = var_list1
-        var_list4 = ['temperature','surface_net_SW_radiation','surface_net_LW_radiation','surface_downwelling_LW_radiation','surface_downwelling_SW_radiation',
-            'sensible_heat_flux','latent_heat_flux','rainfall_flux','snowfall_flux','q','pressure','bl_depth','bl_type','qliq','qice','IWP'] # 'temp_1.5m',
-
-        if names[i] in moccha_missing_files:        ### NOTE THIS WON'T WORK IF IT'S THE FIRST FILE THAT'S MISSING!!
-            print ('File not available...')
-            print ('***Filling arrays with nans***')
-            print (str(doy[i]))
-            nanarray = np.zeros(24)
-            nanarray[:] = np.nan
-            timarray = np.arange(0.041666666666666664,1.01,0.041666666666666664)
-            time_um1 = np.append(time_um1, doy[i] + timarray)
-            time_um2 = np.append(time_um2, doy[i] + timarray)
-            if ifs_flag:
-                time_um3 = np.append(time_um3, doy[i] + timarray)
-            time_um4 = np.append(time_um4, doy[i] + timarray)
-
-            for j in range(0,len(var_list1)):
-                if np.ndim(nc1.variables[var_list1[j]]) == 0:     # ignore horizontal_resolution
-                    continue
-                elif np.ndim(nc1.variables[var_list1[j]]) == 1:
-                    nanarray = np.zeros(24)
-                    nanarray[:] = np.nan
-                    data1[var_list1[j]] = np.append(data1[var_list1[j]],nanarray)
-                elif np.ndim(nc1.variables[var_list1[j]]) == 2:
-                    nanarray = np.zeros([24,71])
-                    nanarray[:] = np.nan
-                    data1[var_list1[j]] = np.append(data1[var_list1[j]],nanarray,0)
-            for j in range(0,len(var_list2)):
-                if np.ndim(nc2.variables[var_list2[j]]) == 0:     # ignore horizontal_resolution
-                    continue
-                elif np.ndim(nc2.variables[var_list2[j]]) == 1:
-                    nanarray = np.zeros(24)
-                    nanarray[:] = np.nan
-                    data2[var_list2[j]] = np.append(data2[var_list2[j]],nanarray)
-                elif np.ndim(nc2.variables[var_list2[j]]) == 2:
-                    nanarray = np.zeros([24,71])
-                    nanarray[:] = np.nan
-                    data2[var_list2[j]] = np.append(data2[var_list2[j]],nanarray,0)
-            for j in range(0,len(var_list4)):
-                if np.ndim(nc4.variables[var_list4[j]]) == 0:     # ignore horizontal_resolution
-                    continue
-                elif np.ndim(nc4.variables[var_list4[j]]) == 1:
-                    nanarray = np.zeros(24)
-                    nanarray[:] = np.nan
-                    data4[var_list4[j]] = np.append(data4[var_list4[j]],nanarray)
-                elif np.ndim(nc4.variables[var_list4[j]]) == 2:
-                    nanarray = np.zeros([24,71])
-                    nanarray[:] = np.nan
-                    data4[var_list4[j]] = np.append(data4[var_list4[j]],nanarray,0)
-            for j in range(0,len(var_list3)):
-                print (j)
-                print (var_list3[j])
-                # np.save('testing', data3)
-                if np.ndim(nc3.variables[var_list3[j]]) == 0:     # ignore horizontal_resolution
-                    continue
-                elif np.ndim(nc3.variables[var_list3[j]]) == 1:
-                    nanarray = np.zeros(24)
-                    nanarray[:] = np.nan
-                    data3[var_list3[j]] = np.append(data3[var_list3[j]],nanarray)
-                elif np.ndim(nc3.variables[var_list3[j]]) == 2:
-                    if var_list3[j][:3] == 'flx':
-                        nanarray = np.zeros([24,138])
-                    else:
-                        nanarray = np.zeros([24,137])
-                    nanarray[:] = np.nan
-                    data3[var_list3[j]] = np.append(data3[var_list3[j]],nanarray,0)
-
-        else:
-            ### --------------------------------------------------------------------
-            ###     READ IN ALL MODEL FILES
-            ### --------------------------------------------------------------------
-            print( 'Loading first run diagnostics:')
-            nc1 = Dataset(filename_um1,'r')
-            print ('...')
-            print( 'Loading second run diagnostics:')
-            nc2 = Dataset(filename_um2,'r')
-            print ('...')
-            print ('Loading third run diagnostics:')
-            nc3 = Dataset(filename_um3,'r')
-            print ('...')
-            print ('Loading fourth run diagnostics:')
-            nc4 = Dataset(filename_um4,'r')
-            print ('...')
-
-    ###################################################################################################################
-    ### ---------------------------------------------------------------------------------------------------------------
-
-            if i == 0:      ### first file
-                ## ------------------
-                #### UM
-                ## ------------------
-                data1 = {}
-                data2 = {}
-                data3 = {}
-                data4 = {}
-                if month_flag == -1:
-                    time_um1 = doy[i] + (nc1.variables['forecast_time'][:]/24.0)
-                    time_um2 = doy[i] + (nc2.variables['forecast_time'][:]/24.0)
-                    if ifs_flag: time_um3 = doy[i] + (nc3.variables['time'][:]/24.0)
-                    if not ifs_flag: time_um3 = doy[i] + (nc3.variables['forecast_time'][:]/24.0)
-                    time_um4 = doy[i] + (nc4.variables['forecast_time'][:]/24.0)
-                else:
-                    time_um1 = float(filename_um1[-16:-14]) + (nc1.variables['forecast_time'][:]/24.0)
-                    time_um2 = float(filename_um2[-16:-14]) + (nc2.variables['forecast_time'][:]/24.0)
-                    if ifs_flag: time_um3 = float(filename_um3[-16:-14]) + (nc3.variables['time'][:]/24.0)
-                    if not ifs_flag: time_um3 = float(filename_um3[-16:-14]) + (nc3.variables['forecast_time'][:]/24.0)
-                    time_um4 = float(filename_um4[-16:-14]) + (nc4.variables['forecast_time'][:]/24.0)
-
-                ### define height arrays explicitly
-                data1['height'] = nc1.variables['height'][:]
-                data2['height'] = nc2.variables['height'][:]
-                if not ifs_flag: data3['height'] = nc3.variables['height'][:]
-                data4['height'] = nc4.variables['height'][:]
-
-                for j in range(0,len(var_list1)):
-                    if np.ndim(nc1.variables[var_list1[j]]) == 0:     # ignore horizontal_resolution
-                        continue
-                    elif np.ndim(nc1.variables[var_list1[j]]) >= 1:
-                        data1[var_list1[j]] = nc1.variables[var_list1[j]][:]
-                nc1.close()
-                ## ------------------
-                #### um2
-                ## ------------------
-                for j in range(0,len(var_list2)):
-                    if np.ndim(nc2.variables[var_list2[j]]) == 0:     # ignore horizontal_resolution
-                        continue
-                    elif np.ndim(nc2.variables[var_list2[j]]) >= 1:
-                        data2[var_list2[j]] = nc2.variables[var_list2[j]][:]
-                nc2.close()
-                ## ------------------
-                #### um3
-                ## ------------------
-                for j in range(0,len(var_list3)):
-                    if np.ndim(nc3.variables[var_list3[j]]) == 0:     # ignore horizontal_resolution
-                        continue
-                    elif np.ndim(nc3.variables[var_list3[j]]) >= 1:
-                        data3[var_list3[j]] = nc3.variables[var_list3[j]][:]
-                nc3.close()
-                ## ------------------
-                #### um4
-                ## ------------------
-                for j in range(0,len(var_list4)):
-                    if np.ndim(nc4.variables[var_list4[j]]) == 0:     # ignore horizontal_resolution
-                        continue
-                    elif np.ndim(nc4.variables[var_list4[j]]) >= 1:
-                        data4[var_list4[j]] = nc4.variables[var_list4[j]][:]
-                nc4.close()
-
-            else:
-                if doy[i] in missing_files:
-                    print (str(doy[i]))
-                    nanarray = np.zeros(24)
-                    nanarray[:] = np.nan
-                    time_um1 = np.append(time_um1, nanarray)
-                    time_um2 = np.append(time_um2, nanarray)
-                    if ifs_flag: time_um3 = np.append(time_um3, nanarray)
-                    if not ifs_flag: time_um3 = np.append(time_um3, nanarray)
-                    time_um4 = np.append(time_um4, nanarray)
-                    for j in range(0,len(var_list1)):
-                        if np.ndim(nc1.variables[var_list1[j]]) == 0:     # ignore horizontal_resolution
-                            continue
-                        elif np.ndim(nc1.variables[var_list1[j]]) == 1:
-                            nanarray = np.zeros(24)
-                            nanarray[:] = np.nan
-                            data1[var_list1[j]] = np.append(data1[var_list1[j]],nanarray)
-                            data2[var_list2[j]] = np.append(data2[var_list2[j]],nanarray)
-                            data1[var_list4[j]] = np.append(data4[var_list4[j]],nanarray)
-                        elif np.ndim(nc1.variables[var_list1[j]]) == 2:
-                            nanarray = np.zeros([24,71])
-                            nanarray[:] = np.nan
-                            data1[var_list1[j]] = np.append(data1[var_list1[j]],nanarray,0)
-                            data2[var_list2[j]] = np.append(data2[var_list2[j]],nanarray,0)
-                            data4[var_list4[j]] = np.append(data4[var_list4[j]],nanarray,0)
-                    for j in range(0,len(var_list3)):
-                        # print (j)
-                        print (var_list3[j])
-                        np.save('testing', data3)
-                        if np.ndim(nc3.variables[var_list3[j]]) == 0:     # ignore horizontal_resolution
-                            continue
-                        elif np.ndim(nc3.variables[var_list3[j]]) == 1:
-                            nanarray = np.zeros(24)
-                            nanarray[:] = np.nan
-                            data3[var_list3[j]] = np.append(data3[var_list3[j]],nanarray)
-                        elif np.ndim(nc3.variables[var_list3[j]]) == 2:
-                            if var_list3[j][:3] == 'flx':
-                                nanarray = np.zeros([24,138])
-                            else:
-                                nanarray = np.zeros([24,137])
-                            nanarray[:] = np.nan
-                            data3[var_list3[j]] = np.append(data3[var_list3[j]],nanarray,0)
-
-
-                time_um1 = np.append(time_um1, doy[i] + (nc1.variables['forecast_time'][:]/24.0))
-                time_um2 = np.append(time_um2, doy[i] + (nc2.variables['forecast_time'][:]/24.0))
-                if ifs_flag: time_um3 = np.append(time_um3, doy[i] + (nc3.variables['time'][:]/24.0))
-                if not ifs_flag: time_um3 = np.append(time_um3, doy[i] + (nc3.variables['forecast_time'][:]/24.0))
-                time_um4 = np.append(time_um4, doy[i] + (nc4.variables['forecast_time'][:]/24.0))
-
-                ## ------------------
-                #### UM
-                ## ------------------
-                for j in range(0,len(var_list1)):
-                    if np.ndim(nc1.variables[var_list1[j]]) == 0:     # ignore horizontal_resolution
-                        continue
-                    elif np.ndim(nc1.variables[var_list1[j]]) == 1:
-                        # data1[cube_um1[j].var_name] = cube_um1[j].data
-                        data1[var_list1[j]] = np.append(data1[var_list1[j]],nc1.variables[var_list1[j]][:])
-                    elif np.ndim(nc1.variables[var_list1[j]]) == 2:
-                        data1[var_list1[j]] = np.append(data1[var_list1[j]],nc1.variables[var_list1[j]][:],0)
-                nc1.close()
-                ## ------------------
-                #### um2
-                ## ------------------
-                for j in range(0,len(var_list2)):
-                    if np.ndim(nc2.variables[var_list2[j]]) == 0:     # ignore horizontal_resolution
-                        continue
-                    elif np.ndim(nc2.variables[var_list2[j]]) == 1:
-                        data2[var_list2[j]] = np.append(data2[var_list2[j]],nc2.variables[var_list2[j]][:])
-                    elif np.ndim(nc2.variables[var_list2[j]]) == 2:
-                        data2[var_list2[j]] = np.append(data2[var_list2[j]],nc2.variables[var_list2[j]][:],0)
-                nc2.close()
-                ## ------------------
-                #### um3 / ifs
-                ## ------------------
-                for j in range(0,len(var_list3)):
-                    if np.ndim(nc3.variables[var_list3[j]]) == 0:     # ignore horizontal_resolution
-                        continue
-                    elif np.ndim(nc3.variables[var_list3[j]]) == 1:
-                        data3[var_list3[j]] = np.append(data3[var_list3[j]],nc3.variables[var_list3[j]][:])
-                    elif np.ndim(nc3.variables[var_list3[j]]) == 2:
-                        data3[var_list3[j]] = np.append(data3[var_list3[j]],nc3.variables[var_list3[j]][:],0)
-                nc3.close()
-                ## ------------------
-                #### UM
-                ## ------------------
-                for j in range(0,len(var_list4)):
-                    if np.ndim(nc4.variables[var_list4[j]]) == 0:     # ignore horizontal_resolution
-                        continue
-                    elif np.ndim(nc4.variables[var_list4[j]]) == 1:
-                        # data1[cube_um1[j].var_name] = cube_um1[j].data
-                        data4[var_list4[j]] = np.append(data4[var_list4[j]],nc4.variables[var_list4[j]][:])
-                    elif np.ndim(nc4.variables[var_list4[j]]) == 2:
-                        data4[var_list4[j]] = np.append(data4[var_list4[j]],nc4.variables[var_list4[j]][:],0)
-                nc4.close()
-
-###################################################################################################################
-###################################################################################################################
-###################################################################################################################
-###################################################################################################################
-###################################################################################################################
-###################################################################################################################
-    for i in range(0,len(names)):
-
-        print ('Now load cloudnet data:')
-        cn_filename_um = [cn_um_dir + cn_um_out_dir[0] + names[i] + cn_um_out_dir[0][-31:-6] + '.nc',
-                        cn_um_dir + cn_um_out_dir[1] + names[i] + cn_um_out_dir[1][-27:-6] + '.nc',
-                        cn_um_dir + cn_um_out_dir[2] + names[i] + cn_um_out_dir[2][-24:-6] + '.nc']
-        cn_filename_ifs = [cn_ifs_dir + cn_ifs_out_dir[0] + names[i] + cn_ifs_out_dir[0][:-6] + '.nc',
-                        cn_ifs_dir + cn_ifs_out_dir[1] + names[i] + cn_ifs_out_dir[1][:-6] + '.nc',
-                        cn_ifs_dir + cn_ifs_out_dir[2] + names[i] + cn_ifs_out_dir[2][:-6] + '.nc']
+        print ('load cloudnet data:')
+        cn_filename_um1 = [cn_um_dir + out_dir1 + cn_um_out_dir[0] + names[i] + cn_um_out_dir[0][-31:-6] + '.nc',
+                        cn_um_dir + out_dir1 + cn_um_out_dir[1] + names[i] + cn_um_out_dir[1][-27:-6] + '.nc',
+                        cn_um_dir + out_dir1 + cn_um_out_dir[2] + names[i] + cn_um_out_dir[2][-24:-6] + '.nc']
+        cn_filename_um2 = [cn_um_dir + out_dir2 + cn_um_out_dir[0] + names[i] + cn_um_out_dir[0][-31:-6] + '.nc',
+                        cn_um_dir + out_dir2 + cn_um_out_dir[1] + names[i] + cn_um_out_dir[1][-27:-6] + '.nc',
+                        cn_um_dir + out_dir2 + cn_um_out_dir[2] + names[i] + cn_um_out_dir[2][-24:-6] + '.nc']
+        cn_filename_um3 = [cn_um_dir + out_dir3 + cn_um_out_dir[0] + names[i] + cn_um_out_dir[0][-31:-6] + '.nc',
+                        cn_um_dir + out_dir3 + cn_um_out_dir[1] + names[i] + cn_um_out_dir[1][-27:-6] + '.nc',
+                        cn_um_dir + out_dir3 + cn_um_out_dir[2] + names[i] + cn_um_out_dir[2][-24:-6] + '.nc']
         cn_filename_obs = [cn_obs_dir + cn_obs_out_dir[0] + names[i] + cn_obs_out_dir[0][:-6] + '.nc',
                         cn_obs_dir + cn_obs_out_dir[1] + names[i] + cn_obs_out_dir[1][:-6] + '.nc',
                         cn_obs_dir + cn_obs_out_dir[2] + names[i] + cn_obs_out_dir[2][:-6] + '.nc']
-        if cn_misc_flag == 1: cn_filename_misc = cn_misc_dir + cn_misc_out_dir[0] + names[i] + 'metum.nc'
-        if cn_misc_flag == 0:
-            cn_filename_misc = [cn_misc_dir + cn_misc_out_dir[0] + names[i] + cn_um_out_dir[0][-31:-6] + '.nc',
-                            cn_misc_dir + cn_misc_out_dir[1] + names[i] + cn_um_out_dir[1][-27:-6] + '.nc',
-                            cn_misc_dir + cn_misc_out_dir[2] + names[i] + cn_um_out_dir[2][-24:-6] + '.nc']
-        cn_filename_ra2t = [cn_um_dir + cn_ra2t_out_dir[0] + names[i] + cn_ra2t_out_dir[0][-31:-6] + '.nc',
-                        cn_um_dir + cn_ra2t_out_dir[1] + names[i] + cn_ra2t_out_dir[1][-27:-6] + '.nc',
-                        cn_um_dir + cn_ra2t_out_dir[2] + names[i] + cn_ra2t_out_dir[2][-24:-6] + '.nc']
-        print (cn_filename_um)
-        print (cn_filename_ifs)
-        if cn_misc_flag != 1: print (cn_filename_misc)
-        print (cn_filename_ra2t)
+        print (cn_filename_um1)
+        print (cn_filename_um2)
+        print (cn_filename_um3)
         print (cn_filename_obs)
         print ('')
 
-        if names[i] in moccha_missing_files:        ### NOTE THIS WON'T WORK IF IT'S THE FIRST FILE THAT'S MISSING!!
-            print ('File not available...')
-            print ('***Filling arrays with nans***')
-            print (str(doy[i]))
-            nanarray = np.zeros(24)
-            nanarray[:] = np.nan
-            timarray = np.arange(0.041666666666666664,1.01,0.041666666666666664)
-            time_um = np.append(time_um, doy[i] + timarray)
-            time_misc = np.append(time_misc, doy[i] + timarray)
-            time_ifs = np.append(time_ifs, doy[i] + timarray)
-            time_ra2t = np.append(time_ra2t, doy[i] + timarray)
-            time_obs = np.append(time_obs, doy[i] + timarray)
+    ### --------------------------------------------------------------------
+    ###     READ IN ALL CLOUDNET FILES: reinitialise diagnostic dictionaries
+    ### --------------------------------------------------------------------
+        print ('Loading multiple diagnostics:')
+        cn_nc1 = {}
+        cn_nc2 = {}
+        cn_nc3 = {}
+        for c in range(0,3):
+            cn_nc1[c] = Dataset(cn_filename_um1[c],'r')
+            cn_nc2[c] = Dataset(cn_filename_um2[c],'r')
+            cn_nc3[c] = Dataset(cn_filename_um3[c],'r')
+            cn_nc0[c] = Dataset(cn_filename_obs[c],'r')
 
-            ########## NEED TO RE-DO THIS FOR THE CLOUDNET DATA
-            for c in range(0,3):
-                ### --------------------------------------------------------------------
-                ### fill missing obs arrays with nans
-                ### --------------------------------------------------------------------
-                print ('Filling obs_data...')
-                for j in range(0,len(obs_var_list[c])):
-                    if np.ndim(cn_nc0[c].variables[obs_var_list[c][j]]) == 1:
-                        nanarray = np.zeros(24)
-                        nanarray[:] = np.nan
-                        obs_data[obs_var_list[c][j]] = np.append(obs_data[obs_var_list[c][j]],nanarray)
-                    elif np.ndim(cn_nc0[c].variables[obs_var_list[c][j]]) == 2:
-                        if obs_var_list[c][j] == 'lwp':
-                            nanarray = np.zeros([24,4])
-                            nanarray[:] = np.nan
-                            obs_data[obs_var_list[c][j]] = np.append(obs_data[obs_var_list[c][j]],nanarray,0)
-                            # lwp = np.append(lwp,nanarray,0)
-                        elif obs_switch == 'RADAR':
-                            nanarray = np.zeros([24,np.size(obs_data[obs_var_list[c][j]],1)])
-                            nanarray[:] = np.nan
-                            obs_data[obs_var_list[c][j]] = np.append(obs_data[obs_var_list[c][j]],nanarray,0)
-                        else:
-                            nanarray = np.zeros([24,70])
-                            nanarray[:] = np.nan
-                            obs_data[obs_var_list[c][j]] = np.append(obs_data[obs_var_list[c][j]],nanarray,0)
-                print ('Filling um_data...')
-                for j in range(0,len(um_var_list[c])):
-                    if np.ndim(cn_nc1[c].variables[um_var_list[c][j]]) == 1:
-                        nanarray = np.zeros(24)
-                        nanarray[:] = np.nan
-                        um_data[um_var_list[c][j]] = np.append(um_data[um_var_list[c][j]],nanarray)
-                    elif np.ndim(cn_nc1[c].variables[um_var_list[c][j]]) == 2:
-                        if um_var_list[c][j] == 'lwp':
-                            nanarray = np.zeros([24,4])
-                            nanarray[:] = np.nan
-                            um_data[um_var_list[c][j]] = np.append(um_data[um_var_list[c][j]],nanarray,0)
-                        else:
-                            nanarray = np.zeros([24,70])
-                            nanarray[:] = np.nan
-                            um_data[um_var_list[c][j]] = np.append(um_data[um_var_list[c][j]],nanarray,0)
-                print ('Filling misc_data...')
-                for j in range(0,len(misc_var_list[c])):
-                    if np.ndim(cn_nc2[c].variables[misc_var_list[c][j]]) == 1:
-                        nanarray = np.zeros(24)
-                        nanarray[:] = np.nan
-                        misc_data[misc_var_list[c][j]] = np.append(misc_data[misc_var_list[c][j]],nanarray)
-                    elif np.ndim(cn_nc2[c].variables[misc_var_list[c][j]]) == 2:
-                        if misc_var_list[c][j] == 'lwp':
-                            nanarray = np.zeros([24,4])
-                            nanarray[:] = np.nan
-                            misc_data[misc_var_list[c][j]] = np.append(misc_data[misc_var_list[c][j]],nanarray,0)
-                        else:
-                            nanarray = np.zeros([24,70])
-                            nanarray[:] = np.nan
-                            misc_data[misc_var_list[c][j]] = np.append(misc_data[misc_var_list[c][j]],nanarray,0)
-                print ('Filling ifs_data...')
-                for j in range(0,len(ifs_var_list[c])):
-                    if np.ndim(cn_nc3[c].variables[ifs_var_list[c][j]]) == 1:
-                        nanarray = np.zeros(24)
-                        nanarray[:] = np.nan
-                        ifs_data[ifs_var_list[c][j]] = np.append(ifs_data[ifs_var_list[c][j]],nanarray)
-                    elif np.ndim(cn_nc3[c].variables[ifs_var_list[c][j]]) == 2:
-                        if ifs_var_list[c][j] == 'lwp':
-                            nanarray = np.zeros([24,4])
-                            nanarray[:] = np.nan
-                            ifs_data[ifs_var_list[c][j]] = np.append(ifs_data[ifs_var_list[c][j]],nanarray,0)
-                        else:
-                            nanarray = np.zeros([24,137])
-                            nanarray[:] = np.nan
-                            ifs_data[ifs_var_list[c][j]] = np.append(ifs_data[ifs_var_list[c][j]],nanarray,0)
-                print ('Filling ra2t_data...')
-                for j in range(0,len(ra2t_var_list[c])):
-                    if np.ndim(cn_nc4[c].variables[ra2t_var_list[c][j]]) == 1:
-                        nanarray = np.zeros(24)
-                        nanarray[:] = np.nan
-                        ra2t_data[ra2t_var_list[c][j]] = np.append(ra2t_data[ra2t_var_list[c][j]],nanarray)
-                    elif np.ndim(cn_nc4[c].variables[ra2t_var_list[c][j]]) == 2:
-                        if ra2t_var_list[c][j] == 'lwp':
-                            nanarray = np.zeros([24,4])
-                            nanarray[:] = np.nan
-                            ra2t_data[ra2t_var_list[c][j]] = np.append(ra2t_data[ra2t_var_list[c][j]],nanarray,0)
-                        else:
-                            nanarray = np.zeros([24,70])
-                            nanarray[:] = np.nan
-                            ra2t_data[ra2t_var_list[c][j]] = np.append(ra2t_data[ra2t_var_list[c][j]],nanarray,0)
+        # -------------------------------------------------------------
+        print ('')
 
         ### --------------------------------------------------------------------
-        ###     READ IN ALL CLOUDNET FILES: reinitialise diagnostic dictionaries
+        ###     LOAD CLOUDNET DIAGS INTO DICTIONARY
+        ### --------------------------------------------------------------------
+        #### LOAD IN SPECIFIC DIAGNOSTICS
+        obs_var_list = [['Cv', 'Cv_adv'],
+                    ['lwc','lwp','lwc_adiabatic','lwc_adiabatic_inc_nolwp'],
+                    ['height','iwc']]
+
+        um_var_list = [['Cv','model_Cv_filtered','model_temperature'],
+                ['lwc','lwp','model_lwc','model_lwp'],
+                ['height','iwc','model_iwc','model_iwc_filtered']]   ### time always read in separately
+
+        ### --------------------------------------------------------------------
+        ### create arrays for all cloudnet data
+        ### --------------------------------------------------------------------
+        if i == 0:
+            ### --------------------------------------------------------------------
+            ### initialise cloudnet data dictionaries
+            ### --------------------------------------------------------------------
+            um1_data = {}
+            um2_data = {}
+            um3_data = {}
+            obs_data = {}
+            ### --------------------------------------------------------------------
+            ### create time arrays for all cloudnet data
+            ### --------------------------------------------------------------------
+            if obs_switch == 'RADAR':
+                time_obs = datenum[i] + ((cn_nc0[1].variables['time'][:])/24.0)
+            else:
+                time_obs = datenum[i] + ((cn_nc0[0].variables['time'][:])/24.0)
+            time_um1 = datenum[i] + ((cn_nc1[0].variables['time'][:])/24.0)
+            time_um2 = datenum[i] + ((cn_nc2[0].variables['time'][:])/24.0)
+            time_um3 = datenum[i] + ((cn_nc3[0].variables['time'][:])/24.0)
+
+            ### --------------------------------------------------------------------
+            ### loop over each Cloudnet class
+            ### --------------------------------------------------------------------
+            for c in range(0,3):
+                ### --------------------------------------------------------------------
+                ### load in initial obs data
+                ### --------------------------------------------------------------------
+                if obs_switch == 'RADAR':
+                    for j in range(0,len(obs_var_list[c])):
+                        if np.ndim(cn_nc0[c].variables[obs_var_list[c][j]]) == 1:  # 1d timeseries only
+                            obs_data[obs_var_list[c][j]] = cn_nc0[c].variables[obs_var_list[c][j]][:]
+                        else:                                   # 2d column um_data
+                            obs_data[obs_var_list[c][j]] = cn_nc0[c].variables[obs_var_list[c][j]][:]
+                else:
+                    for j in range(0,len(obs_var_list[c])):
+                        if np.ndim(cn_nc0[c].variables[obs_var_list[c][j]]) == 1:  # 1d timeseries only
+                            obs_data[obs_var_list[c][j]] = cn_nc0[c].variables[obs_var_list[c][j]][:]
+                        else:                                   # 2d column um_data
+                            obs_data[obs_var_list[c][j]] = cn_nc0[c].variables[obs_var_list[c][j]][:]
+                    # lwp = []
+                    # lwp = cn_nc0[1].variables['lwp'][:]
+                ### --------------------------------------------------------------------
+                ### load in initial UM_RA2M data
+                ### --------------------------------------------------------------------
+                for j in range(0,len(um_var_list[c])):
+                    if np.ndim(cn_nc1[c].variables[um_var_list[c][j]]) == 1:  # 1d timeseries only
+                        um1_data[um_var_list[c][j]] = cn_nc1[c].variables[um_var_list[c][j]][:]
+                    else:                                   # 2d column um_data
+                        um1_data[um_var_list[c][j]] = cn_nc1[c].variables[um_var_list[c][j]][:]
+                ### --------------------------------------------------------------------
+                ### load in initial UM_CASIM-100 data
+                ### --------------------------------------------------------------------
+                for j in range(0,len(misc_var_list[c])):
+                    if np.ndim(cn_nc2[c].variables[misc_var_list[c][j]]) == 1:  # 1d timeseries only
+                        misc_data[misc_var_list[c][j]] = cn_nc2[c].variables[misc_var_list[c][j]][:]
+                    else:                                   # 2d column um_data
+                        misc_data[misc_var_list[c][j]] = cn_nc2[c].variables[misc_var_list[c][j]][:]
+                ### --------------------------------------------------------------------
+                ### load in initial UM_RA2T data
+                ### --------------------------------------------------------------------
+                for j in range(0,len(ra2t_var_list[c])):
+                    if np.ndim(cn_nc4[c].variables[ra2t_var_list[c][j]]) == 1:  # 1d timeseries only
+                        ra2t_data[ra2t_var_list[c][j]] = cn_nc4[c].variables[ra2t_var_list[c][j]][:]
+                    else:                                   # 2d column um_data
+                        ra2t_data[ra2t_var_list[c][j]] = cn_nc4[c].variables[ra2t_var_list[c][j]][:]
+        ### --------------------------------------------------------------------
+        ### fill arrays with remaining data
         ### --------------------------------------------------------------------
         else:
-            print ('Loading multiple diagnostics:')
-            cn_nc1 = {}
-            cn_nc2 = {}
-            cn_nc3 = {}
-            cn_nc4 = {}
-            cn_nc0 = {}
-            for c in range(0,3):
-                cn_nc1[c] = Dataset(cn_filename_um[c],'r')
-                cn_nc3[c] = Dataset(cn_filename_ifs[c],'r')
-                if cn_misc_flag != -1: cn_nc2[c] = Dataset(cn_filename_misc[c],'r')
-                cn_nc4[c] = Dataset(cn_filename_ra2t[c],'r')
-                cn_nc0[c] = Dataset(cn_filename_obs[c],'r')
-
-            # -------------------------------------------------------------
-            print ('')
-
-            ### --------------------------------------------------------------------
-            ###     LOAD CLOUDNET DIAGS INTO DICTIONARY
-            ### --------------------------------------------------------------------
-            #### LOAD IN SPECIFIC DIAGNOSTICS
-            obs_var_list = [['Cv', 'Cv_adv'],
-                        ['lwc','lwp','lwc_adiabatic','lwc_adiabatic_inc_nolwp'],
-                        ['height','iwc']]
-
-            um_var_list = [['Cv','model_Cv_filtered','model_temperature'],
-                    ['lwc','lwp','model_lwc','model_lwp'],
-                    ['height','iwc','model_iwc','model_iwc_filtered']]   ### time always read in separately
-
-            if cn_misc_flag == -1:
-                continue
-            elif cn_misc_flag == 1:
-                misc_var_list = [['cloud_fraction','temperature'],
-                        ['qliq'],
-                        ['qice']]   ### time always read in separately
-            elif cn_misc_flag == 0:
-                misc_var_list = [['Cv','model_Cv_filtered','model_temperature'],
-                        ['lwc','lwp','model_lwc','model_lwp'],
-                        ['height','iwc','model_iwc','model_iwc_filtered']]   ### time always read in separately
-
-            ifs_var_list = [['Cv','model_snow_Cv_filtered','model_temperature'],
-                    ['lwc','lwp','model_lwc','model_lwp'],
-                    ['height','iwc','model_iwc','model_snow_iwc_filtered','model_iwc_filtered']]   ### time always read in separately
-
-            ra2t_var_list = [['Cv','model_Cv_filtered','model_temperature'],
-                    ['lwc','lwp','model_lwc','model_lwp'],
-                    ['height','iwc','model_iwc','model_iwc_filtered']]   ### time always read in separately
-
-            ### --------------------------------------------------------------------
-            ### create arrays for all cloudnet data
-            ### --------------------------------------------------------------------
-            if i == 0:
-                ### --------------------------------------------------------------------
-                ### initialise cloudnet data dictionaries
-                ### --------------------------------------------------------------------
-                um_data = {}
-                ifs_data = {}
-                misc_data = {}
-                ra2t_data = {}
-                obs_data = {}
-                ### --------------------------------------------------------------------
-                ### create time arrays for all cloudnet data
-                ### --------------------------------------------------------------------
-                if obs_switch == 'RADAR':
-                    time_obs = doy[i] + ((cn_nc0[1].variables['time'][:])/24.0)
-                else:
-                    time_obs = doy[i] + ((cn_nc0[0].variables['time'][:])/24.0)
-                time_um = doy[i] + ((cn_nc1[0].variables['time'][:])/24.0)
-                if cn_misc_flag == 1:       ### for non-cloudnet data
-                    time_misc = doy[i] + ((cn_nc2[0].variables['forecast_time'][:])/24.0)
-                    misc_data['height'] = cn_nc2[0].variables['height'][:]
-                elif cn_misc_flag == 0: time_misc = doy[i] + ((cn_nc2[0].variables['time'][:])/24.0)
-                time_ifs = doy[i] + ((cn_nc3[0].variables['time'][:])/24.0)
-                time_ra2t = doy[i] + ((cn_nc4[0].variables['time'][:])/24.0)
-
-                ### --------------------------------------------------------------------
-                ### loop over each Cloudnet class
-                ### --------------------------------------------------------------------
-                for c in range(0,3):
-                    ### --------------------------------------------------------------------
-                    ### load in initial obs data
-                    ### --------------------------------------------------------------------
-                    if obs_switch == 'RADAR':
-                        for j in range(0,len(obs_var_list[c])):
-                            if np.ndim(cn_nc0[c].variables[obs_var_list[c][j]]) == 1:  # 1d timeseries only
-                                obs_data[obs_var_list[c][j]] = cn_nc0[c].variables[obs_var_list[c][j]][:]
-                            else:                                   # 2d column um_data
-                                obs_data[obs_var_list[c][j]] = cn_nc0[c].variables[obs_var_list[c][j]][:]
-                    else:
-                        for j in range(0,len(obs_var_list[c])):
-                            if np.ndim(cn_nc0[c].variables[obs_var_list[c][j]]) == 1:  # 1d timeseries only
-                                obs_data[obs_var_list[c][j]] = cn_nc0[c].variables[obs_var_list[c][j]][:]
-                            else:                                   # 2d column um_data
-                                obs_data[obs_var_list[c][j]] = cn_nc0[c].variables[obs_var_list[c][j]][:]
-                        # lwp = []
-                        # lwp = cn_nc0[1].variables['lwp'][:]
-                    ### --------------------------------------------------------------------
-                    ### load in initial UM_RA2M data
-                    ### --------------------------------------------------------------------
-                    for j in range(0,len(um_var_list[c])):
-                        if np.ndim(cn_nc1[c].variables[um_var_list[c][j]]) == 1:  # 1d timeseries only
-                            um_data[um_var_list[c][j]] = cn_nc1[c].variables[um_var_list[c][j]][:]
-                        else:                                   # 2d column um_data
-                            um_data[um_var_list[c][j]] = cn_nc1[c].variables[um_var_list[c][j]][:]
-                    ### --------------------------------------------------------------------
-                    ### load in initial UM_CASIM-100 data
-                    ### --------------------------------------------------------------------
-                    for j in range(0,len(misc_var_list[c])):
-                        if np.ndim(cn_nc2[c].variables[misc_var_list[c][j]]) == 1:  # 1d timeseries only
-                            misc_data[misc_var_list[c][j]] = cn_nc2[c].variables[misc_var_list[c][j]][:]
-                        else:                                   # 2d column um_data
-                            misc_data[misc_var_list[c][j]] = cn_nc2[c].variables[misc_var_list[c][j]][:]
-                    ### --------------------------------------------------------------------
-                    ### load in initial ECMWF_IFS data
-                    ### --------------------------------------------------------------------
-                    for j in range(0,len(ifs_var_list[c])):
-                        if np.ndim(cn_nc3[c].variables[ifs_var_list[c][j]]) == 1:  # 1d timeseries only
-                            ifs_data[ifs_var_list[c][j]] = cn_nc3[c].variables[ifs_var_list[c][j]][:]
-                        else:                                   # 2d column um_data
-                            ifs_data[ifs_var_list[c][j]] = cn_nc3[c].variables[ifs_var_list[c][j]][:]
-                    ### --------------------------------------------------------------------
-                    ### load in initial UM_RA2T data
-                    ### --------------------------------------------------------------------
-                    for j in range(0,len(ra2t_var_list[c])):
-                        if np.ndim(cn_nc4[c].variables[ra2t_var_list[c][j]]) == 1:  # 1d timeseries only
-                            ra2t_data[ra2t_var_list[c][j]] = cn_nc4[c].variables[ra2t_var_list[c][j]][:]
-                        else:                                   # 2d column um_data
-                            ra2t_data[ra2t_var_list[c][j]] = cn_nc4[c].variables[ra2t_var_list[c][j]][:]
-            ### --------------------------------------------------------------------
-            ### fill arrays with remaining data
-            ### --------------------------------------------------------------------
+            if obs_switch == 'RADAR':
+                time_obs = np.append(time_obs, doy[i] + ((cn_nc0[1].variables['time'][:])/24.0))
             else:
+                time_obs = np.append(time_obs, doy[i] + ((cn_nc0[0].variables['time'][:])/24.0))
+            time_um = np.append(time_um, doy[i] + ((cn_nc1[0].variables['time'][:])/24.0))
+            if cn_misc_flag == 1: time_misc = np.append(time_misc, doy[i] + ((cn_nc2[0].variables['forecast_time'][:])/24.0))
+            if cn_misc_flag == 0: time_misc = np.append(time_misc, doy[i] + ((cn_nc2[0].variables['time'][:])/24.0))
+            time_ifs = np.append(time_ifs, doy[i] + ((cn_nc3[0].variables['time'][:])/24.0))
+            time_ra2t = np.append(time_ra2t, doy[i] + ((cn_nc4[0].variables['time'][:])/24.0))
+
+            ### --------------------------------------------------------------------
+            ### loop over all Cloudnet classes
+            ### --------------------------------------------------------------------
+            for c in range(0,3):
+                ### --------------------------------------------------------------------
+                ### append rest of obs data
+                ### --------------------------------------------------------------------
                 if obs_switch == 'RADAR':
-                    time_obs = np.append(time_obs, doy[i] + ((cn_nc0[1].variables['time'][:])/24.0))
+                    for j in range(0,len(obs_var_list[c])):
+                        if obs_var_list[c][j] == 'height':
+                            continue
+                        elif np.ndim(cn_nc0[c].variables[obs_var_list[c][j]]) == 1:
+                            obs_data[obs_var_list[c][j]] = np.append(obs_data[obs_var_list[c][j]],cn_nc0[c].variables[obs_var_list[c][j]][:])
+                        elif np.ndim(cn_nc0[c].variables[obs_var_list[c][j]]) == 2:
+                            obs_data[obs_var_list[c][j]] = np.append(obs_data[obs_var_list[c][j]],cn_nc0[c].variables[obs_var_list[c][j]][:],0)
                 else:
-                    time_obs = np.append(time_obs, doy[i] + ((cn_nc0[0].variables['time'][:])/24.0))
-                time_um = np.append(time_um, doy[i] + ((cn_nc1[0].variables['time'][:])/24.0))
-                if cn_misc_flag == 1: time_misc = np.append(time_misc, doy[i] + ((cn_nc2[0].variables['forecast_time'][:])/24.0))
-                if cn_misc_flag == 0: time_misc = np.append(time_misc, doy[i] + ((cn_nc2[0].variables['time'][:])/24.0))
-                time_ifs = np.append(time_ifs, doy[i] + ((cn_nc3[0].variables['time'][:])/24.0))
-                time_ra2t = np.append(time_ra2t, doy[i] + ((cn_nc4[0].variables['time'][:])/24.0))
-
+                    for j in range(0,len(obs_var_list[c])):
+                        if np.ndim(cn_nc0[c].variables[obs_var_list[c][j]]) == 1:
+                            obs_data[obs_var_list[c][j]] = np.append(obs_data[obs_var_list[c][j]],cn_nc0[c].variables[obs_var_list[c][j]][:])
+                        elif np.sum(cn_nc0[c].variables[obs_var_list[c][j]].shape) == 71:
+                            continue
+                        else:
+                            obs_data[obs_var_list[c][j]] = np.append(obs_data[obs_var_list[c][j]],cn_nc0[c].variables[obs_var_list[c][j]][:],0)
                 ### --------------------------------------------------------------------
-                ### loop over all Cloudnet classes
+                ### append rest of UM_RA2M data
                 ### --------------------------------------------------------------------
-                for c in range(0,3):
-                    ### --------------------------------------------------------------------
-                    ### append rest of obs data
-                    ### --------------------------------------------------------------------
-                    if obs_switch == 'RADAR':
-                        for j in range(0,len(obs_var_list[c])):
-                            if obs_var_list[c][j] == 'height':
-                                continue
-                            elif np.ndim(cn_nc0[c].variables[obs_var_list[c][j]]) == 1:
-                                obs_data[obs_var_list[c][j]] = np.append(obs_data[obs_var_list[c][j]],cn_nc0[c].variables[obs_var_list[c][j]][:])
-                            elif np.ndim(cn_nc0[c].variables[obs_var_list[c][j]]) == 2:
-                                obs_data[obs_var_list[c][j]] = np.append(obs_data[obs_var_list[c][j]],cn_nc0[c].variables[obs_var_list[c][j]][:],0)
+                for j in range(0,len(um_var_list[c])):
+                    # print (cn_nc1[c])
+                    # print (um_var_list[c][j])
+                    if np.ndim(cn_nc1[c].variables[um_var_list[c][j]]) == 1:
+                        um_data[um_var_list[c][j]] = np.append(um_data[um_var_list[c][j]],cn_nc1[c].variables[um_var_list[c][j]][:])
                     else:
-                        for j in range(0,len(obs_var_list[c])):
-                            if np.ndim(cn_nc0[c].variables[obs_var_list[c][j]]) == 1:
-                                obs_data[obs_var_list[c][j]] = np.append(obs_data[obs_var_list[c][j]],cn_nc0[c].variables[obs_var_list[c][j]][:])
-                            elif np.sum(cn_nc0[c].variables[obs_var_list[c][j]].shape) == 71:
-                                continue
-                            else:
-                                obs_data[obs_var_list[c][j]] = np.append(obs_data[obs_var_list[c][j]],cn_nc0[c].variables[obs_var_list[c][j]][:],0)
-                    ### --------------------------------------------------------------------
-                    ### append rest of UM_RA2M data
-                    ### --------------------------------------------------------------------
-                    for j in range(0,len(um_var_list[c])):
-                        # print (cn_nc1[c])
-                        # print (um_var_list[c][j])
-                        if np.ndim(cn_nc1[c].variables[um_var_list[c][j]]) == 1:
-                            um_data[um_var_list[c][j]] = np.append(um_data[um_var_list[c][j]],cn_nc1[c].variables[um_var_list[c][j]][:])
-                        else:
-                            um_data[um_var_list[c][j]] = np.append(um_data[um_var_list[c][j]],cn_nc1[c].variables[um_var_list[c][j]][:],0)
-                    ### --------------------------------------------------------------------
-                    ### append rest of UM_CASIM-100 data
-                    ### --------------------------------------------------------------------
-                    for j in range(0,len(misc_var_list[c])):
-                        if np.ndim(cn_nc2[c].variables[misc_var_list[c][j]]) == 1:
-                            misc_data[misc_var_list[c][j]] = np.append(misc_data[misc_var_list[c][j]],cn_nc2[c].variables[misc_var_list[c][j]][:])
-                        else:
-                            misc_data[misc_var_list[c][j]] = np.append(misc_data[misc_var_list[c][j]],cn_nc2[c].variables[misc_var_list[c][j]][:],0)
-                    ### --------------------------------------------------------------------
-                    ### append rest of ECMWF_IFS data
-                    ### --------------------------------------------------------------------
-                    for j in range(0,len(ifs_var_list[c])):
-                        if np.ndim(cn_nc3[c].variables[ifs_var_list[c][j]]) == 1:
-                            ifs_data[ifs_var_list[c][j]] = np.append(ifs_data[ifs_var_list[c][j]],cn_nc3[c].variables[ifs_var_list[c][j]][:])
-                        else:
-                            ifs_data[ifs_var_list[c][j]] = np.append(ifs_data[ifs_var_list[c][j]],cn_nc3[c].variables[ifs_var_list[c][j]][:],0)
-                    ### --------------------------------------------------------------------
-                    ### append rest of UM_RA2T data
-                    ### --------------------------------------------------------------------
-                    for j in range(0,len(ra2t_var_list[c])):
-                        if np.ndim(cn_nc4[c].variables[ra2t_var_list[c][j]]) == 1:
-                            ra2t_data[ra2t_var_list[c][j]] = np.append(ra2t_data[ra2t_var_list[c][j]],cn_nc4[c].variables[ra2t_var_list[c][j]][:])
-                        else:
-                            ra2t_data[ra2t_var_list[c][j]] = np.append(ra2t_data[ra2t_var_list[c][j]],cn_nc4[c].variables[ra2t_var_list[c][j]][:],0)
-                # lwp = np.append(lwp, cn_nc0[1].variables['lwp'][:],0)
+                        um_data[um_var_list[c][j]] = np.append(um_data[um_var_list[c][j]],cn_nc1[c].variables[um_var_list[c][j]][:],0)
+                ### --------------------------------------------------------------------
+                ### append rest of UM_CASIM-100 data
+                ### --------------------------------------------------------------------
+                for j in range(0,len(misc_var_list[c])):
+                    if np.ndim(cn_nc2[c].variables[misc_var_list[c][j]]) == 1:
+                        misc_data[misc_var_list[c][j]] = np.append(misc_data[misc_var_list[c][j]],cn_nc2[c].variables[misc_var_list[c][j]][:])
+                    else:
+                        misc_data[misc_var_list[c][j]] = np.append(misc_data[misc_var_list[c][j]],cn_nc2[c].variables[misc_var_list[c][j]][:],0)
+                ### --------------------------------------------------------------------
+                ### append rest of ECMWF_IFS data
+                ### --------------------------------------------------------------------
+                for j in range(0,len(ifs_var_list[c])):
+                    if np.ndim(cn_nc3[c].variables[ifs_var_list[c][j]]) == 1:
+                        ifs_data[ifs_var_list[c][j]] = np.append(ifs_data[ifs_var_list[c][j]],cn_nc3[c].variables[ifs_var_list[c][j]][:])
+                    else:
+                        ifs_data[ifs_var_list[c][j]] = np.append(ifs_data[ifs_var_list[c][j]],cn_nc3[c].variables[ifs_var_list[c][j]][:],0)
+                ### --------------------------------------------------------------------
+                ### append rest of UM_RA2T data
+                ### --------------------------------------------------------------------
+                for j in range(0,len(ra2t_var_list[c])):
+                    if np.ndim(cn_nc4[c].variables[ra2t_var_list[c][j]]) == 1:
+                        ra2t_data[ra2t_var_list[c][j]] = np.append(ra2t_data[ra2t_var_list[c][j]],cn_nc4[c].variables[ra2t_var_list[c][j]][:])
+                    else:
+                        ra2t_data[ra2t_var_list[c][j]] = np.append(ra2t_data[ra2t_var_list[c][j]],cn_nc4[c].variables[ra2t_var_list[c][j]][:],0)
+            # lwp = np.append(lwp, cn_nc0[1].variables['lwp'][:],0)
 
-            ### --------------------------------------------------------------------
-            ### Close cloudnet netCDF files
-            ### --------------------------------------------------------------------
-            for c in range(0,3): cn_nc0[c].close()
-            for c in range(0,3): cn_nc1[c].close()
-            for c in range(0,3): cn_nc2[c].close()
-            for c in range(0,3): cn_nc3[c].close()
-            for c in range(0,3): cn_nc4[c].close()
+        ### --------------------------------------------------------------------
+        ### Close cloudnet netCDF files
+        ### --------------------------------------------------------------------
+        for c in range(0,3): cn_nc0[c].close()
+        for c in range(0,3): cn_nc1[c].close()
+        for c in range(0,3): cn_nc2[c].close()
+        for c in range(0,3): cn_nc3[c].close()
+        for c in range(0,3): cn_nc4[c].close()
 
-        # print (lwp.shape)
+    # print (lwp.shape)
         # print (time_obs.shape)
         # print (time_ifs.shape)
         # print (obs_data['lwp'].shape)
