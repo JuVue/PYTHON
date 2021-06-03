@@ -92,8 +92,8 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     print ('')
 
     date=datenum2date(datenum)
-    from IPython import embed; embed()
-    fileout = os.path.join(plot_out_dir,date.strftime('%Y%m%d') + '_testplot_line.png')
+#    from IPython import embed; embed()
+    fileout = os.path.join(plot_out_dir,date.strftime('%Y%m%d') + '_surfaceVariables_ts.png')
     plt.savefig(fileout)
     #plt.ion()
 
@@ -114,33 +114,9 @@ def plot_radiation(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3, daten
     plt.rc('xtick',labelsize=MED_SIZE)
     plt.rc('ytick',labelsize=MED_SIZE)
     plt.rc('legend',fontsize=MED_SIZE)
-    # plt.figure(figsize=(9,10))
-    # # plt.rc('figure',titlesize=LARGE_SIZE)
-    # plt.subplots_adjust(top = 0.95, bottom = 0.08, right = 0.95, left = 0.08,
-    #         hspace = 0.4, wspace = 0.13)
-
-    #################################################################
-    ## sort out obs['obs_temp']ervations' timestamp
-    #################################################################
-    # 0: Tship / (1)                         (time: 2324)
-    # 1: LWdice / (1)                        (time3: 1293)
-    # 2: LWuice / (1)                        (time3: 1293)
-    # 3: precip / (1)                        (time4: 2352)
-    # 4: Tice / (1)                          (time1: 1296)
-    # 5: SWdship / (1)                       (time2: 2348)
-    # 6: LWdship / (1)                       (time2: 2348)
-    # 7: SWdice / (1)                        (time3: 1293)
-    # 8: SWuice / (1)                        (time3: 1293)
-    from IPython import embed; embed()
 
     ### for reference in figures
     zeros = np.zeros(len(data2['time']))
-
-    # #### add override for data2 to allow 24h data to be used for testing purposes
-    # if out_dir2[-4:] == '24h/':
-    #     data2['surface_net_LW_radiation'][data2['surface_net_LW_radiation'] == 0] = np.nan
-    #     data2['surface_net_SW_radiation'][data2['surface_net_SW_radiation'] == 0] = np.nan
-
     #################################################################
     ## create figure and axes instances
     #################################################################
@@ -149,139 +125,70 @@ def plot_radiation(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3, daten
     ### -------------------------------
     fig = plt.figure(figsize=(12,10))
 
-    ax  = fig.add_axes([0.07,0.7,0.55,0.22])   # left, bottom, width, height
-    obs['ice_rad']['netLW'] = obs['ice_rad']['LWdice'][:] - obs['obs_temp'].variables['LWuice'][:]
-    netSW = obs['obs_temp'].variables['SWdice'][:] - obs['obs_temp'].variables['SWuice'][:]
+    ax  = fig.add_axes([0.07,0.7,0.7,0.22])   # left, bottom, width, height
+    obs['ice_rad']['netLW'] = obs['ice_rad']['LWdice'][:] - obs['ice_rad']['LWuice'][:]
+    obs['ice_rad']['netSW'] = obs['ice_rad']['SWdice'][:] - obs['ice_rad']['SWuice'][:]
     ax = plt.gca()
-    yA = [-65, 85]
     # plt.plot([240.0,240.0],[yA[0],yA[-1]],'--', color='red')
     plt.plot(data2['time'], zeros,'--', color='lightgrey')
-    plt.plot(time_radice, netLW + netSW, color = 'black', label = 'Ice_station')
-    plt.plot(data1['time'], data1['surface_net_LW_radiation'].data + data1['surface_net_SW_radiation'].data, color = 'darkblue', label = label1)
-    plt.plot(data2['time'], data2['surface_net_LW_radiation'].data + data2['surface_net_SW_radiation'].data, color = 'purple', label = label2)
-    if ifs_flag == True:
-        plt.plot(data3['time'], data3['sfc_net_lw'].data + data3['sfc_net_sw'].data, color = 'gold', label = label3)
-    else:
-        plt.plot(data3['time'], data3['surface_net_LW_radiation'].data + data3['surface_net_SW_radiation'].data, color = 'gold', label = label3)
-    plt.title('Net Radiation [W/m2]')
-    ax.set_xlim([doy[0],doy[-1]])
-    plt.legend(bbox_to_anchor=(-0.11, 0.65, 1., .102), loc=4, ncol=2)
-    plt.ylim([-60,80])
+    plt.plot(obs['ice_rad']['time'], obs['ice_rad']['netLW'] + obs['ice_rad']['netSW'], color = 'black', label = 'Ice_station')
+    plt.plot(obs['ship_rad']['time'], obs['ship_rad']['LWnetship'] + obs['ship_rad']['SWnetship'], color = 'gray', label = 'Ship')
+    plt.plot(data1['time'], data1['surface_net_LW_radiation'] + data1['surface_net_SW_radiation'], color = 'darkblue', label = label1)
+    plt.plot(data3['time'], data3['surface_net_LW_radiation'] + data3['surface_net_SW_radiation'],  color = 'steelblue', label = label3[:-4])
+    plt.plot(data2['time'], data2['surface_net_LW_radiation'] + data2['surface_net_SW_radiation'], color = 'mediumseagreen', label = label2)
+    plt.ylabel('Rnet [W/m2]')
+    ax.set_xlim([datenum, datenum+1])
+    plt.grid()
+    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=3))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+    #plt.legend(bbox_to_anchor=(-0.11, 0.1, 1., .102), loc=4, ncol=4)
+    plt.legend(loc=3, ncol=5,fontsize=SMALL_SIZE)
+    plt.ylim([-70,10])
 
-    ax  = fig.add_axes([0.07,0.4,0.55,0.22])   # left, bottom, width, height
+    ax  = fig.add_axes([0.07,0.4,0.7,0.22])   # left, bottom, width, height
     ax = plt.gca()
-    yB = [-10, 120]
     # plt.plot([240.0,240.0],[yB[0],yB[-1]],'--', color='red')
     plt.plot(data2['time'], zeros,'--', color='lightgrey')
-    plt.plot(time_radice,(obs['obs_temp'].variables['SWdice'][:] - obs['obs_temp'].variables['SWuice'][:]), color = 'black', label = 'Ice_station')
-    plt.plot(data1['time'], data1['surface_net_SW_radiation'].data, color = 'darkblue', label = label1)
-    plt.plot(data2['time'], data2['surface_net_SW_radiation'].data, color = 'purple', label = label2)
-    if ifs_flag == True:
-        plt.plot(data3['time'], data3['sfc_net_sw'].data, color = 'gold', label = label3)
-    else:
-        plt.plot(data3['time'], data3['surface_net_SW_radiation'].data, color = 'gold', label = label3)
-    plt.title('surface_net_SW_radiation [W/m2]')
-    # plt.legend()
-    ax.set_xlim([doy[0],doy[-1]])
-    plt.ylim([-3,120])
+    plt.plot(obs['ice_rad']['time'],  obs['ice_rad']['netSW'], color = 'black', label = 'Ice_station')
+    plt.plot(obs['ship_rad']['time'],  obs['ship_rad']['SWnetship'], color = 'gray', label = 'Ship')
+    plt.plot(data1['time'], data1['surface_net_SW_radiation'], color = 'darkblue', label = label1)
+    plt.plot(data3['time'], data3['surface_net_SW_radiation'],  color = 'steelblue', label = label3[:-4])
+    plt.plot(data2['time'], data2['surface_net_SW_radiation'], color = 'mediumseagreen', label = label2[:-7])
+    plt.ylabel('SWnet [W/m2]')
+    ax.set_xlim([datenum, datenum+1])
+    plt.grid()
+    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=3))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+    plt.ylim([0,20])
 
-    ax  = fig.add_axes([0.07,0.1,0.55,0.22])   # left, bottom, width, height
+    ax  = fig.add_axes([0.07,0.1,0.7,0.22])   # left, bottom, width, height
     ax = plt.gca()
-    yC = [-90, 10]
     # plt.plot([240.0,240.0],[yC[0],yC[-1]],'--', color='red')
+    # plt.plot([240.0,240.0],[yA[0],yA[-1]],'--', color='red')
     plt.plot(data2['time'], zeros,'--', color='lightgrey')
-    plt.plot(time_radice,(obs['obs_temp'].variables['LWdice'][:] - obs['obs_temp'].variables['LWuice'][:]), color = 'black', label = 'obs: ice')
-    plt.plot(data1['time'], data1['surface_net_LW_radiation'].data, color = 'darkblue')
-    plt.plot(data2['time'], data2['surface_net_LW_radiation'].data, color = 'purple')
-    if ifs_flag == True:
-        plt.plot(data3['time'], data3['sfc_net_lw'].data, color = 'gold')
-    else:
-        plt.plot(data3['time'], data3['surface_net_LW_radiation'].data, color = 'gold')
-    plt.title('surface_net_LW_radiation [W/m2]')
-    ax.set_xlim([doy[0],doy[-1]])
-    plt.xlabel('Day of year')
-    plt.ylim([-90,5])
-
-    ### -------------------------------
-    ### Build figure (PDFs)
-    ### -------------------------------
-    # f, axes = plt.subplots(2, 1, figsize=(7, 7))#, sharex=True)
-    # fig = plt.figure(figsize=(7,9))
-    # plt.subplots_adjust(top = 0.95, bottom = 0.1, right = 0.95, left = 0.1,
-    #         hspace = 0.3, wspace = 0.15)
-    # plt.subplot(211)
-
-    #### only compare obs over model dates available:
-    ####        all model data share a timestamp
-
-    subSect = np.where(np.logical_and(time_radice > data1['time_hrly'][0], time_radice <= data1['time_hrly'][-1]))
-
-    sw1 = data1['surface_net_SW_radiation'][data1['hrly_flag']]
-    lw1 = data1['surface_net_LW_radiation'][data1['hrly_flag']]
-    sw2 = data2['surface_net_SW_radiation'][data2['hrly_flag']]
-    lw2 = data2['surface_net_LW_radiation'][data2['hrly_flag']]
-    if ifs_flag == True:
-        sw3 = data3['sfc_net_sw'][data3['hrly_flag']]
-        lw3 = data3['sfc_net_lw'][data3['hrly_flag']]
-    else:
-        sw3 = data3['surface_net_SW_radiation'][data3['hrly_flag']]
-        lw3 = data3['surface_net_LW_radiation'][data3['hrly_flag']]
-
-    ax  = fig.add_axes([0.7,0.7,0.25,0.22])   # left, bottom, width, height
-    yDmax = 0.12
-    plt.plot([0,0],[0,yDmax],'--', color='lightgrey')
-    crf1 = sw1 + lw1
-    sns.distplot(crf1, hist=False, color="darkblue", kde_kws={"shade": True})
-    crf3 = sw3 + lw3
-    sns.distplot(crf3, hist=False, color="gold", kde_kws={"shade": True})
-    crf2 = sw2 + lw2
-    sns.distplot(crf2, hist=False, color="purple", kde_kws={"shade": True})
-    sns.distplot(netLW[subSect] + netSW[subSect], hist=False, color="black")
-    # plt.title('Melt')
-    # plt.annotate('Melt', xy=(55,0.07), xytext=(55,0.07), fontsize = 14)
-    plt.xlabel('CRF [W/m2]')
-    plt.xlim([-50,80])
-    plt.ylim([0,yDmax])
-
-    # plt.subplot(212)
-    ax  = fig.add_axes([0.7,0.4,0.25,0.22])   # left, bottom, width, height
-    yEmax = 0.16
-    plt.plot([0,0],[0,yEmax],'--', color='lightgrey')
-    sns.distplot(sw1, hist=False, color="darkblue", kde_kws={"shade": True})
-    sns.distplot(sw3, hist=False, color="gold", kde_kws={"shade": True})
-    sns.distplot(sw2, hist=False, color="purple", kde_kws={"shade": True})
-    sns.distplot(netSW[subSect], hist=False, color="black")
-    # plt.title('Melt')
-    # plt.annotate('Melt', xy=(87,0.07), xytext=(87,0.07), fontsize = 14)
-    # plt.legend()
-    plt.xlim([-10,110])
-    plt.ylim([0,yEmax])
-    plt.xlabel('$SW_{net,surf}$ [W/m2]')
-
-    # plt.subplot(212)
-    ax  = fig.add_axes([0.7,0.1,0.25,0.22])   # left, bottom, width, height
-    yFmax = 0.13
-    plt.plot([0,0],[0,yFmax],'--', color='lightgrey')
-    sns.distplot(lw1, hist=False, color="darkblue", kde_kws={"shade": True})
-    sns.distplot(lw3, hist=False, color="gold", kde_kws={"shade": True})
-    sns.distplot(lw2, hist=False, color="purple", kde_kws={"shade": True})
-    sns.distplot(netLW[subSect], hist=False, color="black")
-    # plt.title('Melt')
-    # plt.annotate('Melt', xy=(0,0.14), xytext=(0,0.14), fontsize = 14)
-    plt.xlim([-80,20])
-    plt.ylim([0,yFmax])
-    plt.xlabel('$LW_{net,surf}$ [W/m2]')
-
+    plt.plot(obs['ice_rad']['time'], obs['ice_rad']['netLW'], color = 'black', label = 'Ice_station')
+    plt.plot(obs['ship_rad']['time'], obs['ship_rad']['LWnetship'], color = 'gray', label = 'Ship')
+    plt.plot(data1['time'], data1['surface_net_LW_radiation'], color = 'darkblue', label = label1)
+    plt.plot(data3['time'], data3['surface_net_LW_radiation'],  color = 'steelblue', label = label3[:-4])
+    plt.plot(data2['time'], data2['surface_net_LW_radiation'], color = 'mediumseagreen', label = label2[:-7])
+    plt.ylabel('LWnet [W/m2]')
+    ax.set_xlim([datenum, datenum+1])
+    plt.grid()
+    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=3))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+    plt.ylim([-70,10])
+    plt.xlabel('Time [UTC]')
 
     print ('******')
     print ('')
     print ('Finished plotting! :)')
     print ('')
 
-    fileout = '../FIGS/comparisons/CRF_netSW_netLW_line+PDFS_oden_iceStation_' + label1[3:] + '_' + label3 + '_' + label2[3:] + '.png'
+    fileout = os.path.join(plot_out_dir,date.strftime('%Y%m%d') + '_radiation_ts.png')
     plt.savefig(fileout)
-    plt.show()
-
 
 
 
@@ -418,7 +325,7 @@ def main():
             #### 7th deck: temperature, surface temperature, RH, downwelling SW, downwelling LW
                     #### 7thDeck/ACAS_AO2018_WX_30min_v2_0.nc
     obs={}
-    
+
     print ('Load ice station data from Jutta...')
     filename = 'AO2018_metalley_01min_v3.0.mat'
     obs['metalley'] = readMatlabStruct(obs_met_dir + filename)
