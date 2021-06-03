@@ -52,7 +52,7 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     ### Build figure (timeseries)
     ### -------------------------------
     #from IPython import embed; embed()
-    fig = plt.figure(figsize=(16,12 ))
+    fig = plt.figure(figsize=(12,10 ))
     #ax  = fig.add_axes([0.07,0.7,0.53,0.22])   # left, bottom, width, height
     plt.subplot(2,1,1)
     ax = plt.gca()
@@ -63,7 +63,7 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     plt.plot(obs['metalley']['mday'], obs['metalley']['t'], color = 'black', label = 'Obs')#plt.ylabel('SW$_{net}$ [W m$^{-2}$]')
     plt.ylabel('T [$^\circ$C]')
     plt.legend(bbox_to_anchor=(-0.08, 0.77, 1., .102), loc=4, ncol=4)
-    ax.set_xlim([datenum, datenum+1])
+    ax.set_xlim([datenum, edatenum])
     plt.grid()
     ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=3))
@@ -123,7 +123,7 @@ def plot_radiation(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3, daten
     ### -------------------------------
     ### Build figure (timeseries)
     ### -------------------------------
-    fig = plt.figure(figsize=(12,10))
+    fig = plt.figure(figsize=(18,10))
 
     ax  = fig.add_axes([0.07,0.7,0.7,0.22])   # left, bottom, width, height
     obs['ice_rad']['netLW'] = obs['ice_rad']['LWdice'][:] - obs['ice_rad']['LWuice'][:]
@@ -144,7 +144,7 @@ def plot_radiation(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3, daten
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
     #plt.legend(bbox_to_anchor=(-0.11, 0.1, 1., .102), loc=4, ncol=4)
     plt.legend(loc=3, ncol=5,fontsize=SMALL_SIZE)
-    plt.ylim([-70,10])
+    plt.ylim([-20,10])
 
     ax  = fig.add_axes([0.07,0.4,0.7,0.22])   # left, bottom, width, height
     ax = plt.gca()
@@ -156,7 +156,7 @@ def plot_radiation(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3, daten
     plt.plot(data3['time'], data3['surface_net_SW_radiation'],  color = 'steelblue', label = label3[:-4])
     plt.plot(data2['time'], data2['surface_net_SW_radiation'], color = 'mediumseagreen', label = label2[:-7])
     plt.ylabel('SWnet [W/m2]')
-    ax.set_xlim([datenum, datenum+1])
+    ax.set_xlim([datenum, edatenum])
     plt.grid()
     ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=3))
@@ -174,7 +174,7 @@ def plot_radiation(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3, daten
     plt.plot(data3['time'], data3['surface_net_LW_radiation'],  color = 'steelblue', label = label3[:-4])
     plt.plot(data2['time'], data2['surface_net_LW_radiation'], color = 'mediumseagreen', label = label2[:-7])
     plt.ylabel('LWnet [W/m2]')
-    ax.set_xlim([datenum, datenum+1])
+    ax.set_xlim([datenum, edatenum])
     plt.grid()
     ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=3))
