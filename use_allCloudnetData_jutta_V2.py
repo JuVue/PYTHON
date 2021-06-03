@@ -13,7 +13,6 @@ from netCDF4 import Dataset
 import numpy as np
 # import diags_MOCCHA as diags
 # import diags_varnames as varnames
-import cartopy.crs as ccrs
 import iris
 import matplotlib.pyplot as plt
 import matplotlib.cm as mpl_cm
@@ -24,7 +23,7 @@ from scipy.interpolate import interp1d
 #### import python functions
 import sys
 sys.path.insert(1, '../py_functions/')
-from time_functions import calcTime_Mat2DOY
+from time_functions import calcTime_Mat2DOY, date2datenum
 from readMAT import readMatlabStruct
 from physFuncts import calcThetaE, calcThetaVL
 # from conversionFuncts import reGrid_Sondes
