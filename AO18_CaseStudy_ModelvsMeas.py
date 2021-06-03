@@ -52,10 +52,9 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     ### Build figure (timeseries)
     ### -------------------------------
     #from IPython import embed; embed()
-    plt.ion()
-    fig = plt.figure(figsize=(18,12 ))
+    fig = plt.figure(figsize=(16,12 ))
     #ax  = fig.add_axes([0.07,0.7,0.53,0.22])   # left, bottom, width, height
-    plt.subplot(3,1,1)
+    plt.subplot(2,1,1)
     ax = plt.gca()
     yB = [-10, 120]
     plt.plot(data1['time'], data1['air_temperature_at_1.5m']-273.15, color = 'darkblue', label = label1)
@@ -71,7 +70,7 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
     plt.ylim([-10,0])
 
-    plt.subplot(3,1,2)
+    plt.subplot(2,1,2)
     ax = plt.gca()
     yB = [-10, 120]
     plt.plot(data1['time'], data1['rh_1.5m'], color = 'darkblue', label = label1)
@@ -87,27 +86,6 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
     plt.ylim([80,110])
 
-    plt.subplot(3,1,3)
-    ax = plt.gca()
-    yB = [-10, 120]
-    plt.plot(data1['time'], data1['rh_1.5m'], color = 'darkblue', label = label1)
-    plt.plot(data3['time'], data3['rh_1.5m'], color = 'steelblue', label = label3[:-4])
-    plt.plot(data2['time'], data2['rh_1.5m'], color = 'mediumseagreen', label = label2[:-7])
-    plt.plot(obs['metalley']['mday'], obs['metalley']['rh'], color = 'black', label = 'Obs')#plt.ylabel('SW$_{net}$ [W m$^{-2}$]')
-    plt.ylabel('RH [$\%]')
-    #plt.legend(bbox_to_anchor=(-0.08, 0.67, 1., .102), loc=4, ncol=3)
-    ax.set_xlim([datenum, datenum+1])
-    plt.grid()
-    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
-    ax.xaxis.set_major_locator(mdates.HourLocator(interval=3))
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-    plt.ylim([80,110])
-
-    #
-    # ax  = fig.add_axes([0.07,0.4,0.53,0.22])   # left, bottom, width, height
-    # ax = plt.gca()
-    # yC = [-90, 10]
-
     print ('******')
     print ('')
     print ('Finished plotting! :)')
@@ -115,18 +93,15 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
 
     date=datenum2date(datenum)
     from IPython import embed; embed()
-    fileout = os.path.join(plot_out_dir,date.strftime('%Y%m%d') + '_testplot_line.png'])
+    fileout = os.path.join(plot_out_dir,date.strftime('%Y%m%d') + '_testplot_line.png')
     plt.savefig(fileout)
     #plt.ion()
-    plt.show()
-    from IPython import embed; embed()
-
 
 
 def plot_radiation(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3, datenum, label1, label2, label3,plot_out_dir):
     print ('******')
     print ('')
-    print ('Plotting combined timeseries and PDFs of radiation terms:')
+    print ('Plotting  timeseries  of radiation terms:')
     print ('')
 
     SMALL_SIZE = 12
@@ -156,37 +131,15 @@ def plot_radiation(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3, daten
     # 6: LWdship / (1)                       (time2: 2348)
     # 7: SWdice / (1)                        (time3: 1293)
     # 8: SWuice / (1)                        (time3: 1293)
-
-    datenums_radice = obs['obs_temp'].variables['time3'][:] ### radiation on different timestep
-    time_radice = calcTime_Mat2DOY(datenums_radice)
-
-    datenums_tice = obs['obs_temp'].variables['time1'][:] ### ice camp data on different timestep
-    time_tice = calcTime_Mat2DOY(datenums_tice)
-
-    ### set diagnostic naming flags for if IFS being used
-    if np.logical_or(out_dir3 == 'OUT_25H/', out_dir3 == 'ECMWF_IFS/'):
-        ifs_flag = True
-    else:
-        ifs_flag = False
-
-    # UM -> um2 comparisons:
-    # 1. snowfall_flux -> sfc_ls_snow
-    # 2. rainfall_flux -> sfc_ls_rain
-    # 3. sensible_heat_flux -> sfc_down_sens_heat_flx
-    # 4. latent_heat_flux -> flx_turb_moist
-    # 5. bl_depth -> sfc_bl_height
-    # 6. sfc_pressure -> sfc_pressure
-    # 7. temp_1.5m -> sfc_temp_2m
-    # 8. surface_net_LW_radiation -> sfc_net_lw
-    # 9. surface_net_SW_radiation -> sfc_net_sw
+    from IPython import embed; embed()
 
     ### for reference in figures
     zeros = np.zeros(len(data2['time']))
 
-    #### add override for data2 to allow 24h data to be used for testing purposes
-    if out_dir2[-4:] == '24h/':
-        data2['surface_net_LW_radiation'][data2['surface_net_LW_radiation'] == 0] = np.nan
-        data2['surface_net_SW_radiation'][data2['surface_net_SW_radiation'] == 0] = np.nan
+    # #### add override for data2 to allow 24h data to be used for testing purposes
+    # if out_dir2[-4:] == '24h/':
+    #     data2['surface_net_LW_radiation'][data2['surface_net_LW_radiation'] == 0] = np.nan
+    #     data2['surface_net_SW_radiation'][data2['surface_net_SW_radiation'] == 0] = np.nan
 
     #################################################################
     ## create figure and axes instances
@@ -197,7 +150,7 @@ def plot_radiation(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3, daten
     fig = plt.figure(figsize=(12,10))
 
     ax  = fig.add_axes([0.07,0.7,0.55,0.22])   # left, bottom, width, height
-    netLW = obs['obs_temp'].variables['LWdice'][:] - obs['obs_temp'].variables['LWuice'][:]
+    obs['ice_rad']['netLW'] = obs['ice_rad']['LWdice'][:] - obs['obs_temp'].variables['LWuice'][:]
     netSW = obs['obs_temp'].variables['SWdice'][:] - obs['obs_temp'].variables['SWuice'][:]
     ax = plt.gca()
     yA = [-65, 85]
@@ -347,6 +300,7 @@ def main():
     obs_rs_dir=   '/nfs/a96/MOCCHA/working/jutta/final_data/radiosondes/V3/';
     obs_hatpro_dir='/nfs/a96/MOCCHA/working/jutta/final_data/HATPRO/';
     obs_albedo_dir='/nfs/a96/MOCCHA/working/data/'
+    obs_rad_dir='/nfs/a96/MOCCHA/working/jutta/requests/Gillian/'
     ### CHOSEN RUN
     out_dir1 = '25_u-cc568_RA2M_CON/'
     out_dir2 = '23_u-cc278_RA1M_CASIM/'
@@ -439,7 +393,7 @@ def main():
             data2[var_list2[j]] = nc2.variables[var_list2[j]][:]
     nc2.close()
 
-    print ('Starting on t=0 RA2T data, initialising:')
+    print ('Starting on t=0 RA2T data:')
     for j in range(0,len(var_list1)):
         if var_list1[j] in nc3.variables:
             if np.ndim(nc3.variables[var_list1[j]]) == 0:     # ignore horizontal_resolution
@@ -465,7 +419,7 @@ def main():
     obs = {}
     obs_ship = {}
 
-    print ('Load temporary ice station data from Jutta...')
+    print ('Load metalley ice station data from Jutta...')
     filename = 'AO2018_metalley_01min_v3.0.mat'
     obs['metalley'] = readMatlabStruct(obs_met_dir + filename)
     print(obs['metalley'].keys())
@@ -484,11 +438,23 @@ def main():
     # obs['hatpro']['doy'] = calcTime_Mat2DOY(obs['hatpro']['mday'])
 
 
-    print ('Load albedo estimates from Michael...')
-    obs['albedo'] = readMatlabStruct(obs_albedo_dir + 'MOCCHA_Albedo_estimates_Michael.mat')
+    #print ('Load albedo estimates from Michael...')
+    #obs['albedo'] = readMatlabStruct(obs_albedo_dir + 'MOCCHA_Albedo_estimates_Michael.mat')
 
-    ### print ('Load ice station radiation data from Jutta...')
-    ### obs['ice_station_radiation'] = readMatlabStruct(obs_root_dir + 'ice_station/mast_radiation_30min_v2.3.mat')
+    print ('Load cleaned and pre processed radiation data ..')
+    nc4 =Dataset(obs_rad_dir + 'MetData_Gillian_V3_30minres.nc','r')
+
+    var_list_srad=(['SWdship', 'LWdship', 'SWnetship', 'LWnetship', 'SWuship'])
+    var_list_irad=(['SWuice', 'LWdice', 'LWuice', 'SWdice'])
+
+    obs['ship_rad']['time']=nc4.variables['time2']
+    for j in range(0,len(var_list_srad)):
+        obs['rad'][var_list_srad[j]] = nc4.variables[var_list_srad[j]][:]
+
+    obs['ice_rad']['time']=nc4.variables['time3']
+    for j in range(0,len(var_list_irad)):
+        obs['ice_rad'][var_list_irad[j]] = nc4.variables[var_list_irad[j]][:]
+    nc4.close
 
     print ('Load radiosonde data from Jutta...')
     obs['sondes'] = readMatlabStruct(obs_rs_dir + '/SondeData_h10int_V03.mat')
@@ -506,9 +472,6 @@ def main():
     obs['pwd'] = readMatlabStruct(obs_acas_dir + 'ACAS_AO2018_PWD_30min_v1_0.mat')
 
     print ('...')
-
-    from IPython import embed; embed()
-
 
     #################################################################
     ## create labels for figure legends - done here so only needs to be done once!
@@ -532,7 +495,8 @@ def main():
     # -------------------------------------------------------------
     # Plot paper figures
     # -------------------------------------------------------------
-    figure = plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3,datenum,label1,label2,label3,plot_out_dir)
+    #figure = plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3,datenum,label1,label2,label3,plot_out_dir)
+    figure = plot_radiation(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3,datenum,label1,label2,label3,plot_out_dir)
     # figure = plot_paperFluxes(data1, data2, data3, month_flag, missing_files, out_dir1, out_dir2, out_dir3, obs, doy, label1, label2, label3)
     # figure = plot_paperRadiation(data1, data2, data3, out_dir1, out_dir2, out_dir3,datenum,label1,label2,label3,plot_out_dir)
     # figure = plot_Precipitation(data1, data2, data3, data4, month_flag, missing_files, out_dir1, out_dir2, out_dir3, obs, doy, label1, label2, label3, label4)
