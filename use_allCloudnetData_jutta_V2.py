@@ -7797,11 +7797,11 @@ def main():
 
     if platform == 'LAPTOP':
         um_root_dir = '/nfs/a96/MOCCHA/working/jutta/CloudNet/Oden/data/calibrated/metum/'
-        ifs_root_dir = '/home/gillian/MOCCHA/ECMWF/'
+        ifs_root_dir = '/nfs/a96/MOCCHA/working/jutta/CloudNet/Oden/data/calibrated/ecmwf'
         obs_root_dir = '/home/gillian/MOCCHA/ODEN/DATA/'
         ship_filename = '~/MOCCHA/ODEN/DATA/2018_shipposition_1hour.txt'
         cn_um_dir = '/nfs/a96/MOCCHA/working/jutta/CloudNet/Oden/output/metum/V7/'
-        cn_ifs_dir = '/home/gillian/MOCCHA/Cloudnet/IFS_DATA/'
+        cn_ifs_dir = '/nfs/a96/MOCCHA/working/jutta/CloudNet/Oden/output/ecmwf/V03_gillian'
         # cn_ifs_dir = '/home/gillian/MOCCHA/Cloudnet/OBS_DATA/'
         # cn_misc_dir = '/home/gillian/MOCCHA/UM/DATA/'; cn_misc_flag = 1              ### FOR NON-CLOUDNET UM DATA
         cn_misc_dir = '/nfs/a96/MOCCHA/working/jutta/CloudNet/Oden/output/metum/V7/'; cn_misc_flag = 0  ### FOR CLOUDNET UM DATA
@@ -7818,12 +7818,13 @@ def main():
         ### model directories
         #out_dir1 = '25_u-cc568_RA2M_CON/OUT_R0/'
         #out_dir2 = '23_u-cc278_RA1M_CASIM/OUT_R0/'
-        #out_dir3 = 'OUT_25H/'
+        out_dir3 = 'OUT_25H/'
         #out_dir4 = '24_u-cc324_RA2T_CON/OUT_R0_LAM/'
 
         out_dir1 = '25_u-cc568_RA2M_CON/'
         out_dir4 = '24_u-cc324_RA2T_CON/'
         out_dir2 = '23_u-cc278_RA1M_CASIM/'
+        out_dir3 = ''
 
         ### cloudnet directories
         cloudnet_um1 ='25_u-cc568_RA2M_CON/'
@@ -7872,6 +7873,7 @@ def main():
                             cloudnet_um2 + 'iwc-Z-T-metum-grid/2018/']
         elif cn_misc_flag == 1:       ## flag to compare non-cloudnet model data
             cn_misc_out_dir = '12_u-br210_RA1M_CASIM/OUT_R0/'
+
         cn_ra2t_out_dir = [cloudnet_um4 + 'cloud-fraction-metum-grid/2018/',
                         cloudnet_um4 + 'lwc-scaled-metum-grid/2018/',
                         cloudnet_um4 + 'iwc-Z-T-metum-grid/2018/']
