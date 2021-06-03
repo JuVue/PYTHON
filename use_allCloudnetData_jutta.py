@@ -10,12 +10,12 @@ from netCDF4 import Dataset
 import numpy as np
 # import diags_MOCCHA as diags
 # import diags_varnames as varnames
-import cartopy.crs as ccrs
-import iris
+#import cartopy.crs as ccrs
+#import iris
 import matplotlib.pyplot as plt
 import matplotlib.cm as mpl_cm
 import os
-import seaborn as sns
+#import seaborn as sns
 from scipy.interpolate import interp1d
 
 #### import python functions
