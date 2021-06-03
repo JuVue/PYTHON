@@ -25,7 +25,6 @@ from readMAT import readMatlabStruct
 
 
 def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3, datenum,edatenum, label1, label2, label3,plot_out_dir):
-
     print ('******')
     print ('')
     print ('Plotting  timeseries of surface variables:')
@@ -60,7 +59,7 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     plt.plot(obs['metalley']['mday'], obs['metalley']['t'], color = 'black', label = 'ice_station')#plt.ylabel('SW$_{net}$ [W m$^{-2}$]')
     plt.plot(data1['time'], data1['air_temperature_at_1.5m']-273.15, color = 'darkblue', label = label1)
     plt.plot(data3['time'], data3['air_temperature_at_1.5m']-273.15, color = 'steelblue', label = label3[:-4])
-    plt.plot(data2['time'], data2['air_temperature_at_1.5m']-273.15, color = 'mediumseagreen', label = label2[:-7])
+    plt.plot(data2['time'], data2['air_temperature_at_1.5m']-273.15, color = 'mediumseagreen', label = label2)
     plt.ylabel('T [$^\circ$C]')
     plt.legend(bbox_to_anchor=(-0.08, 0.77, 1., .102), loc=4, ncol=4)
     ax.set_xlim([datenum, edatenum])
@@ -75,7 +74,7 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     yB = [-10, 120]
     plt.plot(data1['time'], data1['rh_1.5m'], color = 'darkblue', label = label1)
     plt.plot(data3['time'], data3['rh_1.5m'], color = 'steelblue', label = label3[:-4])
-    plt.plot(data2['time'], data2['rh_1.5m'], color = 'mediumseagreen', label = label2[:-7])
+    plt.plot(data2['time'], data2['rh_1.5m'], color = 'mediumseagreen', label = label2)
     plt.plot(obs['metalley']['mday'], obs['metalley']['rh'], color = 'black', label = 'Obs')#plt.ylabel('SW$_{net}$ [W m$^{-2}$]')
     plt.ylabel('RH [%]')
     #plt.legend(bbox_to_anchor=(-0.08, 0.67, 1., .102), loc=4, ncol=3)
@@ -96,7 +95,6 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
 #    from IPython import embed; embed()
     fileout = os.path.join(plot_out_dir,date.strftime('%Y%m%d') + '_surfaceVariables_ts.png')
     plt.savefig(fileout)
-    #plt.ion()
 
 def plot_radiation(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3, datenum,edatenum, label1, label2, label3,plot_out_dir):
 
