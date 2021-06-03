@@ -7784,7 +7784,7 @@ def main():
     print ('')
 
 
-    names = ['20180912_oden','20180913_oden_']
+    names = ['20180912_oden_','20180913_oden_']
     sdate = datetime.datetime.strptime('2018091222','%Y%m%d%H')
     edate = datetime.datetime.strptime('2018091315','%Y%m%d%H')
     dates = [date2datenum(sdate),date2datenum(edate)]
