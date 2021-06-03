@@ -24,7 +24,7 @@ from readMAT import readMatlabStruct
 #from pyFixes import py3_FixNPLoad
 
 
-def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3, datenum, label1, label2, label3,plot_out_dir):
+def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3, datenum,edatenum, label1, label2, label3,plot_out_dir):
 
     print ('******')
     print ('')
@@ -79,7 +79,7 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     plt.plot(obs['metalley']['mday'], obs['metalley']['rh'], color = 'black', label = 'Obs')#plt.ylabel('SW$_{net}$ [W m$^{-2}$]')
     plt.ylabel('RH [%]')
     #plt.legend(bbox_to_anchor=(-0.08, 0.67, 1., .102), loc=4, ncol=3)
-    ax.set_xlim([datenum, datenum+1])
+    ax.set_xlim([datenum, edatenum])
     plt.grid()
     ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=3))
@@ -97,7 +97,7 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     plt.savefig(fileout)
     #plt.ion()
 
-def plot_radiation(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3, datenum, label1, label2, label3,plot_out_dir):
+def plot_radiation(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3, datenum,edatenum, label1, label2, label3,plot_out_dir):
 
     print ('******')
     print ('')
@@ -137,7 +137,7 @@ def plot_radiation(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3, daten
     plt.plot(data3['time'], data3['surface_net_LW_radiation'] + data3['surface_net_SW_radiation'],  color = 'steelblue', label = label3[:-4])
     plt.plot(data2['time'], data2['surface_net_LW_radiation'] + data2['surface_net_SW_radiation'], color = 'mediumseagreen', label = label2)
     plt.ylabel('Rnet [W/m2]')
-    ax.set_xlim([datenum, datenum+1])
+    ax.set_xlim([datenum, edatenum])
     plt.grid()
     ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=3))
@@ -217,6 +217,7 @@ def main():
 
     ### CHOOSE DATES TO PLOT
     DATES = 20180913
+    ENDDATE=2018091315
 
     ### SET OUTPUT DIRECTORY FOR PLOTS
     plot_out_dir = '/nfs/a96/MOCCHA/working/jutta/plots/CaseStudies/ModelComparison/'
@@ -235,8 +236,9 @@ def main():
     ### -------------------------------------------------------------------------
 
     strdate = str(DATES)
+    estrdate=str(ENDDATE)
     datenum = date2datenum(datetime.datetime.strptime(strdate,'%Y%m%d'))
-
+    edatenum = date2datenum(datetime.datetime.strptime(estrdate,'%Y%m%d%H'))
     filename_um1 = um_root_dir + out_dir1 + strdate + '_oden_metum.nc'
     filename_um2 = um_root_dir + out_dir2 + strdate + '_oden_metum.nc'
     filename_um3 = um_root_dir + out_dir3 + strdate + '_oden_metum.nc'
@@ -411,8 +413,8 @@ def main():
     # -------------------------------------------------------------
     # Plot paper figures
     # -------------------------------------------------------------
-    #figure = plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3,datenum,label1,label2,label3,plot_out_dir)
-    figure = plot_radiation(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3,datenum,label1,label2,label3,plot_out_dir)
+    figure = plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3,datenum,edatenum,label1,label2,label3,plot_out_dir)
+    figure = plot_radiation(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3,datenum,edatenum,label1,label2,label3,plot_out_dir)
     # figure = plot_paperFluxes(data1, data2, data3, month_flag, missing_files, out_dir1, out_dir2, out_dir3, obs, doy, label1, label2, label3)
     # figure = plot_paperRadiation(data1, data2, data3, out_dir1, out_dir2, out_dir3,datenum,label1,label2,label3,plot_out_dir)
     # figure = plot_Precipitation(data1, data2, data3, data4, month_flag, missing_files, out_dir1, out_dir2, out_dir3, obs, doy, label1, label2, label3, label4)
