@@ -7279,7 +7279,7 @@ def interpCloudnet(obs_data):
         height = np.copy(obs_data['height'][0,:])        ### height array constant in time, so just take first column
         from IPython import embed; embed()
         nans,id=nanhelper(cv)
-        for i in range(0,len(height))
+        for i in range(0,len(height)):
             id(nans[:])
             cv[nans]=np.interp(id(nans),id(~nans),y[~nans])
 
