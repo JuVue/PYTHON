@@ -7932,7 +7932,7 @@ def main():
                 ### append rest of UM_RA2T data
                 ### --------------------------------------------------------------------
                 for j in range(0,len(ra2t_var_list[c])):
-                    if np.ndim(cn_nc4[c].variables[ra2t_var_list[c][j]]) == 1:
+                    if np.ndim(cn_nc3[c].variables[ra2t_var_list[c][j]]) == 1:
                         ra2t_data[ra2t_var_list[c][j]] = np.append(ra2t_data[ra2t_var_list[c][j]],cn_nc4[c].variables[ra2t_var_list[c][j]][:])
                     else:
                         ra2t_data[ra2t_var_list[c][j]] = np.append(ra2t_data[ra2t_var_list[c][j]],cn_nc4[c].variables[ra2t_var_list[c][j]][:],0)
