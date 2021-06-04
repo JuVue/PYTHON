@@ -7800,7 +7800,7 @@ def main():
         ### --------------------------------------------------------------------
         #### LOAD IN SPECIFIC DIAGNOSTICS
         obs_var_list = [['Cv', 'Cv_adv'],
-                    ['lwc','lwp','lwc_adiabatic','lwc_adiabatic_inc_nolwp'],
+                    ['lwc','lwp','lwc_adiabatic'],
                     ['height','iwc']]
 
         um_var_list = [['Cv','model_Cv_filtered','model_temperature'],
