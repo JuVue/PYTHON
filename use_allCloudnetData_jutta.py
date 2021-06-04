@@ -7808,7 +7808,6 @@ def main():
                 ['height','iwc','model_iwc','model_iwc_filtered']]   ### time always read in separately
         misc_var_list=um_var_list
         ra2t_var_list=um_var_list
-        from IPython import embed; embed()
         ### --------------------------------------------------------------------
         ### create arrays for all cloudnet data
         ### --------------------------------------------------------------------
