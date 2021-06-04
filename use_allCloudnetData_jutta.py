@@ -7272,12 +7272,12 @@ def interpCloudnet(obs_data):
     for var in varlist:
         ### remove bad and flagged data
         obs_data[var][obs_data[var] < 0.0] = np.nan
+        from IPython import embed; embed()
 
         ### save relevant fields as tempvars for ease
         cv = np.copy(obs_data[var].data)
         times = np.copy(obs_data['time'].data)
         height = np.copy(obs_data['height'][0,:])        ### height array constant in time, so just take first column
-        from IPython import embed; embed()
         nans,id=nanhelper(cv)
         for i in range(0,len(height)):
             id(nans[:])
