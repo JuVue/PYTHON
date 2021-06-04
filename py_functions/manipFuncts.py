@@ -21,7 +21,6 @@ def nanhelper(y):
     return np.isnan(y), lambda z: z.nonzero()[0]
 
 def int2list(var):
-    if not isinstance(var,list):
+    if isinstance(var,int):
         var=[var]
-        print('converted int to list')
     return var
