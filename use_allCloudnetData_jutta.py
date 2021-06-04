@@ -24,6 +24,7 @@ sys.path.insert(1, './py_functions/')
 from time_functions import calcTime_Mat2DOY, date2datenum
 from readMAT import readMatlabStruct
 from physFuncts import calcThetaE, calcThetaVL
+from manipFuncts import int2list
 # from conversionFuncts import reGrid_Sondes
 
 def readfile(filename):
@@ -7283,8 +7284,9 @@ def interpCloudnet(obs_data):
             idtmp=np.squeeze(np.nonzero(np.diff(np.append([0],tmp))>3))
             nanint=(nans[:,i])
             if idtmp.tolist():
-                ide=tmp[idtmp]
-                ids=tmp[idtmp-1]+1
+                ide=int2list(tmp[idtmp])
+                ids=int2list(tmp[idtmp-1]+1)
+
                 for m in range(0,len(ids)):
                     nanint[ids[m]:ide[m]]=np.False_
             if any(np.isnan(nanint)):
