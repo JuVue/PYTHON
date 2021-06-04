@@ -7322,7 +7322,7 @@ def buildNaNMask(obs_data, month_flag, missing_files, doy):
 
     return nanind, nanmask, wcind, wc0ind, lwpind
 
-def setFlags(obs_data, um_data, misc_data, ifs_data, ra2t_data, obs_var_list, um_var_list, misc_var_list, ifs_var_list, ra2t_var_list):
+def setFlags(obs_data, um_data, misc_data, ra2t_data, obs_var_list, um_var_list, misc_var_list, ra2t_var_list):
 
     print ('*******')
     print ('Set flagged data to nan:')
@@ -7346,7 +7346,7 @@ def setFlags(obs_data, um_data, misc_data, ifs_data, ra2t_data, obs_var_list, um
             ra2t_data[ra2t_var_list[c][j]][ra2t_data[ra2t_var_list[c][j]] == -999] = np.nan
             ra2t_data[ra2t_var_list[c][j]][ra2t_data[ra2t_var_list[c][j]] < 0] = 0.0
 
-    return obs_data, um_data, misc_data, ifs_data, ra2t_data
+    return obs_data, um_data, misc_data,  ra2t_data
 
 def check_Radiation(data1, data2, data3, data4, obs, doy, out_dir1):
 
@@ -7983,7 +7983,7 @@ def main():
     ## -------------------------------------------------------------
     ## maximise obs data available and build mask for available data
     ## -------------------------------------------------------------
-    obs_data, um_data, misc_data, ifs_data, ra2t_data = setFlags(obs_data, um_data, misc_data, ra2t_data, obs_var_list, um_var_list, misc_var_list, ra2t_var_list)
+    obs_data, um_data, misc_data, ra2t_data = setFlags(obs_data, um_data, misc_data, ra2t_data, obs_var_list, um_var_list, misc_var_list, ra2t_var_list)
     obs_data = interpCloudnet(obs_data)
     nanind, nanmask, wcind, wc0ind, lwpind = buildNaNMask(obs_data, month_flag, missing_files, doy)
 
