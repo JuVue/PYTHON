@@ -7,7 +7,6 @@ import numpy as np
 
 def nanhelper(y):
     """Helper to handle indices and logical indices of NaNs.
-
     Input:
     - y, 1d numpy array with possible NaNs
     Output:
@@ -19,5 +18,4 @@ def nanhelper(y):
     >>> nans, x= nan_helper(y)
     >>> y[nans]= np.interp(x(nans), x(~nans), y[~nans])
     """
-
     return np.isnan(y), lambda z: z.nonzero()[0]
