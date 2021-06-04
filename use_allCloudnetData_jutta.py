@@ -7276,10 +7276,10 @@ def interpCloudnet(obs_data):
         ### save relevant fields as tempvars for ease
         cv = np.copy(obs_data[var].data)
         times = np.copy(obs_data['time'].data)
-        height = np.copy(obs_data['height'])        ### height array constant in time, so just take first column
+        height = np.copy(obs_data['height'][0,:])        ### height array constant in time, so just take first column
         nans,id=nanhelper(cv)
+        from IPython import embed; embed()
         for i in range(0,len(height)):
-            from IPython import embed; embed()
             tmp=id(~nans[:,i])
             idtmp=np.squeeze(np.nonzero(np.diff(np.append([0],tmp))>3))
             nanint=(nans[:,i])
@@ -7738,8 +7738,8 @@ def main():
                      'lwc-scaled-metum-grid/2018/',
                      'iwc-Z-T-metum-grid/2018/']
     cn_obs_out_dir = ['cloud-fraction-metum-grid/2018/',
-                        'lwc-adiabatic-method/2018/',
-                        'iwc-Z-T-method/2018/']
+                        'lwc-adiabatic-metum-grid/2018/',
+                        'iwc-Z-T-metum-grid/2018/']
     ######## lwc-adiabatic-metum-grid/2018/
     ########-> liquid water content derived using measurements averaged on to model grid
     ### cloud-fraction-metum-grid/2018/ + cloud-fraction-ecmwf-grid/2018/
