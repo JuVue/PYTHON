@@ -7822,12 +7822,12 @@ def main():
             ### create time arrays for all cloudnet data
             ### --------------------------------------------------------------------
             if obs_switch == 'RADAR':
-                time_obs = datenum[i] + ((cn_nc0[1].variables['time'][:])/24.0)
+                time_obs = datenum + ((cn_nc0[1].variables['time'][:])/24.0)
             else:
-                time_obs = datenum[i] + ((cn_nc0[0].variables['time'][:])/24.0)
-            time_um = datenum[i] + ((cn_nc1[0].variables['time'][:])/24.0)
-            time_misc = datenum[i] + ((cn_nc2[0].variables['time'][:])/24.0)
-            time_ra2t = datenum[i] + ((cn_nc3[0].variables['time'][:])/24.0)
+                time_obs = datenum + ((cn_nc0[0].variables['time'][:])/24.0)
+            time_um = datenum + ((cn_nc1[0].variables['time'][:])/24.0)
+            time_misc = datenum + ((cn_nc2[0].variables['time'][:])/24.0)
+            time_ra2t = datenum + ((cn_nc3[0].variables['time'][:])/24.0)
 
             ### --------------------------------------------------------------------
             ### loop over each Cloudnet class
