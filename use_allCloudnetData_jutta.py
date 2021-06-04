@@ -7257,10 +7257,11 @@ def plot_BiasCorrelation(obs_data, um_data, misc_data, ifs_data, ra2t_data, doy,
     plt.xlabel('T bias [K]')
     plt.show()
 
-def interpCloudnet(obs_data, month_flag, missing_files, doy):
+
+def interpCloudnet(obs_data):
 
     from scipy.interpolate import interp1d
-
+    from manipFuncts import nanhelper
     print ('*******')
     print ('Interpolate obs cloudnet field for continuous array:')
     print ('*******')
@@ -7276,89 +7277,11 @@ def interpCloudnet(obs_data, month_flag, missing_files, doy):
         cv = np.copy(obs_data[var].data)
         times = np.copy(obs_data['time'].data)
         height = np.copy(obs_data['height'][0,:])        ### height array constant in time, so just take first column
-
-        ### check if the mean of the column is NaN
-        # np.isnan(np.nanmean(cv[0,:]))
-
-        ### need 3 points for interp, so start for loop at i = 2 (remember to finish at i-1!)
-        ### check if the column mean == nan but next timestep is non-nan:
-        for i in range(2,len(times)-1):
-            mn = np.nanmean(cv[i,:])
-            # print(str(mn))
-            if np.isnan(np.nanmean(cv[i,:])) == True:
-                # print ('column i = ' + str(i) + ' needs to be fixed:')
-                if np.isnan(np.nanmean(cv[i+1,:])) == False:
-                    if np.isnan(np.nanmean(cv[i-1,:])) == False:        ### if the timestep before is non-nan
-                        # print (str(i-1) + ' and ' + str(i+1) + ' = yes')
-                        cv[i,:] = (cv[i-1,:] + cv[i+1,:]) / 2.0
-                        mncv = np.nanmean(cv[i,:])
-                        # print ('new mean for i = ' + str(i) + ' is: ' + str(mncv))
-                    else:
-                        # print ('need to find last non-nan instance...')
-                        if np.isnan(np.nanmean(cv[i-2,:])) == False:        ### if the timestep before is non-nan
-                            # print (str(i-2) + ' and ' + str(i+1) + ' = yes')
-                            cv[i,:] = (cv[i-2,:] + cv[i+1,:]) / 2.0
-                            mncv = np.nanmean(cv[i,:])
-                            # print ('new mean for i = ' + str(i) + ' is: ' + str(mncv))
-
-        for i in range(2,len(times)-1):
-            mn = np.nanmean(cv[i,:])
-            # print(str(mn))
-            if np.isnan(np.nanmean(cv[i,:])) == True:
-                # print ('column i = ' + str(i) + ' needs to be fixed:')
-                if np.isnan(np.nanmean(cv[i+1,:])) == False:
-                    if np.isnan(np.nanmean(cv[i-1,:])) == False:        ### if the timestep before is non-nan
-                        # print (str(i-1) + ' and ' + str(i+1) + ' = yes')
-                        cv[i,:] = (cv[i-1,:] + cv[i+1,:]) / 2.0
-                        mncv = np.nanmean(cv[i,:])
-                        # print ('new mean for i = ' + str(i) + ' is: ' + str(mncv))
-                    else:
-                        # print ('need to find last non-nan instance...')
-                        if np.isnan(np.nanmean(cv[i-2,:])) == False:        ### if the timestep before is non-nan
-                            # print (str(i-2) + ' and ' + str(i+1) + ' = yes')
-                            cv[i,:] = (cv[i-2,:] + cv[i+1,:]) / 2.0
-                            mncv = np.nanmean(cv[i,:])
-                            # print ('new mean for i = ' + str(i) + ' is: ' + str(mncv))
-
-        # fig = plt.figure(figsize=(12,6))
-        # plt.subplots_adjust(top = 0.9, bottom = 0.15, right = 0.98, left = 0.12,
-        #         hspace = 0.3, wspace = 0.3)
-        # plt.subplot(211)
-        # plt.pcolor(obs_data['time'].data,obs_data['height'][0,:].data,np.transpose(obs_data['Cv'].data), vmin = 0, vmax = 1)
-        # plt.xlim([226,258])
-        # plt.ylim([0,3000])
-        # plt.ylabel('Z [m]')
-        # plt.title('original')
-        # plt.subplot(212)
-        # plt.pcolor(times,height,np.transpose(cv), vmin = 0, vmax = 1)
-        # plt.xlim([226,258])
-        # plt.ylim([0,3000])
-        # plt.xlabel('DOY')
-        # plt.ylabel('Z [m]')
-        # plt.title('interpolated')
-        # plt.savefig('FIGS/Cv_TS_orig_interpd.png')
-        # plt.show()
-        #
-        #
-        # fig = plt.figure(figsize=(12,6))
-        # plt.subplots_adjust(top = 0.9, bottom = 0.15, right = 0.98, left = 0.12,
-        #         hspace = 0.3, wspace = 0.3)
-        # plt.subplot(211)
-        # plt.pcolor(obs_data['time'][::6].data,obs_data['height'][0,:].data,np.transpose(obs_data['Cv'][::6,:].data), vmin = 0, vmax = 1)
-        # plt.xlim([226,258])
-        # plt.ylim([0,3000])
-        # plt.ylabel('Z [m]')
-        # plt.title('original, 6hrly')
-        # plt.subplot(212)
-        # plt.pcolor(times[::6],height,np.transpose(cv[::6,:]), vmin = 0, vmax = 1)
-        # plt.xlim([226,258])
-        # plt.ylim([0,3000])
-        # plt.xlabel('DOY')
-        # plt.ylabel('Z [m]')
-        # plt.title('interpolated, 6hrly')
-        # plt.savefig('FIGS/Cv_TS_6hrly_orig_interpd.png')
-        # plt.show()
-
+        from IPython import embed; embed()
+        nans,id=nanhelper(cv)
+        for i in range(0,len(height))
+            id(nans[:])
+            cv[nans]=np.interp(id(nans),id(~nans),y[~nans])
 
         ### save back to dictionary after completion of updates
         obs_data[var] = cv
@@ -7419,9 +7342,6 @@ def setFlags(obs_data, um_data, misc_data, ifs_data, ra2t_data, obs_var_list, um
         for j in range(0,len(misc_var_list[c])):
             misc_data[misc_var_list[c][j]][misc_data[misc_var_list[c][j]] == -999] = np.nan
             misc_data[misc_var_list[c][j]][misc_data[misc_var_list[c][j]] < 0] = 0.0
-        for j in range(0,len(ifs_var_list[c])):
-            ifs_data[ifs_var_list[c][j]][ifs_data[ifs_var_list[c][j]] == -999] = np.nan
-            ifs_data[ifs_var_list[c][j]][ifs_data[ifs_var_list[c][j]] < 0] = 0.0
         for j in range(0,len(ra2t_var_list[c])):
             ra2t_data[ra2t_var_list[c][j]][ra2t_data[ra2t_var_list[c][j]] == -999] = np.nan
             ra2t_data[ra2t_var_list[c][j]][ra2t_data[ra2t_var_list[c][j]] < 0] = 0.0
@@ -8038,47 +7958,17 @@ def main():
         print ('')
         print ('*************** NEXT:')
         print ('')
-        from IPython import embed; embed()
     #################################################################
     ## save time to dictionaries now we're not looping over all diags anymore
     #################################################################
-    ### models
-    data1['time'] = time_um1
-    data2['time'] = time_um2
-    data3['time'] = time_um3
-    data4['time'] = time_um4
-
-    ### cloudnet
-    ifs_data['time'] = time_ifs
     um_data['time'] = time_um
-    if cn_misc_flag != -1: misc_data['time'] = time_misc
+    misc_data['time'] = time_misc
     ra2t_data['time'] = time_ra2t
     obs_data['time'] = time_obs
 
     # print (ifs_data['time'].shape)
     # print (obs_data['time'].shape)
     # plt.plot(obs_data['time'],ifs_data['time']);plt.show()
-
-    #################################################################
-    ### stop double counting of 0000 and 2400 from model data
-    #################################################################
-    temp = np.zeros([len(data1['time'])])
-    for i in range(0, len(temp)-1):
-        if data1['time'][i] == data1['time'][i+1]:
-            continue
-        else:
-            temp[i] = data1['time'][i]
-    ii = np.where(temp != 0.0)      ### picks out where data are non-zero
-
-    ### can use temp for all model data since they are on the same (hourly) time binning
-    data1['time_hrly'] = temp[ii]
-    data2['time_hrly'] = temp[ii]
-    data3['time_hrly'] = temp[ii]
-    data4['time_hrly'] = temp[ii]
-    data1['hrly_flag'] = ii
-    data2['hrly_flag'] = ii
-    data3['hrly_flag'] = ii
-    data4['hrly_flag'] = ii
 
     #################################################################
     ### if RADAR flag used, force 2D height array for function compatibility
@@ -8092,13 +7982,12 @@ def main():
     ## -------------------------------------------------------------
     ## maximise obs data available and build mask for available data
     ## -------------------------------------------------------------
-    obs_data, um_data, misc_data, ifs_data, ra2t_data = setFlags(obs_data, um_data, misc_data, ifs_data, ra2t_data, obs_var_list, um_var_list, misc_var_list, ifs_var_list, ra2t_var_list)
-    obs_data = interpCloudnet(obs_data, month_flag, missing_files, doy)
+    obs_data, um_data, misc_data, ifs_data, ra2t_data = setFlags(obs_data, um_data, misc_data, ra2t_data, obs_var_list, um_var_list, misc_var_list, ra2t_var_list)
+    obs_data = interpCloudnet(obs_data)
     nanind, nanmask, wcind, wc0ind, lwpind = buildNaNMask(obs_data, month_flag, missing_files, doy)
 
     varlist_obs = ['Cv', 'lwc_adiabatic', 'iwc', 'lwp']
     varlist_um = ['model_Cv_filtered', 'model_lwc', 'model_iwc_filtered', 'model_lwp']
-    varlist_ifs = ['model_snow_Cv_filtered', 'model_lwc', 'model_snow_iwc_filtered', 'model_lwp']
 
     # print(um_data.keys())
 
@@ -8106,13 +7995,11 @@ def main():
     for c in range(0, 3):
         # print(c)
         um_data[varlist_um[c]][nanind, :] = np.nan
-        ifs_data[varlist_ifs[c]][nanind, :] = np.nan
         misc_data[varlist_um[c]][nanind, :] = np.nan
         ra2t_data[varlist_um[c]][nanind, :] = np.nan
     ### remove missing water content obs timestep (only remove from water contents)
     for c in range(1, 3):
         um_data[varlist_um[c]][wcind, :] = np.nan
-        ifs_data[varlist_ifs[c]][wcind, :] = np.nan
         misc_data[varlist_um[c]][wcind, :] = np.nan
         ra2t_data[varlist_um[c]][wcind, :] = np.nan
     # ### remove zeroed water content on obs timestep (only remove from water contents)
@@ -8131,7 +8018,6 @@ def main():
     #
     ### lwp only 1d
     um_data['model_lwp'][lwpind] = np.nan
-    ifs_data['model_lwp'][lwpind] = np.nan
     misc_data['model_lwp'][lwpind] = np.nan
     ra2t_data['model_lwp'][lwpind] = np.nan
 
@@ -8148,70 +8034,23 @@ def main():
     label1 = 'undefined_label'
     if out_dir1[:10] == '23_u-cc278': label1 = 'UM_CASIM-100_GA6alb'
     if out_dir1[:10] == '20_u-ca326': label1 = 'UM_CASIM-100_CICE'
-    if out_dir1[:10] == '16_u-bv926': label1 = 'UM_RA2T_noTurbMP'
-    if out_dir1[:10] == '15_u-bu687': label1 = 'UM_RA2M_newRHcrit'
-    if out_dir1[:10] == '14_u-bu570': label1 = 'UM_CASIM-100'
-    if out_dir1[:10] == '13_u-br409': label1 = 'UM_CASIM-100_AP'
-    if out_dir1[:10] == '12_u-br210': label1 = 'UM_CASIM-AeroProf'
-    if out_dir1[:10] == '11_u-bq798': label1 = 'UM_CASIM-100_Meyers'
-    if out_dir1[:10] == '10_u-bq791': label1 = 'UM_CASIM-100_Fletcher'
-    if out_dir1[:9] == '8_u-bp738': label1 = 'UM_RA2M-ERAI-GLM'
-    if out_dir1[:9] == '7_u-bn068': label1 = 'UM_RA2T_' + out_dir1[-4:-1]
-    if out_dir1[:9] == '6_u-bm410': label1 = 'UM_CASIM-200'
-    if out_dir1[:9] == '5_u-bl661': label1 = 'UM_CASIM-100'
-    if out_dir1[:9] == '4_u-bg610': label1 = 'UM_RA2M'
+
     if out_dir1 == 'UM_RA2M/': label1 = 'UM_RA2M'
 
     label2 = 'undefined_label'
     if out_dir2[:10] == '23_u-cc278': label2 = 'UM_CASIM-100_GA6alb'
     if out_dir2[:10] == '20_u-ca326': label2 = 'UM_CASIM-100_CICE'
-    if out_dir2[:10] == '16_u-bv926': label2 = 'UM_RA2T_noTurbMP'
-    if out_dir2[:10] == '15_u-bu687': label2 = 'UM_RA2M_newRHcrit'
-    if out_dir2[:10] == '14_u-bu570': label2 = 'UM_CASIM-100'
-    if out_dir2[:10] == '13_u-br409': label2 = 'UM_CASIM-100_AP'
-    if out_dir2[:10] == '12_u-br210': label2 = 'UM_CASIM-AeroProf'
-    if out_dir2[:10] == '11_u-bq798': label2 = 'UM_CASIM-100_Meyers'
-    if out_dir2[:10] == '10_u-bq791': label2 = 'UM_CASIM-100_Fletcher'
-    if out_dir2[:9] == '8_u-bp738': label2 = 'UM_RA2M-ERAI-GLM'
-    if out_dir2[:9] == '7_u-bn068': label2 = 'UM_RA2T_' + out_dir2[-4:-1]
-    if out_dir2[:9] == '6_u-bm410': label2 = 'UM_CASIM-200'
-    if out_dir2[:9] == '5_u-bl661': label2 = 'UM_CASIM-100'
-    if out_dir2[:9] == '4_u-bg610': label2 = 'UM_RA2M'
     if out_dir2 == 'UM_CASIM-100/': label2 = 'UM_CASIM-100'
 
     label3 = 'undefined_label'
     if out_dir3 == 'OUT_25H/': label3 = 'ECMWF_IFS'
     if out_dir3[:10] == '23_u-cc278': label3 = 'UM_CASIM-100_GA6alb'
     if out_dir3[:10] == '20_u-ca326': label3 = 'UM_CASIM-100_CICE'
-    if out_dir3[:10] == '16_u-bv926': label3 = 'UM_RA2T_noTurbMP'
-    if out_dir3[:10] == '15_u-bu687': label3 = 'UM_RA2M_newRHcrit'
-    if out_dir3[:10] == '14_u-bu570': label3 = 'UM_CASIM-100'
-    if out_dir3[:10] == '13_u-br409': label3 = 'UM_CASIM-100_AP'
-    if out_dir3[:10] == '12_u-br210': label3 = 'UM_CASIM-AeroProf'
-    if out_dir3[:10] == '11_u-bq798': label3 = 'UM_CASIM-100_Meyers'
-    if out_dir3[:10] == '10_u-bq791': label3 = 'UM_CASIM-100_Fletcher'
-    if out_dir3[:9] == '8_u-bp738': label3 = 'UM_RA2M-ERAI-GLM'
-    if out_dir3[:9] == '7_u-bn068': label3 = 'UM_RA2T_' + out_dir3[-4:-1]
-    if out_dir3[:9] == '6_u-bm410': label3 = 'UM_CASIM-200'
-    if out_dir3[:9] == '5_u-bl661': label3 = 'UM_CASIM-100'
-    if out_dir3[:9] == '4_u-bg610': label3 = 'UM_RA2M'
     if out_dir3 == 'ECMWF_IFS/': label3 = 'ECMWF_IFS'
 
     label4 = 'undefined_label'
     if out_dir4[:10] == '23_u-cc278': label4 = 'UM_CASIM-100_GA6alb'
     if out_dir4[:10] == '20_u-ca326': label4 = 'UM_CASIM-100_CICE'
-    if out_dir4[:10] == '16_u-bv926': label4 = 'UM_RA2T_noTurbMP'
-    if out_dir4[:10] == '15_u-bu687': label4 = 'UM_RA2M_newRHcrit'
-    if out_dir4[:10] == '14_u-bu570': label4 = 'UM_CASIM-100'
-    if out_dir4[:10] == '13_u-br409': label4 = 'UM_CASIM-100_AP'
-    if out_dir4[:10] == '12_u-br210': label4 = 'UM_CASIM-AeroProf'
-    if out_dir4[:10] == '11_u-bq798': label4 = 'UM_CASIM-100_Meyers'
-    if out_dir4[:10] == '10_u-bq791': label4 = 'UM_CASIM-100_Fletcher'
-    if out_dir4[:9] == '8_u-bp738': label4 = 'UM_ERAI-GLM'
-    if out_dir4[:9] == '7_u-bn068': label4 = 'UM_RA2T_' + out_dir4[-4:-1]
-    if out_dir4[:9] == '6_u-bm410': label4 = 'UM_CASIM-200'
-    if out_dir4[:9] == '5_u-bl661': label4 = 'UM_CASIM-100'
-    if out_dir4[:9] == '4_u-bg610': label4 = 'UM_RA2M'
     if out_dir4 == 'UM_RA2M/': label4 = 'UM_RA2M'
 
     # -------------------------------------------------------------
