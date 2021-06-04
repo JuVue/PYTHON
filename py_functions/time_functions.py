@@ -27,7 +27,7 @@ def datenum2date(datenum):
     minutes = hours % 1 * 60
     seconds = minutes % 1 * 60
     mseconds = seconds % 1 * 60
-    return dt.fromordinal(int(datenum)) \
+    return dt.fromordinal(int(datenum.astype(int))) \
            + timedelta(days=int(days)) \
            + timedelta(hours=int(hours)) \
            + timedelta(minutes=int(minutes)) \
