@@ -7259,7 +7259,7 @@ def plot_BiasCorrelation(obs_data, um_data, misc_data, ifs_data, ra2t_data, doy,
 
 
 def interpCloudnet(obs_data):
-
+    #interpolates missing times up to 1 hour
     from scipy.interpolate import interp1d
     from manipFuncts import nanhelper
     print ('*******')
@@ -7280,8 +7280,15 @@ def interpCloudnet(obs_data):
         height = np.copy(obs_data['height'])        ### height array constant in time, so just take first column
         nans,id=nanhelper(cv)
         for i in range(0,len(height)):
-            tmp=id(nans[:,i])
-            cv[nans]=np.interp(id(nans),id(~nans),y[~nans])
+            tmp=id(~nans[:,i])
+            idtmp=np.squeeze(np.nonzero(np.diff(np.append([0],tmp))>3))
+            ide=tmp[idtmp]
+            ids=tmp[idtmp-1]+1
+            nanint=(nans[:,i])
+            for m in range(0,len(ids)):
+                nanint[ids[m]:ide[m]]=False
+            cv[nanint,i]=np.interp(id(nanint),id(~nanint),cv[~nanint,i])
+
 
         ### save back to dictionary after completion of updates
         obs_data[var] = cv
@@ -7984,7 +7991,7 @@ def main():
     ## maximise obs data available and build mask for available data
     ## -------------------------------------------------------------
     from IPython import embed; embed()
-    obs_data, um_data, misc_data, ra2t_data = setFlags(obs_data, um_data, misc_data, ra2t_data, obs_var_list, um_var_list, misc_var_list, ra2t_var_list)
+    obs_data1, um_data1, misc_data1, ra2t_data1 = setFlags(obs_data, um_data, misc_data, ra2t_data, obs_var_list, um_var_list, misc_var_list, ra2t_var_list)
     obs_data = interpCloudnet(obs_data)
     nanind, nanmask, wcind, wc0ind, lwpind = buildNaNMask(obs_data, month_flag, missing_files, doy)
 
