@@ -7286,6 +7286,7 @@ def interpCloudnet(obs_data):
             nanint=(nans[:,i])
             for m in range(0,len(ids)):
                 nanint[ids[m]:ide[m]]=False
+            from IPython import embed;embed()
             if any(np.isnan(nanint))
                 cv[nanint,i]=np.interp(id(nanint),id(~nanint),cv[~nanint,i])
         ### save back to dictionary after completion of updates
