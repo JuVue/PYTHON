@@ -7284,6 +7284,7 @@ def interpCloudnet(obs_data):
                 ide=[tmp[idtmp]]
                 ids=[tmp[idtmp-1]+1]
                 for m in range(0,len(ids)):
+                    from IPython import embed; embed()
                     nanint[ids[m]:ide[m]]=np.False_
             if any(np.isnan(nanint)):
                 cv[nanint,i]=np.interp(id(nanint),id(~nanint),cv[~nanint,i])
