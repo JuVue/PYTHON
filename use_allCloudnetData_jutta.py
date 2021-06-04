@@ -7872,9 +7872,9 @@ def main():
                 ### --------------------------------------------------------------------
                 for j in range(0,len(ra2t_var_list[c])):
                     if np.ndim(cn_nc4[c].variables[ra2t_var_list[c][j]]) == 1:  # 1d timeseries only
-                        ra2t_data[ra2t_var_list[c][j]] = cn_nc4[c].variables[ra2t_var_list[c][j]][:]
+                        ra2t_data[ra2t_var_list[c][j]] = cn_nc3[c].variables[ra2t_var_list[c][j]][:]
                     else:                                   # 2d column um_data
-                        ra2t_data[ra2t_var_list[c][j]] = cn_nc4[c].variables[ra2t_var_list[c][j]][:]
+                        ra2t_data[ra2t_var_list[c][j]] = cn_nc3[c].variables[ra2t_var_list[c][j]][:]
         ### --------------------------------------------------------------------
         ### fill arrays with remaining data
         ### --------------------------------------------------------------------
@@ -7885,7 +7885,7 @@ def main():
                 time_obs = np.append(time_obs, doy[i] + ((cn_nc0[0].variables['time'][:])/24.0))
             time_um = np.append(time_um, doy[i] + ((cn_nc1[0].variables['time'][:])/24.0))
             if cn_misc_flag == 0: time_misc = np.append(time_misc, doy[i] + ((cn_nc2[0].variables['time'][:])/24.0))
-            time_ra2t = np.append(time_ra2t, doy[i] + ((cn_nc4[0].variables['time'][:])/24.0))
+            time_ra2t = np.append(time_ra2t, doy[i] + ((cn_nc3[0].variables['time'][:])/24.0))
 
             ### --------------------------------------------------------------------
             ### loop over all Cloudnet classes
@@ -7944,7 +7944,7 @@ def main():
         for c in range(0,3): cn_nc0[c].close()
         for c in range(0,3): cn_nc1[c].close()
         for c in range(0,3): cn_nc2[c].close()
-        for c in range(0,3): cn_nc4[c].close()
+        for c in range(0,3): cn_nc3[c].close()
 
     # print (lwp.shape)
         # print (time_obs.shape)
