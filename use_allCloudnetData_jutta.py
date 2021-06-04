@@ -7267,6 +7267,7 @@ def interpCloudnet(obs_data):
     print ('Interpolate obs cloudnet field for continuous array:')
 
     varlist = ['Cv', 'lwc', 'iwc']
+    varlist = [ 'iwc']
     for var in varlist:
         ### remove bad and flagged data
         obs_data[var][obs_data[var] < 0.0] = np.nan
@@ -7279,6 +7280,7 @@ def interpCloudnet(obs_data):
     #    from IPython import embed; embed()
         #for i in range(0,len(height)):
         for i in range(0,len(height)):
+            pritn(i)
             tmp=id(~nans[:,i])
             idtmp=np.squeeze(np.nonzero(np.diff(np.append([0],tmp))>3))
             nanint=(nans[:,i])
