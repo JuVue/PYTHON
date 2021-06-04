@@ -20,7 +20,7 @@ def nanhelper(y):
     """
     return np.isnan(y), lambda z: z.nonzero()[0]
 
-def int2list(var)
+def int2list(var):
     if not isinstance(var,list):
         var=[var]
     return var
