@@ -7264,8 +7264,6 @@ def interpCloudnet(obs_data):
     from manipFuncts import nanhelper
     print ('*******')
     print ('Interpolate obs cloudnet field for continuous array:')
-    print ('*******')
-    print ('')
 
     varlist = ['Cv', 'lwc', 'iwc']
 
@@ -7278,12 +7276,11 @@ def interpCloudnet(obs_data):
         times = np.copy(obs_data['time'].data)
         height = np.copy(obs_data['height'][0,:])        ### height array constant in time, so just take first column
         nans,id=nanhelper(cv)
-        from IPython import embed; embed()
         for i in range(0,len(height)):
             tmp=id(~nans[:,i])
             idtmp=np.squeeze(np.nonzero(np.diff(np.append([0],tmp))>3))
             nanint=(nans[:,i])
-            if idtmp:
+            if idtmp.tolist():
                 ide=[tmp[idtmp]]
                 ids=[tmp[idtmp-1]+1]
                 for m in range(0,len(ids)):
@@ -7292,6 +7289,9 @@ def interpCloudnet(obs_data):
                 cv[nanint,i]=np.interp(id(nanint),id(~nanint),cv[~nanint,i])
         ### save back to dictionary after completion of updates
         obs_data[var] = cv
+    print('done')
+    print ('*******')
+    print ('')
 
     return obs_data
 
@@ -7948,7 +7948,6 @@ def main():
         ### --------------------------------------------------------------------
         ### Close cloudnet netCDF files
         ### --------------------------------------------------------------------
-        from IPython import embed; embed()
         for c in range(0,3): cn_nc0[c].close()
         for c in range(0,3): cn_nc1[c].close()
         for c in range(0,3): cn_nc2[c].close()
