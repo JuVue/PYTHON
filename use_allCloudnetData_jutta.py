@@ -7281,11 +7281,12 @@ def interpCloudnet(obs_data):
         for i in range(0,len(height)):
             tmp=id(~nans[:,i])
             idtmp=np.squeeze(np.nonzero(np.diff(np.append([0],tmp))>3))
-            ide=tmp[idtmp]
-            ids=tmp[idtmp-1]+1
             nanint=(nans[:,i])
-            for m in range(0,len(ids)):
-                nanint[ids[m]:ide[m]]=False
+            if idtmp
+                ide=[tmp[idtmp]]
+                ids=[tmp[idtmp-1]+1]
+                for m in range(0,len(ids)):
+                    nanint[ids[m]:ide[m]]=False
             if any(np.isnan(nanint)):
                 cv[nanint,i]=np.interp(id(nanint),id(~nanint),cv[~nanint,i])
         ### save back to dictionary after completion of updates
