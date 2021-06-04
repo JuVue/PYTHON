@@ -7948,7 +7948,6 @@ def main():
         ### --------------------------------------------------------------------
         ### Close cloudnet netCDF files
         ### --------------------------------------------------------------------
-        from IPython import embed; embed()
         for c in range(0,3): cn_nc0[c].close()
         for c in range(0,3): cn_nc1[c].close()
         for c in range(0,3): cn_nc2[c].close()
