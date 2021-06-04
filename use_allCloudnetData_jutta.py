@@ -7272,7 +7272,6 @@ def interpCloudnet(obs_data):
     for var in varlist:
         ### remove bad and flagged data
         obs_data[var][obs_data[var] < 0.0] = np.nan
-        from IPython import embed; embed()
 
         ### save relevant fields as tempvars for ease
         cv = np.copy(obs_data[var].data)
@@ -7287,9 +7286,8 @@ def interpCloudnet(obs_data):
             nanint=(nans[:,i])
             for m in range(0,len(ids)):
                 nanint[ids[m]:ide[m]]=False
-            cv[nanint,i]=np.interp(id(nanint),id(~nanint),cv[~nanint,i])
-
-
+            if np.nonzero(nanint)
+                cv[nanint,i]=np.interp(id(nanint),id(~nanint),cv[~nanint,i])
         ### save back to dictionary after completion of updates
         obs_data[var] = cv
 
@@ -7991,9 +7989,9 @@ def main():
     ## maximise obs data available and build mask for available data
     ## -------------------------------------------------------------
     from IPython import embed; embed()
-    obs_data1, um_data1, misc_data1, ra2t_data1 = setFlags(obs_data, um_data, misc_data, ra2t_data, obs_var_list, um_var_list, misc_var_list, ra2t_var_list)
+    obs_data, um_data, misc_data, ra2t_data = setFlags(obs_data, um_data, misc_data, ra2t_data, obs_var_list, um_var_list, misc_var_list, ra2t_var_list)
     obs_data = interpCloudnet(obs_data)
-    nanind, nanmask, wcind, wc0ind, lwpind = buildNaNMask(obs_data, month_flag, missing_files, doy)
+    nanind, nanmask, wcind, wc0ind, lwpind = buildNaNMask(obs_data, doy)
 
     varlist_obs = ['Cv', 'lwc_adiabatic', 'iwc', 'lwp']
     varlist_um = ['model_Cv_filtered', 'model_lwc', 'model_iwc_filtered', 'model_lwp']
