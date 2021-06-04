@@ -7285,9 +7285,6 @@ def interpCloudnet(obs_data):
             if idtmp.tolist():
                 ide=int2list(tmp[idtmp])
                 ids=int2list(tmp[idtmp-1]+1)
-                if np.issubdtype(ids,np.integer):
-                    print('still integer')
-                    from IPython import embed; embed()
                 for m in range(0,len(ids)):
                     nanint[ids[m]:ide[m]]=np.False_
             if any(np.isnan(nanint)):
