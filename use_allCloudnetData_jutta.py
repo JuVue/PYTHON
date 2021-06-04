@@ -7806,7 +7806,7 @@ def main():
         um_var_list = [['Cv','model_Cv_filtered','model_temperature'],
                 ['lwc','lwp','model_lwc','model_lwp'],
                 ['height','iwc','model_iwc','model_iwc_filtered']]   ### time always read in separately
-
+        misc_var_list=um_var_list
         ### --------------------------------------------------------------------
         ### create arrays for all cloudnet data
         ### --------------------------------------------------------------------
