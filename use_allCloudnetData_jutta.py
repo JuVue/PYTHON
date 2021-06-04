@@ -7279,7 +7279,7 @@ def interpCloudnet(obs_data):
         nans,id=nanhelper(cv)
     #    from IPython import embed; embed()
         #for i in range(0,len(height)):
-        for i in range(0,len(height)):
+        for i in range(5,len(height)):
             print(i)
             tmp=id(~nans[:,i])
             idtmp=np.squeeze(np.nonzero(np.diff(np.append([0],tmp))>3))
