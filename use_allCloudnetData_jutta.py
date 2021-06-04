@@ -7808,7 +7808,6 @@ def main():
                 ['height','iwc','model_iwc','model_iwc_filtered']]   ### time always read in separately
         misc_var_list=um_var_list
         ra2t_var_list=um_var_list
-        from IPython import embed; embed()
         ### --------------------------------------------------------------------
         ### create arrays for all cloudnet data
         ### --------------------------------------------------------------------
@@ -7881,12 +7880,12 @@ def main():
         ### --------------------------------------------------------------------
         else:
             if obs_switch == 'RADAR':
-                time_obs = np.append(time_obs, doy[i] + ((cn_nc0[1].variables['time'][:])/24.0))
+                time_obs = np.append(time_obs,  datenum +  ((cn_nc0[1].variables['time'][:])/24.0))
             else:
-                time_obs = np.append(time_obs, doy[i] + ((cn_nc0[0].variables['time'][:])/24.0))
-            time_um = np.append(time_um, doy[i] + ((cn_nc1[0].variables['time'][:])/24.0))
-            if cn_misc_flag == 0: time_misc = np.append(time_misc, doy[i] + ((cn_nc2[0].variables['time'][:])/24.0))
-            time_ra2t = np.append(time_ra2t, doy[i] + ((cn_nc3[0].variables['time'][:])/24.0))
+                time_obs = np.append(time_obs,  datenum + ((cn_nc0[0].variables['time'][:])/24.0))
+            time_um = np.append(time_um, datenum +  ((cn_nc1[0].variables['time'][:])/24.0))
+            if cn_misc_flag == 0: time_misc = np.append(time_misc,  datenum +  ((cn_nc2[0].variables['time'][:])/24.0))
+            time_ra2t = np.append(time_ra2t,  datenum +  ((cn_nc3[0].variables['time'][:])/24.0))
 
             ### --------------------------------------------------------------------
             ### loop over all Cloudnet classes
