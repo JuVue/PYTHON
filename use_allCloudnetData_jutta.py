@@ -7884,7 +7884,7 @@ def main():
             else:
                 time_obs = np.append(time_obs,  datenum + ((cn_nc0[0].variables['time'][:])/24.0))
             time_um = np.append(time_um, datenum +  ((cn_nc1[0].variables['time'][:])/24.0))
-            if cn_misc_flag == 0: time_misc = np.append(time_misc,  datenum +  ((cn_nc2[0].variables['time'][:])/24.0))
+            time_misc = np.append(time_misc,  datenum +  ((cn_nc2[0].variables['time'][:])/24.0))
             time_ra2t = np.append(time_ra2t,  datenum +  ((cn_nc3[0].variables['time'][:])/24.0))
 
             ### --------------------------------------------------------------------
