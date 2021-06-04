@@ -7282,7 +7282,7 @@ def interpCloudnet(obs_data):
             tmp=id(~nans[:,i])
             idtmp=np.squeeze(np.nonzero(np.diff(np.append([0],tmp))>3))
             nanint=(nans[:,i])
-            if idtmp
+            if idtmp:
                 ide=[tmp[idtmp]]
                 ids=[tmp[idtmp-1]+1]
                 for m in range(0,len(ids)):
