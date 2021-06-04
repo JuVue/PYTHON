@@ -19,3 +19,8 @@ def nanhelper(y):
     >>> y[nans]= np.interp(x(nans), x(~nans), y[~nans])
     """
     return np.isnan(y), lambda z: z.nonzero()[0]
+
+def int2list(var)
+    if not isinstance(var,list):
+        var=[var]
+    return var
