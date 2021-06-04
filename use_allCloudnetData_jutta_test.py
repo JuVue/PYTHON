@@ -7852,13 +7852,6 @@ def main():
         cn_um_out_dir = [cloudnet_um1 + 'cloud-fraction-metum-grid/2018/',
                         cloudnet_um1 + 'lwc-scaled-metum-grid/2018/',
                         cloudnet_um1 + 'iwc-Z-T-metum-grid/2018/']
-        cn_ifs_out_dir = ['cloud-fraction-ecmwf-grid/2018/',
-                    'lwc-scaled-ecmwf-grid/2018/',
-                    'iwc-Z-T-ecmwf-grid/2018/']
-        if obs_switch == 'IFS':
-            cn_obs_out_dir = ['cloud-fraction-ecmwf-grid/2018/',
-                        'lwc-scaled-ecmwf-grid/2018/', #'lwc-adiabatic-ecmwf-grid/2018/',
-                        'iwc-Z-T-ecmwf-grid/2018/']
         elif obs_switch == 'UM':
             cn_obs_out_dir = ['cloud-fraction-metum-grid/2018/',
                         'lwc-adiabatic-metum-grid/2018/',#'lwc-scaled-metum-grid/2018/',
@@ -7867,13 +7860,9 @@ def main():
             cn_obs_out_dir = ['cloud-fraction-metum-grid/2018/',
                         'lwc-adiabatic-method/2018/',
                         'iwc-Z-T-method/2018/']
-        if cn_misc_flag == 0:       ## flag to compare cloudnet model data
-            cn_misc_out_dir = [cloudnet_um2 + 'cloud-fraction-metum-grid/2018/',
+        cn_misc_out_dir = [cloudnet_um2 + 'cloud-fraction-metum-grid/2018/',
                             cloudnet_um2 + 'lwc-scaled-metum-grid/2018/',
                             cloudnet_um2 + 'iwc-Z-T-metum-grid/2018/']
-        elif cn_misc_flag == 1:       ## flag to compare non-cloudnet model data
-            cn_misc_out_dir = '12_u-br210_RA1M_CASIM/OUT_R0/'
-
         cn_ra2t_out_dir = [cloudnet_um4 + 'cloud-fraction-metum-grid/2018/',
                         cloudnet_um4 + 'lwc-scaled-metum-grid/2018/',
                         cloudnet_um4 + 'iwc-Z-T-metum-grid/2018/']
@@ -8031,18 +8020,9 @@ def main():
         print ('Load raw model data first: ')
         filename_um1 = um_root_dir + out_dir1 + names[i] + 'metum.nc'
         filename_um2 = um_root_dir + out_dir2 + names[i] + 'metum.nc'
-        if np.logical_or(out_dir3 == 'OUT_25H/',out_dir3 == 'ECMWF_IFS/'):
-            print( '***IFS being compared***')
-            ifs_flag = True
-            filename_um3 = ifs_root_dir + out_dir3 + names[i] + 'ecmwf.nc'
-        else:
-            print ('***IFS NOT being compared***')
-            filename_um3 = um_root_dir + out_dir3 + names[i] + 'metum.nc'
-            ifs_flag = False
         filename_um4 = um_root_dir + out_dir4 + names[i] + 'metum.nc'
         print (filename_um1)
         print (filename_um2)
-        print (filename_um3)
         print (filename_um4)
         print ('')
 
@@ -8133,9 +8113,6 @@ def main():
             print( 'Loading second run diagnostics:')
             nc2 = Dataset(filename_um2,'r')
             print ('...')
-            print ('Loading third run diagnostics:')
-            nc3 = Dataset(filename_um3,'r')
-            print ('...')
             print ('Loading fourth run diagnostics:')
             nc4 = Dataset(filename_um4,'r')
             print ('...')
@@ -8154,20 +8131,15 @@ def main():
                 if month_flag == -1:
                     time_um1 = doy[i] + (nc1.variables['forecast_time'][:]/24.0)
                     time_um2 = doy[i] + (nc2.variables['forecast_time'][:]/24.0)
-                    if ifs_flag: time_um3 = doy[i] + (nc3.variables['time'][:]/24.0)
-                    if not ifs_flag: time_um3 = doy[i] + (nc3.variables['forecast_time'][:]/24.0)
                     time_um4 = doy[i] + (nc4.variables['forecast_time'][:]/24.0)
                 else:
                     time_um1 = float(filename_um1[-16:-14]) + (nc1.variables['forecast_time'][:]/24.0)
                     time_um2 = float(filename_um2[-16:-14]) + (nc2.variables['forecast_time'][:]/24.0)
-                    if ifs_flag: time_um3 = float(filename_um3[-16:-14]) + (nc3.variables['time'][:]/24.0)
-                    if not ifs_flag: time_um3 = float(filename_um3[-16:-14]) + (nc3.variables['forecast_time'][:]/24.0)
                     time_um4 = float(filename_um4[-16:-14]) + (nc4.variables['forecast_time'][:]/24.0)
 
                 ### define height arrays explicitly
                 data1['height'] = nc1.variables['height'][:]
                 data2['height'] = nc2.variables['height'][:]
-                if not ifs_flag: data3['height'] = nc3.variables['height'][:]
                 data4['height'] = nc4.variables['height'][:]
 
                 for j in range(0,len(var_list1)):
@@ -8185,15 +8157,6 @@ def main():
                     elif np.ndim(nc2.variables[var_list2[j]]) >= 1:
                         data2[var_list2[j]] = nc2.variables[var_list2[j]][:]
                 nc2.close()
-                ## ------------------
-                #### um3
-                ## ------------------
-                for j in range(0,len(var_list3)):
-                    if np.ndim(nc3.variables[var_list3[j]]) == 0:     # ignore horizontal_resolution
-                        continue
-                    elif np.ndim(nc3.variables[var_list3[j]]) >= 1:
-                        data3[var_list3[j]] = nc3.variables[var_list3[j]][:]
-                nc3.close()
                 ## ------------------
                 #### um4
                 ## ------------------
@@ -8250,8 +8213,6 @@ def main():
 
                 time_um1 = np.append(time_um1, doy[i] + (nc1.variables['forecast_time'][:]/24.0))
                 time_um2 = np.append(time_um2, doy[i] + (nc2.variables['forecast_time'][:]/24.0))
-                if ifs_flag: time_um3 = np.append(time_um3, doy[i] + (nc3.variables['time'][:]/24.0))
-                if not ifs_flag: time_um3 = np.append(time_um3, doy[i] + (nc3.variables['forecast_time'][:]/24.0))
                 time_um4 = np.append(time_um4, doy[i] + (nc4.variables['forecast_time'][:]/24.0))
 
                 ## ------------------
@@ -8278,17 +8239,6 @@ def main():
                         data2[var_list2[j]] = np.append(data2[var_list2[j]],nc2.variables[var_list2[j]][:],0)
                 nc2.close()
                 ## ------------------
-                #### um3 / ifs
-                ## ------------------
-                for j in range(0,len(var_list3)):
-                    if np.ndim(nc3.variables[var_list3[j]]) == 0:     # ignore horizontal_resolution
-                        continue
-                    elif np.ndim(nc3.variables[var_list3[j]]) == 1:
-                        data3[var_list3[j]] = np.append(data3[var_list3[j]],nc3.variables[var_list3[j]][:])
-                    elif np.ndim(nc3.variables[var_list3[j]]) == 2:
-                        data3[var_list3[j]] = np.append(data3[var_list3[j]],nc3.variables[var_list3[j]][:],0)
-                nc3.close()
-                ## ------------------
                 #### UM
                 ## ------------------
                 for j in range(0,len(var_list4)):
@@ -8313,22 +8263,16 @@ def main():
         cn_filename_um = [cn_um_dir + cn_um_out_dir[0] + names[i] + cn_um_out_dir[0][-31:-6] + '.nc',
                         cn_um_dir + cn_um_out_dir[1] + names[i] + cn_um_out_dir[1][-27:-6] + '.nc',
                         cn_um_dir + cn_um_out_dir[2] + names[i] + cn_um_out_dir[2][-24:-6] + '.nc']
-        cn_filename_ifs = [cn_ifs_dir + cn_ifs_out_dir[0] + names[i] + cn_ifs_out_dir[0][:-6] + '.nc',
-                        cn_ifs_dir + cn_ifs_out_dir[1] + names[i] + cn_ifs_out_dir[1][:-6] + '.nc',
-                        cn_ifs_dir + cn_ifs_out_dir[2] + names[i] + cn_ifs_out_dir[2][:-6] + '.nc']
         cn_filename_obs = [cn_obs_dir + cn_obs_out_dir[0] + names[i] + cn_obs_out_dir[0][:-6] + '.nc',
                         cn_obs_dir + cn_obs_out_dir[1] + names[i] + cn_obs_out_dir[1][:-6] + '.nc',
                         cn_obs_dir + cn_obs_out_dir[2] + names[i] + cn_obs_out_dir[2][:-6] + '.nc']
-        if cn_misc_flag == 1: cn_filename_misc = cn_misc_dir + cn_misc_out_dir[0] + names[i] + 'metum.nc'
-        if cn_misc_flag == 0:
-            cn_filename_misc = [cn_misc_dir + cn_misc_out_dir[0] + names[i] + cn_um_out_dir[0][-31:-6] + '.nc',
+        cn_filename_misc = [cn_misc_dir + cn_misc_out_dir[0] + names[i] + cn_um_out_dir[0][-31:-6] + '.nc',
                             cn_misc_dir + cn_misc_out_dir[1] + names[i] + cn_um_out_dir[1][-27:-6] + '.nc',
                             cn_misc_dir + cn_misc_out_dir[2] + names[i] + cn_um_out_dir[2][-24:-6] + '.nc']
         cn_filename_ra2t = [cn_um_dir + cn_ra2t_out_dir[0] + names[i] + cn_ra2t_out_dir[0][-31:-6] + '.nc',
                         cn_um_dir + cn_ra2t_out_dir[1] + names[i] + cn_ra2t_out_dir[1][-27:-6] + '.nc',
                         cn_um_dir + cn_ra2t_out_dir[2] + names[i] + cn_ra2t_out_dir[2][-24:-6] + '.nc']
         print (cn_filename_um)
-        print (cn_filename_ifs)
         if cn_misc_flag != 1: print (cn_filename_misc)
         print (cn_filename_ra2t)
         print (cn_filename_obs)
