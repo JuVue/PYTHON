@@ -7276,15 +7276,15 @@ def interpCloudnet(obs_data):
         times = np.copy(obs_data['time'].data)
         height = np.copy(obs_data['height'][0,:])        ### height array constant in time, so just take first column
         nans,id=nanhelper(cv)
-        from IPython import embed; embed()        
+    #    from IPython import embed; embed()
         for i in range(0,len(height)):
             print(i)
             tmp=id(~nans[:,i])
             idtmp=np.squeeze(np.nonzero(np.diff(np.append([0],tmp))>3))
             nanint=(nans[:,i])
             if idtmp.tolist():
-                ide=[tmp[idtmp]]
-                ids=[tmp[idtmp-1]+1]
+                ide=tmp[idtmp]
+                ids=tmp[idtmp-1]+1
                 for m in range(0,len(ids)):
                     nanint[ids[m]:ide[m]]=np.False_
             if any(np.isnan(nanint)):
