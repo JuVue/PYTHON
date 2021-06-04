@@ -7871,7 +7871,7 @@ def main():
                 ### load in initial UM_RA2T data
                 ### --------------------------------------------------------------------
                 for j in range(0,len(ra2t_var_list[c])):
-                    if np.ndim(cn_nc4[c].variables[ra2t_var_list[c][j]]) == 1:  # 1d timeseries only
+                    if np.ndim(cn_nc3[c].variables[ra2t_var_list[c][j]]) == 1:  # 1d timeseries only
                         ra2t_data[ra2t_var_list[c][j]] = cn_nc3[c].variables[ra2t_var_list[c][j]][:]
                     else:                                   # 2d column um_data
                         ra2t_data[ra2t_var_list[c][j]] = cn_nc3[c].variables[ra2t_var_list[c][j]][:]
@@ -7933,9 +7933,9 @@ def main():
                 ### --------------------------------------------------------------------
                 for j in range(0,len(ra2t_var_list[c])):
                     if np.ndim(cn_nc3[c].variables[ra2t_var_list[c][j]]) == 1:
-                        ra2t_data[ra2t_var_list[c][j]] = np.append(ra2t_data[ra2t_var_list[c][j]],cn_nc4[c].variables[ra2t_var_list[c][j]][:])
+                        ra2t_data[ra2t_var_list[c][j]] = np.append(ra2t_data[ra2t_var_list[c][j]],cn_nc3[c].variables[ra2t_var_list[c][j]][:])
                     else:
-                        ra2t_data[ra2t_var_list[c][j]] = np.append(ra2t_data[ra2t_var_list[c][j]],cn_nc4[c].variables[ra2t_var_list[c][j]][:],0)
+                        ra2t_data[ra2t_var_list[c][j]] = np.append(ra2t_data[ra2t_var_list[c][j]],cn_nc3[c].variables[ra2t_var_list[c][j]][:],0)
             # lwp = np.append(lwp, cn_nc0[1].variables['lwp'][:],0)
 
         ### --------------------------------------------------------------------
