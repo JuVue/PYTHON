@@ -7277,10 +7277,10 @@ def interpCloudnet(obs_data):
         ### save relevant fields as tempvars for ease
         cv = np.copy(obs_data[var].data)
         times = np.copy(obs_data['time'].data)
-        height = np.copy(obs_data['height'][0,:])        ### height array constant in time, so just take first column
+        height = np.copy(obs_data['height'])        ### height array constant in time, so just take first column
         nans,id=nanhelper(cv)
         for i in range(0,len(height)):
-            id(nans[:])
+            tmp=id(nans[:,i])
             cv[nans]=np.interp(id(nans),id(~nans),y[~nans])
 
         ### save back to dictionary after completion of updates
@@ -7983,6 +7983,7 @@ def main():
     ## -------------------------------------------------------------
     ## maximise obs data available and build mask for available data
     ## -------------------------------------------------------------
+    from IPython import embed; embed()
     obs_data, um_data, misc_data, ra2t_data = setFlags(obs_data, um_data, misc_data, ra2t_data, obs_var_list, um_var_list, misc_var_list, ra2t_var_list)
     obs_data = interpCloudnet(obs_data)
     nanind, nanmask, wcind, wc0ind, lwpind = buildNaNMask(obs_data, month_flag, missing_files, doy)
