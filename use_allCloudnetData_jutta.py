@@ -7280,7 +7280,7 @@ def interpCloudnet(obs_data):
     #    from IPython import embed; embed()
         #for i in range(0,len(height)):
         for i in range(0,len(height)):
-            pritn(i)
+            print(i)
             tmp=id(~nans[:,i])
             idtmp=np.squeeze(np.nonzero(np.diff(np.append([0],tmp))>3))
             nanint=(nans[:,i])
