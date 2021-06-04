@@ -23,4 +23,5 @@ def nanhelper(y):
 def int2list(var):
     if not isinstance(var,list):
         var=[var]
+        print('converted int to list')
     return var
