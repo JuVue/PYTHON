@@ -21,6 +21,6 @@ def nanhelper(y):
     return np.isnan(y), lambda z: z.nonzero()[0]
 
 def int2list(var):
-    if isinstance(var,int):
+    if np.issubdtype(ids,np.integer):
         var=[var]
     return var
