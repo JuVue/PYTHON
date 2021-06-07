@@ -4,10 +4,11 @@
 from __future__ import print_function
 import time
 import datetime
+
 import numpy as np
 import pandas as pd
 from netCDF4 import Dataset
-import numpy as np
+
 # import diags_MOCCHA as diags
 # import diags_varnames as varnames
 #import cartopy.crs as ccrs
@@ -15,6 +16,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as mpl_cm
 from matplotlib.colors import ListedColormap, LinearSegmentedColormap
+import matplotlib.dates as mdates
 
 import os
 #import seaborn as sns
