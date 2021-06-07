@@ -7566,7 +7566,7 @@ def main():
     um_root_dir = '/nfs/a96/MOCCHA/working/jutta/CloudNet/Oden/data/calibrated/metum/'
     #obs_root_dir = '/gws/nopw/j04/ncas_weather/gyoung/MOCCHA/ODEN/DATA/'
     cn_obs_dir = '/nfs/a96/MOCCHA/working/jutta/CloudNet/Oden/output/Halo/measurements_V7/'
-
+    cn_um_dir = '/nfs/a96/MOCCHA/working/jutta/CloudNet/Oden/output/metum/V7/'
     ### -----------------------------------------------------------------
     ### CHOSEN RUN - MODEL DATA
     out_dir1 = '25_u-cc568_RA2M_CON/'
