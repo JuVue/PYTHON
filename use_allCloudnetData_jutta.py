@@ -7297,7 +7297,7 @@ def interpCloudnet(obs_data):
 
     return obs_data
 
-def buildNaNMask(obs_data, month_flag, missing_files, doy):
+def buildNaNMask(obs_data):
 
     print ('*******')
     print ('Only include model data where we have observations:')
@@ -8000,7 +8000,6 @@ def main():
     varlist_um = ['model_Cv_filtered', 'model_lwc', 'model_iwc_filtered', 'model_lwp']
 
     # print(um_data.keys())
-    from IPython import embed; embed()
 
     ### remove missing Cv obs timesteps (remove from all)
     for c in range(0, 3):
