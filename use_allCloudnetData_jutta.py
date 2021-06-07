@@ -17,7 +17,7 @@ import matplotlib.cm as mpl_cm
 import os
 #import seaborn as sns
 from scipy.interpolate import interp1d
-
+from IPython import embed
 #### import python functions
 import sys
 sys.path.insert(1, './py_functions/')
@@ -41,13 +41,13 @@ def readfile(filename):
 
     return data
 
-def assignColumns(data):
+#def assignColumns(data):
 
     columns = ['Year', 'Month', 'Day', 'Hour', 'Minutes', 'Seconds', 'Longitude', 'Latitude']
 
     return columns
 
-def iceDrift(data):
+#def iceDrift(data):
 
     ###################################
     ## Define ice drift period
@@ -66,7 +66,7 @@ def iceDrift(data):
 
     return drift_index
 
-def inIce(data):
+#def inIce(data):
 
     ###################################
     ## DEFINE IN ICE PERIOD
@@ -100,7 +100,7 @@ def inIce(data):
 
     return inIce_index
 
-def trackShip(data, date):
+#def trackShip(data, date):
     ###################################
     ## DEFINE METUM PERIOD (CLOUDNET COMPARISON)
     ###################################
@@ -122,7 +122,7 @@ def trackShip(data, date):
 
     return trackShip_index
 
-def plot_CvProfiles(um_data, ifs_data, misc_data, ra2t_data, obs_data, month_flag, missing_files, um_out_dir, doy, obs, obs_switch): #, lon, lat):
+#def plot_CvProfiles(um_data, ifs_data, misc_data, ra2t_data, obs_data, month_flag, missing_files, um_out_dir, doy, obs, obs_switch): #, lon, lat):
 
     import iris.plot as iplt
     import iris.quickplot as qplt
@@ -366,16 +366,7 @@ def plot_CvProfiles(um_data, ifs_data, misc_data, ra2t_data, obs_data, month_fla
     # plt.savefig(fileout)
     # plt.show()
 
-def plot_CvTimeseries(um_data, ifs_data, misc_data, ra2t_data, obs_data, month_flag, missing_files, um_out_dir, doy, obs_switch, obs, data1, data2, data3, data4):
-
-    import iris.plot as iplt
-    import iris.quickplot as qplt
-    import iris.analysis.cartography
-    import cartopy.crs as ccrs
-    import cartopy
-    import matplotlib.cm as mpl_cm
-    from matplotlib.colors import ListedColormap, LinearSegmentedColormap
-        # from matplotlib.patches import Polygon
+def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, um_out_dir, dates):
 
     ###################################
     ## PLOT MAP
@@ -421,17 +412,12 @@ def plot_CvTimeseries(um_data, ifs_data, misc_data, ra2t_data, obs_data, month_f
     # ifs_data['model_snow_Cv_filtered'][ifs_data['model_snow_Cv_filtered'] < 0.0] = np.nan
     # misc_data['model_Cv_filtered'][misc_data['model_Cv_filtered'] < 0.0] = np.nan
     # ra2t_data['model_Cv_filtered'][ra2t_data['model_Cv_filtered'] < 0.0] = np.nan
-
+    embed()
     viridis = mpl_cm.get_cmap('viridis', 256)
     newcolors = viridis(np.linspace(0, 1, 256))
     greyclr = np.array([0.1, 0.1, 0.1, 0.1])
     newcolors[:20, :] = greyclr
     newcmp = ListedColormap(newcolors)
-
-    bldepth1 = data1['bl_depth'][data1['hrly_flag']]
-    bldepth2 = data2['bl_depth'][data2['hrly_flag']]
-    bldepth3 = data3['sfc_bl_height'][data3['hrly_flag']]
-    bldepth4 = data4['bl_depth'][data2['hrly_flag']]
 
     plt.subplot(511)
     ax = plt.gca()
@@ -446,9 +432,9 @@ def plot_CvTimeseries(um_data, ifs_data, misc_data, ra2t_data, obs_data, month_f
     plt.ylim([0,9000])
     plt.yticks([0,3e3,6e3,9e3])
     ax.set_yticklabels([0, 3, 6, 9])
-    plt.xlim([doy[0], doy[-1]])
-    plt.xticks([230,235,240,245,250,255])
-    ax.set_xticklabels(['18 Aug','23 Aug','28 Aug','2 Sep','7 Sep','12 Sep'])
+    plt.xlim([dates[0], dates[1]])
+    #plt.xticks([230,235,240,245,250,255])
+    #ax.set_xticklabels(['18 Aug','23 Aug','28 Aug','2 Sep','7 Sep','12 Sep'])
     # plt.title('Measured C$_{V}$, 1 hour sampling')
     # plt.title('Measured cloud fraction by volume, 1.5km sampling')
     nans = ax.get_ylim()
@@ -7357,7 +7343,7 @@ def setFlags(obs_data, um_data, misc_data, ra2t_data, obs_var_list, um_var_list,
 
     return obs_data, um_data, misc_data,  ra2t_data
 
-def check_Radiation(data1, data2, data3, data4, obs, doy, out_dir1):
+#def check_Radiation(data1, data2, data3, data4, obs, doy, out_dir1):
 
     import iris.plot as iplt
     import iris.quickplot as qplt
@@ -7781,16 +7767,16 @@ def main():
         cn_filename_obs = [cn_obs_dir + cn_obs_out_dir[0] + names[i] + cn_obs_out_dir[0][:-6] + '.nc',
                         cn_obs_dir + cn_obs_out_dir[1] + names[i] + cn_obs_out_dir[1][:-6] + '.nc',
                         cn_obs_dir + cn_obs_out_dir[2] + names[i] + cn_obs_out_dir[2][:-6] + '.nc']
-        print (cn_filename_um)
-        print (cn_filename_misc)
-        print (cn_filename_ra2t)
-        print (cn_filename_obs)
+        #print (cn_filename_um)
+        #print (cn_filename_misc)
+        #print (cn_filename_ra2t)
+        #print (cn_filename_obs)
         print ('')
 
     ### --------------------------------------------------------------------
     ###     READ IN ALL CLOUDNET FILES: reinitialise diagnostic dictionaries
     ### --------------------------------------------------------------------
-        print ('Loading multiple diagnostics:')
+        print ('Loading multiple diagnostics from cloudnet results:')
         cn_nc1 = {}
         cn_nc2 = {}
         cn_nc3 = {}
@@ -7992,6 +7978,7 @@ def main():
     ## -------------------------------------------------------------
     ## maximise obs data available and build mask for available data
     ## -------------------------------------------------------------
+    print('setting mssing data to nan and interpolate missing obs')
     obs_data, um_data, misc_data, ra2t_data = setFlags(obs_data, um_data, misc_data, ra2t_data, obs_var_list, um_var_list, misc_var_list, ra2t_var_list)
     obs_data = interpCloudnet(obs_data)
     nanind, nanmask, wcind, wc0ind, lwpind = buildNaNMask(obs_data)
@@ -8002,6 +7989,7 @@ def main():
     # print(um_data.keys())
 
     ### remove missing Cv obs timesteps (remove from all)
+    print(' remove missing Cv obs timesteps (remove from all)')
     for c in range(0, 3):
         # print(c)
         um_data[varlist_um[c]][nanind, :] = np.nan
@@ -8031,37 +8019,25 @@ def main():
     misc_data['model_lwp'][lwpind] = np.nan
     ra2t_data['model_lwp'][lwpind] = np.nan
 
-    ##################################################################################################################################
-    #################################################################
-    ## filter radiation measurements for bad/missing values
-    #################################################################
-    data1, data2, data3, data4, obs = check_Radiation(data1, data2, data3, data4, obs, doy, out_dir1)
-
 
     #################################################################
     ## create labels for figure legends - done here so only needs to be done once!
     #################################################################
     label1 = 'undefined_label'
-    if out_dir1[:10] == '23_u-cc278': label1 = 'UM_CASIM-100_GA6alb'
-    if out_dir1[:10] == '20_u-ca326': label1 = 'UM_CASIM-100_CICE'
-
-    if out_dir1 == 'UM_RA2M/': label1 = 'UM_RA2M'
+    if out_dir1[:10] == '25_u-cc568': label1 = 'UM_RA2M'
+    if out_dir1[:10] == '24_u-cc324': label1 = 'UM_RA2T_' + out_dir1[-4:-1]
+    if out_dir1[:10] == '23_u-cc278': label1 = 'UM_CASIM-100'
 
     label2 = 'undefined_label'
-    if out_dir2[:10] == '23_u-cc278': label2 = 'UM_CASIM-100_GA6alb'
-    if out_dir2[:10] == '20_u-ca326': label2 = 'UM_CASIM-100_CICE'
-    if out_dir2 == 'UM_CASIM-100/': label2 = 'UM_CASIM-100'
+    if out_dir2[:10] == '25_u-cc568': label2 = 'UM_RA2M'
+    if out_dir2[:10] == '24_u-cc324': label2 = 'UM_RA2T_' + out_dir2[-4:-1]
+    if out_dir2[:10] == '23_u-cc278': label2 = 'UM_CASIM-100'
 
     label3 = 'undefined_label'
     if out_dir3 == 'OUT_25H/': label3 = 'ECMWF_IFS'
-    if out_dir3[:10] == '23_u-cc278': label3 = 'UM_CASIM-100_GA6alb'
-    if out_dir3[:10] == '20_u-ca326': label3 = 'UM_CASIM-100_CICE'
-    if out_dir3 == 'ECMWF_IFS/': label3 = 'ECMWF_IFS'
-
-    label4 = 'undefined_label'
-    if out_dir4[:10] == '23_u-cc278': label4 = 'UM_CASIM-100_GA6alb'
-    if out_dir4[:10] == '20_u-ca326': label4 = 'UM_CASIM-100_CICE'
-    if out_dir4 == 'UM_RA2M/': label4 = 'UM_RA2M'
+    if out_dir3[:10] == '25_u-cc568': label3 = 'UM_RA2M'
+    if out_dir3[:10] == '24_u-cc324': label3 = 'UM_RA2T_' + out_dir3[-4:-1]
+    if out_dir3[:10] == '23_u-cc278': label3 = 'UM_CASIM-100'
 
     # -------------------------------------------------------------
     # save out working data for debugging purposes
@@ -8094,7 +8070,7 @@ def main():
     # -------------------------------------------------------------
     # Cloudnet plot: Plot contour timeseries
     # -------------------------------------------------------------
-    # figure = plot_CvTimeseries(um_data, ifs_data, misc_data, ra2t_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs_switch, obs, data1, data2, data3, data4)
+     figure = plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates, cn_um_out_dir )
     # figure = plot_LWCTimeseries(um_data, ifs_data, misc_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs_switch)
     # figure = plot_IWCTimeseries(um_data, ifs_data, misc_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs_switch)
     # figure = plot_TWCTimeseries(um_data, ifs_data, misc_data, ra2t_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs_switch, obs, data1, data2, data3, data4, nanind, wcind)
@@ -8116,7 +8092,7 @@ def main():
     # -------------------------------------------------------------
     # plot bivariate distributions
     # -------------------------------------------------------------
-    figure = plot_BiVAR(um_data, ifs_data, misc_data, ra2t_data, obs_data, obs, month_flag, missing_files, cn_um_out_dir, doy, obs_switch, data1, data2, data3, data4, nanind, wcind)
+    #figure = plot_BiVAR(um_data, ifs_data, misc_data, ra2t_data, obs_data, obs, month_flag, missing_files, cn_um_out_dir, doy, obs_switch, data1, data2, data3, data4, nanind, wcind)
 
     # -------------------------------------------------------------
     # make obs comparison fig between um and ifs grids
