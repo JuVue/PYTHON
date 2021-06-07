@@ -14,6 +14,8 @@ import numpy as np
 #import iris
 import matplotlib.pyplot as plt
 import matplotlib.cm as mpl_cm
+from matplotlib.colors import ListedColormap, LinearSegmentedColormap
+
 import os
 #import seaborn as sns
 from scipy.interpolate import interp1d
@@ -412,7 +414,6 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, um_out_dir, date
     # ifs_data['model_snow_Cv_filtered'][ifs_data['model_snow_Cv_filtered'] < 0.0] = np.nan
     # misc_data['model_Cv_filtered'][misc_data['model_Cv_filtered'] < 0.0] = np.nan
     # ra2t_data['model_Cv_filtered'][ra2t_data['model_Cv_filtered'] < 0.0] = np.nan
-    embed()
     viridis = mpl_cm.get_cmap('viridis', 256)
     newcolors = viridis(np.linspace(0, 1, 256))
     greyclr = np.array([0.1, 0.1, 0.1, 0.1])
@@ -433,16 +434,15 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, um_out_dir, date
     plt.yticks([0,3e3,6e3,9e3])
     ax.set_yticklabels([0, 3, 6, 9])
     plt.xlim([dates[0], dates[1]])
+    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+
     #plt.xticks([230,235,240,245,250,255])
     #ax.set_xticklabels(['18 Aug','23 Aug','28 Aug','2 Sep','7 Sep','12 Sep'])
     # plt.title('Measured C$_{V}$, 1 hour sampling')
     # plt.title('Measured cloud fraction by volume, 1.5km sampling')
     nans = ax.get_ylim()
-    for file in missing_files:
-        ax.fill_between(np.arange(file, file + 1, 1/24.0), nans[0], nans[-1],
-            facecolor = 'white',
-            # hatch = 'x',
-            zorder = 2)
     ax2 = ax.twinx()
     ax2.set_ylabel('Measurements \n (1 hour sampling)', rotation = 270, labelpad = 35)
     ax2.set_yticks([])
@@ -450,33 +450,6 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, um_out_dir, date
     cb = plt.colorbar(img, cax = cbaxes, orientation = 'horizontal')
     plt.title('C$_{V}$')
     # plt.colorbar()
-
-    plt.subplot(512)
-    ax = plt.gca()
-    # ax.set_facecolor('aliceblue')
-    plt.contourf(ifs_data['time'], np.squeeze(ifs_data['height'][0,:]), np.transpose(ifs_data['model_snow_Cv_filtered']),
-        np.arange(0,1.1,0.1),
-        cmap = newcmp,
-        zorder = 1)
-    # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
-    # plt.plot(data3['time_hrly'][::6], bldepth3[::6], 'k', linewidth = 1.0)
-    plt.ylabel('Z [km]')
-    plt.ylim([0,9000])
-    plt.yticks([0,3e3,6e3,9e3])
-    ax.set_yticklabels([0, 3, 6, 9])
-    plt.xlim([doy[0], doy[-1]])
-    plt.xticks([230,235,240,245,250,255])
-    ax.set_xticklabels(['18 Aug','23 Aug','28 Aug','2 Sep','7 Sep','12 Sep'])
-    # plt.title('ECMWF_IFS; C$_{V}$ (including snow)')
-    nans = ax.get_ylim()
-    for file in missing_files:
-        ax.fill_between(np.arange(file, file + 1, 1/24.0), nans[0], nans[-1],
-            facecolor = 'white',
-            # hatch = 'x',
-            zorder = 2)
-    ax2 = ax.twinx()
-    ax2.set_ylabel('ECMWF_IFS \n (C$_{V}$ including snow)', rotation = 270, labelpad = 36)
-    ax2.set_yticks([])
 
     plt.subplot(513)
     ax = plt.gca()
@@ -491,18 +464,14 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, um_out_dir, date
     plt.ylim([0,9000])
     plt.yticks([0,3e3,6e3,9e3])
     ax.set_yticklabels([0, 3, 6, 9])
-    plt.xlim([doy[0], doy[-1]])
-    plt.xticks([230,235,240,245,250,255])
-    ax.set_xticklabels(['18 Aug','23 Aug','28 Aug','2 Sep','7 Sep','12 Sep'])
-    # plt.title('UM_CASIM-100; C$_{V}$')
+    plt.xlim([dates[0], dates[1]])
+    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+
     nans = ax.get_ylim()
-    for file in missing_files:
-        ax.fill_between(np.arange(file, file + 1, 1/24.0), nans[0], nans[-1],
-            facecolor = 'white',
-            # hatch = 'x',
-            zorder = 2)
     ax2 = ax.twinx()
-    ax2.set_ylabel('UM_CASIM-AeroProf', rotation = 270, labelpad = 17)
+    ax2.set_ylabel('UM_CASIM', rotation = 270, labelpad = 17)
     ax2.set_yticks([])
 
     plt.subplot(514)
@@ -518,16 +487,11 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, um_out_dir, date
     plt.ylim([0,9000])
     plt.yticks([0,3e3,6e3,9e3])
     ax.set_yticklabels([0, 3, 6, 9])
-    plt.xlim([doy[0], doy[-1]])
-    plt.xticks([230,235,240,245,250,255])
-    ax.set_xticklabels(['18 Aug','23 Aug','28 Aug','2 Sep','7 Sep','12 Sep'])
-    # plt.title('UM_RA2T; C$_{V}$')
+    plt.xlim([dates[0], dates[1]])
+    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
     nans = ax.get_ylim()
-    for file in missing_files:
-        ax.fill_between(np.arange(file, file + 1, 1/24.0), nans[0], nans[-1],
-            facecolor = 'white',
-            # hatch = 'x',
-            zorder = 2)
     ax2 = ax.twinx()
     ax2.set_ylabel('UM_RA2T', rotation = 270, labelpad = 17)
     ax2.set_yticks([])
@@ -546,17 +510,12 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, um_out_dir, date
     plt.ylim([0,9000])
     plt.yticks([0,3e3,6e3,9e3])
     ax.set_yticklabels([0, 3, 6, 9])
-    plt.xlim([doy[0], doy[-1]])
-    plt.xticks([230,235,240,245,250,255])
-    ax.set_xticklabels(['18 Aug','23 Aug','28 Aug','2 Sep','7 Sep','12 Sep'])
-    # plt.title('UM_RA2M; C$_{V}$')
+    plt.xlim([dates[0], dates[1]])
+    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
     plt.xlabel('Date')
     nans = ax.get_ylim()
-    for file in missing_files:
-        ax.fill_between(np.arange(file, file + 1, 1/24.0), nans[0], nans[-1],
-            facecolor = 'white',
-            # hatch = 'x',
-            zorder = 2)
     ax2 = ax.twinx()
     ax2.set_ylabel('UM_RA2M', rotation = 270, labelpad = 17)
     ax2.set_yticks([])
@@ -565,9 +524,8 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, um_out_dir, date
     print ('')
     print ('Finished plotting! :)')
     print ('')
-
-    if month_flag == -1:
-        fileout = 'FIGS/Obs-UMGrid_IFS_RA2M_CASIM-AeroProf_RA2T_CvTimeseries_226-257DOY_fixedRA2T_whiteNaNs_Dates_noOffsetLWP.svg'
+    embed()
+    fileout = 'FIGS/Obs-UMGrid_IFS_RA2M_CASIM-AeroProf_RA2T_CvTimeseries_226-257DOY_fixedRA2T_whiteNaNs_Dates_noOffsetLWP.svg'
     plt.savefig(fileout)
     plt.show()
 #
@@ -7989,17 +7947,19 @@ def main():
     # print(um_data.keys())
 
     ### remove missing Cv obs timesteps (remove from all)
-    print(' remove missing Cv obs timesteps (remove from all)')
-    for c in range(0, 3):
-        # print(c)
-        um_data[varlist_um[c]][nanind, :] = np.nan
-        misc_data[varlist_um[c]][nanind, :] = np.nan
-        ra2t_data[varlist_um[c]][nanind, :] = np.nan
-    ### remove missing water content obs timestep (only remove from water contents)
-    for c in range(1, 3):
-        um_data[varlist_um[c]][wcind, :] = np.nan
-        misc_data[varlist_um[c]][wcind, :] = np.nan
-        ra2t_data[varlist_um[c]][wcind, :] = np.nan
+    # print(' remove missing Cv obs timesteps (remove from all)')
+    # for c in range(0, 3):
+    #     # print(c)
+    #     um_data[varlist_um[c]][nanind, :] = np.nan
+    #     misc_data[varlist_um[c]][nanind, :] = np.nan
+    #     ra2t_data[varlist_um[c]][nanind, :] = np.nan
+    # ### remove missing water content obs timestep (only remove from water contents)
+    # for c in range(1, 3):
+    #     um_data[varlist_um[c]][wcind, :] = np.nan
+    #     misc_data[varlist_um[c]][wcind, :] = np.nan
+    #     ra2t_data[varlist_um[c]][wcind, :] = np.nan
+
+
     # ### remove zeroed water content on obs timestep (only remove from water contents)
     # for c in range(1, 3):
     #     obs_data[varlist_obs[c]][wc0ind, :] = np.nan
