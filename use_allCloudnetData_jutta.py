@@ -368,7 +368,7 @@ def readfile(filename):
     # plt.savefig(fileout)
     # plt.show()
 
-def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, um_out_dir, dates):
+def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, um_out_dir):
 
     ###################################
     ## PLOT MAP
