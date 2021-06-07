@@ -268,124 +268,17 @@ def readfile(filename):
     print ('Obs = ')
     print (np.nanmean(obs_data['Cv'][:,Zindex[0]],0))
 
-    ##################################################
-    ##################################################
-    #### 	Plot median profiles
-    ##################################################
-    ##################################################
-
-    # SMALL_SIZE = 12
-    # MED_SIZE = 14
-    # LARGE_SIZE = 16
-    #
-    # plt.rc('font',size=MED_SIZE)
-    # plt.rc('axes',titlesize=LARGE_SIZE)
-    # plt.rc('axes',labelsize=LARGE_SIZE)
-    # plt.rc('xtick',labelsize=LARGE_SIZE)
-    # plt.rc('ytick',labelsize=LARGE_SIZE)
-    # plt.rc('legend',fontsize=LARGE_SIZE)
-    # plt.figure(figsize=(4.5,6))
-    # plt.subplots_adjust(top = 0.95, bottom = 0.12, right = 0.95, left = 0.15,
-    #         hspace = 0.4, wspace = 0.1)
-    #
-    # ### define axis instance
-    # ax = plt.gca()
-    #
-    # # print (um_data.keys())
-    #
-    # #### set flagged um_data to nans
-    # # um_data['Cv'][um_data['Cv'] == -999] = np.nan
-    # # ifs_data['Cv'][ifs_data['Cv'] == -999] = np.nan
-    # # obs_data['Cv'][obs_data['Cv'] == -999] = np.nan
-    # # obs_data['Cv_adv'][obs_data['Cv_adv'] == -999] = np.nan
-    # # # um_data['Cv'][um_data['Cv'] == 0] = np.nan
-    # # um_data['model_Cv_filtered'][um_data['model_Cv_filtered'] < 0.0] = np.nan
-    # ifs_data['model_snow_Cv_filtered'][ifs_data['model_snow_Cv_filtered'] < 0.0] = np.nan
-    # # misc_data['model_Cv_filtered'][misc_data['model_Cv_filtered'] < 0.0] = np.nan
-    # # ra2t_data['model_Cv_filtered'][ra2t_data['model_Cv_filtered'] < 0.0] = np.nan
-    #
-    # # plt.plot(np.nanmean(obs_data['Cv_adv'],0),np.nanmean(obs_data['height'],0), color = 'purple', linewidth = 3, label = 'Obs Cv_adv')
-    # plt.plot(np.nanmedian(obs_data['Cv'],0),np.nanmedian(obs_data['height'],0), 'k', linewidth = 3, label = 'Obs-' + obs_switch + 'grid', zorder = 5)
-    # ax.fill_betweenx(np.nanmedian(obs_data['height'],0),np.nanmedian(obs_data['Cv'],0) - np.nanstd(obs_data['Cv'],0),
-    #     np.nanmedian(obs_data['Cv'],0) + np.nanstd(obs_data['Cv'],0), color = 'lightgrey', alpha = 0.5)
-    # # plt.plot(np.nanmean(obs['cloudfractions']['cloudfraction_total'],0),np.squeeze(obs['cloudfractions']['height']),
-    # #     '--', color = 'grey', linewidth = 3, label = 'Obs-on-artificial-grid')
-    # # ax.fill_betweenx(np.squeeze(obs['cloudfractions']['height']),np.nanmean(obs['cloudfractions']['cloudfraction_total'],0) - np.nanstd(obs['cloudfractions']['cloudfraction_total'],0),
-    # #     np.nanmean(obs['cloudfractions']['cloudfraction_total'],0) + np.nanstd(obs['cloudfractions']['cloudfraction_total'],0), color = 'lightgrey', alpha = 0.5)
-    # plt.plot(np.nanmedian(obs_data['Cv'],0) - np.nanstd(obs_data['Cv'],0), np.nanmedian(obs_data['height'],0),
-    #     '--', color = 'k', linewidth = 0.5)
-    # plt.plot(np.nanmedian(obs_data['Cv'],0) + np.nanstd(obs_data['Cv'],0), np.nanmedian(obs_data['height'],0),
-    #     '--', color = 'k', linewidth = 0.5)
-    #
-    # ax.fill_betweenx(np.nanmedian(ifs_data['height'],0),np.nanmedian(ifs_data['model_snow_Cv_filtered'],0) - np.nanstd(ifs_data['model_snow_Cv_filtered'],0),
-    #     np.nanmedian(ifs_data['model_snow_Cv_filtered'],0) + np.nanstd(ifs_data['model_snow_Cv_filtered'],0), color = 'navajowhite', alpha = 0.35)
-    # plt.plot(np.nanmedian(ifs_data['model_snow_Cv_filtered'],0) - np.nanstd(ifs_data['model_snow_Cv_filtered'],0), np.nanmedian(ifs_data['height'],0),
-    #     '--', color = 'gold', linewidth = 0.5)
-    # plt.plot(np.nanmedian(ifs_data['model_snow_Cv_filtered'],0) + np.nanstd(ifs_data['model_snow_Cv_filtered'],0), np.nanmedian(ifs_data['height'],0),
-    #     '--', color = 'gold', linewidth = 0.5)
-    #
-    # ax.fill_betweenx(np.nanmedian(misc_data['height'],0),np.nanmedian(misc_data['model_Cv_filtered'],0) - np.nanstd(misc_data['model_Cv_filtered'],0),
-    #     np.nanmedian(misc_data['model_Cv_filtered'],0) + np.nanstd(misc_data['model_Cv_filtered'],0), color = 'mediumaquamarine', alpha = 0.15)
-    # plt.plot(np.nanmedian(misc_data['model_Cv_filtered'],0) - np.nanstd(misc_data['model_Cv_filtered'],0), np.nanmedian(misc_data['height'],0),
-    #     '--', color = 'mediumseagreen', linewidth = 0.5)
-    # plt.plot(np.nanmedian(misc_data['model_Cv_filtered'],0) + np.nanstd(misc_data['model_Cv_filtered'],0), np.nanmedian(misc_data['height'],0),
-    #     '--', color = 'mediumseagreen', linewidth = 0.5)
-    #
-    # ax.fill_betweenx(np.nanmedian(ra2t_data['height'],0),np.nanmedian(ra2t_data['model_Cv_filtered'],0) - np.nanstd(ra2t_data['model_Cv_filtered'],0),
-    #     np.nanmedian(ra2t_data['model_Cv_filtered'],0) + np.nanstd(ra2t_data['model_Cv_filtered'],0), color = 'lightblue', alpha = 0.3)
-    # plt.plot(np.nanmedian(ra2t_data['model_Cv_filtered'],0) - np.nanstd(ra2t_data['model_Cv_filtered'],0), np.nanmedian(ra2t_data['height'],0),
-    #     '--', color = 'steelblue', linewidth = 0.5)
-    # plt.plot(np.nanmedian(ra2t_data['model_Cv_filtered'],0) + np.nanstd(ra2t_data['model_Cv_filtered'],0), np.nanmedian(ra2t_data['height'],0),
-    #     '--', color = 'steelblue', linewidth = 0.5)
-    #
-    # ax.fill_betweenx(np.nanmedian(um_data['height'],0),np.nanmedian(um_data['model_Cv_filtered'],0) - np.nanstd(um_data['model_Cv_filtered'],0),
-    #     np.nanmedian(um_data['model_Cv_filtered'],0) + np.nanstd(um_data['model_Cv_filtered'],0), color = 'blue', alpha = 0.05)
-    # plt.plot(np.nanmedian(um_data['model_Cv_filtered'],0) - np.nanstd(um_data['model_Cv_filtered'],0), np.nanmedian(um_data['height'],0),
-    #     '--', color = 'darkblue', linewidth = 0.5)
-    # plt.plot(np.nanmedian(um_data['model_Cv_filtered'],0) + np.nanstd(um_data['model_Cv_filtered'],0), np.nanmedian(um_data['height'],0),
-    #     '--', color = 'darkblue', linewidth = 0.5)
-    #
-    # plt.plot(np.nanmedian(ifs_data['model_snow_Cv_filtered'],0),np.nanmedian(ifs_data['height'],0), color = 'gold', linewidth = 3, label = 'ECMWF_IFS', zorder = 4)
-    # plt.plot(np.nanmedian(misc_data['model_Cv_filtered'],0),np.nanmedian(misc_data['height'],0), color = 'mediumseagreen', linewidth = 3, label = 'UM_CASIM-100', zorder = 3)
-    # plt.plot(np.nanmedian(ra2t_data['model_Cv_filtered'],0),np.nanmedian(ra2t_data['height'],0), color = 'steelblue', linewidth = 3, label = 'UM_RA2T', zorder = 2)
-    # plt.plot(np.nanmedian(um_data['model_Cv_filtered'],0),np.nanmedian(um_data['height'],0), color = 'darkblue', linewidth = 3, label = 'UM_RA2M', zorder = 1)
-    #
-    # plt.xlabel('C$_{V}$')
-    # plt.ylabel('Z [km]')
-    # plt.ylim([0,9000])
-    # plt.yticks(np.arange(0,9.01e3,0.5e3))
-    # ax.set_yticklabels([0,' ',1,' ',2,' ',3,' ',4,' ',5,' ',6,' ',7,' ',8,' ',9])
-    # plt.xlim([0,1])
-    # plt.xticks(np.arange(0,1.01,0.1))
-    # ax.set_xticklabels([0,' ',0.2,' ',0.4,' ',0.6,' ',0.8,' ',1.0])
-    # plt.legend()
-    #
-    # print ('******')
-    # print ('')
-    # print ('Finished plotting! :)')
-    # print ('')
-    #
-    # if month_flag == -1:
-    #     fileout = 'FIGS/Obs-' + obs_switch + 'grid-QF30_RA2M_IFS_CASIM-100_RA2T_Cv_226-257DOY_fixedRA2T_noOffsetLWP_wSetFlags_Median.svg'
-    # plt.savefig(fileout)
-    # plt.show()
-
 def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, um_out_dir):
 
-    ###################################
-    ## PLOT MAP
-    ###################################
+    ylims=[0,5]
+    yticks=np.arange(0,5e3,1e3)
+    ytlabels=yticks/1e3
 
     print ('******')
     print ('')
     print ('Plotting Cv timeseries for whole drift period:')
     print ('')
 
-    ##################################################
-    ##################################################
-    #### 	CARTOPY
-    ##################################################
-    ##################################################
 
     SMALL_SIZE = 12
     MED_SIZE = 15
@@ -422,7 +315,7 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, um_out_di
     newcolors[:20, :] = greyclr
     newcmp = ListedColormap(newcolors)
 
-    plt.subplot(511)
+    plt.subplot(411)
     ax = plt.gca()
     # ax.set_facecolor('aliceblue')
     img = plt.contourf(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(obs_data['Cv']),
@@ -432,14 +325,15 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, um_out_di
     # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
     # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['sfmlheight']), color = 'grey', linewidth = 1.0)
     plt.ylabel('Z [km]')
-    plt.ylim([0,9000])
-    plt.yticks([0,3e3,6e3,9e3])
-    ax.set_yticklabels([0, 3, 6, 9])
+    plt.ylim(ylims)
+    plt.yticks(yticks)
+    ax.set_yticklabels(ytlabels)
     plt.xlim([dates[0], dates[1]])
     ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-
+    plt.show()
+    embed()
     #plt.xticks([230,235,240,245,250,255])
     #ax.set_xticklabels(['18 Aug','23 Aug','28 Aug','2 Sep','7 Sep','12 Sep'])
     # plt.title('Measured C$_{V}$, 1 hour sampling')
@@ -453,7 +347,7 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, um_out_di
     plt.title('C$_{V}$')
     # plt.colorbar()
 
-    plt.subplot(513)
+    plt.subplot(412)
     ax = plt.gca()
     # ax.set_facecolor('aliceblue')
     plt.contourf(misc_data['time'], np.squeeze(misc_data['height'][0,:]), np.transpose(misc_data['model_Cv_filtered']),
@@ -463,7 +357,7 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, um_out_di
     # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
     # plt.plot(data2['time_hrly'][::6], bldepth2[::6], 'k', linewidth = 1.0)
     plt.ylabel('Z [km]')
-    plt.ylim([0,9000])
+    plt.ylim([0,5000])
     plt.yticks([0,3e3,6e3,9e3])
     ax.set_yticklabels([0, 3, 6, 9])
     plt.xlim([dates[0], dates[1]])
@@ -476,7 +370,7 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, um_out_di
     ax2.set_ylabel('UM_CASIM', rotation = 270, labelpad = 17)
     ax2.set_yticks([])
 
-    plt.subplot(514)
+    plt.subplot(413)
     ax = plt.gca()
     # ax.set_facecolor('aliceblue')
     plt.contourf(ra2t_data['time'], np.squeeze(ra2t_data['height'][0,:]), np.transpose(ra2t_data['model_Cv_filtered']),
@@ -499,7 +393,7 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, um_out_di
     ax2.set_yticks([])
 
 
-    plt.subplot(515)
+    plt.subplot(414)
     ax = plt.gca()
     # ax.set_facecolor('aliceblue')
     plt.contourf(um_data['time'], np.squeeze(um_data['height'][0,:]), np.transpose(um_data['model_Cv_filtered']),
@@ -7939,9 +7833,9 @@ def main():
     ## maximise obs data available and build mask for available data
     ## -------------------------------------------------------------
     print('setting mssing data to nan and interpolate missing obs')
-    obs_data, um_data, misc_data, ra2t_data = setFlags(obs_data, um_data, misc_data, ra2t_data, obs_var_list, um_var_list, misc_var_list, ra2t_var_list)
-    obs_data = interpCloudnet(obs_data)
-    nanind, nanmask, wcind, wc0ind, lwpind = buildNaNMask(obs_data)
+    #obs_data, um_data, misc_data, ra2t_data = setFlags(obs_data, um_data, misc_data, ra2t_data, obs_var_list, um_var_list, misc_var_list, ra2t_var_list)
+    #obs_data = interpCloudnet(obs_data)
+    #nanind, nanmask, wcind, wc0ind, lwpind = buildNaNMask(obs_data)
 
     varlist_obs = ['Cv', 'lwc_adiabatic', 'iwc', 'lwp']
     varlist_um = ['model_Cv_filtered', 'model_lwc', 'model_iwc_filtered', 'model_lwp']
@@ -7977,9 +7871,9 @@ def main():
     #     ra2t_data[varlist_um[c]][lwpind, :] = np.nan
     #
     ### lwp only 1d
-    um_data['model_lwp'][lwpind] = np.nan
-    misc_data['model_lwp'][lwpind] = np.nan
-    ra2t_data['model_lwp'][lwpind] = np.nan
+    #um_data['model_lwp'][lwpind] = np.nan
+    #misc_data['model_lwp'][lwpind] = np.nan
+    #ra2t_data['model_lwp'][lwpind] = np.nan
 
 
     #################################################################
