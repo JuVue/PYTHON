@@ -297,31 +297,20 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, plots_out
     ### define axis instance
     ax = plt.gca()
 
-    print (um_data.keys())
-
-    #### set flagged um_data to nans
-    # um_data['Cv'][um_data['Cv'] == -999] = np.nan
-    # ifs_data['Cv'][ifs_data['Cv'] == -999] = np.nan
-    # obs_data['Cv'][obs_data['Cv'] == -999] = np.nan
-    # obs_data['Cv_adv'][obs_data['Cv_adv'] == -999] = np.nan
-    # # um_data['Cv'][um_data['Cv'] == 0] = np.nan
-    # um_data['model_Cv_filtered'][um_data['model_Cv_filtered'] < 0.0] = np.nan
-    # ifs_data['model_snow_Cv_filtered'][ifs_data['model_snow_Cv_filtered'] < 0.0] = np.nan
-    # misc_data['model_Cv_filtered'][misc_data['model_Cv_filtered'] < 0.0] = np.nan
-    # ra2t_data['model_Cv_filtered'][ra2t_data['model_Cv_filtered'] < 0.0] = np.nan
-    viridis = mpl_cm.get_cmap('viridis', 256)
-    newcolors = viridis(np.linspace(0, 1, 256))
+    viridis = mpl_cm.get_cmap('viridis', 256) # nice colormap purple to yellow
+    newcolors = viridis(np.linspace(0, 1, 256)) #assgin new colormap with viridis colors
     greyclr = np.array([0.1, 0.1, 0.1, 0.1])
-    newcolors[:20, :] = greyclr
+    newcolors[:20, :] = greyclr   # make first 20 colors greyclr
     newcmp = ListedColormap(newcolors)
 
     plt.subplot(411)
     ax = plt.gca()
     # ax.set_facecolor('aliceblue')
-    img = plt.contourf(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(obs_data['Cv']),
-          np.arange(0,1.1,0.1),
-          cmap = newcmp,
-          zorder = 1)
+    img = plt.pcolor(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(obs_data['Cv'],vmin=0,vmax=1))
+    #img = plt.contourf(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(obs_data['Cv']),
+    #      np.arange(0,1.1,0.1),
+    #      cmap = newcmp,
+    #      zorder = 1)
     # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
     # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['sfmlheight']), color = 'grey', linewidth = 1.0)
 
@@ -333,10 +322,6 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, plots_out
     ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-    #plt.xticks([230,235,240,245,250,255])
-    #ax.set_xticklabels(['18 Aug','23 Aug','28 Aug','2 Sep','7 Sep','12 Sep'])
-    # plt.title('Measured C$_{V}$, 1 hour sampling')
-    # plt.title('Measured cloud fraction by volume, 1.5km sampling')
     nans = ax.get_ylim()
     ax2 = ax.twinx()
     ax2.set_ylabel('Measurements \n (1 hour sampling)', rotation = 270, labelpad = 35)
@@ -345,7 +330,7 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, plots_out
     cb = plt.colorbar(img, cax = cbaxes, orientation = 'horizontal')
     plt.title('C$_{V}$')
     # plt.colorbar()
-
+    pld.show()
     plt.subplot(412)
     ax = plt.gca()
     # ax.set_facecolor('aliceblue')
@@ -353,8 +338,6 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, plots_out
         np.arange(0,1.1,0.1),
         cmap = newcmp,
         zorder = 1)
-    # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
-    # plt.plot(data2['time_hrly'][::6], bldepth2[::6], 'k', linewidth = 1.0)
     plt.ylabel('Z [km]')
     plt.ylim(ylims)
     plt.yticks(yticks)
@@ -418,7 +401,7 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, plots_out
     print ('')
     print ('Finished plotting! :)')
     print ('')
-
+    embed()
     dstr=datenum2date(dates[1])
     fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_CvTimeseries.png'
     plt.savefig(fileout)
