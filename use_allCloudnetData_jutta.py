@@ -330,7 +330,7 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, plots_out
     cb = plt.colorbar(img, cax = cbaxes, orientation = 'horizontal')
     plt.title('C$_{V}$')
     # plt.colorbar()
-    pld.show()
+
     plt.subplot(412)
     ax = plt.gca()
     # ax.set_facecolor('aliceblue')
@@ -401,6 +401,7 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, plots_out
     print ('')
     print ('Finished plotting! :)')
     print ('')
+    plt.show()
     embed()
     dstr=datenum2date(dates[1])
     fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_CvTimeseries.png'
