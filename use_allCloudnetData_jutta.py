@@ -334,10 +334,11 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, plots_out
     plt.subplot(412)
     ax = plt.gca()
     # ax.set_facecolor('aliceblue')
-    plt.contourf(misc_data['time'], np.squeeze(misc_data['height'][0,:]), np.transpose(misc_data['model_Cv_filtered']),
-        np.arange(0,1.1,0.1),
-        cmap = newcmp,
-        zorder = 1)
+    plt.pcolor(misc_data['time'], np.squeeze(misc_data['height'][0,:]), np.transpose(misc_data['model_Cv_filtered']),vmin=0,vmax=1)
+    # plt.contourf(misc_data['time'], np.squeeze(misc_data['height'][0,:]), np.transpose(misc_data['model_Cv_filtered']),
+    #     np.arange(0,1.1,0.1),
+    #     cmap = newcmp,
+    #     zorder = 1)
     plt.ylabel('Z [km]')
     plt.ylim(ylims)
     plt.yticks(yticks)
@@ -7674,7 +7675,7 @@ def main():
             time_um = datenum + ((cn_nc1[0].variables['time'][:])/24.0)
             time_misc = datenum + ((cn_nc2[0].variables['time'][:])/24.0)
             time_ra2t = datenum + ((cn_nc3[0].variables['time'][:])/24.0)
-
+            embed()
             ### --------------------------------------------------------------------
             ### loop over each Cloudnet class
             ### --------------------------------------------------------------------
