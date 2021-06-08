@@ -8,7 +8,6 @@ from __future__ import print_function
 import time
 import datetime
 import numpy as np
-import pandas as pd
 from datetime import datetime as dt
 from datetime import timedelta
 import pandas as pd
