@@ -7828,9 +7828,9 @@ def main():
     ## maximise obs data available and build mask for available data
     ## -------------------------------------------------------------
     print('setting mssing data to nan and interpolate missing obs')
-    obs_data, um_data, misc_data, ra2t_data = setFlags(obs_data, um_data, misc_data, ra2t_data, obs_var_list, um_var_list, misc_var_list, ra2t_var_list)
-    obs_data = interpCloudnet(obs_data)
-    nanind, nanmask, wcind, wc0ind, lwpind = buildNaNMask(obs_data)
+    #obs_data, um_data, misc_data, ra2t_data = setFlags(obs_data, um_data, misc_data, ra2t_data, obs_var_list, um_var_list, misc_var_list, ra2t_var_list)
+    #obs_data = interpCloudnet(obs_data)
+    #nanind, nanmask, wcind, wc0ind, lwpind = buildNaNMask(obs_data)
 
     varlist_obs = ['Cv', 'lwc_adiabatic', 'iwc', 'lwp']
     varlist_um = ['model_Cv_filtered', 'model_lwc', 'model_iwc_filtered', 'model_lwp']
