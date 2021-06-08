@@ -405,31 +405,12 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, plots_out
     plt.savefig(fileout)
 
 
-def plot_LWCTimeseries(um_data, ifs_data, misc_data, obs_data, month_flag, missing_files, um_out_dir, doy, obs_switch): #, lon, lat):
-
-    import iris.plot as iplt
-    import iris.quickplot as qplt
-    import iris.analysis.cartography
-    import cartopy.crs as ccrs
-    import cartopy
-    import matplotlib.cm as mpl_cm
-    from matplotlib.colors import ListedColormap, LinearSegmentedColormap
-        # from matplotlib.patches import Polygon
-
-    ###################################
-    ## PLOT MAP
-    ###################################
+def plot_LWCTimeseries(um_data, misc_data, obs_data, plots_out_dir, dates, obs_switch): #, lon, lat):
 
     print ('******')
     print ('')
     print ('Plotting LWC timeseries for whole drift period:')
     print ('')
-
-    ##################################################
-    ##################################################
-    #### 	CARTOPY
-    ##################################################
-    ##################################################
 
     SMALL_SIZE = 12
     MED_SIZE = 14
@@ -499,52 +480,21 @@ def plot_LWCTimeseries(um_data, ifs_data, misc_data, obs_data, month_flag, missi
     plt.title('UM_CASIM-100')
     plt.colorbar()
 
-    plt.subplot(414)
-    plt.pcolor(ifs_data['time'], np.squeeze(ifs_data['height'][0,:]), np.transpose(ifs_data['model_lwc'])*1e3,
-        vmin = 0.0, vmax = cmax)
-        # cmap = newcmp)
-    plt.ylabel('Height [m]')
-    plt.ylim([0,5000])
-    plt.xlabel('DOY')
-    plt.title('ECMWF_IFS')
-    plt.colorbar()
-
 
     print ('******')
     print ('')
     print ('Finished plotting! :)')
     print ('')
 
-    if month_flag == -1:
-        fileout = 'FIGS/Obs-' + obs_switch + 'grid_UM_IFS_CASIM-100_LWCTimeseries_226-257DOY.png'
-    # plt.savefig(fileout)
-    plt.show()
-    # plt.close()
-def plot_IWCTimeseries(um_data, ifs_data, misc_data, obs_data, month_flag, missing_files, um_out_dir, doy, obs_switch): #, lon, lat):
+    fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_LWCTimeseries.png'
+    plt.savefig(fileout)
 
-    import iris.plot as iplt
-    import iris.quickplot as qplt
-    import iris.analysis.cartography
-    import cartopy.crs as ccrs
-    import cartopy
-    import matplotlib.cm as mpl_cm
-    from matplotlib.colors import ListedColormap, LinearSegmentedColormap
-        # from matplotlib.patches import Polygon
-
-    ###################################
-    ## PLOT MAP
-    ###################################
+def plot_IWCTimeseries(um_data,  misc_data, obs_data, plots_out_dir, dates, obs_switch): #, lon, lat):
 
     print ('******')
     print ('')
     print ('Plotting IWC timeseries for whole drift period:')
     print ('')
-
-    ##################################################
-    ##################################################
-    #### 	CARTOPY
-    ##################################################
-    ##################################################
 
     SMALL_SIZE = 12
     MED_SIZE = 12
@@ -619,26 +569,15 @@ def plot_IWCTimeseries(um_data, ifs_data, misc_data, obs_data, month_flag, missi
     plt.title('UM_CASIM-100')
     plt.colorbar()
 
-    plt.subplot(414)
-    plt.contourf(ifs_data['time'], np.squeeze(ifs_data['height'][0,:]), np.transpose(ifs_data['model_snow_iwc_filtered'])*1e3,
-        vmin = 0.0, vmax = cmax)
-        #cmap = newcmp)
-    plt.ylabel('Height [m]')
-    plt.ylim([0,9000])
-    plt.xlabel('DOY')
-    plt.title('ECMWF_IFS')
-    plt.colorbar()
-
 
     print ('******')
     print ('')
     print ('Finished plotting! :)')
     print ('')
 
-    if month_flag == -1:
-        fileout = 'FIGS/Obs-' + obs_switch + 'grid-qf10_UM_IFS_CASIM-100_IWCTimeseries_226-257DOY.png'
-    # plt.savefig(fileout)
-    plt.show()
+    fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_IWCTimeseries.png'
+    plt.savefig(fileout)
+
 
 def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch,nanind,wcind):
     #
@@ -7749,8 +7688,8 @@ def main():
     # -------------------------------------------------------------
     #figure = plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates,plots_out_dir )
 
-    # figure = plot_LWCTimeseries(um_data, ifs_data, misc_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs_switch)
-    # figure = plot_IWCTimeseries(um_data, ifs_data, misc_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs_switch)
+     figure = plot_LWCTimeseries(um_data, ifs_data, misc_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs_switch)
+     figure = plot_IWCTimeseries(um_data, ifs_data, misc_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs_switch)
     figure = plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch,nanind,wcind)
     # figure = plot_TWCTesting(um_data, ifs_data, misc_data, obs_data, data1, data2, data3, obs, month_flag, missing_files, doy)
 
@@ -7834,18 +7773,18 @@ def main():
     # save out working data for debugging purposes
     # -------------------------------------------------------------
     ### model/measurement data
-    np.save('working_data1', data1)
-    np.save('working_data2', data2)
-    np.save('working_data3', data3)
-    np.save('working_data4', data4)
-    np.save('working_dataObs', obs['inversions'])
-
-    ### cloudnet
-    np.save('working_um_data', um_data)
-    np.save('working_ifs_data', ifs_data)
-    if cn_misc_flag != -1: np.save('working_misc_data', misc_data)
-    np.save('working_ra2t_data', ra2t_data)
-    np.save('working_obsV6_data', obs_data)
+    # np.save('working_data1', data1)
+    # np.save('working_data2', data2)
+    # np.save('working_data3', data3)
+    # np.save('working_data4', data4)
+    # np.save('working_dataObs', obs['inversions'])
+    #
+    # ### cloudnet
+    # np.save('working_um_data', um_data)
+    # np.save('working_ifs_data', ifs_data)
+    # if cn_misc_flag != -1: np.save('working_misc_data', misc_data)
+    # np.save('working_ra2t_data', ra2t_data)
+    # np.save('working_obsV6_data', obs_data)
 
     # print (data1['height'][:])
     # print (data1['height'][data1['height'] <= 1e3])
