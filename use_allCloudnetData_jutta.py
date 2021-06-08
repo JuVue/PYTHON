@@ -363,7 +363,6 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, plots_out
     ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-
     nans = ax.get_ylim()
     ax2 = ax.twinx()
     ax2.set_ylabel('UM_CASIM', rotation = 270, labelpad = 17)
@@ -419,11 +418,12 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, plots_out
     print ('')
     print ('Finished plotting! :)')
     print ('')
+    plt.show()
+
     embed()
     dstr=datenum2date(int(dates[1]))
     fileout = plots_out_dir + '/Obs-UMGrid_RA2M_CASIM_RA2T_CvTimeseries_' + int(dates[1]) iteNaNs_Dates_noOffsetLWP.svg'
     plt.savefig(fileout)
-    plt.show()
 #
 def plot_lwcProfiles(um_data, ifs_data, misc_data, ra2t_data, obs_data, month_flag, missing_files, um_out_dir, doy, obs_switch): #, lon, lat):
 
