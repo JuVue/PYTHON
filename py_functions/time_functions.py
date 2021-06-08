@@ -8,7 +8,6 @@ from __future__ import print_function
 import time
 import datetime
 import numpy as np
-import pandas as pd
 from datetime import datetime as dt
 from datetime import timedelta
 import pandas as pd
@@ -25,16 +24,6 @@ def datenum2date(datenum):
    ##:return:Datetime object corresponding to datenum.
    d=np.array(datenum)
    return pd.to_datetime(d-719529,unit='D')
-    # if isinstance(datenum,list):
-    #     for m in range(0,len(datenum)):
-    #         d=datenum[m]
-    #         d = np.array(d)
-    #         dout[m] =np.append(dout, dt.fromordinal(int(d.astype(int)))+timedelta(days=d%1)-timedelta(days=366))
-    # else:
-    #     d=datenum
-    #     d = np.array(d)
-    #     dout[0] =  dt.fromordinal(int(d.astype(int)))+timedelta(days=d%1)-timedelta(days=366))
-    # return dout
 
 
 def calcTime_Mat2DOY(matlab_time):
