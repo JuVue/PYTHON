@@ -418,12 +418,12 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, plots_out
     print ('')
     print ('Finished plotting! :)')
     print ('')
+
+    #dstr=datenum2date(int(dates[1]))
+    #fileout = plots_out_dir + '/Obs-UMGrid_RA2M_CASIM_RA2T_CvTimeseries_NaNs_Dates.png'
+    #plt.savefig(fileout)
     plt.show()
 
-    embed()
-    dstr=datenum2date(int(dates[1]))
-    #fileout = plots_out_dir + '/Obs-UMGrid_RA2M_CASIM_RA2T_CvTimeseries_' + int(dates[1]) iteNaNs_Dates_noOffsetLWP.svg'
-    #plt.savefig(fileout)
 #
 def plot_lwcProfiles(um_data, ifs_data, misc_data, ra2t_data, obs_data, month_flag, missing_files, um_out_dir, doy, obs_switch): #, lon, lat):
 
@@ -7834,9 +7834,10 @@ def main():
     ## maximise obs data available and build mask for available data
     ## -------------------------------------------------------------
     print('setting mssing data to nan and interpolate missing obs')
-    obs_data, um_data, misc_data, ra2t_data = setFlags(obs_data, um_data, misc_data, ra2t_data, obs_var_list, um_var_list, misc_var_list, ra2t_var_list)
-    obs_data = interpCloudnet(obs_data)
-    nanind, nanmask, wcind, wc0ind, lwpind = buildNaNMask(obs_data)
+    obs_data1 = obs_data
+    obs_data1, um_data, misc_data, ra2t_data = setFlags(obs_data, um_data, misc_data, ra2t_data, obs_var_list, um_var_list, misc_var_list, ra2t_var_list)
+    obs_data1 = interpCloudnet(obs_data1)
+    nanind, nanmask, wcind, wc0ind, lwpind = buildNaNMask(obs_data1)
 
     varlist_obs = ['Cv', 'lwc_adiabatic', 'iwc', 'lwp']
     varlist_um = ['model_Cv_filtered', 'model_lwc', 'model_iwc_filtered', 'model_lwp']
@@ -7926,7 +7927,8 @@ def main():
     # -------------------------------------------------------------
     # Cloudnet plot: Plot contour timeseries
     # -------------------------------------------------------------
-    figure = plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates,plots_out_dir )
+    figure = plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data1, dates,plots_out_dir )
+    embed()
     # figure = plot_LWCTimeseries(um_data, ifs_data, misc_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs_switch)
     # figure = plot_IWCTimeseries(um_data, ifs_data, misc_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs_switch)
     # figure = plot_TWCTimeseries(um_data, ifs_data, misc_data, ra2t_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs_switch, obs, data1, data2, data3, data4, nanind, wcind)
