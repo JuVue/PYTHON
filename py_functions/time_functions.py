@@ -11,7 +11,7 @@ import numpy as np
 import pandas as pd
 from datetime import datetime as dt
 from datetime import timedelta
-import panda as pd
+import pandas as pd
 
 def date2datenum(d):
  ##  Convert python datetime to Matlab datenum
