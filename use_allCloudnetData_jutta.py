@@ -7560,7 +7560,7 @@ def main():
     moccha_missing_files = ['20180813_oden_','20180910_oden_']   ### cloud radar not working    #,'20180914_oden_'
 
     ### Set output directory for plots
-    plot_out_dir='/nfs/a96/MOCCHA/working/jutta/plots/CaseStudies/ModelComparison/'
+    plots_out_dir='/nfs/a96/MOCCHA/working/jutta/plots/CaseStudies/ModelComparison/'
 
     ### Choose observations vertical gridding used in Cloudnet processing (UM/IFS/RADAR)
     obs_switch = 'UM'
