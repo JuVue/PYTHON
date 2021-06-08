@@ -333,7 +333,7 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, plots_out
     plt.subplot(412)
     ax = plt.gca()
     # ax.set_facecolor('aliceblue')
-     plt.contourf(misc_data['time'], np.squeeze(misc_data['height'][0,:]), np.transpose(misc_data['model_Cv_filtered']),
+    plt.contourf(misc_data['time'], np.squeeze(misc_data['height'][0,:]), np.transpose(misc_data['model_Cv_filtered']),
          np.arange(0,1.1,0.1),
          cmap = newcmp,
          zorder = 1)
