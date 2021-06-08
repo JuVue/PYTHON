@@ -319,11 +319,12 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, um_out_di
     ax = plt.gca()
     # ax.set_facecolor('aliceblue')
     img = plt.contourf(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(obs_data['Cv']),
-            np.arange(0,1.1,0.1),
-            cmap = newcmp,
-            zorder = 1)
+          np.arange(0,1.1,0.1),
+          cmap = newcmp,
+          zorder = 1)
     # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
     # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['sfmlheight']), color = 'grey', linewidth = 1.0)
+
     plt.ylabel('Z [km]')
     plt.ylim(ylims)
     plt.yticks(yticks)
@@ -332,8 +333,6 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, um_out_di
     ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-    plt.show()
-    embed()
     #plt.xticks([230,235,240,245,250,255])
     #ax.set_xticklabels(['18 Aug','23 Aug','28 Aug','2 Sep','7 Sep','12 Sep'])
     # plt.title('Measured C$_{V}$, 1 hour sampling')
@@ -7120,7 +7119,7 @@ def interpCloudnet(obs_data):
         #for i in range(0,len(height)):
         for i in range(0,len(height)):
             tmp=id(~nans[:,i])
-            idtmp=np.squeeze(np.nonzero(np.diff(np.append([0],tmp))>3))
+            idtmp=np.squeeze(np.nonzero(np.diff(np.append([0],tmp))>4)) #only interp ,gaps of max 3 timesteps
             nanint=(nans[:,i])
             if idtmp.tolist():
                 ide=int2list(tmp[idtmp])
@@ -7832,9 +7831,9 @@ def main():
     ## maximise obs data available and build mask for available data
     ## -------------------------------------------------------------
     print('setting mssing data to nan and interpolate missing obs')
-    #obs_data, um_data, misc_data, ra2t_data = setFlags(obs_data, um_data, misc_data, ra2t_data, obs_var_list, um_var_list, misc_var_list, ra2t_var_list)
-    #obs_data = interpCloudnet(obs_data)
-    #nanind, nanmask, wcind, wc0ind, lwpind = buildNaNMask(obs_data)
+    obs_data, um_data, misc_data, ra2t_data = setFlags(obs_data, um_data, misc_data, ra2t_data, obs_var_list, um_var_list, misc_var_list, ra2t_var_list)
+    obs_data = interpCloudnet(obs_data)
+    nanind, nanmask, wcind, wc0ind, lwpind = buildNaNMask(obs_data)
 
     varlist_obs = ['Cv', 'lwc_adiabatic', 'iwc', 'lwp']
     varlist_um = ['model_Cv_filtered', 'model_lwc', 'model_iwc_filtered', 'model_lwp']
