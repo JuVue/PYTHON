@@ -649,7 +649,7 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     # import cartopy
     # import matplotlib.cm as mpl_cm
     # import matplotlib.colors as colors
-    # from matplotlib.colors import LogNorm
+     from matplotlib.colors import LogNorm
     # from matplotlib.colors import ListedColormap, LinearSegmentedColormap
     # from matplotlib import ticker, cm
     # from scipy.interpolate import interp1d
