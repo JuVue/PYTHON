@@ -3,7 +3,7 @@
 
 from __future__ import print_function
 import time
-import datetime
+import datetime as dtime
 
 import numpy as np
 import pandas as pd
@@ -25,7 +25,7 @@ from IPython import embed
 #### import python functions
 import sys
 sys.path.insert(1, './py_functions/')
-from time_functions import calcTime_Mat2DOY, date2datenum
+from time_functions import calcTime_Mat2DOY, date2datenum, datenum2date
 from readMAT import readMatlabStruct
 from physFuncts import calcThetaE, calcThetaVL
 from manipFuncts import int2list
@@ -268,7 +268,7 @@ def readfile(filename):
     print ('Obs = ')
     print (np.nanmean(obs_data['Cv'][:,Zindex[0]],0))
 
-def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, um_out_dir):
+def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, plots_out_dir):
 
     ylims=[0,5]
     yticks=np.arange(0,5e3,1e3)
@@ -356,9 +356,9 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, um_out_di
     # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
     # plt.plot(data2['time_hrly'][::6], bldepth2[::6], 'k', linewidth = 1.0)
     plt.ylabel('Z [km]')
-    plt.ylim([0,5000])
-    plt.yticks([0,3e3,6e3,9e3])
-    ax.set_yticklabels([0, 3, 6, 9])
+    plt.ylim(ylims)
+    plt.yticks(yticks)
+    ax.set_yticklabels(ytlabels)
     plt.xlim([dates[0], dates[1]])
     ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
@@ -379,9 +379,9 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, um_out_di
     # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
     # plt.plot(data2['time_hrly'][::6], bldepth4[::6], 'k', linewidth = 1.0)
     plt.ylabel('Z [km]')
-    plt.ylim([0,9000])
-    plt.yticks([0,3e3,6e3,9e3])
-    ax.set_yticklabels([0, 3, 6, 9])
+    plt.ylim(ylims)
+    plt.yticks(yticks)
+    ax.set_yticklabels(ytlabels)
     plt.xlim([dates[0], dates[1]])
     ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
@@ -402,9 +402,9 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, um_out_di
     # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
     # plt.plot(data1['time_hrly'][::6], bldepth1[::6], 'k', linewidth = 1.0)
     plt.ylabel('Z [km]')
-    plt.ylim([0,9000])
-    plt.yticks([0,3e3,6e3,9e3])
-    ax.set_yticklabels([0, 3, 6, 9])
+    plt.ylim(ylims)
+    plt.yticks(yticks)
+    ax.set_yticklabels(ytlabels)
     plt.xlim([dates[0], dates[1]])
     ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
@@ -420,7 +420,8 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, um_out_di
     print ('Finished plotting! :)')
     print ('')
     embed()
-    fileout = 'FIGS/Obs-UMGrid_IFS_RA2M_CASIM-AeroProf_RA2T_CvTimeseries_226-257DOY_fixedRA2T_whiteNaNs_Dates_noOffsetLWP.svg'
+    dstr=datenum2date(int(dates[1]))
+    fileout = plots_out_dir + '/Obs-UMGrid_RA2M_CASIM_RA2T_CvTimeseries_' + int(dates[1]) iteNaNs_Dates_noOffsetLWP.svg'
     plt.savefig(fileout)
     plt.show()
 #
@@ -7553,11 +7554,13 @@ def main():
 
 
     names = ['20180912_oden_','20180913_oden_']
-    sdate = datetime.datetime.strptime('2018091222','%Y%m%d%H')
-    edate = datetime.datetime.strptime('2018091315','%Y%m%d%H')
+    sdate = dtime.datetime.strptime('2018091222','%Y%m%d%H')
+    edate = dtime.datetime.strptime('2018091315','%Y%m%d%H')
     dates = [date2datenum(sdate),date2datenum(edate)]
     moccha_missing_files = ['20180813_oden_','20180910_oden_']   ### cloud radar not working    #,'20180914_oden_'
 
+    ### Set output directory for plots
+    plot_out_dir='/nfs/a96/MOCCHA/working/jutta/plots/CaseStudies/ModelComparison/'
 
     ### Choose observations vertical gridding used in Cloudnet processing (UM/IFS/RADAR)
     obs_switch = 'UM'
@@ -7604,7 +7607,7 @@ def main():
 
     for i in range(0,len(names)):
         dstr=names[i][0:8]
-        datenum = date2datenum(datetime.datetime.strptime(dstr,'%Y%m%d'))
+        datenum = date2datenum(dtime.datetime.strptime(dstr,'%Y%m%d'))
 
         print ('load cloudnet data:')
         cn_filename_um = [cn_um_dir + out_dir1 + cn_um_out_dir[0] + names[i] + cn_um_out_dir[0][-31:-6] + '.nc',
@@ -7837,7 +7840,6 @@ def main():
 
     varlist_obs = ['Cv', 'lwc_adiabatic', 'iwc', 'lwp']
     varlist_um = ['model_Cv_filtered', 'model_lwc', 'model_iwc_filtered', 'model_lwp']
-    embed()
     # print(um_data.keys())
 
     ### remove missing Cv obs timesteps (remove from all)
@@ -7924,7 +7926,7 @@ def main():
     # -------------------------------------------------------------
     # Cloudnet plot: Plot contour timeseries
     # -------------------------------------------------------------
-    figure = plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates, cn_um_out_dir )
+    figure = plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates,plots_out_dir )
     # figure = plot_LWCTimeseries(um_data, ifs_data, misc_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs_switch)
     # figure = plot_IWCTimeseries(um_data, ifs_data, misc_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs_switch)
     # figure = plot_TWCTimeseries(um_data, ifs_data, misc_data, ra2t_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs_switch, obs, data1, data2, data3, data4, nanind, wcind)
