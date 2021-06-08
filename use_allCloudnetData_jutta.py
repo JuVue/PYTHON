@@ -419,9 +419,9 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, plots_out
     print ('Finished plotting! :)')
     print ('')
 
-    #dstr=datenum2date(int(dates[1]))
-    #fileout = plots_out_dir + '/Obs-UMGrid_RA2M_CASIM_RA2T_CvTimeseries_NaNs_Dates.png'
-    #plt.savefig(fileout)
+    dstr=datenum2date(dates[1])
+    fileout = plots_out_dir + dstr.strftime(%Y%m%d) + '_Obs-UMGrid_RA2M_CASIM_RA2T_CvTimeseries.png'
+    plt.savefig(fileout)
     plt.show()
 
 #
@@ -7129,6 +7129,16 @@ def interpCloudnet(obs_data):
                     nanint[ids[m]:ide[m]]=np.False_
             if any(np.isnan(nanint)):
                 cv[nanint,i]=np.interp(id(nanint),id(~nanint),cv[~nanint,i])
+        ### check if interpolation worked
+        fig = plt.figure(figsize(9,6))
+        ax=plt.gca()
+        plt.subplot(211)
+        plt.pcolor(obs_data['time'],np.squeeze(obs_data['height'][0,:]), np.transpose(obs_data['Cv']))
+        plt.subplot(212)
+        plt.pcolor(obs_data['time'],np.squeeze(obs_data['height'][0,:]), np.transpose(cv))
+        embed()
+
+
         ### save back to dictionary after completion of updates
         obs_data[var] = cv
     print('done')
@@ -7927,6 +7937,7 @@ def main():
     # -------------------------------------------------------------
     # Cloudnet plot: Plot contour timeseries
     # -------------------------------------------------------------
+    figure = plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates,plots_out_dir )
     figure = plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data1, dates,plots_out_dir )
     embed()
     # figure = plot_LWCTimeseries(um_data, ifs_data, misc_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs_switch)
