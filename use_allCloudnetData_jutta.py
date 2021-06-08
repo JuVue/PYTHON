@@ -422,8 +422,8 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, plots_out
 
     embed()
     dstr=datenum2date(int(dates[1]))
-    fileout = plots_out_dir + '/Obs-UMGrid_RA2M_CASIM_RA2T_CvTimeseries_' + int(dates[1]) iteNaNs_Dates_noOffsetLWP.svg'
-    plt.savefig(fileout)
+    #fileout = plots_out_dir + '/Obs-UMGrid_RA2M_CASIM_RA2T_CvTimeseries_' + int(dates[1]) iteNaNs_Dates_noOffsetLWP.svg'
+    #plt.savefig(fileout)
 #
 def plot_lwcProfiles(um_data, ifs_data, misc_data, ra2t_data, obs_data, month_flag, missing_files, um_out_dir, doy, obs_switch): #, lon, lat):
 
