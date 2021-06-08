@@ -759,11 +759,6 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
     # plt.plot(data4['time_hrly'][::6], bldepth4[::6], 'k', linewidth = 1.0)
     nans = ax.get_ylim()
-    for file in missing_files:
-        ax.fill_between(np.arange(file, file + 1, 1/24.0), nans[0], nans[-1],
-            facecolor = 'white',
-            # hatch = 'x',
-            zorder = 2)
     plt.ylabel('Z [km]')
     plt.ylim(ylims)
     plt.yticks(yticks)
@@ -786,11 +781,6 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
     # plt.plot(data1['time_hrly'][::6], bldepth1[::6], 'k', linewidth = 1.0)
     nans = ax.get_ylim()
-    for file in missing_files:
-        ax.fill_between(np.arange(file, file + 1, 1/24.0), nans[0], nans[-1],
-            facecolor = 'white',
-            # hatch = 'x',
-            zorder = 2)
     plt.ylabel('Z [km]')
     plt.ylim(ylims)
     plt.yticks(yticks)
