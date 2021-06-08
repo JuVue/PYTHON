@@ -485,6 +485,7 @@ def plot_LWCTimeseries(um_data, misc_data, obs_data, plots_out_dir, dates, obs_s
     print ('')
     print ('Finished plotting! :)')
     print ('')
+    dstr=datenum2date(dates[1])
 
     fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_LWCTimeseries.png'
     plt.savefig(fileout)
@@ -569,6 +570,7 @@ def plot_IWCTimeseries(um_data,  misc_data, obs_data, plots_out_dir, dates, obs_
     print ('')
     print ('Finished plotting! :)')
     print ('')
+    dstr=datenum2date(dates[1])
 
     fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_IWCTimeseries.png'
     plt.savefig(fileout)
