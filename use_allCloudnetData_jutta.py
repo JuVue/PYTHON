@@ -356,9 +356,9 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, um_out_di
     # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
     # plt.plot(data2['time_hrly'][::6], bldepth2[::6], 'k', linewidth = 1.0)
     plt.ylabel('Z [km]')
-    plt.ylim([0,5000])
-    plt.yticks([0,3e3,6e3,9e3])
-    ax.set_yticklabels([0, 3, 6, 9])
+    plt.ylim(ylims)
+    plt.yticks(yticks)
+    ax.set_yticklabels(ytlabels)
     plt.xlim([dates[0], dates[1]])
     ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
@@ -379,9 +379,9 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, um_out_di
     # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
     # plt.plot(data2['time_hrly'][::6], bldepth4[::6], 'k', linewidth = 1.0)
     plt.ylabel('Z [km]')
-    plt.ylim([0,9000])
-    plt.yticks([0,3e3,6e3,9e3])
-    ax.set_yticklabels([0, 3, 6, 9])
+    plt.ylim(ylims)
+    plt.yticks(yticks)
+    ax.set_yticklabels(ytlabels)
     plt.xlim([dates[0], dates[1]])
     ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
@@ -402,9 +402,9 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, um_out_di
     # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
     # plt.plot(data1['time_hrly'][::6], bldepth1[::6], 'k', linewidth = 1.0)
     plt.ylabel('Z [km]')
-    plt.ylim([0,9000])
-    plt.yticks([0,3e3,6e3,9e3])
-    ax.set_yticklabels([0, 3, 6, 9])
+    plt.ylim(ylims)
+    plt.yticks(yticks)
+    ax.set_yticklabels(ytlabels)
     plt.xlim([dates[0], dates[1]])
     ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
@@ -7558,6 +7558,8 @@ def main():
     dates = [date2datenum(sdate),date2datenum(edate)]
     moccha_missing_files = ['20180813_oden_','20180910_oden_']   ### cloud radar not working    #,'20180914_oden_'
 
+    ### Set output directory for plots
+    plot_out_dir='/nfs/a96/MOCCHA/working/jutta/plots/CaseStudies/ModelComparison/'
 
     ### Choose observations vertical gridding used in Cloudnet processing (UM/IFS/RADAR)
     obs_switch = 'UM'
@@ -7837,7 +7839,6 @@ def main():
 
     varlist_obs = ['Cv', 'lwc_adiabatic', 'iwc', 'lwp']
     varlist_um = ['model_Cv_filtered', 'model_lwc', 'model_iwc_filtered', 'model_lwp']
-    embed()
     # print(um_data.keys())
 
     ### remove missing Cv obs timesteps (remove from all)
@@ -7924,7 +7925,7 @@ def main():
     # -------------------------------------------------------------
     # Cloudnet plot: Plot contour timeseries
     # -------------------------------------------------------------
-    figure = plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates, cn_um_out_dir )
+    figure = plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates,plots_out_dir )
     # figure = plot_LWCTimeseries(um_data, ifs_data, misc_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs_switch)
     # figure = plot_IWCTimeseries(um_data, ifs_data, misc_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs_switch)
     # figure = plot_TWCTimeseries(um_data, ifs_data, misc_data, ra2t_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs_switch, obs, data1, data2, data3, data4, nanind, wcind)
