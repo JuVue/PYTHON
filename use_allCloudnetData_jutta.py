@@ -457,11 +457,23 @@ def plot_LWCTimeseries(um_data, misc_data, obs_data, plots_out_dir, dates, obs_s
         plt.pcolor(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(obs_data['lwc_adiabatic'])*1e3,
             vmin = 0.0, vmax = cmax)
             #cmap = newcmp)
-    plt.ylabel('Height [m]')
-    plt.ylim([0,5000])
-    plt.title('Obs')
-    plt.colorbar()
 
+        plt.ylabel('Z [km]')
+        plt.ylim(ylims)
+        plt.yticks(yticks)
+        ax.set_yticklabels(ytlabels)
+        plt.xlim([dates[0], dates[1]])
+        ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+        ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+        nans = ax.get_ylim()
+        ax2 = ax.twinx()
+        ax2.set_ylabel('Measurements \n (1 hour sampling)', rotation = 270, labelpad = 35)
+        ax2.set_yticks([])
+        cbaxes = fig.add_axes([0.225, 0.96, 0.6, 0.015])
+        cb = plt.colorbar(img, cax = cbaxes, orientation = 'horizontal')
+        plt.title('C$_{V}$')
+        
     plt.subplot(412)
     plt.pcolor(um_data['time'], np.squeeze(um_data['height'][0,:]), np.transpose(um_data['model_lwc'])*1e3,
         vmin = 0.0, vmax = cmax)
