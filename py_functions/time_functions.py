@@ -38,7 +38,7 @@ def datenum2date(datenum):
                    + timedelta(seconds=int(seconds)) \
                    + timedelta(milliseconds=round(mseconds)) \
                    - timedelta(days=366)
-    else
+    else:
         d=datenum
         days = d % 1
         hours = days % 1 * 24
