@@ -22,12 +22,12 @@ def datenum2date(d):
    ##Convert Matlab datenum into Python datetime.
    ##:input  datenum Date in datenum format
    ##:return:Datetime object corresponding to datenum.
-    d = np.array(d)
     days = d % 1
     hours = days % 1 * 24
     minutes = hours % 1 * 60
     seconds = minutes % 1 * 60
     mseconds = seconds % 1 * 60
+    d = np.array(d)
     return dt.fromordinal(int(d.astype(int))) \
            + timedelta(days=int(days)) \
            + timedelta(hours=int(hours)) \
