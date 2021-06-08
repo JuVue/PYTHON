@@ -420,7 +420,7 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, plots_out
     print ('')
 
     dstr=datenum2date(dates[1])
-    fileout = plots_out_dir + dstr.strftime(%Y%m%d) + '_Obs-UMGrid_RA2M_CASIM_RA2T_CvTimeseries.png'
+    fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_CvTimeseries.png'
     plt.savefig(fileout)
     plt.show()
 
