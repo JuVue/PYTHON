@@ -18,23 +18,43 @@ def date2datenum(d):
  ##:    return: corresponding datenum
     return 366 + d.toordinal() + (d - dt.fromordinal(d.toordinal())).total_seconds()/(24*60*60)
 
-def datenum2date(d):
+def datenum2date(datenum):
    ##Convert Matlab datenum into Python datetime.
    ##:input  datenum Date in datenum format
    ##:return:Datetime object corresponding to datenum.
-    days = d % 1
-    hours = days % 1 * 24
-    minutes = hours % 1 * 60
-    seconds = minutes % 1 * 60
-    mseconds = seconds % 1 * 60
-    d = np.array(d)
-    return dt.fromordinal(int(d.astype(int))) \
-           + timedelta(days=int(days)) \
-           + timedelta(hours=int(hours)) \
-           + timedelta(minutes=int(minutes)) \
-           + timedelta(seconds=int(seconds)) \
-           + timedelta(milliseconds=round(mseconds)) \
-           - timedelta(days=366)
+    if isinstance(datenum,'list'):
+        for m in range(0,len(d)):
+            d=datenum[m]
+            days = d % 1
+            hours = days % 1 * 24
+            minutes = hours % 1 * 60
+            seconds = minutes % 1 * 60
+            mseconds = seconds % 1 * 60
+            d = np.array(d)
+            dout[m] = dt.fromordinal(int(d.astype(int))) \
+                   + timedelta(days=int(days)) \
+                   + timedelta(hours=int(hours)) \
+                   + timedelta(minutes=int(minutes)) \
+                   + timedelta(seconds=int(seconds)) \
+                   + timedelta(milliseconds=round(mseconds)) \
+                   - timedelta(days=366)
+    else
+        d=datenum
+        days = d % 1
+        hours = days % 1 * 24
+        minutes = hours % 1 * 60
+        seconds = minutes % 1 * 60
+        mseconds = seconds % 1 * 60
+        d = np.array(d)
+        dout = dt.fromordinal(int(d.astype(int))) \
+                + timedelta(days=int(days)) \
+                + timedelta(hours=int(hours)) \
+                + timedelta(minutes=int(minutes)) \
+                + timedelta(seconds=int(seconds)) \
+                + timedelta(milliseconds=round(mseconds)) \
+                - timedelta(days=366)
+    return dout
+
 
 def calcTime_Mat2DOY(matlab_time):
         #### EXAMPLE OF USE:
