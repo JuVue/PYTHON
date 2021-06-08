@@ -7722,12 +7722,12 @@ def main():
         ### --------------------------------------------------------------------
         else:
             if obs_switch == 'RADAR':
-                time_obs = np.append(time_obs,  datenum +  ((cn_nc0[1].variables['time'][:])/24.0))
+                time_obs = np.append(time_obs,  datenum +  np.float64((cn_nc0[1].variables['time'][:])/24.0))
             else:
-                time_obs = np.append(time_obs,  datenum + ((cn_nc0[0].variables['time'][:])/24.0))
-            time_um = np.append(time_um, datenum +  ((cn_nc1[0].variables['time'][:])/24.0))
-            time_misc = np.append(time_misc,  datenum +  ((cn_nc2[0].variables['time'][:])/24.0))
-            time_ra2t = np.append(time_ra2t,  datenum +  ((cn_nc3[0].variables['time'][:])/24.0))
+                time_obs = np.append(time_obs,  datenum + np.float64((cn_nc0[0].variables['time'][:])/24.0))
+            time_um = np.append(time_um, datenum + np.float64((cn_nc1[0].variables['time'][:])/24.0))
+            time_misc = np.append(time_misc,  datenum +  np.float64((cn_nc2[0].variables['time'][:])/24.0))
+            time_ra2t = np.append(time_ra2t,  datenum +  np.float64((cn_nc3[0].variables['time'][:])/24.0))
 
             ### --------------------------------------------------------------------
             ### loop over all Cloudnet classes
@@ -7826,9 +7826,9 @@ def main():
     ## maximise obs data available and build mask for available data
     ## -------------------------------------------------------------
     print('setting mssing data to nan and interpolate missing obs')
-    #obs_data, um_data, misc_data, ra2t_data = setFlags(obs_data, um_data, misc_data, ra2t_data, obs_var_list, um_var_list, misc_var_list, ra2t_var_list)
-    #obs_data = interpCloudnet(obs_data)
-    #nanind, nanmask, wcind, wc0ind, lwpind = buildNaNMask(obs_data)
+    obs_data, um_data, misc_data, ra2t_data = setFlags(obs_data, um_data, misc_data, ra2t_data, obs_var_list, um_var_list, misc_var_list, ra2t_var_list)
+    obs_data = interpCloudnet(obs_data)
+    nanind, nanmask, wcind, wc0ind, lwpind = buildNaNMask(obs_data)
 
     varlist_obs = ['Cv', 'lwc_adiabatic', 'iwc', 'lwp']
     varlist_um = ['model_Cv_filtered', 'model_lwc', 'model_iwc_filtered', 'model_lwp']
