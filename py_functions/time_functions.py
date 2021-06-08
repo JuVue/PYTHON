@@ -24,7 +24,7 @@ def datenum2date(datenum):
    ##:input  datenum Date in datenum format
    ##:return:Datetime object corresponding to datenum.
    d=np.array(datenum)
-   return python_time = pd.to_datetime(d-719529,unit='D')
+   return pd.to_datetime(d-719529,unit='D')
     # if isinstance(datenum,list):
     #     for m in range(0,len(datenum)):
     #         d=datenum[m]
