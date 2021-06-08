@@ -7130,13 +7130,13 @@ def interpCloudnet(obs_data):
             if any(np.isnan(nanint)):
                 cv[nanint,i]=np.interp(id(nanint),id(~nanint),cv[~nanint,i])
         ### check if interpolation worked
-        fig = plt.figure(figsize(9,6))
+        embed()        
+        fig = plt.figure(figsize=(9,6))
         ax=plt.gca()
         plt.subplot(211)
         plt.pcolor(obs_data['time'],np.squeeze(obs_data['height'][0,:]), np.transpose(obs_data['Cv']))
         plt.subplot(212)
         plt.pcolor(obs_data['time'],np.squeeze(obs_data['height'][0,:]), np.transpose(cv))
-        embed()
 
 
         ### save back to dictionary after completion of updates
