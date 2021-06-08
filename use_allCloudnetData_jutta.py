@@ -7127,18 +7127,19 @@ def interpCloudnet(obs_data):
                 ids=int2list(tmp[idtmp-1]+1)
                 for m in range(0,len(ids)):
                     nanint[ids[m]:ide[m]]=np.False_
-            if any(np.isnan(nanint)):
+            if any(nanint==True) and any(nanint==False):
                 cv[nanint,i]=np.interp(id(nanint),id(~nanint),cv[~nanint,i])
         ### check if interpolation worked
-        embed()        
-        fig = plt.figure(figsize=(9,6))
-        ax=plt.gca()
-        plt.subplot(211)
-        plt.pcolor(obs_data['time'],np.squeeze(obs_data['height'][0,:]), np.transpose(obs_data['Cv']))
-        plt.subplot(212)
-        plt.pcolor(obs_data['time'],np.squeeze(obs_data['height'][0,:]), np.transpose(cv))
-
-
+        # fig = plt.figure(figsize=(9,6))
+        # ax=plt.gca()
+        # plt.subplot(211)
+        # plt.pcolor(obs_data['time'],np.squeeze(obs_data['height'][0,:]), np.transpose(obs_data['Cv']))
+        # plt.clim(vmin=0,vmax=1)
+        # plt.subplot(212)
+        # plt.pcolor(obs_data['time'],np.squeeze(obs_data['height'][0,:]), np.transpose(cv))
+        # plt.clim(vmin=0,vmax=1)
+        #
+        #
         ### save back to dictionary after completion of updates
         obs_data[var] = cv
     print('done')
@@ -7844,10 +7845,9 @@ def main():
     ## maximise obs data available and build mask for available data
     ## -------------------------------------------------------------
     print('setting mssing data to nan and interpolate missing obs')
-    obs_data1 = obs_data
-    obs_data1, um_data, misc_data, ra2t_data = setFlags(obs_data, um_data, misc_data, ra2t_data, obs_var_list, um_var_list, misc_var_list, ra2t_var_list)
-    obs_data1 = interpCloudnet(obs_data1)
-    nanind, nanmask, wcind, wc0ind, lwpind = buildNaNMask(obs_data1)
+    obs_data, um_data, misc_data, ra2t_data = setFlags(obs_data, um_data, misc_data, ra2t_data, obs_var_list, um_var_list, misc_var_list, ra2t_var_list)
+    obs_data = interpCloudnet(obs_data)
+    nanind, nanmask, wcind, wc0ind, lwpind = buildNaNMask(obs_data)
 
     varlist_obs = ['Cv', 'lwc_adiabatic', 'iwc', 'lwp']
     varlist_um = ['model_Cv_filtered', 'model_lwc', 'model_iwc_filtered', 'model_lwp']
@@ -7938,7 +7938,6 @@ def main():
     # Cloudnet plot: Plot contour timeseries
     # -------------------------------------------------------------
     figure = plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates,plots_out_dir )
-    figure = plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data1, dates,plots_out_dir )
     embed()
     # figure = plot_LWCTimeseries(um_data, ifs_data, misc_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs_switch)
     # figure = plot_IWCTimeseries(um_data, ifs_data, misc_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs_switch)
