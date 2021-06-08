@@ -6931,7 +6931,7 @@ def interpCloudnet(obs_data):
         #for i in range(0,len(height)):
         for i in range(0,len(height)):
             tmp=id(~nans[:,i])
-            idtmp=np.squeeze(np.nonzero(np.diff(np.append([0],tmp))>3)) #only interp ,gaps of max 3 timesteps
+            idtmp=np.squeeze(np.nonzero(np.diff(np.append([0],tmp))>4)) #only interp ,gaps of max 3 timesteps
             nanint=(nans[:,i])
             if idtmp.tolist():
                 ide=int2list(tmp[idtmp])
