@@ -436,7 +436,7 @@ def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     viridis = mpl_cm.get_cmap('viridis', 256) # nice colormap purple to yellow
     newcolors = viridis(np.linspace(0, 1, 256)) #assgin new colormap with viridis colors
     greyclr = np.array([0.1, 0.1, 0.1, 0.1])
-    newcolors[:5, :] = greyclr   # make first 20 colors greyclr
+    newcolors[:1, :] = greyclr   # make first 20 colors greyclr
     newcmp = ListedColormap(newcolors)
 
 
@@ -543,7 +543,7 @@ def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, 
     viridis = mpl_cm.get_cmap('viridis', 256) # nice colormap purple to yellow
     newcolors = viridis(np.linspace(0, 1, 256)) #assgin new colormap with viridis colors
     greyclr = np.array([0.1, 0.1, 0.1, 0.1])
-    newcolors[:5, :] = greyclr   # make first 20 colors greyclr
+    newcolors[:1, :] = greyclr   # make first 20 colors greyclr
     newcmp = ListedColormap(newcolors)
 
     print ('******')
