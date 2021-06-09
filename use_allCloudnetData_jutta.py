@@ -481,7 +481,7 @@ def plot_LWCTimeseries(um_data, misc_data, obs_data, plots_out_dir, dates, obs_s
 
 
         plt.subplot(413)
-        plt.pcolor(ta2t_data['time'], np.squeeze(ra2t_data['height'][0,:]), np.transpose(ra2t_data['model_lwc'])*1e3,
+        plt.pcolor(ra2t_data['time'], np.squeeze(ra2t_data['height'][0,:]), np.transpose(ra2t_data['model_lwc'])*1e3,
             vmin = 0.0, vmax = cmax)
         # cmap = newcmp)
         plt.ylabel('Z [km]')
@@ -590,7 +590,7 @@ def plot_IWCTimeseries(um_data,  misc_data, obs_data, plots_out_dir, dates, obs_
 
 
     plt.subplot(413)
-    plt.pcolor(ra2t_data['time'], np.squeeze(ta2t_data['height'][0,:]), np.transpose(ra2t_data['model_iwc_filtered'])*1e3,
+    plt.pcolor(ra2t_data['time'], np.squeeze(ra2t_data['height'][0,:]), np.transpose(ra2t_data['model_iwc_filtered'])*1e3,
         vmin = 0.0, vmax = cmax)
         #cmap = newcmp)
 
