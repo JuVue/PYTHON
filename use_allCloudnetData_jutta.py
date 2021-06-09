@@ -433,87 +433,96 @@ def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     ### define axis instance
     ax = plt.gca()
 
+    viridis = mpl_cm.get_cmap('viridis', 256) # nice colormap purple to yellow
+    newcolors = viridis(np.linspace(0, 1, 256)) #assgin new colormap with viridis colors
+    greyclr = np.array([0.1, 0.1, 0.1, 0.1])
+    newcolors[:20, :] = greyclr   # make first 20 colors greyclr
+    newcmp = ListedColormap(newcolors)
+
+
     ### set colour max as var
     cmax = 0.3
 
     plt.subplot(411)
+    ax = plt.gca()
     if obs_switch == 'RADAR':
         img = plt.pcolor(obs_data['time'][::6], obs_data['height'][:394], np.transpose(obs_data['lwc'][::6,:394])*1e3,
             vmin = 0.0, vmax = cmax)
             #cmap = newcmp)
     else:
         img = plt.pcolor(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(obs_data['lwc_adiabatic'])*1e3,
-            vmin = 0.0, vmax = cmax)
+            cmap=newcmp,vmin = 0.0, vmax = cmax)
             #cmap = newcmp)
+    plt.ylabel('Z [km]')
+    plt.ylim(ylims)
+    plt.yticks(yticks)
+    ax.set_yticklabels(ytlabels)
+    plt.xlim([dates[0], dates[1]])
+    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+    nans = ax.get_ylim()
+    ax2 = ax.twinx()
+    ax2.set_ylabel('Measurements \n (1 hour sampling)', rotation = 270, labelpad = 35)
+    ax2.set_yticks([])
+    cbaxes = fig.add_axes([0.225, 0.96, 0.6, 0.015])
+    cb = plt.colorbar(img, cax = cbaxes, orientation = 'horizontal')
+    plt.title('C$_{V}$')
 
-        plt.ylabel('Z [km]')
-        plt.ylim(ylims)
-        plt.yticks(yticks)
-        ax.set_yticklabels(ytlabels)
-        plt.xlim([dates[0], dates[1]])
-        ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
-        ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
-        ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-        nans = ax.get_ylim()
-        ax2 = ax.twinx()
-        ax2.set_ylabel('Measurements \n (1 hour sampling)', rotation = 270, labelpad = 35)
-        ax2.set_yticks([])
-        cbaxes = fig.add_axes([0.225, 0.96, 0.6, 0.015])
-        cb = plt.colorbar(img, cax = cbaxes, orientation = 'horizontal')
-        plt.title('C$_{V}$')
-
-        plt.subplot(412)
-        plt.pcolor(misc_data['time'], np.squeeze(misc_data['height'][0,:]), np.transpose(misc_data['model_lwc'])*1e3,
-            vmin = 0.0, vmax = cmax)
-            # cmap = newcmp)
-        plt.ylabel('Z [km]')
-        plt.ylim(ylims)
-        plt.yticks(yticks)
-        ax.set_yticklabels(ytlabels)
-        plt.xlim([dates[0], dates[1]])
-        ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
-        ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
-        ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-        nans = ax.get_ylim()
-        ax2 = ax.twinx()
-        ax2.set_ylabel('UM_CASIM', rotation = 270, labelpad = 35)
-        ax2.set_yticks([])
+    plt.subplot(412)
+    plt.pcolor(misc_data['time'], np.squeeze(misc_data['height'][0,:]), np.transpose(misc_data['model_lwc'])*1e3,
+        cmap=newcmp,vmin = 0.0, vmax = cmax)
+        # cmap = newcmp)
+    plt.ylabel('Z [km]')
+    plt.ylim(ylims)
+    plt.yticks(yticks)
+    ax.set_yticklabels(ytlabels)
+    plt.xlim([dates[0], dates[1]])
+    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+    nans = ax.get_ylim()
+    ax2 = ax.twinx()
+    ax2.set_ylabel('UM_CASIM', rotation = 270, labelpad = 17)
+    ax2.set_yticks([])
 
 
-        plt.subplot(413)
+    plt.subplot(413)
+    ax = plt.gca()
         plt.pcolor(ra2t_data['time'], np.squeeze(ra2t_data['height'][0,:]), np.transpose(ra2t_data['model_lwc'])*1e3,
-            vmin = 0.0, vmax = cmax)
-        # cmap = newcmp)
-        plt.ylabel('Z [km]')
-        plt.ylim(ylims)
-        plt.yticks(yticks)
-        ax.set_yticklabels(ytlabels)
-        plt.xlim([dates[0], dates[1]])
-        ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
-        ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
-        ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-        nans = ax.get_ylim()
-        ax2 = ax.twinx()
-        ax2.set_ylabel('UM_RA2T', rotation = 270, labelpad = 35)
-        ax2.set_yticks([])
+        cmap=newcmp,vmin = 0.0, vmax = cmax)
+    # cmap = newcmp)
+    plt.ylabel('Z [km]')
+    plt.ylim(ylims)
+    plt.yticks(yticks)
+    ax.set_yticklabels(ytlabels)
+    plt.xlim([dates[0], dates[1]])
+    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+    nans = ax.get_ylim()
+    ax2 = ax.twinx()
+    ax2.set_ylabel('UM_RA2T', rotation = 270, labelpad = 17)
+    ax2.set_yticks([])
 
 
-        plt.subplot(414)
-        plt.pcolor(um_data['time'], np.squeeze(um_data['height'][0,:]), np.transpose(um_data['model_lwc'])*1e3,
-            vmin = 0.0, vmax = cmax)
-        # cmap = newcmp)
-        plt.ylabel('Z [km]')
-        plt.ylim(ylims)
-        plt.yticks(yticks)
-        ax.set_yticklabels(ytlabels)
-        plt.xlim([dates[0], dates[1]])
-        ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
-        ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
-        ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-        nans = ax.get_ylim()
-        ax2 = ax.twinx()
-        ax2.set_ylabel('UM_RA2M', rotation = 270, labelpad = 35)
-        ax2.set_yticks([])
+    plt.subplot(414)
+    ax = plt.gca()
+    plt.pcolor(um_data['time'], np.squeeze(um_data['height'][0,:]), np.transpose(um_data['model_lwc'])*1e3,
+        cmap=newcmp,vmin = 0.0, vmax = cmax)
+    # cmap = newcmp)
+    plt.ylabel('Z [km]')
+    plt.ylim(ylims)
+    plt.yticks(yticks)
+    ax.set_yticklabels(ytlabels)
+    plt.xlim([dates[0], dates[1]])
+    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+    nans = ax.get_ylim()
+    ax2 = ax.twinx()
+    ax2.set_ylabel('UM_RA2M', rotation = 270, labelpad = 17)
+    ax2.set_yticks([])
 
     print ('******')
     print ('')
@@ -570,13 +579,14 @@ def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, 
     cmax = 0.08
 
     plt.subplot(411)
+    ax = plt.gca()
     if obs_switch == 'RADAR':
         img = plt.pcolor(obs_data['time'], obs_data['height'], np.transpose(obs_data['iwc'])*1e3,
-            vmin = 0.0, vmax = cmax)
+            cmap=newcmp,vmin = 0.0, vmax = cmax)
             #cmap = newcmp)
     else:
         img = plt.pcolor(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(obs_data['iwc'])*1e3,
-            vmin = 0.0, vmax = cmax)
+            cmap=newcmp,vmin = 0.0, vmax = cmax)
             #cmap = newcmp)
 
     plt.ylabel('Z [km]')
@@ -594,8 +604,9 @@ def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, 
 
 
     plt.subplot(413)
+    ax = plt.gca()
     plt.pcolor(ra2t_data['time'], np.squeeze(ra2t_data['height'][0,:]), np.transpose(ra2t_data['model_iwc_filtered'])*1e3,
-        vmin = 0.0, vmax = cmax)
+        cmap=newcmp,vmin = 0.0, vmax = cmax)
         #cmap = newcmp)
 
     plt.ylabel('Z [km]')
@@ -612,8 +623,9 @@ def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, 
     ax2.set_yticks([])
 
     plt.subplot(412)
+    ax = plt.gca()
     plt.pcolor(misc_data['time'], np.squeeze(misc_data['height'][0,:]), np.transpose(misc_data['model_iwc_filtered'])*1e3,
-        vmin = 0.0, vmax = cmax)
+        cmap=newcmp,vmin = 0.0, vmax = cmax)
         #cmap = newcmp)
     plt.ylabel('Z [km]')
     plt.ylim(ylims)
@@ -629,8 +641,9 @@ def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, 
     ax2.set_yticks([])
 
     plt.subplot(414)
+    ax = plt.gca()
     plt.pcolor(um_data['time'], np.squeeze(um_data['height'][0,:]), np.transpose(um_data['model_iwc_filtered'])*1e3,
-        vmin = 0.0, vmax = cmax)
+        cmap=newcmp,vmin = 0.0, vmax = cmax)
         #cmap = newcmp)
 
     plt.ylabel('Z [km]')
