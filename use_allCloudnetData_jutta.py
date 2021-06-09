@@ -489,8 +489,8 @@ def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
 
     plt.subplot(413)
     ax = plt.gca()
-        plt.pcolor(ra2t_data['time'], np.squeeze(ra2t_data['height'][0,:]), np.transpose(ra2t_data['model_lwc'])*1e3,
-        cmap=newcmp,vmin = 0.0, vmax = cmax)
+    plt.pcolor(ra2t_data['time'], np.squeeze(ra2t_data['height'][0,:]), np.transpose(ra2t_data['model_lwc'])*1e3,
+    cmap=newcmp,vmin = 0.0, vmax = cmax)
     # cmap = newcmp)
     plt.ylabel('Z [km]')
     plt.ylim(ylims)
