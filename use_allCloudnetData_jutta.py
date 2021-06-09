@@ -685,19 +685,7 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     yticks=np.arange(0,5e3,1e3)
     ytlabels=yticks/1e3
 
-    #
-    # import iris.plot as iplt
-    # import iris.quickplot as qplt
-    # import iris.analysis.cartography
-    # import cartopy.crs as ccrs
-    # import cartopy
-    # import matplotlib.cm as mpl_cm
-    # import matplotlib.colors as colors
     from matplotlib.colors import LogNorm
-    # from matplotlib.colors import ListedColormap, LinearSegmentedColormap
-    # from matplotlib import ticker, cm
-    # from scipy.interpolate import interp1d
-    #     # from matplotlib.patches import Polygon
 
     print ('******')
     print ('')
@@ -6611,7 +6599,9 @@ def main():
     moccha_missing_files = ['20180813_oden_','20180910_oden_']   ### cloud radar not working    #,'20180914_oden_'
 
     ### Set output directory for plots
-    plots_out_dir='/nfs/a96/MOCCHA/working/jutta/plots/CaseStudies/ModelComparison/'
+    plots_out_dir='/nfs/a96/MOCCHA/working/jutta/plots/CaseStudies/ModelComparison/nointerp'
+    if not os.path.exists(plots_out_dir):
+        os.makedirs(plots_out_dir)
 
     ### Choose observations vertical gridding used in Cloudnet processing (UM/IFS/RADAR)
     obs_switch = 'UM'
@@ -6885,25 +6875,25 @@ def main():
     ## -------------------------------------------------------------
     print('setting mssing data to nan and interpolate missing obs')
     obs_data, um_data, misc_data, ra2t_data = setFlags(obs_data, um_data, misc_data, ra2t_data, obs_var_list, um_var_list, misc_var_list, ra2t_var_list)
-    obs_data = interpCloudnet(obs_data)
+    #obs_data = interpCloudnet(obs_data)
     nanind, nanmask, wcind, wc0ind, lwpind = buildNaNMask(obs_data)
 
     varlist_obs = ['Cv', 'lwc_adiabatic', 'iwc', 'lwp']
     varlist_um = ['model_Cv_filtered', 'model_lwc', 'model_iwc_filtered', 'model_lwp']
     # print(um_data.keys())
 
-    ### remove missing Cv obs timesteps (remove from all)
-    # print(' remove missing Cv obs timesteps (remove from all)')
-    # for c in range(0, 3):
-    #     # print(c)
-    #     um_data[varlist_um[c]][nanind, :] = np.nan
-    #     misc_data[varlist_um[c]][nanind, :] = np.nan
-    #     ra2t_data[varlist_um[c]][nanind, :] = np.nan
-    # ### remove missing water content obs timestep (only remove from water contents)
-    # for c in range(1, 3):
-    #     um_data[varlist_um[c]][wcind, :] = np.nan
-    #     misc_data[varlist_um[c]][wcind, :] = np.nan
-    #     ra2t_data[varlist_um[c]][wcind, :] = np.nan
+    ## remove missing Cv obs timesteps (remove from all)
+    print(' remove missing Cv obs timesteps (remove from all)')
+    for c in range(0, 3):
+        # print(c)
+        um_data[varlist_um[c]][nanind, :] = np.nan
+        misc_data[varlist_um[c]][nanind, :] = np.nan
+        ra2t_data[varlist_um[c]][nanind, :] = np.nan
+    ### remove missing water content obs timestep (only remove from water contents)
+    for c in range(1, 3):
+        um_data[varlist_um[c]][wcind, :] = np.nan
+        misc_data[varlist_um[c]][wcind, :] = np.nan
+        ra2t_data[varlist_um[c]][wcind, :] = np.nan
 
 
     # ### remove zeroed water content on obs timestep (only remove from water contents)
@@ -6920,10 +6910,10 @@ def main():
     #     misc_data[varlist_um[c]][lwpind, :] = np.nan
     #     ra2t_data[varlist_um[c]][lwpind, :] = np.nan
     #
-    ### lwp only 1d
-    #um_data['model_lwp'][lwpind] = np.nan
-    #misc_data['model_lwp'][lwpind] = np.nan
-    #ra2t_data['model_lwp'][lwpind] = np.nan
+    ## lwp only 1d
+    um_data['model_lwp'][lwpind] = np.nan
+    misc_data['model_lwp'][lwpind] = np.nan
+    ra2t_data['model_lwp'][lwpind] = np.nan
 
 
     #################################################################
@@ -6976,7 +6966,7 @@ def main():
     # -------------------------------------------------------------
     # Cloudnet plot: Plot contour timeseries
     # -------------------------------------------------------------
-    #figure = plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates,plots_out_dir )
+    figure = plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates,plots_out_dir )
 
     figure = plot_LWCTimeseries(um_data, misc_data, ra2t_data,obs_data, plots_out_dir, dates, obs_switch)
     figure = plot_IWCTimeseries(um_data, misc_data, ra2t_data,obs_data, plots_out_dir, dates, obs_switch)
