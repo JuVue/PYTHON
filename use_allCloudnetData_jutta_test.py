@@ -8658,7 +8658,7 @@ def main():
     ## maximise obs data available and build mask for available data
     ## -------------------------------------------------------------
     obs_data, um_data, misc_data, ifs_data, ra2t_data = setFlags(obs_data, um_data, misc_data, ifs_data, ra2t_data, obs_var_list, um_var_list, misc_var_list, ifs_var_list, ra2t_var_list)
-    obs_data = interpCloudnet(obs_data, month_flag, missing_files, doy)
+#    obs_data = interpCloudnet(obs_data, month_flag, missing_files, doy)
     nanind, nanmask, wcind, wc0ind, lwpind = buildNaNMask(obs_data, month_flag, missing_files, doy)
 
     varlist_obs = ['Cv', 'lwc_adiabatic', 'iwc', 'lwp']
