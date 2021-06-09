@@ -407,6 +407,10 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, plots_out
 
 def plot_LWCTimeseries(um_data, misc_data, obs_data, plots_out_dir, dates, obs_switch): #, lon, lat):
 
+    ylims=[0,5]
+    yticks=np.arange(0,5e3,1e3)
+    ytlabels=yticks/1e3
+
     print ('******')
     print ('')
     print ('Plotting LWC timeseries for whole drift period:')
@@ -651,6 +655,10 @@ def plot_IWCTimeseries(um_data,  misc_data, obs_data, plots_out_dir, dates, obs_
 
 
 def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch,nanind,wcind):
+    ylims=[0,5]
+    yticks=np.arange(0,5e3,1e3)
+    ytlabels=yticks/1e3
+
     #
     # import iris.plot as iplt
     # import iris.quickplot as qplt
