@@ -583,7 +583,7 @@ def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, 
     # newcolors[:20, :] = greyclr
     # newcmp = ListedColormap(newcolors)
 
-    cmax = 0.08
+    cmax = 0.05
 
     plt.subplot(411)
     ax = plt.gca()
