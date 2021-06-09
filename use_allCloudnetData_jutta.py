@@ -730,6 +730,10 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     plt.rc('xtick',labelsize=MED_SIZE)
     plt.rc('ytick',labelsize=MED_SIZE)
     plt.rc('legend',fontsize=MED_SIZE)
+
+
+
+    #####Plot Twc###############################################
     fig = plt.figure(figsize=(9.5,13))
     plt.subplots_adjust(top = 0.9, bottom = 0.06, right = 0.98, left = 0.08,
             hspace = 0.4, wspace = 0.2)
@@ -835,6 +839,7 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_TWCTimeseries.png'
     plt.savefig(fileout)
     plt.close()
+
     #### ---------------------------------------------------------------------------------------------------
     #### ---------------------------------------------------------------------------------------------------
     ####            CREATE TWC MASK
@@ -922,6 +927,7 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     plt.rc('xtick',labelsize=MED_SIZE)
     plt.rc('ytick',labelsize=MED_SIZE)
     plt.rc('legend',fontsize=MED_SIZE)
+
     fig = plt.figure(figsize=(9.5,13))
     plt.subplots_adjust(top = 0.9, bottom = 0.06, right = 0.98, left = 0.08,
             hspace = 0.4, wspace = 0.2)
@@ -933,7 +939,7 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     #    np.arange(0,1.01,0.1),
     #    cmap = mpl_cm.viridis)
     img = plt.pcolor(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(mask0),
-                cmap = mpl_cm.viridis)
+                cmap = mpl_cm.viridis,vmin=0,vmax=0.1)
     # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
     ax = plt.gca()
     nans = ax.get_ylim()
@@ -6283,6 +6289,7 @@ def buildNaNMask(obs_data):
     wcindex = np.zeros([np.size(obs_data['time'])])
     wc0index = np.zeros([np.size(obs_data['time'])])
     lwpindex = np.zeros([np.size(obs_data['time'])])
+    embed()
     # print(nanindex.shape)
     for i in range(len(obs_data['time'])):
         if np.isnan(np.nanmean(obs_data['Cv'][i,:], 0)):       ## if there are only nans in the time profile
@@ -6785,8 +6792,8 @@ def main():
         ### --------------------------------------------------------------------
         #### LOAD IN SPECIFIC DIAGNOSTICS
         obs_var_list = [['Cv', 'Cv_adv'],
-                    ['lwc','lwp','lwc_adiabatic','lwc_adiabatic_inc_nolwp'],
-                    ['height','iwc']]
+                    ['lwc','lwp','lwc_adiabatic','lwc_adiabatic_inc_nolwp','lwc_adv_adiabatic_inc_nolwp'],
+                    ['height','iwc','iwc_adv']]
 
         um_var_list = [['Cv','model_Cv_filtered','model_temperature'],
                 ['lwc','lwp','model_lwc','model_lwp'],
