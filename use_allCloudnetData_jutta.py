@@ -533,6 +533,7 @@ def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
 
     fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_LWCTimeseries.png'
     plt.savefig(fileout)
+    plt.close()
 
 def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch): #, lon, lat):
 
@@ -677,7 +678,7 @@ def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, 
 
     fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_IWCTimeseries.png'
     plt.savefig(fileout)
-
+    plt.close()
 
 def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch,nanind,wcind):
     ylims=[0,5]
@@ -845,7 +846,7 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     dstr=datenum2date(dates[1])
     fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_TWCTimeseries.png'
     plt.savefig(fileout)
-
+    plt.close()
     #### ---------------------------------------------------------------------------------------------------
     #### ---------------------------------------------------------------------------------------------------
     ####            CREATE TWC MASK
@@ -1030,7 +1031,7 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
 
     fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_TWC-MASKTimeseries.png'
     plt.savefig(fileout)
-
+    plt.close()
 
     plt.rc('font',size=MED_SIZE)
     plt.rc('axes',titlesize=LARGE_SIZE)
@@ -1102,7 +1103,6 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
 
     fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_TWC-MASK_profiles.png'
     plt.savefig(fileout)
-    plt.show()
 
     # print ('Z1 = ')
     # print (np.round(np.nanmean(um_data['height'],0),-2))
