@@ -929,9 +929,11 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     plt.subplot(411)
     ax = plt.gca()
     # ax.set_facecolor('aliceblue')
-    img = plt.contourf(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(mask0),
-        np.arange(0,1.01,0.1),
-        cmap = mpl_cm.viridis)
+    #img = plt.contourf(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(mask0),
+    #    np.arange(0,1.01,0.1),
+    #    cmap = mpl_cm.viridis)
+    img = plt.pcolor(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(mask0),
+                cmap = mpl_cm.viridis)
     # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
     ax = plt.gca()
     nans = ax.get_ylim()
@@ -1020,6 +1022,98 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_TWC-MASKTimeseries.png'
     plt.savefig(fileout)
     plt.close()
+
+    #####TCW MASK pcolor #############################################
+    fig = plt.figure(figsize=(9.5,13))
+    plt.subplots_adjust(top = 0.9, bottom = 0.06, right = 0.98, left = 0.08,
+            hspace = 0.4, wspace = 0.2)
+
+    plt.subplot(411)
+    ax = plt.gca()
+    img = plt.pcolor(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(mask0),
+                cmap = mpl_cm.viridis)
+    ax = plt.gca()
+    nans = ax.get_ylim()
+    plt.ylabel('Z [km]')
+    plt.ylim(ylims)
+    plt.yticks(yticks)
+    ax.set_yticklabels(ytlabels)
+    plt.xlim([dates[0], dates[1]])
+    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+    plt.title('Obs-' + obs_switch + 'grid')
+    cbaxes = fig.add_axes([0.225, 0.95, 0.6, 0.015])
+    cb = plt.colorbar(img, cax = cbaxes, orientation = 'horizontal')
+    plt.title('Cloud mask')
+
+    plt.subplot(412)
+    ax = plt.gca()
+    plt.pcolor(misc_data['time'], np.squeeze(misc_data['height'][0,:]), np.transpose(mask2),
+        cmap = mpl_cm.viridis)
+    ax = plt.gca()
+    nans = ax.get_ylim()
+    plt.ylabel('Z [km]')
+    plt.ylim(ylims)
+    plt.yticks(yticks)
+    ax.set_yticklabels(ytlabels)
+    plt.xlim([dates[0], dates[1]])
+    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+    plt.title('UM_CASIM')
+    # plt.colorbar()
+
+    plt.subplot(413)
+    ax = plt.gca()
+    # ax.set_facecolor('aliceblue')
+    plt.pcolor(ra2t_data['time'], np.squeeze(ra2t_data['height'][0,:]), np.transpose(mask4),
+        cmap = mpl_cm.viridis)
+    # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
+    # plt.plot(data4['time_hrly'][::6], bldepth4[::6], 'k', linewidth = 1.0)
+    ax = plt.gca()
+    nans = ax.get_ylim()
+    plt.ylabel('Z [km]')
+    plt.ylim(ylims)
+    plt.yticks(yticks)
+    ax.set_yticklabels(ytlabels)
+    plt.xlim([dates[0], dates[1]])
+    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+    plt.title('UM_RA2T')
+    # plt.colorbar()
+
+    plt.subplot(414)
+    ax = plt.gca()
+    # ax.set_facecolor('aliceblue')
+    plt.pcolor(um_data['time'], np.squeeze(um_data['height'][0,:]), np.transpose(mask1),
+        cmap = mpl_cm.viridis)
+    # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
+    # plt.plot(data1['time_hrly'][::6], bldepth1[::6], 'k', linewidth = 1.0)
+    ax = plt.gca()
+    nans = ax.get_ylim()
+    plt.ylabel('Z [km]')
+    plt.ylim(ylims)
+    plt.yticks(yticks)
+    ax.set_yticklabels(ytlabels)
+    plt.xlim([dates[0], dates[1]])
+    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+    plt.title('UM_RA2M')
+    # plt.colorbar()
+    plt.xlabel('Date')
+
+    print ('******')
+    print ('')
+    print ('Finished plotting! :)')
+    print ('')
+
+    fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_TWC-MASKTimeseries_pcolor.png'
+    plt.savefig(fileout)
+    plt.close()
+    #############################################################
 
     plt.rc('font',size=MED_SIZE)
     plt.rc('axes',titlesize=LARGE_SIZE)
@@ -6599,7 +6693,7 @@ def main():
     moccha_missing_files = ['20180813_oden_','20180910_oden_']   ### cloud radar not working    #,'20180914_oden_'
 
     ### Set output directory for plots
-    plots_out_dir='/nfs/a96/MOCCHA/working/jutta/plots/CaseStudies/ModelComparison/nointerp'
+    plots_out_dir='/nfs/a96/MOCCHA/working/jutta/plots/CaseStudies/ModelComparison/nointerp/'
     if not os.path.exists(plots_out_dir):
         os.makedirs(plots_out_dir)
 
