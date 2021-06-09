@@ -405,7 +405,7 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, plots_out
     plt.savefig(fileout)
 
 
-def plot_LWCTimeseries(um_data, misc_data, obs_data, plots_out_dir, dates, obs_switch): #, lon, lat):
+def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch): #, lon, lat):
 
     ylims=[0,5]
     yticks=np.arange(0,5e3,1e3)
@@ -524,7 +524,7 @@ def plot_LWCTimeseries(um_data, misc_data, obs_data, plots_out_dir, dates, obs_s
     fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_LWCTimeseries.png'
     plt.savefig(fileout)
 
-def plot_IWCTimeseries(um_data,  misc_data, obs_data, plots_out_dir, dates, obs_switch): #, lon, lat):
+def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch): #, lon, lat):
 
     print ('******')
     print ('')
@@ -6951,8 +6951,8 @@ def main():
     # -------------------------------------------------------------
     #figure = plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates,plots_out_dir )
 
-    figure = plot_LWCTimeseries(um_data, misc_data, obs_data, plots_out_dir, dates, obs_switch)
-    figure = plot_IWCTimeseries(um_data, misc_data, obs_data, plots_out_dir, dates, obs_switch)
+    figure = plot_LWCTimeseries(um_data, misc_data, ra2t_data,obs_data, plots_out_dir, dates, obs_switch)
+    figure = plot_IWCTimeseries(um_data, misc_data, ra2t_data,obs_data, plots_out_dir, dates, obs_switch)
     figure = plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch,nanind,wcind)
     # figure = plot_TWCTesting(um_data, ifs_data, misc_data, obs_data, data1, data2, data3, obs, month_flag, missing_files, doy)
 
