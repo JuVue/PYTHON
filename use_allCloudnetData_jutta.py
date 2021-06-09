@@ -426,9 +426,9 @@ def plot_LWCTimeseries(um_data, misc_data, obs_data, plots_out_dir, dates, obs_s
     plt.rc('xtick',labelsize=MED_SIZE)
     plt.rc('ytick',labelsize=MED_SIZE)
     plt.rc('legend',fontsize=MED_SIZE)
-    plt.figure(figsize=(10,9))
-    plt.subplots_adjust(top = 0.9, bottom = 0.1, right = 1.0, left = 0.1,
-            hspace = 0.4, wspace = 0.05)
+    fig = plt.figure(figsize=(9.5,13))
+    plt.subplots_adjust(top = 0.92, bottom = 0.06, right = 0.92, left = 0.08,
+            hspace = 0.4, wspace = 0.2)
 
     ### define axis instance
     ax = plt.gca()
@@ -541,14 +541,12 @@ def plot_IWCTimeseries(um_data,  misc_data, obs_data, plots_out_dir, dates, obs_
     plt.rc('xtick',labelsize=MED_SIZE)
     plt.rc('ytick',labelsize=MED_SIZE)
     plt.rc('legend',fontsize=MED_SIZE)
-    plt.figure(figsize=(10,8))
-    plt.subplots_adjust(top = 0.9, bottom = 0.1, right = 1.0, left = 0.1,
-            hspace = 0.4, wspace = 0.05)
+    fig = plt.figure(figsize=(9.5,13))
+    plt.subplots_adjust(top = 0.92, bottom = 0.06, right = 0.92, left = 0.08,
+            hspace = 0.4, wspace = 0.2)
 
     ### define axis instance
     ax = plt.gca()
-
-    print (um_data.keys())
 
     #### set flagged um_data to nans
     obs_data['iwc'][obs_data['iwc'] == -999] = np.nan
