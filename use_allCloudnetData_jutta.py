@@ -539,6 +539,12 @@ def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, 
     yticks=np.arange(0,5e3,1e3)
     ytlabels=yticks/1e3
 
+    viridis = mpl_cm.get_cmap('viridis', 256) # nice colormap purple to yellow
+    newcolors = viridis(np.linspace(0, 1, 256)) #assgin new colormap with viridis colors
+    greyclr = np.array([0.1, 0.1, 0.1, 0.1])
+    newcolors[:20, :] = greyclr   # make first 20 colors greyclr
+    newcmp = ListedColormap(newcolors)
+
     print ('******')
     print ('')
     print ('Plotting IWC timeseries for whole drift period:')
