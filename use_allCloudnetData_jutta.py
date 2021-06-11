@@ -6383,6 +6383,16 @@ def main():
 
 
     names = ['20180912_oden_','20180913_oden_']
+    names = ['20180814_oden_','20180815_oden_','20180816_oden_',
+            '20180817_oden_','20180818_oden_','20180819_oden_','20180820_oden_',
+            '20180821_oden_','20180822_oden_','20180823_oden_','20180824_oden_',
+            '20180825_oden_','20180826_oden_','20180827_oden_','20180828_oden_',
+            '20180829_oden_','20180830_oden_','20180831_oden_','20180901_oden_',
+            '20180902_oden_','20180903_oden_','20180904_oden_','20180905_oden_',
+            '20180906_oden_','20180907_oden_','20180908_oden_','20180909_oden_',
+            '20180910_oden_','20180911_oden_','20180912_oden_','20180913_oden_',
+            '20180914_oden_']
+
     sdate = dtime.datetime.strptime('2018091222','%Y%m%d%H')
     edate = dtime.datetime.strptime('2018091315','%Y%m%d%H')
     dates = [date2datenum(sdate),date2datenum(edate)]
@@ -6668,7 +6678,7 @@ def main():
     #obs_data = interpCloudnet(obs_data)
     nanind, nanmask, wcind, wc0ind, lwpind = buildNaNMask(obs_data)
     nanindadv, nanmaskadv, wcindadv, wc0indadv, lwpindadv = buildNaNMaskadv(obs_data)
-
+    embed()
     varlist_obs = ['Cv', 'lwc_adiabatic', 'iwc', 'lwp']
     varlist_um = ['model_Cv_filtered', 'model_lwc', 'model_iwc_filtered', 'model_lwp']
     # print(um_data.keys())
