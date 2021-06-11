@@ -6369,7 +6369,7 @@ def setFlags(obs_data, um_data, misc_data, ra2t_data, obs_var_list, um_var_list,
             ra2t_data[ra2t_var_list[c][j]][ra2t_data[ra2t_var_list[c][j]] == -999] = np.nan
             ra2t_data[ra2t_var_list[c][j]][ra2t_data[ra2t_var_list[c][j]] < 0] = 0.0
 
-    return obs_data, um_data, misc_data, ifs_data, ra2t_data
+    return obs_data, um_data, misc_data,  ra2t_data
 
 ################################################################################
 ################################################################################
