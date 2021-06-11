@@ -318,11 +318,11 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, plots_out
     plt.yticks(yticks)
     ax.set_yticklabels(ytlabels)
     plt.xlim([dates[0], dates[1]])
-#    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
-#    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
-    #ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-    ax.xaxis.set_major_locator(mdates.DayLocator(interval=5))
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%d%m'))
+    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+    #ax.xaxis.set_major_locator(mdates.DayLocator(interval=5))
+    #ax.xaxis.set_major_formatter(mdates.DateFormatter('%d%m'))
     nans = ax.get_ylim()
     ax2 = ax.twinx()
     ax2.set_ylabel('Measurements \n (1 hour sampling)', rotation = 270, labelpad = 35)
@@ -6423,7 +6423,7 @@ def main():
 
     ### -----------------------------------------------------------------
     ### CHOSEN RUN - CLOUDNET DATA
-    cn_um_out_dir = ['cloud-fraction-metum-grid/2018/',
+    cn_um_out_dir = ['cloud-fraction-metum-grid/2018/qual70/',
                      'lwc-scaled-metum-grid/2018/',
                      'iwc-Z-T-metum-grid/2018/']
     cn_obs_out_dir = ['cloud-fraction-metum-grid/2018/',
@@ -6683,22 +6683,23 @@ def main():
     obs_data = interpCloudnet(obs_data)
     nanind, nanmask, wcind, wc0ind, lwpind = buildNaNMask(obs_data)
     nanindadv, nanmaskadv, wcindadv, wc0indadv, lwpindadv = buildNaNMaskadv(obs_data)
+
     varlist_obs = ['Cv', 'lwc_adiabatic', 'iwc', 'lwp']
     varlist_um = ['model_Cv_filtered', 'model_lwc', 'model_iwc_filtered', 'model_lwp']
     # print(um_data.keys())
 
-    # ## remove missing Cv obs timesteps (remove from all)
-    # print(' remove missing Cv obs timesteps (remove from all)')
-    # for c in 0: #range(0, 3):
-    #     um_data[varlist_um[c]][nanind, :] = np.nan
-    #     misc_data[varlist_um[c]][nanind, :] = np.nan
-    #     ra2t_data[varlist_um[c]][nanind, :] = np.nan
-    # ### remove missing water content obs timestep (only remove from water contents)
-    # for c in range(1, 3):
-    #     um_data[varlist_um[c]][wcind, :] = np.nan
-    #     misc_data[varlist_um[c]][wcind, :] = np.nan
-    #     ra2t_data[varlist_um[c]][wcind, :] = np.nan
-    #
+    ## remove missing Cv obs timesteps (remove from all)
+    print(' remove missing Cv obs timesteps (remove from all)')
+    for c in 0: #range(0, 3):
+        um_data[varlist_um[c]][nanind, :] = np.nan
+        misc_data[varlist_um[c]][nanind, :] = np.nan
+        ra2t_data[varlist_um[c]][nanind, :] = np.nan
+    ### remove missing water content obs timestep (only remove from water contents)
+    for c in range(1, 3):
+        um_data[varlist_um[c]][wcind, :] = np.nan
+        misc_data[varlist_um[c]][wcind, :] = np.nan
+        ra2t_data[varlist_um[c]][wcind, :] = np.nan
+
 
     # ### remove zeroed water content on obs timestep (only remove from water contents)
     # for c in range(1, 3):
@@ -6772,9 +6773,9 @@ def main():
     # -------------------------------------------------------------
     figure = plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates,plots_out_dir )
 
-    #figure = plot_LWCTimeseries(um_data, misc_data, ra2t_data,obs_data, plots_out_dir, dates, obs_switch)
-    #figure = plot_IWCTimeseries(um_data, misc_data, ra2t_data,obs_data, plots_out_dir, dates, obs_switch)
-    #figure = plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch,nanind,wcind)
+    figure = plot_LWCTimeseries(um_data, misc_data, ra2t_data,obs_data, plots_out_dir, dates, obs_switch)
+    figure = plot_IWCTimeseries(um_data, misc_data, ra2t_data,obs_data, plots_out_dir, dates, obs_switch)
+    figure = plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch,nanind,wcind)
     # figure = plot_TWCTesting(um_data, ifs_data, misc_data, obs_data, data1, data2, data3, obs, month_flag, missing_files, doy)
 
     # -------------------------------------------------------------
