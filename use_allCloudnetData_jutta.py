@@ -403,7 +403,6 @@ def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, plots_out
     print ('Finished plotting! :)')
     print ('')
     dstr=datenum2date(dates[1])
-    embed()
     fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_CvTimeseries.png'
     plt.savefig(fileout)
 
@@ -6386,20 +6385,20 @@ def main():
 
 
     names = ['20180912_oden_','20180913_oden_']
-    names = ['20180814_oden_','20180815_oden_','20180816_oden_',
-            '20180817_oden_','20180818_oden_','20180819_oden_','20180820_oden_',
-            '20180821_oden_','20180822_oden_','20180823_oden_','20180824_oden_',
-            '20180825_oden_','20180826_oden_','20180827_oden_','20180828_oden_',
-            '20180829_oden_','20180830_oden_','20180831_oden_','20180901_oden_',
-            '20180902_oden_','20180903_oden_','20180904_oden_','20180905_oden_',
-            '20180906_oden_','20180907_oden_','20180908_oden_','20180909_oden_',
-            '20180911_oden_','20180912_oden_','20180913_oden_',
-            '20180914_oden_']
+    # names = ['20180814_oden_','20180815_oden_','20180816_oden_',
+    #         '20180817_oden_','20180818_oden_','20180819_oden_','20180820_oden_',
+    #         '20180821_oden_','20180822_oden_','20180823_oden_','20180824_oden_',
+    #         '20180825_oden_','20180826_oden_','20180827_oden_','20180828_oden_',
+    #         '20180829_oden_','20180830_oden_','20180831_oden_','20180901_oden_',
+    #         '20180902_oden_','20180903_oden_','20180904_oden_','20180905_oden_',
+    #         '20180906_oden_','20180907_oden_','20180908_oden_','20180909_oden_',
+    #         '20180911_oden_','20180912_oden_','20180913_oden_',
+    #         '20180914_oden_']
 
     sdate = dtime.datetime.strptime('2018091222','%Y%m%d%H')
     edate = dtime.datetime.strptime('2018091315','%Y%m%d%H')
-    sdate = dtime.datetime.strptime('2018081400','%Y%m%d%H')
-    edate = dtime.datetime.strptime('2018091500','%Y%m%d%H')
+    # sdate = dtime.datetime.strptime('2018081400','%Y%m%d%H')
+    # edate = dtime.datetime.strptime('2018091500','%Y%m%d%H')
     dates = [date2datenum(sdate),date2datenum(edate)]
     moccha_missing_files = ['20180813_oden_','20180910_oden_']   ### cloud radar not working    #,'20180914_oden_'
 
@@ -6423,10 +6422,10 @@ def main():
 
     ### -----------------------------------------------------------------
     ### CHOSEN RUN - CLOUDNET DATA
-    cn_um_out_dir = ['cloud-fraction-metum-grid/2018/qual70/',
+    cn_um_out_dir = ['cloud-fraction-metum-grid/2018/',
                      'lwc-scaled-metum-grid/2018/',
                      'iwc-Z-T-metum-grid/2018/']
-    cn_obs_out_dir = ['cloud-fraction-metum-grid/2018/',
+    cn_obs_out_dir = ['cloud-fraction-metum-grid/2018/qual70/',
                         'lwc-adiabatic-metum-grid/2018/',
                         'iwc-Z-T-metum-grid/2018/']
     ######## lwc-adiabatic-metum-grid/2018/
