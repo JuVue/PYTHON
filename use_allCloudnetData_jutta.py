@@ -6464,7 +6464,7 @@ def main():
         cn_filename_ra2t = [cn_um_dir + out_dir3 + cn_um_out_dir[0] + names[i] + cn_um_out_dir[0][-31:-6] + '.nc',
                         cn_um_dir + out_dir3 + cn_um_out_dir[1] + names[i] + cn_um_out_dir[1][-27:-6] + '.nc',
                         cn_um_dir + out_dir3 + cn_um_out_dir[2] + names[i] + cn_um_out_dir[2][-24:-6] + '.nc']
-        cn_filename_obs = [cn_obs_dir + cn_obs_out_dir[0] + names[i] + cn_obs_out_dir[0][:-6] + '.nc',
+        cn_filename_obs = [cn_obs_dir + cn_obs_out_dir[0] + names[i] + cn_obs_out_dir[0][:-13] + '.nc',
                         cn_obs_dir + cn_obs_out_dir[1] + names[i] + cn_obs_out_dir[1][:-6] + '.nc',
                         cn_obs_dir + cn_obs_out_dir[2] + names[i] + cn_obs_out_dir[2][:-6] + '.nc']
         #print (cn_filename_um)
