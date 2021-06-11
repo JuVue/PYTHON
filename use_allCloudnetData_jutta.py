@@ -6689,7 +6689,7 @@ def main():
 
     ## remove missing Cv obs timesteps (remove from all)
     print(' remove missing Cv obs timesteps (remove from all)')
-    for c in 0: #range(0, 3):
+    for c in range(0, 1):
         um_data[varlist_um[c]][nanind, :] = np.nan
         misc_data[varlist_um[c]][nanind, :] = np.nan
         ra2t_data[varlist_um[c]][nanind, :] = np.nan
