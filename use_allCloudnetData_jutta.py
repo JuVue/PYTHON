@@ -6371,11 +6371,11 @@ def setFlags(obs_data, um_data, misc_data, ra2t_data, obs_var_list, um_var_list,
             ra2t_data[ra2t_var_list[c][j]][ra2t_data[ra2t_var_list[c][j]] == -999] = np.nan
             ra2t_data[ra2t_var_list[c][j]][ra2t_data[ra2t_var_list[c][j]] < 0] = 0.0
 
-    for c in range(0,2):
-        for j in range(0,len(monc_var_list[c])):
-            monc_data[monc_var_list[c][j]][monc_data[monc_var_list[c][j]]== -999] = np.nan
+    # for c in range(0,2):
+    #     for j in range(0,len(monc_var_list[c])):
+    #         monc_data[monc_var_list[c][j]][monc_data[monc_var_list[c][j]]== -999] = np.nan
 
-    return obs_data, um_data, misc_data,  ra2t_data, monc_data
+    return obs_data, um_data, misc_data,  ra2t_data
 
 ################################################################################
 ################################################################################
@@ -6701,7 +6701,7 @@ def main():
     monc_data.pop('time_series_2_600')
 
 
-
+    embed()
 
 
     ##################################################################################################################################
@@ -6709,7 +6709,7 @@ def main():
     ## maximise obs data available and build mask for available data
     ## -------------------------------------------------------------
     print('setting missing data to nan and interpolate missing obs')
-    obs_data, um_data, misc_data, ra2t_data = setFlags(obs_data, um_data, misc_data, ra2t_data, monc_data,obs_var_list, um_var_list, misc_var_list, ra2t_var_list,monc_varlist)
+    obs_data, um_data, misc_data, ra2t_data = setFlags(obs_data, um_data, misc_data, ra2t_data, obs_var_list, um_var_list, misc_var_list, ra2t_var_list)
     #obs_data = interpCloudnet(obs_data)
     nanind, nanmask, wcind, wc0ind, lwpind = buildNaNMask(obs_data)
     nanindadv, nanmaskadv, wcindadv, wc0indadv, lwpindadv = buildNaNMaskadv(obs_data)
