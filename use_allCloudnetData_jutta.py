@@ -783,7 +783,7 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-    plt.title('UM_CASIM-AeroProf')
+    plt.title('UM_CASIM')
     # plt.colorbar()
 
     plt.subplot(413)
@@ -937,11 +937,11 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     plt.subplot(411)
     ax = plt.gca()
     # ax.set_facecolor('aliceblue')
-    #img = plt.contourf(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(mask0),
-    #    np.arange(0,1.01,0.1),
-    #    cmap = mpl_cm.viridis)
-    img = plt.pcolor(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(mask0),
-                cmap = mpl_cm.viridis,vmin=0,vmax=0.1)
+    img = plt.contourf(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(mask0),
+        np.arange(0,1.01,0.1),
+        cmap = mpl_cm.viridis)
+    #img = plt.pcolor(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(mask0),
+    #            cmap = mpl_cm.viridis,vmin=0,vmax=0.1)
     # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
     ax = plt.gca()
     nans = ax.get_ylim()
@@ -6679,7 +6679,7 @@ def main():
     ## -------------------------------------------------------------
     print('setting missing data to nan and interpolate missing obs')
     obs_data, um_data, misc_data, ra2t_data = setFlags(obs_data, um_data, misc_data, ra2t_data, obs_var_list, um_var_list, misc_var_list, ra2t_var_list)
-    obs_data = interpCloudnet(obs_data)
+    #obs_data = interpCloudnet(obs_data)
     nanind, nanmask, wcind, wc0ind, lwpind = buildNaNMask(obs_data)
     nanindadv, nanmaskadv, wcindadv, wc0indadv, lwpindadv = buildNaNMaskadv(obs_data)
 
@@ -6771,7 +6771,6 @@ def main():
     # Cloudnet plot: Plot contour timeseries
     # -------------------------------------------------------------
     figure = plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates,plots_out_dir )
-
     figure = plot_LWCTimeseries(um_data, misc_data, ra2t_data,obs_data, plots_out_dir, dates, obs_switch)
     figure = plot_IWCTimeseries(um_data, misc_data, ra2t_data,obs_data, plots_out_dir, dates, obs_switch)
     figure = plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch,nanind,wcind)
