@@ -6684,7 +6684,7 @@ def main():
     monc_var_list =[['time_series_2_600','time_series_20_60' 'z', 'LWP_mean','IWP_mean','SWP_mean','TOT_IWP_mean','GWP_mean'],
                     ['theta_mean','total_cloud_fraction', 'liquid_cloud_fraction','ice_cloud_fraction',
                     'vapour_mmr_mean','liquid_mmr_mean','rain_mmr_mean','ice_mmr_mean','snow_mmr_mean',
-                    'graupel_mmr_mean']
+                    'graupel_mmr_mean']]
 
 
     ncm = {}
