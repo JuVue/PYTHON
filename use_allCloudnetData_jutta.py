@@ -1031,96 +1031,96 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     plt.savefig(fileout)
     plt.close()
 
-    #####TCW MASK pcolor #############################################
-    fig = plt.figure(figsize=(9.5,13))
-    plt.subplots_adjust(top = 0.9, bottom = 0.06, right = 0.98, left = 0.08,
-            hspace = 0.4, wspace = 0.2)
-
-    plt.subplot(411)
-    ax = plt.gca()
-    img = plt.pcolor(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(mask0),
-                cmap = mpl_cm.viridis)
-    ax = plt.gca()
-    nans = ax.get_ylim()
-    plt.ylabel('Z [km]')
-    plt.ylim(ylims)
-    plt.yticks(yticks)
-    ax.set_yticklabels(ytlabels)
-    plt.xlim([dates[0], dates[1]])
-    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
-    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-    plt.title('Obs-' + obs_switch + 'grid')
-    cbaxes = fig.add_axes([0.225, 0.95, 0.6, 0.015])
-    cb = plt.colorbar(img, cax = cbaxes, orientation = 'horizontal')
-    plt.title('Cloud mask')
-
-    plt.subplot(412)
-    ax = plt.gca()
-    plt.pcolor(misc_data['time'], np.squeeze(misc_data['height'][0,:]), np.transpose(mask2),
-        cmap = mpl_cm.viridis)
-    ax = plt.gca()
-    nans = ax.get_ylim()
-    plt.ylabel('Z [km]')
-    plt.ylim(ylims)
-    plt.yticks(yticks)
-    ax.set_yticklabels(ytlabels)
-    plt.xlim([dates[0], dates[1]])
-    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
-    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-    plt.title('UM_CASIM')
-    # plt.colorbar()
-
-    plt.subplot(413)
-    ax = plt.gca()
-    # ax.set_facecolor('aliceblue')
-    plt.pcolor(ra2t_data['time'], np.squeeze(ra2t_data['height'][0,:]), np.transpose(mask4),
-        cmap = mpl_cm.viridis)
-    # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
-    # plt.plot(data4['time_hrly'][::6], bldepth4[::6], 'k', linewidth = 1.0)
-    ax = plt.gca()
-    nans = ax.get_ylim()
-    plt.ylabel('Z [km]')
-    plt.ylim(ylims)
-    plt.yticks(yticks)
-    ax.set_yticklabels(ytlabels)
-    plt.xlim([dates[0], dates[1]])
-    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
-    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-    plt.title('UM_RA2T')
-    # plt.colorbar()
-
-    plt.subplot(414)
-    ax = plt.gca()
-    # ax.set_facecolor('aliceblue')
-    plt.pcolor(um_data['time'], np.squeeze(um_data['height'][0,:]), np.transpose(mask1),
-        cmap = mpl_cm.viridis)
-    # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
-    # plt.plot(data1['time_hrly'][::6], bldepth1[::6], 'k', linewidth = 1.0)
-    ax = plt.gca()
-    nans = ax.get_ylim()
-    plt.ylabel('Z [km]')
-    plt.ylim(ylims)
-    plt.yticks(yticks)
-    ax.set_yticklabels(ytlabels)
-    plt.xlim([dates[0], dates[1]])
-    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
-    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-    plt.title('UM_RA2M')
-    # plt.colorbar()
-    plt.xlabel('Date')
-
-    print ('******')
-    print ('')
-    print ('Finished plotting! :)')
-    print ('')
-
-    fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_TWC-MASKTimeseries_pcolor.png'
-    plt.savefig(fileout)
-    plt.close()
+    # #####TCW MASK pcolor #############################################
+    # fig = plt.figure(figsize=(9.5,13))
+    # plt.subplots_adjust(top = 0.9, bottom = 0.06, right = 0.98, left = 0.08,
+    #         hspace = 0.4, wspace = 0.2)
+    #
+    # plt.subplot(411)
+    # ax = plt.gca()
+    # img = plt.pcolor(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(mask0),
+    #             cmap = mpl_cm.viridis)
+    # ax = plt.gca()
+    # nans = ax.get_ylim()
+    # plt.ylabel('Z [km]')
+    # plt.ylim(ylims)
+    # plt.yticks(yticks)
+    # ax.set_yticklabels(ytlabels)
+    # plt.xlim([dates[0], dates[1]])
+    # ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    # ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    # ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+    # plt.title('Obs-' + obs_switch + 'grid')
+    # cbaxes = fig.add_axes([0.225, 0.95, 0.6, 0.015])
+    # cb = plt.colorbar(img, cax = cbaxes, orientation = 'horizontal')
+    # plt.title('Cloud mask')
+    #
+    # plt.subplot(412)
+    # ax = plt.gca()
+    # plt.pcolor(misc_data['time'], np.squeeze(misc_data['height'][0,:]), np.transpose(mask2),
+    #     cmap = mpl_cm.viridis)
+    # ax = plt.gca()
+    # nans = ax.get_ylim()
+    # plt.ylabel('Z [km]')
+    # plt.ylim(ylims)
+    # plt.yticks(yticks)
+    # ax.set_yticklabels(ytlabels)
+    # plt.xlim([dates[0], dates[1]])
+    # ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    # ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    # ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+    # plt.title('UM_CASIM')
+    # # plt.colorbar()
+    #
+    # plt.subplot(413)
+    # ax = plt.gca()
+    # # ax.set_facecolor('aliceblue')
+    # plt.pcolor(ra2t_data['time'], np.squeeze(ra2t_data['height'][0,:]), np.transpose(mask4),
+    #     cmap = mpl_cm.viridis)
+    # # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
+    # # plt.plot(data4['time_hrly'][::6], bldepth4[::6], 'k', linewidth = 1.0)
+    # ax = plt.gca()
+    # nans = ax.get_ylim()
+    # plt.ylabel('Z [km]')
+    # plt.ylim(ylims)
+    # plt.yticks(yticks)
+    # ax.set_yticklabels(ytlabels)
+    # plt.xlim([dates[0], dates[1]])
+    # ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    # ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    # ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+    # plt.title('UM_RA2T')
+    # # plt.colorbar()
+    #
+    # plt.subplot(414)
+    # ax = plt.gca()
+    # # ax.set_facecolor('aliceblue')
+    # plt.pcolor(um_data['time'], np.squeeze(um_data['height'][0,:]), np.transpose(mask1),
+    #     cmap = mpl_cm.viridis)
+    # # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
+    # # plt.plot(data1['time_hrly'][::6], bldepth1[::6], 'k', linewidth = 1.0)
+    # ax = plt.gca()
+    # nans = ax.get_ylim()
+    # plt.ylabel('Z [km]')
+    # plt.ylim(ylims)
+    # plt.yticks(yticks)
+    # ax.set_yticklabels(ytlabels)
+    # plt.xlim([dates[0], dates[1]])
+    # ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    # ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    # ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+    # plt.title('UM_RA2M')
+    # # plt.colorbar()
+    # plt.xlabel('Date')
+    #
+    # print ('******')
+    # print ('')
+    # print ('Finished plotting! :)')
+    # print ('')
+    #
+    # fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_TWC-MASKTimeseries_pcolor.png'
+    # plt.savefig(fileout)
+    # plt.close()
     #############################################################
 
     plt.rc('font',size=MED_SIZE)
@@ -1176,7 +1176,7 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
 
     plt.xlabel('TWC Cloud mask')
     plt.ylabel('Z [km]')
-    plt.ylim([0,9000])
+    plt.ylim([0,4000])
     plt.yticks(np.arange(0,9.01e3,0.5e3))
     ax1.set_yticklabels([0,' ',1,' ',2,' ',3,' ',4,' ',5,' ',6,' ',7,' ',8,' ',9])
     plt.xlim([0,1])
@@ -6371,7 +6371,11 @@ def setFlags(obs_data, um_data, misc_data, ra2t_data, obs_var_list, um_var_list,
             ra2t_data[ra2t_var_list[c][j]][ra2t_data[ra2t_var_list[c][j]] == -999] = np.nan
             ra2t_data[ra2t_var_list[c][j]][ra2t_data[ra2t_var_list[c][j]] < 0] = 0.0
 
-    return obs_data, um_data, misc_data,  ra2t_data
+    for c in range(0,2):
+        for j in range(0,len(monc_var_list[c])):
+            monc_data[monc_var_list[c][j]][monc_data[monc_var_list[c][j]]== -999] = np.nan
+
+    return obs_data, um_data, misc_data,  ra2t_data, monc_data
 
 ################################################################################
 ################################################################################
@@ -6414,6 +6418,8 @@ def main():
     #obs_root_dir = '/gws/nopw/j04/ncas_weather/gyoung/MOCCHA/ODEN/DATA/'
     cn_obs_dir = '/nfs/a96/MOCCHA/working/jutta/CloudNet/Oden/output/Halo/measurements_V7/'
     cn_um_dir = '/nfs/a96/MOCCHA/working/jutta/CloudNet/Oden/output/metum/V7/'
+    cn_monc_dir = '/nfs/a96/MOCCHA/working/gillian/MONC_CASES/MOCCHA/output/1_control/'
+    monc_filename = cn_monc_dir + 'moccha_casim_dg_50400.nc'
     ### -----------------------------------------------------------------
     ### CHOSEN RUN - MODEL DATA
     out_dir1 = '25_u-cc568_RA2M_CON/'
@@ -6443,7 +6449,7 @@ def main():
     ###                 model performance.
 
     # # -------------------------------------------------------------
-    # # Load cube
+    # # Load cloudnet data
     # # -------------------------------------------------------------
     print ('******')
     print ('')
@@ -6661,10 +6667,6 @@ def main():
     ra2t_data['time'] = time_ra2t
     obs_data['time'] = time_obs
 
-    # print (ifs_data['time'].shape)
-    # print (obs_data['time'].shape)
-    # plt.plot(obs_data['time'],ifs_data['time']);plt.show()
-
     #################################################################
     ### if RADAR flag used, force 2D height array for function compatibility
     #################################################################
@@ -6673,12 +6675,41 @@ def main():
     #     for t in range(0,len(obs_data['time'])): tmp_height[t,:] = obs_data['height'][:]
     #     obs_data['height'] = tmp_height
 
+    #################################################################
+    ###     READ IN MONC DATA
+    #################################################################
+    print ('Loading monc results:')
+    print ('')
+    ###1d variables, 2d variables ( 200x84)
+    monc_var_list =[['time_series_2_600','time_series_20_60' 'z', 'LWP_mean','IWP_mean','SWP_mean','TOT_IWP_mean','GWP_mean'],
+                    ['theta_mean','total_cloud_fraction', 'liquid_cloud_fraction','ice_cloud_fraction',
+                    'vapour_mmr_mean','liquid_mmr_mean','rain_mmr_mean','ice_mmr_mean','snow_mmr_mean',
+                    'graupel_mmr_mean']
+
+
+    ncm = {}
+    monc_data = {}
+    ncm = Dataset(monc_filename,'r')
+
+    for c in range(0,2):
+        for j in range(0,len(monc_var_list[c])):
+            monc_data[monc_var_list[c][j]] = ncm.variables[monc_var_list[c][j]][:]
+
+    monc_data['time1']=monc_data['time_series_20_60']
+    monc_data['time2']=monc_data['time_series_2_600']
+    monc_data.pop('time_series_20_60')
+    monc_data.pop('time_series_2_600')
+
+
+
+
+
     ##################################################################################################################################
     ## -------------------------------------------------------------
     ## maximise obs data available and build mask for available data
     ## -------------------------------------------------------------
     print('setting missing data to nan and interpolate missing obs')
-    obs_data, um_data, misc_data, ra2t_data = setFlags(obs_data, um_data, misc_data, ra2t_data, obs_var_list, um_var_list, misc_var_list, ra2t_var_list)
+    obs_data, um_data, misc_data, ra2t_data = setFlags(obs_data, um_data, misc_data, ra2t_data, monc_data,obs_var_list, um_var_list, misc_var_list, ra2t_var_list,monc_varlist)
     #obs_data = interpCloudnet(obs_data)
     nanind, nanmask, wcind, wc0ind, lwpind = buildNaNMask(obs_data)
     nanindadv, nanmaskadv, wcindadv, wc0indadv, lwpindadv = buildNaNMaskadv(obs_data)
