@@ -398,7 +398,8 @@ def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates, plots_out_
     ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-    plt.xlabel('Date')
+    if numsp ==4:
+        plt.xlabel('Date')
     nans = ax.get_ylim()
     ax2 = ax.twinx()
     ax2.set_ylabel('UM_RA2M', rotation = 270, labelpad = 17)
@@ -408,7 +409,7 @@ def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates, plots_out_
         plt.subplot(numsp,1,5)
         ax = plt.gca()
         # ax.set_facecolor('aliceblue')
-        plt.contourf(monc_data['time2'], np.squeeze(monc_data['z'][:]), np.transpose(monc_data['total_cloud_fraction']),
+        plt.contourf(monc_data['time2']/60/60, np.squeeze(monc_data['z'][:]), np.transpose(monc_data['total_cloud_fraction']),
             np.arange(0,1.1,0.1),
             cmap = newcmp,
             zorder = 1)
@@ -418,15 +419,13 @@ def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates, plots_out_
         plt.ylim(ylims)
         plt.yticks(yticks)
         ax.set_yticklabels(ytlabels)
-        embed()
         #plt.xlim(monc_data['time2']/60/60])
-        ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
-        ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
-        ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-        plt.xlabel('Date')
+        ax.xaxis.set_minor_locator(ticker.MultipleLocator(1))
+        ax.xaxis.set_major_locator(ticker.MultipleLocator(2))
+        plt.xlabel('Time (UTC)')
         nans = ax.get_ylim()
         ax2 = ax.twinx()
-        ax2.set_ylabel('UM_RA2M', rotation = 270, labelpad = 17)
+        ax2.set_ylabel('MONC', rotation = 270, labelpad = 17)
         ax2.set_yticks([])
 
         print ('******')
@@ -434,9 +433,12 @@ def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates, plots_out_
         print ('Finished plotting! :)')
         print ('')
         dstr=datenum2date(dates[1])
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_CvTimeseries.png'
+        if numsp ==4:
+            fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_CvTimeseries.png'
+        elif numsp==5:
+            fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_MONC_CvTimeseries.png'
         plt.savefig(fileout)
-
+        plt.show()
 def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch): #, lon, lat):
 
     ylims=[0,5]
