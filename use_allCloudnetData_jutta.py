@@ -6429,7 +6429,7 @@ def main():
     #         '20180911_oden_','20180912_oden_','20180913_oden_',
     #         '20180914_oden_']
 
-    sdate = dtime.datetime.strptime('2018091301','%Y%m%d%H')
+    sdate = dtime.datetime.strptime('2018091300','%Y%m%d%H')
     edate = dtime.datetime.strptime('2018091314','%Y%m%d%H')
     # sdate = dtime.datetime.strptime('2018081400','%Y%m%d%H')
     # edate = dtime.datetime.strptime('2018091500','%Y%m%d%H')
@@ -6440,7 +6440,7 @@ def main():
     monc_spin = 6 *60 *60
 
     ### Set output directory for plots
-    plots_out_dir='/nfs/a96/MOCCHA/working/jutta/plots/CaseStudies/ModelComparison/allinterp'
+    plots_out_dir='/nfs/a96/MOCCHA/working/jutta/plots/CaseStudies/ModelComparison/allinterp/'
     if not os.path.exists(plots_out_dir):
         os.makedirs(plots_out_dir)
 
