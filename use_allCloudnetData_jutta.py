@@ -268,8 +268,8 @@ def readfile(filename):
     print ('Obs = ')
     print (np.nanmean(obs_data['Cv'][:,Zindex[0]],0))
 
-def plot_CvTimeseries(um_data,  misc_data, ra2t_data, obs_data, dates, plots_out_dir):
-
+def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates, plots_out_dir, **kwargs):
+    embed()
     ylims=[0,5]
     yticks=np.arange(0,5e3,1e3)
     ytlabels=yticks/1e3
@@ -6387,7 +6387,6 @@ def main():
     print ('Start: ' + time.strftime("%c"))
     print ('')
 
-
     names = ['20180912_oden_','20180913_oden_']
     # names = ['20180814_oden_','20180815_oden_','20180816_oden_',
     #         '20180817_oden_','20180818_oden_','20180819_oden_','20180820_oden_',
@@ -6399,12 +6398,15 @@ def main():
     #         '20180911_oden_','20180912_oden_','20180913_oden_',
     #         '20180914_oden_']
 
-    sdate = dtime.datetime.strptime('2018091222','%Y%m%d%H')
-    edate = dtime.datetime.strptime('2018091315','%Y%m%d%H')
+    sdate = dtime.datetime.strptime('2018091301','%Y%m%d%H')
+    edate = dtime.datetime.strptime('2018091314','%Y%m%d%H')
     # sdate = dtime.datetime.strptime('2018081400','%Y%m%d%H')
     # edate = dtime.datetime.strptime('2018091500','%Y%m%d%H')
     dates = [date2datenum(sdate),date2datenum(edate)]
     moccha_missing_files = ['20180813_oden_','20180910_oden_']   ### cloud radar not working    #,'20180914_oden_'
+
+    #---- MONC SPIN UP TIME
+    monc_spin = 6 *60 *60
 
     ### Set output directory for plots
     plots_out_dir='/nfs/a96/MOCCHA/working/jutta/plots/CaseStudies/ModelComparison/nointerp/'
@@ -6415,7 +6417,6 @@ def main():
     obs_switch = 'UM'
 
     um_root_dir = '/nfs/a96/MOCCHA/working/jutta/CloudNet/Oden/data/calibrated/metum/'
-    #obs_root_dir = '/gws/nopw/j04/ncas_weather/gyoung/MOCCHA/ODEN/DATA/'
     cn_obs_dir = '/nfs/a96/MOCCHA/working/jutta/CloudNet/Oden/output/Halo/measurements_V7/'
     cn_um_dir = '/nfs/a96/MOCCHA/working/jutta/CloudNet/Oden/output/metum/V7/'
     cn_monc_dir = '/nfs/a96/MOCCHA/working/gillian/MONC_CASES/MOCCHA/output/1_control/'
@@ -6434,6 +6435,8 @@ def main():
     cn_obs_out_dir = ['cloud-fraction-metum-grid/2018/qual70/',
                         'lwc-adiabatic-metum-grid/2018/',
                         'iwc-Z-T-metum-grid/2018/']
+
+
     ######## lwc-adiabatic-metum-grid/2018/
     ########-> liquid water content derived using measurements averaged on to model grid
     ### cloud-fraction-metum-grid/2018/ + cloud-fraction-ecmwf-grid/2018/
@@ -6646,7 +6649,6 @@ def main():
         for c in range(0,3): cn_nc2[c].close()
         for c in range(0,3): cn_nc3[c].close()
 
-    # print (lwp.shape)
         # print (time_obs.shape)
         # print (time_ifs.shape)
         # print (obs_data['lwp'].shape)
@@ -6655,7 +6657,7 @@ def main():
         # print (len(moccha_names))
         # obs_data['lwp'] = lwp
 
-        print ('Loaded! :D')
+        print ('Loaded!')
         print ('')
         print ('*************** NEXT:')
         print ('')
@@ -6686,23 +6688,23 @@ def main():
                     'vapour_mmr_mean','liquid_mmr_mean','rain_mmr_mean','ice_mmr_mean','snow_mmr_mean',
                     'graupel_mmr_mean']]
 
+    print(monc_var_list)
+
 
     ncm = {}
     monc_data = {}
     ncm = Dataset(monc_filename,'r')
     for var in ncm.variables: print (var)
-    embed()
     for c in range(0,2):
         for j in range(0,len(monc_var_list[c])):
             monc_data[monc_var_list[c][j]] = ncm.variables[monc_var_list[c][j]][:]
 
-    monc_data['time1']=monc_data['time_series_20_60']
-    monc_data['time2']=monc_data['time_series_2_600']
-    monc_data.pop('time_series_20_60')
-    monc_data.pop('time_series_2_600')
+    monc_data['time1']=monc_data['time_series_2_60']
+    monc_data['time2']=monc_data['time_series_20_600']
+    monc_data.pop('time_series_2_60')
+    monc_data.pop('time_series_20_600')
 
-
-    embed()
+    print ('Loaded!')
 
 
     ##################################################################################################################################
@@ -6802,7 +6804,7 @@ def main():
     # -------------------------------------------------------------
     # Cloudnet plot: Plot contour timeseries
     # -------------------------------------------------------------
-    figure = plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates,plots_out_dir )
+    figure = plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates,plots_out_dir ,monc_data)
     figure = plot_LWCTimeseries(um_data, misc_data, ra2t_data,obs_data, plots_out_dir, dates, obs_switch)
     figure = plot_IWCTimeseries(um_data, misc_data, ra2t_data,obs_data, plots_out_dir, dates, obs_switch)
     figure = plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch,nanind,wcind)
