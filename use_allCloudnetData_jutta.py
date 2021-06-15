@@ -6739,14 +6739,14 @@ def main():
     id1 =np.argwhere(monc_data['time1']<=monc_spin)
     id2 =np.argwhere(monc_data['time2']<=monc_spin)
     for j in range(0,len(monc_var_list)):
-        if any(np.array(monc_data[monc_var_list[j]].shape) == len(monc_data['time1']))
+        if any(np.array(monc_data[monc_var_list[j]].shape) == len(monc_data['time1'])):
             monc_data[monc_var_list[j]][id1] = np.nan
-        if any(np.array(monc_data[monc_var_list[j]].shape) == len(monc_data['time2']))
+        if any(np.array(monc_data[monc_var_list[j]].shape) == len(monc_data['time2'])):
             tmp=np.argwhere(np.array(monc_data[monc_var_list[j]].shape) == len(monc_data['time2']))
             id=np.where(tmp)[0]
-            if id == 0
+            if id == 0:
                 monc_data[monc_var_list[j][id]][id2] = np.NaN
-            if id == 1
+            if id == 1:
                 monc_data[monc_var_list[j][id2]][id] = np.NaN
 
 
