@@ -270,8 +270,11 @@ def readfile(filename):
 
 def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates, plots_out_dir, **args):
 
+    num_sp=4
+    pltmonc=False
     if isinstance(args,dict):
         monc_data=args[list(args.keys())[0]]
+        num_sp = 5
 
     ylims=[0,5]
     yticks=np.arange(0,5e3,1e3)
@@ -281,7 +284,6 @@ def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates, plots_out_
     print ('')
     print ('Plotting Cv timeseries for whole drift period:')
     print ('')
-
 
     SMALL_SIZE = 12
     MED_SIZE = 15
@@ -306,7 +308,7 @@ def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates, plots_out_
     newcolors[:20, :] = greyclr   # make first 20 colors greyclr
     newcmp = ListedColormap(newcolors)
 
-    plt.subplot(411)
+    plt.subplot(numsp,1,1)
     ax = plt.gca()
     # ax.set_facecolor('aliceblue')
     img = plt.contourf(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(obs_data['Cv']),
@@ -335,7 +337,7 @@ def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates, plots_out_
     plt.title('C$_{V}$')
     # plt.colorbar()
 
-    plt.subplot(412)
+    plt.subplot(numsp,1,2)
     ax = plt.gca()
     # ax.set_facecolor('aliceblue')
     plt.contourf(misc_data['time'], np.squeeze(misc_data['height'][0,:]), np.transpose(misc_data['model_Cv_filtered']),
@@ -355,7 +357,7 @@ def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates, plots_out_
     ax2.set_ylabel('UM_CASIM', rotation = 270, labelpad = 17)
     ax2.set_yticks([])
 
-    plt.subplot(413)
+    plt.subplot(numsp,1,3)
     ax = plt.gca()
     # ax.set_facecolor('aliceblue')
     plt.contourf(ra2t_data['time'], np.squeeze(ra2t_data['height'][0,:]), np.transpose(ra2t_data['model_Cv_filtered']),
@@ -378,7 +380,7 @@ def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates, plots_out_
     ax2.set_yticks([])
 
 
-    plt.subplot(414)
+    plt.subplot(numsp,1,4)
     ax = plt.gca()
     # ax.set_facecolor('aliceblue')
     plt.contourf(um_data['time'], np.squeeze(um_data['height'][0,:]), np.transpose(um_data['model_Cv_filtered']),
@@ -401,13 +403,38 @@ def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates, plots_out_
     ax2.set_ylabel('UM_RA2M', rotation = 270, labelpad = 17)
     ax2.set_yticks([])
 
-    print ('******')
-    print ('')
-    print ('Finished plotting! :)')
-    print ('')
-    dstr=datenum2date(dates[1])
-    fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_CvTimeseries.png'
-    plt.savefig(fileout)
+    if num_sp == 5:
+        plt.subplot(numsp,1,4)
+        ax = plt.gca()
+        # ax.set_facecolor('aliceblue')
+        plt.contourf(monc_data['time2'], np.squeeze(monc_data['z'][0,:]), np.transpose(monc_data['total_cloud_fraction']),
+            np.arange(0,1.1,0.1),
+            cmap = newcmp,
+            zorder = 1)
+        # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
+        # plt.plot(data1['time_hrly'][::6], bldepth1[::6], 'k', linewidth = 1.0)
+        plt.ylabel('Z [km]')
+        plt.ylim(ylims)
+        plt.yticks(yticks)
+        ax.set_yticklabels(ytlabels)
+        embed()
+        #plt.xlim(monc_data['time2']/60/60])
+        ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+        ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+        plt.xlabel('Date')
+        nans = ax.get_ylim()
+        ax2 = ax.twinx()
+        ax2.set_ylabel('UM_RA2M', rotation = 270, labelpad = 17)
+        ax2.set_yticks([])
+
+        print ('******')
+        print ('')
+        print ('Finished plotting! :)')
+        print ('')
+        dstr=datenum2date(dates[1])
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_CvTimeseries.png'
+        plt.savefig(fileout)
 
 def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch): #, lon, lat):
 
@@ -6707,14 +6734,20 @@ def main():
     print ('Loaded!')
     embed()
     monc_var_list = list(monc_data.keys())
-    # ## remove spin up time from monc data1
-    # id1 =np.argwhere(monc_data['time1']<=monc_spin)
-    # id2 =np.argwhere(monc_data['time2']<=monc_spin)
-    # for j in range(0,len(monc_var_list)):
-    #     if any(np.size(monc_data[monc_var_list[j]]) == len(monc_data['time1']))
-    #         monc_data[monc_var_list[c][j]][id1] = np.NaN
-    #     if any(np.size(monc_data[monc_var_list[j]]) == len(monc_data['time1']))
-    #         monc_data[monc_var_list[c][j]][id2] = np.NaN
+
+    ## remove spin up time from monc data1
+    id1 =np.argwhere(monc_data['time1']<=monc_spin)
+    id2 =np.argwhere(monc_data['time2']<=monc_spin)
+    for j in range(0,len(monc_var_list)):
+        if any(np.array(monc_data[monc_var_list[j]].shape)) == len(monc_data['time1']))
+            monc_data[monc_var_list[c][j]][id1] = np.NaN
+        if any(np.array(monc_data[monc_var_list[j]].shape) == len(monc_data['time2']))
+            tmp=np.argwhere(np.array(monc_data[monc_var_list[j]].shape) == len(monc_data['time2']))
+            id=np.where(tmp)[0]
+            if id == 0
+                monc_data[monc_var_list[j][id]][id2] = np.NaN
+            if id == 1
+                monc_data[monc_var_list[j][id2]][id] = np.NaN
 
 
 
@@ -6816,7 +6849,7 @@ def main():
     # -------------------------------------------------------------
     # Cloudnet plot: Plot contour timeseries
     # -------------------------------------------------------------
-    figure = plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates,plots_out_dir)# ,monc_data=monc_data)
+    figure = plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates,plots_out_dir ,monc_data=monc_data)
     #figure = plot_LWCTimeseries(um_data, misc_data, ra2t_data,obs_data, plots_out_dir, dates, obs_switch)
     #figure = plot_IWCTimeseries(um_data, misc_data, ra2t_data,obs_data, plots_out_dir, dates, obs_switch)
     #figure = plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch,nanind,wcind)
