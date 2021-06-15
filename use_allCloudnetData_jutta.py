@@ -6320,7 +6320,8 @@ def buildNaNMask(obs_data):
     wc0index = np.zeros([np.size(obs_data['time'])])
     lwpindex = np.zeros([np.size(obs_data['time'])])
     # print(nanindex.shape)
-    for i in range(0,len(obs_data['time'])):
+    embed()
+    for i in range(len(obs_data['time'])):
         if np.isnan(np.nanmean(obs_data['Cv'][i,:], 0)):       ## if there are only nans in the time profile
             nanmask[i,:] = 1.0
             #nanmask[i-1,:] = 1.0   ##why setting -1 and +1 to nan???
@@ -6760,7 +6761,7 @@ def main():
     obs_data, um_data, misc_data, ra2t_data = setFlags(obs_data, um_data, misc_data, ra2t_data, obs_var_list, um_var_list, misc_var_list, ra2t_var_list)
     #obs_data = interpCloudnet(obs_data)
     nanind, nanmask, wcind, wc0ind, lwpind = buildNaNMask(obs_data)
-    nanindadv, nanmaskadv, wcindadv, wc0indadv, lwpindadv = buildNaNMaskadv(obs_data)
+    #nanindadv, nanmaskadv, wcindadv, wc0indadv, lwpindadv = buildNaNMaskadv(obs_data)
 
     varlist_obs = ['Cv', 'lwc_adiabatic', 'iwc', 'lwp']
     varlist_um = ['model_Cv_filtered', 'model_lwc', 'model_iwc_filtered', 'model_lwp']
