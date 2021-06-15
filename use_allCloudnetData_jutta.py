@@ -5,9 +5,9 @@ from __future__ import print_function
 import time
 import datetime as dtime
 
-import numpy as np
 import pandas as pd
 from netCDF4 import Dataset
+import numpy as np
 
 # import diags_MOCCHA as diags
 # import diags_varnames as varnames
