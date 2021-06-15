@@ -6690,7 +6690,8 @@ def main():
     ncm = {}
     monc_data = {}
     ncm = Dataset(monc_filename,'r')
-
+    for var in ncm.variables: print (var)
+    embed()
     for c in range(0,2):
         for j in range(0,len(monc_var_list[c])):
             monc_data[monc_var_list[c][j]] = ncm.variables[monc_var_list[c][j]][:]
