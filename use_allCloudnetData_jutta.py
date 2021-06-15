@@ -6440,7 +6440,7 @@ def main():
     monc_spin = 6 *60 *60
 
     ### Set output directory for plots
-    plots_out_dir='/nfs/a96/MOCCHA/working/jutta/plots/CaseStudies/ModelComparison/nointerp/'
+    plots_out_dir='/nfs/a96/MOCCHA/working/jutta/plots/CaseStudies/ModelComparison/allinterp'
     if not os.path.exists(plots_out_dir):
         os.makedirs(plots_out_dir)
 
@@ -6762,7 +6762,7 @@ def main():
     ## -------------------------------------------------------------
     print('setting missing data to nan and interpolate missing obs')
     obs_data, um_data, misc_data, ra2t_data = setFlags(obs_data, um_data, misc_data, ra2t_data, obs_var_list, um_var_list, misc_var_list, ra2t_var_list)
-    #obs_data = interpCloudnet(obs_data)
+    obs_data = interpCloudnet(obs_data)
     nanind, nanmask, wcind, wc0ind, lwpind = buildNaNMask(obs_data)
     #nanindadv, nanmaskadv, wcindadv, wc0indadv, lwpindadv = buildNaNMaskadv(obs_data)
 
