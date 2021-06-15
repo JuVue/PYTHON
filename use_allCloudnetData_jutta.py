@@ -6736,6 +6736,7 @@ def main():
     monc_data.pop('time_series_20_600')
 
     print ('Loaded!')
+
     monc_var_list = list(monc_data.keys())
     monc_var_list.remove('time1')
     monc_var_list.remove('time2')
@@ -6749,9 +6750,9 @@ def main():
             tmp=np.argwhere(np.array(monc_data[monc_var_list[j]].shape) == len(monc_data['time2']))
             id=np.where(tmp)[0]
             if id == 0:
-                monc_data[monc_var_list[j][id]][id2] = np.NaN
+                monc_data[monc_var_list[j][id]][id2] = np.nan
             if id == 1:
-                monc_data[monc_var_list[j][id2]][id] = np.NaN
+                monc_data[monc_var_list[j][id2]][id] = np.nan
 
 
 
