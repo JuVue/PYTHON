@@ -6320,7 +6320,7 @@ def buildNaNMask(obs_data):
     wc0index = np.zeros([np.size(obs_data['time'])])
     lwpindex = np.zeros([np.size(obs_data['time'])])
     # print(nanindex.shape)
-    for i in range(len(obs_data['time'])):
+    for i in range(0,len(obs_data['time'])):
         if np.isnan(np.nanmean(obs_data['Cv'][i,:], 0)):       ## if there are only nans in the time profile
             nanmask[i,:] = 1.0
             #nanmask[i-1,:] = 1.0   ##why setting -1 and +1 to nan???
@@ -6733,7 +6733,8 @@ def main():
 
     print ('Loaded!')
     monc_var_list = list(monc_data.keys())
-    print(monc_var_list)
+    monc_var_list.remove('time1')
+    monc_var_list.remove('time2')
     ## remove spin up time from monc data1
     id1 =np.argwhere(monc_data['time1']<=monc_spin)
     id2 =np.argwhere(monc_data['time2']<=monc_spin)
@@ -6748,7 +6749,6 @@ def main():
             if id == 1:
                 monc_data[monc_var_list[j][id2]][id] = np.NaN
 
-    embed()
 
 
 
