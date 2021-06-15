@@ -268,7 +268,7 @@ def readfile(filename):
     print ('Obs = ')
     print (np.nanmean(obs_data['Cv'][:,Zindex[0]],0))
 
-def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates, plots_out_dir, *args):
+def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates, plots_out_dir, **args):
     embed()
     ylims=[0,5]
     yticks=np.arange(0,5e3,1e3)
@@ -6804,7 +6804,7 @@ def main():
     # -------------------------------------------------------------
     # Cloudnet plot: Plot contour timeseries
     # -------------------------------------------------------------
-    figure = plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates,plots_out_dir ,monc_data)
+    figure = plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates,plots_out_dir ,monc_data=monc_data)
     figure = plot_LWCTimeseries(um_data, misc_data, ra2t_data,obs_data, plots_out_dir, dates, obs_switch)
     figure = plot_IWCTimeseries(um_data, misc_data, ra2t_data,obs_data, plots_out_dir, dates, obs_switch)
     figure = plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch,nanind,wcind)
