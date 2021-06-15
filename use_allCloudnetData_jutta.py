@@ -408,7 +408,7 @@ def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates, plots_out_
         plt.subplot(numsp,1,5)
         ax = plt.gca()
         # ax.set_facecolor('aliceblue')
-        plt.contourf(monc_data['time2'], np.squeeze(monc_data['z'][0,:]), np.transpose(monc_data['total_cloud_fraction']),
+        plt.contourf(monc_data['time2'], np.squeeze(monc_data['z'][:]), np.transpose(monc_data['total_cloud_fraction']),
             np.arange(0,1.1,0.1),
             cmap = newcmp,
             zorder = 1)
