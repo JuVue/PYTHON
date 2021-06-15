@@ -268,7 +268,7 @@ def readfile(filename):
     print ('Obs = ')
     print (np.nanmean(obs_data['Cv'][:,Zindex[0]],0))
 
-def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates, plots_out_dir, **kwargs):
+def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates, plots_out_dir, *args):
     embed()
     ylims=[0,5]
     yticks=np.arange(0,5e3,1e3)
