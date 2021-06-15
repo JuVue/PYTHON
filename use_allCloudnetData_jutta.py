@@ -15,6 +15,7 @@ import numpy as np
 #import iris
 import matplotlib.pyplot as plt
 import matplotlib.cm as mpl_cm
+import matplotlib.ticker as ticker
 from matplotlib.colors import ListedColormap, LinearSegmentedColormap
 import matplotlib.dates as mdates
 
@@ -420,8 +421,8 @@ def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates, plots_out_
         plt.yticks(yticks)
         ax.set_yticklabels(ytlabels)
         #plt.xlim(monc_data['time2']/60/60])
-        ax.xaxis.set_minor_locator(plt.ticker.MultipleLocator(1))
-        ax.xaxis.set_major_locator(plt.ticker.MultipleLocator(2))
+        ax.xaxis.set_minor_locator(ticker.MultipleLocator(1))
+        ax.xaxis.set_major_locator(ticker.MultipleLocator(2))
         plt.xlabel('Time (UTC)')
         nans = ax.get_ylim()
         ax2 = ax.twinx()
