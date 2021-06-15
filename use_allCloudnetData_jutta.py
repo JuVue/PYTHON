@@ -269,7 +269,10 @@ def readfile(filename):
     print (np.nanmean(obs_data['Cv'][:,Zindex[0]],0))
 
 def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates, plots_out_dir, **args):
-    embed()
+
+    if isinstance(args,dict):
+        monc_data=args[list(args.keys())[0]]
+
     ylims=[0,5]
     yticks=np.arange(0,5e3,1e3)
     ytlabels=yticks/1e3
@@ -405,7 +408,6 @@ def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates, plots_out_
     dstr=datenum2date(dates[1])
     fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_CvTimeseries.png'
     plt.savefig(fileout)
-
 
 def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch): #, lon, lat):
 
@@ -6228,7 +6230,6 @@ def plot_BiasCorrelation(obs_data, um_data, misc_data, ifs_data, ra2t_data, doy,
     plt.xlabel('T bias [K]')
     plt.show()
 
-
 def interpCloudnet(obs_data):
     #interpolates missing times up to 1 hour
     from scipy.interpolate import interp1d
@@ -6311,7 +6312,6 @@ def buildNaNMask(obs_data):
     lwpind = np.where(lwpindex == 1)
 
     return nanind, nanmask, wcind, wc0ind, lwpind
-
 
 def buildNaNMaskadv(obs_data):
 
@@ -6699,12 +6699,20 @@ def main():
         for j in range(0,len(monc_var_list[c])):
             monc_data[monc_var_list[c][j]] = ncm.variables[monc_var_list[c][j]][:]
 
-    monc_data['time1']=monc_data['time_series_2_60']
-    monc_data['time2']=monc_data['time_series_20_600']
+    monc_data['time1']=monc_data['time_series_2_60'] #1d data
+    monc_data['time2']=monc_data['time_series_20_600'] #2d data
     monc_data.pop('time_series_2_60')
     monc_data.pop('time_series_20_600')
 
     print ('Loaded!')
+
+    monc_var_list = list(monc_data.keys())
+    ## remove spin up time from monc data1
+    id =np.argwhere(monc_data['time1']<=monc_spin)
+    for j in range(0,len(monc_var_list)):
+        if any(monc_data[monc_var_list[j].shape == len(monc_data['time1']))
+            monc_data[monc_var_list[c][j]] = monc_data[monc_var_list[c][j]]
+
 
 
     ##################################################################################################################################
@@ -6804,7 +6812,7 @@ def main():
     # -------------------------------------------------------------
     # Cloudnet plot: Plot contour timeseries
     # -------------------------------------------------------------
-    figure = plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates,plots_out_dir ,monc_data=monc_data)
+    figure = plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates,plots_out_dir)# ,monc_data=monc_data)
     #figure = plot_LWCTimeseries(um_data, misc_data, ra2t_data,obs_data, plots_out_dir, dates, obs_switch)
     #figure = plot_IWCTimeseries(um_data, misc_data, ra2t_data,obs_data, plots_out_dir, dates, obs_switch)
     #figure = plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch,nanind,wcind)
