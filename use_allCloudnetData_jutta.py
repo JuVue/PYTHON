@@ -270,11 +270,11 @@ def readfile(filename):
 
 def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates, plots_out_dir, **args):
 
-    num_sp=4
+    numsp=4
     pltmonc=False
     if isinstance(args,dict):
         monc_data=args[list(args.keys())[0]]
-        num_sp = 5
+        numsp = 5
 
     ylims=[0,5]
     yticks=np.arange(0,5e3,1e3)
@@ -284,7 +284,8 @@ def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates, plots_out_
     print ('')
     print ('Plotting Cv timeseries for whole drift period:')
     print ('')
-
+    print(numsp)
+    
     SMALL_SIZE = 12
     MED_SIZE = 15
     LARGE_SIZE = 16
@@ -6320,7 +6321,6 @@ def buildNaNMask(obs_data):
     wc0index = np.zeros([np.size(obs_data['time'])])
     lwpindex = np.zeros([np.size(obs_data['time'])])
     print('nanmask')
-    embed()
     for i in range(len(obs_data['time'])):
         if np.isnan(np.nanmean(obs_data['Cv'][i,:], 0)):       ## if there are only nans in the time profile
             nanmask[i,:] = 1.0
