@@ -285,7 +285,7 @@ def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates, plots_out_
     print ('Plotting Cv timeseries for whole drift period:')
     print ('')
     print(numsp)
-    
+
     SMALL_SIZE = 12
     MED_SIZE = 15
     LARGE_SIZE = 16
@@ -404,8 +404,8 @@ def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates, plots_out_
     ax2.set_ylabel('UM_RA2M', rotation = 270, labelpad = 17)
     ax2.set_yticks([])
 
-    if num_sp == 5:
-        plt.subplot(numsp,1,4)
+    if numsp == 5:
+        plt.subplot(numsp,1,5)
         ax = plt.gca()
         # ax.set_facecolor('aliceblue')
         plt.contourf(monc_data['time2'], np.squeeze(monc_data['z'][0,:]), np.transpose(monc_data['total_cloud_fraction']),
