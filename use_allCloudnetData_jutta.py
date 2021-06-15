@@ -6705,13 +6705,17 @@ def main():
     monc_data.pop('time_series_20_600')
 
     print ('Loaded!')
-
+    embed()
     monc_var_list = list(monc_data.keys())
     ## remove spin up time from monc data1
-    id =np.argwhere(monc_data['time1']<=monc_spin)
+    id1 =np.argwhere(monc_data['time1']<=monc_spin)
+    id2 =np.argwhere(monc_data['time2']<=monc_spin)
     for j in range(0,len(monc_var_list)):
-        if any(monc_data[monc_var_list[j].shape == len(monc_data['time1']))
-            monc_data[monc_var_list[c][j]] = monc_data[monc_var_list[c][j]]
+        if any(np.size(monc_data[monc_var_list[j]) == len(monc_data['time1']))
+            monc_data[monc_var_list[c][j]][id1] = np.NaN
+        if any(np.size(monc_data[monc_var_list[j]) == len(monc_data['time1']))
+            monc_data[monc_var_list[c][j]][id2] = np.NaN
+
 
 
 
