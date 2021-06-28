@@ -6743,6 +6743,7 @@ def main():
     ## remove spin up time from monc data1
     id1 = np.squeeze(np.argwhere(monc_data['time1']<=monc_spin)) #1D data
     id2 = np.squeeze(np.argwhere(monc_data['time2']<=monc_spin))
+    embed()
     for j in range(0,len(monc_var_list)):
         print(j)
         if any(np.array(monc_data[monc_var_list[j]].shape) == len(monc_data['time1'])):
