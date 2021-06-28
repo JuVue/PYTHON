@@ -6752,9 +6752,9 @@ def main():
             print('time2')
             tmp2=np.argwhere(np.array(monc_data[monc_var_list[j]].shape) == len(monc_data['time2']))
             if tmp2 == 0:
-                monc_data[monc_var_list[j]][tmp2.squeeze()][id2] = np.nan
+                monc_data[monc_var_list[j]][id2,:] = np.nan
             if tmp2 == 1:
-                monc_data[monc_var_list[j]][id2][tmp2.squeeze()] = np.nan
+                monc_data[monc_var_list[j]][:,id2] = np.nan
 
     embed()
 
