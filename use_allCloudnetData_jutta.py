@@ -6743,6 +6743,7 @@ def main():
     ## remove spin up time from monc data1
     id1 =np.argwhere(monc_data['time1']<=monc_spin)
     id2 =np.argwhere(monc_data['time2']<=monc_spin)
+    embed()
     for j in range(0,len(monc_var_list)):
         if any(np.array(monc_data[monc_var_list[j]].shape) == len(monc_data['time1'])):
             monc_data[monc_var_list[j]][id1] = np.nan
@@ -6754,7 +6755,7 @@ def main():
             if id == 1:
                 monc_data[monc_var_list[j][id2]][id] = np.nan
 
-    
+
 
 
     ##################################################################################################################################
