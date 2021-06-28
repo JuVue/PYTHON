@@ -6450,7 +6450,7 @@ def main():
     um_root_dir = '/nfs/a96/MOCCHA/working/jutta/CloudNet/Oden/data/calibrated/metum/'
     cn_obs_dir = '/nfs/a96/MOCCHA/working/jutta/CloudNet/Oden/output/Halo/measurements_V7/'
     cn_um_dir = '/nfs/a96/MOCCHA/working/jutta/CloudNet/Oden/output/metum/V7/'
-    cn_monc_dir = '/nfs/a96/MOCCHA/working/gillian/MONC_CASES/MOCCHA/output/ 4_control_20180913T0000Z_Wsub-1.5/'
+    cn_monc_dir = '/nfs/a96/MOCCHA/working/gillian/MONC_CASES/MOCCHA/output/4_control_20180913T0000Z_Wsub-1.5/'
     monc_filename = cn_monc_dir + 'moccha_casim_dg_72000.nc'
     ### -----------------------------------------------------------------
     ### CHOSEN RUN - MODEL DATA
