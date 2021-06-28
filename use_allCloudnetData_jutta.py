@@ -270,7 +270,6 @@ def readfile(filename):
     print (np.nanmean(obs_data['Cv'][:,Zindex[0]],0))
 
 def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates, plots_out_dir, **args):
-    embed()
     numsp=4
     pltmonc=False
     if bool(args):
@@ -285,7 +284,7 @@ def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates, plots_out_
     print ('')
     print ('Plotting Cv timeseries for whole drift period:')
     print ('')
-    print(numsp)
+    print('plotting ' , numsp, ' subplots')
 
     SMALL_SIZE = 12
     MED_SIZE = 15
@@ -438,6 +437,7 @@ def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates, plots_out_
             fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_CvTimeseries.png'
         elif numsp==5:
             fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_MONC_CvTimeseries.png'
+        print(fileout)
         plt.savefig(fileout)
         #plt.close()
 def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch): #, lon, lat):
