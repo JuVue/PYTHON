@@ -273,7 +273,7 @@ def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates, plots_out_
     embed()
     numsp=4
     pltmonc=False
-    if isinstance(args,dict):
+    if bool(args):
         monc_data=args[list(args.keys())[0]]
         numsp = 5
 
