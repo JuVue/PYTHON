@@ -6450,8 +6450,8 @@ def main():
     um_root_dir = '/nfs/a96/MOCCHA/working/jutta/CloudNet/Oden/data/calibrated/metum/'
     cn_obs_dir = '/nfs/a96/MOCCHA/working/jutta/CloudNet/Oden/output/Halo/measurements_V7/'
     cn_um_dir = '/nfs/a96/MOCCHA/working/jutta/CloudNet/Oden/output/metum/V7/'
-    cn_monc_dir = '/nfs/a96/MOCCHA/working/gillian/MONC_CASES/MOCCHA/output/1_control/'
-    monc_filename = cn_monc_dir + 'moccha_casim_dg_50400.nc'
+    cn_monc_dir = '/nfs/a96/MOCCHA/working/gillian/MONC_CASES/MOCCHA/output/ 4_control_20180913T0000Z_Wsub-1.5/'
+    monc_filename = cn_monc_dir + 'moccha_casim_dg_72000.nc'
     ### -----------------------------------------------------------------
     ### CHOSEN RUN - MODEL DATA
     out_dir1 = '25_u-cc568_RA2M_CON/'
@@ -6755,9 +6755,6 @@ def main():
                 monc_data[monc_var_list[j]][id2,:] = np.nan
             if tmp2 == 1:
                 monc_data[monc_var_list[j]][:,id2] = np.nan
-
-    embed()
-
 
     ##################################################################################################################################
     ## -------------------------------------------------------------
