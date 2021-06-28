@@ -439,7 +439,7 @@ def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates, plots_out_
         elif numsp==5:
             fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_MONC_CvTimeseries.png'
         plt.savefig(fileout)
-        plt.show()
+        #plt.close()
 def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch): #, lon, lat):
 
     ylims=[0,5]
