@@ -28,7 +28,7 @@ import sys
 sys.path.insert(1, './py_functions/')
 from time_functions import calcTime_Mat2DOY, date2datenum, datenum2date
 from readMAT import readMatlabStruct
-from physFuncts import calcThetaE, calcThetaVL
+from physFuncts import calcThetaE, calcThetaVL,calcAirDensity, calcT
 from manipFuncts import int2list
 # from conversionFuncts import reGrid_Sondes
 
@@ -715,21 +715,24 @@ def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, 
     plt.savefig(fileout)
     plt.close()
 
-def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch,nanind,wcind):
-    ylims=[0,5]
-    yticks=np.arange(0,5e3,1e3)
-    ytlabels=yticks/1e3
+def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch,nanind,wcind, **args):
 
     from matplotlib.colors import LogNorm
+
+    numsp=4
+    pltmonc=False
+    if bool(args):
+        monc_data=args[list(args.keys())[0]]
+        numsp = 5
+
+    ylims=[0,2.5]
+    yticks=np.arange(0,2.5e3,0.5e3)
+    ytlabels=yticks/1e3
 
     print ('******')
     print ('')
     print ('Plotting TWC timeseries for whole drift period:')
     print ('')
-
-    ylims=[0,5]
-    yticks=np.arange(0,5e3,1e3)
-    ytlabels=yticks/1e3
 
     ###----------------------------------------------------------------
     ###         Calculate total water content
@@ -739,6 +742,13 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     um_data['model_twc'] = um_data['model_lwc'] + um_data['model_iwc_filtered']
     misc_data['model_twc'] = misc_data['model_lwc'] + misc_data['model_iwc_filtered']
     ra2t_data['model_twc'] = ra2t_data['model_lwc'] + ra2t_data['model_iwc_filtered']
+
+    if bool(args):
+        monc_data['model_iwc']= monc_data['ice_mmr_mean']*monc_data['rho']
+        monc_data['model_lwc']= monc_data['liquid_mmr_mean']*monc_data['rho']
+        monc_data['model_twc'] = monc_data['model_lwc'] +monc_data['model_iwc']
+
+
 
     # bldepth1 = data1['bl_depth'][data1['hrly_flag']]
     # bldepth2 = data2['bl_depth'][data2['hrly_flag']]
@@ -773,7 +783,7 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     plt.subplots_adjust(top = 0.9, bottom = 0.06, right = 0.98, left = 0.08,
             hspace = 0.4, wspace = 0.2)
 
-    plt.subplot(411)
+    plt.subplot(numsp,1,1)
     ax = plt.gca()
     # ax.set_facecolor('aliceblue')
     img = plt.contourf(obs_data['time'], np.squeeze(obs_data['height'][0,:]), twc0,
@@ -797,7 +807,7 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     cb = plt.colorbar(img, cax = cbaxes, orientation = 'horizontal')
     plt.title('TWC [g m$^{-3}$]')
 
-    plt.subplot(412)
+    plt.subplot(numsp,1,2)
     ax = plt.gca()
     # ax.set_facecolor('aliceblue')
     plt.contourf(misc_data['time'], np.squeeze(misc_data['height'][0,:]), np.transpose(misc_data['model_twc'])*1e3,
@@ -819,7 +829,7 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     plt.title('UM_CASIM')
     # plt.colorbar()
 
-    plt.subplot(413)
+    plt.subplot(numsp,1,3)
     ax = plt.gca()
     # ax.set_facecolor('gainsboro')
     plt.contourf(ra2t_data['time'], np.squeeze(ra2t_data['height'][0,:]), np.transpose(ra2t_data['model_twc'])*1e3,
@@ -841,7 +851,7 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     plt.title('UM_RA2T')
     # plt.colorbar()
 
-    plt.subplot(414)
+    plt.subplot(numsp,1,4)
     ax = plt.gca()
     # ax.set_facecolor('aliceblue')
     plt.contourf(um_data['time'], np.squeeze(um_data['height'][0,:]), np.transpose(um_data['model_twc'])*1e3,
@@ -862,8 +872,32 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
     plt.title('UM_RA2M')
     # plt.colorbar()
+    if numsp ==4:
+        plt.xlabel('Date')
 
-    plt.xlabel('Date')
+
+    if numsp == 5:
+        plt.subplot(numsp,1,5)
+        ax = plt.gca()
+        # ax.set_facecolor('aliceblue')
+        plt.contourf(monc_data['time2']/60/60, np.squeeze(monc_data['z'][:]), np.transpose(monc_data['twc'])*1e3,
+            levels=[1e-4, 1e-3, 1e-2, 1e-1, 1e0], norm = LogNorm(),
+            cmap = newcmp,
+            zorder = 1)
+        # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
+        # plt.plot(data1['time_hrly'][::6], bldepth1[::6], 'k', linewidth = 1.0)
+        plt.ylabel('Z [km]')
+        plt.ylim(ylims)
+        plt.yticks(yticks)
+        ax.set_yticklabels(ytlabels)
+        #plt.xlim(monc_data['time2']/60/60])
+        ax.xaxis.set_minor_locator(ticker.MultipleLocator(1))
+        ax.xaxis.set_major_locator(ticker.MultipleLocator(2))
+        plt.xlabel('Time (UTC)')
+        nans = ax.get_ylim()
+        ax2 = ax.twinx()
+        ax2.set_ylabel('MONC', rotation = 270, labelpad = 17)
+        ax2.set_yticks([])
 
     print ('******')
     print ('')
@@ -871,9 +905,12 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     print ('')
 
     dstr=datenum2date(dates[1])
-    fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_TWCTimeseries.png'
+    if numsp ==4:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_TWCTimeseries.png'
+    if numsp ==5:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_MONC_TWCTimeseries.png'
     plt.savefig(fileout)
-    plt.close()
+    plt.show()
 
     #### ---------------------------------------------------------------------------------------------------
     #### ---------------------------------------------------------------------------------------------------
@@ -6408,6 +6445,36 @@ def setFlags(obs_data, um_data, misc_data, ra2t_data, obs_var_list, um_var_list,
 
     return obs_data, um_data, misc_data,  ra2t_data
 
+def removeSpinUp(monc_data):
+
+    monc_var_list = list(monc_data.keys())
+    monc_var_list.remove('time1')
+    monc_var_list.remove('time2')
+
+    id1 = np.squeeze(np.argwhere(monc_data['time1']<=monc_spin)) #1D data
+    id2 = np.squeeze(np.argwhere(monc_data['time2']<=monc_spin))
+    for j in range(0,len(monc_var_list)):
+        print(j)
+        if any(np.array(monc_data[monc_var_list[j]].shape) == len(monc_data['time1'])):
+            monc_data[monc_var_list[j]]=np.delete(monc_data[monc_var_list[j]],id1,0)
+        elif any(np.array(monc_data[monc_var_list[j]].shape) == len(monc_data['time2'])):
+            tmp2=np.argwhere(np.array(monc_data[monc_var_list[j]].shape) == len(monc_data['time2']))
+            if tmp2 == 0:
+                monc_data[monc_var_list[j]]=np.delete(monc_data[monc_var_list[j]],id2,0)
+            elif tmp2 == 1:
+                monc_data[monc_var_list[j]]=np.delete(monc_data[monc_var_list[j]],id2,1)
+            elif tmp2 == 2:
+                monc_data[monc_var_list[j]]=np.delete(monc_data[monc_var_list[j]],id2,2)
+            elif tmp2 == 3:
+                monc_data[monc_var_list[j]]=np.delete(monc_data[monc_var_list[j]],id2,3)
+        else:
+            print(monc_var_list[j], ': not time depend')
+    monc_data['time1']=np.delete(monc_data['time1'],id1,0)
+    monc_data['time2']=np.delete(monc_data['time2'],id2,0)
+    monc_data['time1']=monc_data['time1']-monc_data['time1'][0]
+    monc_data['time2']=monc_data['time2']-monc_data['time2'][0]
+
+    return monc_data
 ################################################################################
 ################################################################################
 def main():
@@ -6713,20 +6780,26 @@ def main():
     #################################################################
     print ('Loading monc results:')
     print ('')
-    ###1d variables, 2d variables ( 200x84)
+    ###1d variables, 2d variables (time,height), 3d variables (time,x,y), 4d variables(time,x,y,z)
     monc_var_list =[['time_series_2_60','time_series_20_600' ,'z', 'LWP_mean','IWP_mean','SWP_mean','TOT_IWP_mean','GWP_mean'],
                     ['theta_mean','total_cloud_fraction', 'liquid_cloud_fraction','ice_cloud_fraction',
                     'vapour_mmr_mean','liquid_mmr_mean','rain_mmr_mean','ice_mmr_mean','snow_mmr_mean',
                     'graupel_mmr_mean']]
+    monc_var_list =[['time_series_2_60','time_series_20_600' ,'z','rho', 'LWP_mean','IWP_mean','SWP_mean','TOT_IWP_mean','GWP_mean'],
+                    ['theta_mean','total_cloud_fraction', 'liquid_cloud_fraction','ice_cloud_fraction',
+                    'vapour_mmr_mean','liquid_mmr_mean','rain_mmr_mean','ice_mmr_mean','snow_mmr_mean',
+                    'graupel_mmr_mean'],
+                    ['vwp','lwp','rwp','iwp','swp','gwp','tot_iwp'],
+                    'q_vapour','q_cloud_liquid_mass','q_rain_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
+
 
     print(monc_var_list)
-
 
     ncm = {}
     monc_data = {}
     ncm = Dataset(monc_filename,'r')
     for var in ncm.variables: print (var)
-    for c in range(0,2):
+    for c in range(0,len(monc_var_list)):
         for j in range(0,len(monc_var_list[c])):
             monc_data[monc_var_list[c][j]] = ncm.variables[monc_var_list[c][j]][:]
 
@@ -6737,28 +6810,9 @@ def main():
 
     print ('Loaded!')
 
-    monc_var_list = list(monc_data.keys())
-    monc_var_list.remove('time1')
-    monc_var_list.remove('time2')
-    ## remove spin up time from monc data1
-    id1 = np.squeeze(np.argwhere(monc_data['time1']<=monc_spin)) #1D data
-    id2 = np.squeeze(np.argwhere(monc_data['time2']<=monc_spin))
-    for j in range(0,len(monc_var_list)):
-        print(j)
-        if any(np.array(monc_data[monc_var_list[j]].shape) == len(monc_data['time1'])):
-            print('time1')
-            monc_data[monc_var_list[j]]=np.delete(monc_data[monc_var_list[j]],id1,0)
-        if any(np.array(monc_data[monc_var_list[j]].shape) == len(monc_data['time2'])):
-            print('time2')
-            tmp2=np.argwhere(np.array(monc_data[monc_var_list[j]].shape) == len(monc_data['time2']))
-            if tmp2 == 0:
-                monc_data[monc_var_list[j]]=np.delete(monc_data[monc_var_list[j]],id2,0)
-            if tmp2 == 1:
-                monc_data[monc_var_list[j]]=np.delete(monc_data[monc_var_list[j]],id2,1)
-    monc_data['time1']=np.delete(monc_data['time1'],id1,0)
-    monc_data['time2']=np.delete(monc_data['time2'],id2,0)
-    monc_data['time1']=monc_data['time1']-monc_data['time1'][0]
-    monc_data['time2']=monc_data['time2']-monc_data['time2'][0]
+    ## remove spin up time from monc data
+    monc_data=removeSpinUp(monc_data)
+
     ##################################################################################################################################
     ## -------------------------------------------------------------
     ## maximise obs data available and build mask for available data
