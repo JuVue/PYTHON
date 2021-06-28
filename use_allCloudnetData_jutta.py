@@ -6748,14 +6748,14 @@ def main():
         print(j)
         if any(np.array(monc_data[monc_var_list[j]].shape) == len(monc_data['time1'])):
             print('time1')
-            monc_data[monc_var_list[j]][id1] = np.nan
+            monc_data[monc_var_list[j]]=np.delete(monc_data[monc_var_list[j]],id1,0)
         if any(np.array(monc_data[monc_var_list[j]].shape) == len(monc_data['time2'])):
             print('time2')
             tmp2=np.argwhere(np.array(monc_data[monc_var_list[j]].shape) == len(monc_data['time2']))
             if tmp2 == 0:
-                monc_data[monc_var_list[j]][id2,:] = np.nan
+                monc_data[monc_var_list[j]]=np.delete(monc_data[monc_var_list[j]],id2,0)
             if tmp2 == 1:
-                monc_data[monc_var_list[j]][:,id2] = np.nan
+                monc_data[monc_var_list[j]]=np.delete(monc_data[monc_var_list[j]],id2,1)
 
     ##################################################################################################################################
     ## -------------------------------------------------------------
