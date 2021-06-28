@@ -428,18 +428,18 @@ def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates, plots_out_
         ax2.set_ylabel('MONC', rotation = 270, labelpad = 17)
         ax2.set_yticks([])
 
-        print ('******')
-        print ('')
-        print ('Finished plotting! :)')
-        print ('')
-        dstr=datenum2date(dates[1])
-        if numsp ==4:
-            fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_CvTimeseries.png'
-        elif numsp==5:
-            fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_MONC_CvTimeseries.png'
-        print(fileout)
-        plt.savefig(fileout)
-        #plt.close()
+    print ('******')
+    print ('')
+    print ('Finished plotting! :)')
+    print ('')
+    dstr=datenum2date(dates[1])
+    if numsp ==4:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_CvTimeseries.png'
+    elif numsp==5:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_MONC_CvTimeseries.png'
+    print(fileout)
+    plt.savefig(fileout)
+    #plt.close()
 def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch): #, lon, lat):
 
     ylims=[0,5]
