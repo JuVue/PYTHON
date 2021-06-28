@@ -277,8 +277,8 @@ def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates, plots_out_
         monc_data=args[list(args.keys())[0]]
         numsp = 5
 
-    ylims=[0,5]
-    yticks=np.arange(0,5e3,1e3)
+    ylims=[0,2.5]
+    yticks=np.arange(0,2.5e3,0.5e3)
     ytlabels=yticks/1e3
 
     print ('******')
@@ -6759,7 +6759,6 @@ def main():
     monc_data['time2']=np.delete(monc_data['time2'],id2,0)
     monc_data['time1']=monc_data['time1']-monc_data['time1'][0]
     monc_data['time2']=monc_data['time2']-monc_data['time2'][0]
-    embed()
     ##################################################################################################################################
     ## -------------------------------------------------------------
     ## maximise obs data available and build mask for available data
@@ -6857,7 +6856,7 @@ def main():
     # -------------------------------------------------------------
     # Cloudnet plot: Plot contour timeseries
     # -------------------------------------------------------------
-    figure = plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates,plots_out_dir ,monc_data=monc_data)
+    figure = plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates,plots_out_dir) #,monc_data=monc_data)
     #figure = plot_LWCTimeseries(um_data, misc_data, ra2t_data,obs_data, plots_out_dir, dates, obs_switch)
     #figure = plot_IWCTimeseries(um_data, misc_data, ra2t_data,obs_data, plots_out_dir, dates, obs_switch)
     #figure = plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch,nanind,wcind)
