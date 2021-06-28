@@ -270,7 +270,7 @@ def readfile(filename):
     print (np.nanmean(obs_data['Cv'][:,Zindex[0]],0))
 
 def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates, plots_out_dir, **args):
-
+    embed()
     numsp=4
     pltmonc=False
     if isinstance(args,dict):
