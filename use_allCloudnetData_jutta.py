@@ -6756,7 +6756,11 @@ def main():
                 monc_data[monc_var_list[j]]=np.delete(monc_data[monc_var_list[j]],id2,0)
             if tmp2 == 1:
                 monc_data[monc_var_list[j]]=np.delete(monc_data[monc_var_list[j]],id2,1)
-
+    monc_data['time1']=np.delete(monc_data['time1'],id1,0)
+    monc_data['time2']=np.delete(monc_data['time2'],id2,0)
+    monc_data['time1']=monc_data['time1']-monc_data['time1'][0]
+    monc_data['time2']=monc_data['time1']-monc_data['time2'][0]
+    embed()
     ##################################################################################################################################
     ## -------------------------------------------------------------
     ## maximise obs data available and build mask for available data
