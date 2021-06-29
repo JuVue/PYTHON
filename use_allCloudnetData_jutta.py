@@ -1010,7 +1010,7 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_MONC_TWCTimeseries.png'
     plt.savefig(fileout)
     plt.show()
-
+    embed()
     #### ---------------------------------------------------------------------------------------------------
     #### ---------------------------------------------------------------------------------------------------
     ####            CREATE TWC MASK
