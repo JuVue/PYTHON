@@ -804,14 +804,12 @@ def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, 
     print ('Finished plotting! :)')
     print ('')
     plt.show()
-    embed()
+
     dstr=datenum2date(dates[1])
     if numsp ==4:
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_IWCTimeseries.png'
     if numsp ==5:
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_MONC_IWCTimeseries.png'
-    print(fileout)
-    embed()
     plt.savefig(fileout)
     plt.close()
 
@@ -6990,8 +6988,8 @@ def main():
     # -------------------------------------------------------------
     #figure = plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, monc_data=monc_data)
     #figure = plot_LWCTimeseries(um_data, misc_data, ra2t_data,obs_data, plots_out_dir, dates, obs_switch,monc_data=monc_data)
-    figure = plot_IWCTimeseries(um_data, misc_data, ra2t_data,obs_data, plots_out_dir, dates, obs_switch,monc_data=monc_data)
-    figure = plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch,nanind,wcind,monc_data=monc_data)
+    figure = plot_IWCTimeseries(um_data, misc_data, ra2t_data,obs_data, plots_out_dir, dates, obs_switch,x=monc_data)
+    figure = plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch,nanind,wcind,x=monc_data)
     # figure = plot_TWCTesting(um_data, ifs_data, misc_data, obs_data, data1, data2, data3, obs, month_flag, missing_files, doy)
 
     # -------------------------------------------------------------
