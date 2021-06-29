@@ -270,7 +270,7 @@ def readfile(filename):
     print ('Obs = ')
     print (np.nanmean(obs_data['Cv'][:,Zindex[0]],0))
 
-def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates, plots_out_dir, **args):
+def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir,dates,  **args):
     numsp=4
     pltmonc=False
     if bool(args):
@@ -457,8 +457,8 @@ def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     yticks=np.arange(0,2.5e3,0.5e3)
     ytlabels=yticks/1e3
 
-    obs_data['lwc'][obs_data['lwc'] == 0] = np.nan
-    obs_data['lwc_adiabatic'][obs_data['lwc_adiabatic'] == 0] = np.nan
+    obs_data['lwc'][obs_data['lwc'] <= 0] = np.nan
+    obs_data['lwc_adiabatic'][obs_data['lwc_adiabatic'] <= 0] = np.nan
     um_data['model_lwc'][um_data['model_lwc'] <= 0.0] = np.nan
     misc_data['model_lwc'][misc_data['model_lwc'] <= 0.0] = np.nan
     ra2t_data['model_lwc'][ra2t_data['model_lwc'] <= 0.0] = np.nan
@@ -491,7 +491,7 @@ def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     newcmp = ListedColormap(newcolors)
 
     cmax=0.3
-    clev=np.arange(0.001,0.45,0.05)
+    clev=np.arange(0.0,0.45,0.05)
 
     #####PlotLwc###############################################
     fig = plt.figure(figsize=(9.5,13))
@@ -648,7 +648,7 @@ def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, 
     yticks=np.arange(0,2.5e3,0.5e3)
     ytlabels=yticks/1e3
 
-    obs_data['iwc'][obs_data['iwc'] <= 0] = np.nan
+    obs_data['iwc'][obs_data['iwc'] <= 0.0] = np.nan
     um_data['model_iwc_filtered'][um_data['model_iwc_filtered'] <= 0.0] = np.nan
     misc_data['model_iwc_filtered'][misc_data['model_iwc_filtered'] <= 0.0] = np.nan
     ra2t_data['model_iwc_filtered'][ra2t_data['model_iwc_filtered'] <= 0.0] = np.nan
@@ -681,6 +681,7 @@ def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, 
 
     cmax = 0.05
     clev=np.arange(0.0,0.05,0.001)
+    clev=[1e-4, 1e-3, 1e-2, 1e-1]
 
     fig = plt.figure(figsize=(9.5,13))
     plt.subplots_adjust(top = 0.92, bottom = 0.06, right = 0.92, left = 0.08,
@@ -694,7 +695,7 @@ def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, 
             #cmap = newcmp)
     else:
         img = plt.contourf(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(obs_data['iwc'])*1e3,
-            levels=clev,cmap = newcmp)
+            levels=clev, norm = LogNorm(),cmap = newcmp)
 
         #img = plt.pcolor(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(obs_data['iwc'])*1e3,
         #    cmap=newcmp,vmin = 0.0, vmax = cmax)
@@ -716,34 +717,12 @@ def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, 
     cb = plt.colorbar(img, cax = cbaxes, orientation = 'horizontal')
     plt.title('IWC')
 
-
-    plt.subplot(numsp,1,3)
-    ax = plt.gca()
-    #plt.pcolor(ra2t_data['time'], np.squeeze(ra2t_data['height'][0,:]), np.transpose(ra2t_data['model_iwc_filtered'])*1e3,
-    #    cmap=newcmp,vmin = 0.0, vmax = cmax)
-    plt.contourf(ra2t_data['time'], np.squeeze(ra2t_data['height'][0,:]), np.transpose(ra2t_data['model_iwc_filtered'])*1e3,
-        levels=clev,cmap = newcmp)
-        #cmap = newcmp)
-
-    plt.ylabel('Z [km]')
-    plt.ylim(ylims)
-    plt.yticks(yticks)
-    ax.set_yticklabels(ytlabels)
-    plt.xlim([dates[0], dates[1]])
-    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
-    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-    nans = ax.get_ylim()
-    ax2 = ax.twinx()
-    ax2.set_ylabel('UM_RA2T', rotation = 270, labelpad = 35)
-    ax2.set_yticks([])
-
     plt.subplot(numsp,1,2)
     ax = plt.gca()
     # plt.pcolor(misc_data['time'], np.squeeze(misc_data['height'][0,:]), np.transpose(misc_data['model_iwc_filtered'])*1e3,
     #     cmap=newcmp,vmin = 0.0, vmax = cmax)
     plt.contourf(misc_data['time'], np.squeeze(misc_data['height'][0,:]), np.transpose(misc_data['model_iwc_filtered'])*1e3,
-        levels=clev,cmap = newcmp)
+        levels=clev,norm = LogNorm(),cmap = newcmp)
         #cmap = newcmp)
     plt.ylabel('Z [km]')
     plt.ylim(ylims)
@@ -758,10 +737,30 @@ def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, 
     ax2.set_ylabel('UM_CASIM', rotation = 270, labelpad = 35)
     ax2.set_yticks([])
 
+    plt.subplot(numsp,1,3)
+    ax = plt.gca()
+    #plt.pcolor(ra2t_data['time'], np.squeeze(ra2t_data['height'][0,:]), np.transpose(ra2t_data['model_iwc_filtered'])*1e3,
+    #    cmap=newcmp,vmin = 0.0, vmax = cmax)
+    plt.contourf(ra2t_data['time'], np.squeeze(ra2t_data['height'][0,:]), np.transpose(ra2t_data['model_iwc_filtered'])*1e3,
+        levels=clev, norm = LogNorm(),cmap = newcmp)
+    plt.ylabel('Z [km]')
+    plt.ylim(ylims)
+    plt.yticks(yticks)
+    ax.set_yticklabels(ytlabels)
+    plt.xlim([dates[0], dates[1]])
+    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+    nans = ax.get_ylim()
+    ax2 = ax.twinx()
+    ax2.set_ylabel('UM_RA2T', rotation = 270, labelpad = 35)
+    ax2.set_yticks([])
+
+
     plt.subplot(numsp,1,4)
     ax = plt.gca()
     plt.contourf(um_data['time'], np.squeeze(um_data['height'][0,:]), np.transpose(um_data['model_iwc_filtered'])*1e3,
-        levels=clev,cmap = newcmp)
+        levels=clev,norm = LogNorm(),cmap = newcmp)
 #        cmap=newcmp,vmin = 0.0, vmax = cmax)
         #cmap = newcmp)
     plt.ylabel('Z [km]')
@@ -785,7 +784,7 @@ def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, 
         ax = plt.gca()
         # ax.set_facecolor('aliceblue')
         plt.contourf(monc_data['time2']/60/60, np.squeeze(monc_data['z'][:]), np.transpose(monc_data['model_iwc'])*1e3,
-        levels=clev,cmap = newcmp)
+        levels=clev,norm = LogNorm(),cmap = newcmp)
 #        cmap=newcmp,vmin = 0.0, vmax = cmax)
         plt.ylabel('Z [km]')
         plt.ylim(ylims)
@@ -952,13 +951,14 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     plt.subplot(numsp,1,4)
     ax = plt.gca()
     # ax.set_facecolor('aliceblue')
-    plt.contourf(um_data['time'], np.squeeze(um_data['height'][0,:]), np.transpose(um_data['model_twc'])*1e3,
-        #levels=clev,cmap = newcmp)
-        # np.arange(0,0.31,0.01),
-        # locator=ticker.LogLocator(base = 10.0),
-        levels=[1e-4, 1e-3, 1e-2, 1e-1, 1e0], norm = LogNorm(),
-        cmap = newcmp)
-        # )
+    # plt.contourf(um_data['time'], np.squeeze(um_data['height'][0,:]), np.transpose(um_data['model_twc'])*1e3,
+    #     #levels=clev,cmap = newcmp)
+    #     # np.arange(0,0.31,0.01),
+    #     # locator=ticker.LogLocator(base = 10.0),
+    #     levels=[1e-4, 1e-3, 1e-2, 1e-1, 1e0], norm = LogNorm(),
+    #     cmap = newcmp)
+    plt.pcolor(um_data['time'], np.squeeze(um_data['height'][0,:]), np.transpose(um_data['model_twc'])*1e3,
+            cmap = newcmp)        # )
     # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
     # plt.plot(data1['time_hrly'][::6], bldepth1[::6], 'k', linewidth = 1.0)
     nans = ax.get_ylim()
@@ -6989,7 +6989,7 @@ def main():
     # -------------------------------------------------------------
     # Cloudnet plot: Plot contour timeseries
     # -------------------------------------------------------------
-    figure = plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates,plots_out_dir,monc_data=monc_data)
+    figure = plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, monc_data=monc_data)
     figure = plot_LWCTimeseries(um_data, misc_data, ra2t_data,obs_data, plots_out_dir, dates, obs_switch,monc_data=monc_data)
     figure = plot_IWCTimeseries(um_data, misc_data, ra2t_data,obs_data, plots_out_dir, dates, obs_switch,monc_data=monc_data)
     figure = plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch,nanind,wcind,monc_data=monc_data)
