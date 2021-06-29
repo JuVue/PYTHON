@@ -887,7 +887,7 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
 
 
     if numsp == 5:
-        plt.subplot(numsp,1,5)
+        plt.subplot(numsp,1,1)
         ax = plt.gca()
         # ax.set_facecolor('aliceblue')
         plt.contourf(monc_data['time2']/60/60, np.squeeze(monc_data['z'][:]), np.transpose(monc_data['model_twc'])*1e3,
@@ -903,10 +903,9 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
         #plt.xlim(monc_data['time2']/60/60])
         ax.xaxis.set_minor_locator(ticker.MultipleLocator(1))
         ax.xaxis.set_major_locator(ticker.MultipleLocator(2))
-        ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
         embed()
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
         plt.xlabel('Time (UTC)')
-        nans = ax.get_ylim()
         ax2 = ax.twinx()
         ax2.set_ylabel('MONC', rotation = 270, labelpad = 17)
         ax2.set_yticks([])
