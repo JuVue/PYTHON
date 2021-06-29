@@ -880,7 +880,7 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
         plt.subplot(numsp,1,5)
         ax = plt.gca()
         # ax.set_facecolor('aliceblue')
-        plt.contourf(monc_data['time2']/60/60, np.squeeze(monc_data['z'][:]), np.transpose(monc_data['twc'])*1e3,
+        plt.contourf(monc_data['time2']/60/60, np.squeeze(monc_data['z'][:]), np.transpose(monc_data['model_twc'])*1e3,
             levels=[1e-4, 1e-3, 1e-2, 1e-1, 1e0], norm = LogNorm(),
             cmap = newcmp,
             zorder = 1)
