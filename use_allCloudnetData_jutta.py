@@ -491,7 +491,8 @@ def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     newcmp = ListedColormap(newcolors)
 
     cmax=0.3
-    clev=np.arange(0,0.45,0.05)
+    clev=np.arange(0.001,0.45,0.05)
+
     #####PlotLwc###############################################
     fig = plt.figure(figsize=(9.5,13))
     plt.subplots_adjust(top = 0.9, bottom = 0.06, right = 0.92, left = 0.08,
@@ -499,12 +500,11 @@ def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
 
     plt.subplot(numsp,1,1)
     ax = plt.gca()
-    # ax.set_facecolor('aliceblue')
     img = plt.contourf(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(obs_data['lwc_adiabatic'])*1e3,
         levels=clev,cmap = newcmp)
         #    cmap=newcmp,vmin = 0.0, vmax = cmax)
         # locator=ticker.LogLocator(base = 10.0),
-#        levels=[1e-4, 1e-3, 1e-2, 1e-1, 1e0], norm = LogNorm(),
+        #levels=[1e-4, 1e-3, 1e-2, 1e-1, 1e0], norm = LogNorm())
         # )
     nans = ax.get_ylim()
     plt.ylabel('Z [km]')
@@ -680,6 +680,7 @@ def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, 
     newcmp = ListedColormap(newcolors)
 
     cmax = 0.05
+    clev=np.arange(0.0,0.01,0.05)
 
     fig = plt.figure(figsize=(9.5,13))
     plt.subplots_adjust(top = 0.92, bottom = 0.06, right = 0.92, left = 0.08,
@@ -692,8 +693,11 @@ def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, 
             cmap=newcmp,vmin = 0.0, vmax = cmax)
             #cmap = newcmp)
     else:
-        img = plt.pcolor(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(obs_data['iwc'])*1e3,
-            cmap=newcmp,vmin = 0.0, vmax = cmax)
+        img = plt.contourf(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(obs_data['iwc'])*1e3,
+            levels=clev,cmap = newcmp)
+
+        #img = plt.pcolor(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(obs_data['iwc'])*1e3,
+        #    cmap=newcmp,vmin = 0.0, vmax = cmax)
             #cmap = newcmp)
 
     plt.ylabel('Z [km]')
@@ -715,8 +719,10 @@ def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, 
 
     plt.subplot(numsp,1,3)
     ax = plt.gca()
-    plt.pcolor(ra2t_data['time'], np.squeeze(ra2t_data['height'][0,:]), np.transpose(ra2t_data['model_iwc_filtered'])*1e3,
-        cmap=newcmp,vmin = 0.0, vmax = cmax)
+    #plt.pcolor(ra2t_data['time'], np.squeeze(ra2t_data['height'][0,:]), np.transpose(ra2t_data['model_iwc_filtered'])*1e3,
+    #    cmap=newcmp,vmin = 0.0, vmax = cmax)
+    plt.contourf(ra2t_data['time'], np.squeeze(ra2t_data['height'][0,:]), np.transpose(ra2t_data['model_iwc_filtered'])*1e3,
+        levels=clev,cmap = newcmp)
         #cmap = newcmp)
 
     plt.ylabel('Z [km]')
@@ -734,8 +740,10 @@ def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, 
 
     plt.subplot(numsp,1,2)
     ax = plt.gca()
-    plt.pcolor(misc_data['time'], np.squeeze(misc_data['height'][0,:]), np.transpose(misc_data['model_iwc_filtered'])*1e3,
-        cmap=newcmp,vmin = 0.0, vmax = cmax)
+    # plt.pcolor(misc_data['time'], np.squeeze(misc_data['height'][0,:]), np.transpose(misc_data['model_iwc_filtered'])*1e3,
+    #     cmap=newcmp,vmin = 0.0, vmax = cmax)
+    plt.contourf(misc_data['time'], np.squeeze(misc_data['height'][0,:]), np.transpose(misc_data['model_iwc_filtered'])*1e3,
+        levels=clev,cmap = newcmp)
         #cmap = newcmp)
     plt.ylabel('Z [km]')
     plt.ylim(ylims)
@@ -752,8 +760,9 @@ def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, 
 
     plt.subplot(numsp,1,4)
     ax = plt.gca()
-    plt.pcolor(um_data['time'], np.squeeze(um_data['height'][0,:]), np.transpose(um_data['model_iwc_filtered'])*1e3,
-        cmap=newcmp,vmin = 0.0, vmax = cmax)
+    plt.contourf(um_data['time'], np.squeeze(um_data['height'][0,:]), np.transpose(um_data['model_iwc_filtered'])*1e3,
+        levels=clev,cmap = newcmp)
+#        cmap=newcmp,vmin = 0.0, vmax = cmax)
         #cmap = newcmp)
     plt.ylabel('Z [km]')
     plt.ylim(ylims)
@@ -776,7 +785,8 @@ def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, 
         ax = plt.gca()
         # ax.set_facecolor('aliceblue')
         plt.contourf(monc_data['time2']/60/60, np.squeeze(monc_data['z'][:]), np.transpose(monc_data['model_iwc'])*1e3,
-        cmap=newcmp,vmin = 0.0, vmax = cmax)
+        levels=clev,cmap = newcmp)
+#        cmap=newcmp,vmin = 0.0, vmax = cmax)
         plt.ylabel('Z [km]')
         plt.ylim(ylims)
         plt.yticks(yticks)
@@ -854,8 +864,6 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     plt.rc('ytick',labelsize=MED_SIZE)
     plt.rc('legend',fontsize=MED_SIZE)
 
-    clev = np.arange(0,1,0.1)
-
 
     #####Plot Twc###############################################
     fig = plt.figure(figsize=(9.5,13))
@@ -866,11 +874,9 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     ax = plt.gca()
     # ax.set_facecolor('aliceblue')
     img = plt.contourf(obs_data['time'], np.squeeze(obs_data['height'][0,:]), twc0,
-        levels=clev,cmap = newcmp)
-        # np.arange(0,0.31,0.01),
-        # locator=ticker.LogLocator(base = 10.0),
-        #levels=[1e-4, 1e-3, 1e-2, 1e-1, 1e0], norm = LogNorm(),
-        #cmap = newcmp)
+        #levels=clev,cmap = newcmp)
+        levels=[1e-4, 1e-3, 1e-2, 1e-1, 1e0], norm = LogNorm(),
+        cmap = newcmp)
         # )
     # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
     nans = ax.get_ylim()
@@ -895,11 +901,11 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     ax = plt.gca()
     # ax.set_facecolor('aliceblue')
     plt.contourf(misc_data['time'], np.squeeze(misc_data['height'][0,:]), np.transpose(misc_data['model_twc'])*1e3,
-        levels=clev,cmap = newcmp)
+        #levels=clev,cmap = newcmp)
         # np.arange(0,0.31,0.01),
         # locator=ticker.LogLocator(base = 10.0),
-        #levels=[1e-4, 1e-3, 1e-2, 1e-1, 1e0], norm = LogNorm(),
-        #cmap = newcmp)
+        levels=[1e-4, 1e-3, 1e-2, 1e-1, 1e0], norm = LogNorm(),
+        cmap = newcmp)
         # )
     # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
     # plt.plot(data2['time_hrly'][::6], bldepth2[::6], 'k', linewidth = 1.0)
@@ -921,11 +927,11 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     ax = plt.gca()
     # ax.set_facecolor('gainsboro')
     plt.contourf(ra2t_data['time'], np.squeeze(ra2t_data['height'][0,:]), np.transpose(ra2t_data['model_twc'])*1e3,
-        levels=clev,cmap = newcmp)
+        #levels=clev,cmap = newcmp)
         # np.arange(0,0.31,0.01),
         # locator=ticker.LogLocator(base = 10.0),
-        #levels=[1e-4, 1e-3, 1e-2, 1e-1, 1e0], norm = LogNorm(),
-        #cmap = newcmp)
+        levels=[1e-4, 1e-3, 1e-2, 1e-1, 1e0], norm = LogNorm(),
+        cmap = newcmp)
         # )
     # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
     # plt.plot(data4['time_hrly'][::6], bldepth4[::6], 'k', linewidth = 1.0)
@@ -947,11 +953,11 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     ax = plt.gca()
     # ax.set_facecolor('aliceblue')
     plt.contourf(um_data['time'], np.squeeze(um_data['height'][0,:]), np.transpose(um_data['model_twc'])*1e3,
-        levels=clev,cmap = newcmp)
+        #levels=clev,cmap = newcmp)
         # np.arange(0,0.31,0.01),
         # locator=ticker.LogLocator(base = 10.0),
-        #levels=[1e-4, 1e-3, 1e-2, 1e-1, 1e0], norm = LogNorm(),
-        #cmap = newcmp)
+        levels=[1e-4, 1e-3, 1e-2, 1e-1, 1e0], norm = LogNorm(),
+        cmap = newcmp)
         # )
     # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
     # plt.plot(data1['time_hrly'][::6], bldepth1[::6], 'k', linewidth = 1.0)
@@ -978,11 +984,11 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
         ax = plt.gca()
         # ax.set_facecolor('aliceblue')
         plt.contourf(monc_data['time2']/60/60, np.squeeze(monc_data['z'][:]), np.transpose(monc_data['model_twc'])*1e3,
-        levels=clev,cmap = newcmp)
+        #levels=clev,cmap = newcmp)
         # np.arange(0,0.31,0.01),
         # locator=ticker.LogLocator(base = 10.0),
-        #levels=[1e-4, 1e-3, 1e-2, 1e-1, 1e0], norm = LogNorm(),
-        #cmap = newcmp)
+        levels=[1e-4, 1e-3, 1e-2, 1e-1, 1e0], norm = LogNorm(),
+        cmap = newcmp)
         # )
         plt.ylabel('Z [km]')
         plt.ylim(ylims)
