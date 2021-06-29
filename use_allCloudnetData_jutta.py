@@ -1009,8 +1009,8 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     if numsp ==5:
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_MONC_TWCTimeseries.png'
     plt.savefig(fileout)
-    plt.show()
-    embed()
+    plt.close()
+
     #### ---------------------------------------------------------------------------------------------------
     #### ---------------------------------------------------------------------------------------------------
     ####            CREATE TWC MASK
@@ -6900,7 +6900,7 @@ def main():
     varlist_obs = ['Cv', 'lwc_adiabatic', 'iwc', 'lwp']
     varlist_um = ['model_Cv_filtered', 'model_lwc', 'model_iwc_filtered', 'model_lwp']
     # print(um_data.keys())
-    embed()
+
     ## remove missing Cv obs timesteps (remove from all)
     print(' remove missing Cv obs timesteps (remove from all)')
     for c in range(0, 1):
@@ -6986,7 +6986,7 @@ def main():
     # -------------------------------------------------------------
     #figure = plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, monc_data=monc_data)
     #figure = plot_LWCTimeseries(um_data, misc_data, ra2t_data,obs_data, plots_out_dir, dates, obs_switch,monc_data=monc_data)
-    #figure = plot_IWCTimeseries(um_data, misc_data, ra2t_data,obs_data, plots_out_dir, dates, obs_switch,monc_data=monc_data)
+    figure = plot_IWCTimeseries(um_data, misc_data, ra2t_data,obs_data, plots_out_dir, dates, obs_switch,monc_data=monc_data)
     figure = plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch,nanind,wcind,monc_data=monc_data)
     # figure = plot_TWCTesting(um_data, ifs_data, misc_data, obs_data, data1, data2, data3, obs, month_flag, missing_files, doy)
 
