@@ -16,8 +16,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as mpl_cm
 import matplotlib.ticker as ticker
-from matplotlib.colors import ListedColormap, LinearSegmentedColormap
+from matplotlib.colors import ListedColormap, LinearSegmentedColormap,LogNorm
 import matplotlib.dates as mdates
+
 
 import os
 #import seaborn as sns
@@ -775,8 +776,6 @@ def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, 
     plt.close()
 
 def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch,nanind,wcind, **args):
-
-    from matplotlib.colors import LogNorm
 
     numsp=4
     pltmonc=False
