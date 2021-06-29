@@ -905,7 +905,7 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
         xticks=np.arange(np.floor(monc_data['time2'][0]/60/60),np.ceil(monc_data['time2'][-1]/60/60),2)
         xlabs=xticks*100
         plt.xticks(xticks)
-        ax.set_xticklabels({0:-04d}.format(xlabs))
+        ax.set_xticklabels("{0:-04d}".format(xlabs))
         plt.xlabel('Time (UTC)')
         ax2 = ax.twinx()
         ax2.set_ylabel('MONC', rotation = 270, labelpad = 17)
