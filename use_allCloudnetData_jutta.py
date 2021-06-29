@@ -457,8 +457,15 @@ def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     yticks=np.arange(0,2.5e3,0.5e3)
     ytlabels=yticks/1e3
 
+    obs_data['lwc'][obs_data['lwc'] == 0] = np.nan
+    um_data['model_lwc'][um_data['model_lwc'] <= 0.0] = np.nan
+    misc_data['model_lwc'][misc_data['model_lwc'] <= 0.0] = np.nan
+    ra2t_data['model_lwc'][ra2t_data['model_lwc'] <= 0.0] = np.nan
+
+
     if bool(args):
         monc_data['model_lwc']= monc_data['liquid_mmr_mean']*monc_data['rho']
+        monc_data['model_lwc'][monc_data['model_lwc'] <= 0.0] = np.nan
 
     print ('******')
     print ('')
@@ -486,6 +493,7 @@ def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     newcmp = ListedColormap(newcolors)
 
     cmax=0.3
+    clev=np.arange(0,0.35,0.05)
     #####PlotLwc###############################################
     fig = plt.figure(figsize=(9.5,13))
     plt.subplots_adjust(top = 0.9, bottom = 0.06, right = 0.92, left = 0.08,
@@ -495,11 +503,10 @@ def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     ax = plt.gca()
     # ax.set_facecolor('aliceblue')
     img = plt.contourf(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(obs_data['lwc_adiabatic'])*1e3,
-            cmap=newcmp,vmin = 0.0, vmax = cmax)
-        # np.arange(0,0.31,0.01),
+        levels=clev,cmap = newcmp)
+        #    cmap=newcmp,vmin = 0.0, vmax = cmax)
         # locator=ticker.LogLocator(base = 10.0),
 #        levels=[1e-4, 1e-3, 1e-2, 1e-1, 1e0], norm = LogNorm(),
-#        cmap = newcmp)
         # )
     # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
     nans = ax.get_ylim()
@@ -524,7 +531,7 @@ def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     ax = plt.gca()
     # ax.set_facecolor('aliceblue')
     plt.contourf(misc_data['time'], np.squeeze(misc_data['height'][0,:]), np.transpose(misc_data['model_lwc'])*1e3,
-            cmap=newcmp,vmin = 0.0, vmax = cmax)
+        levels=clev,cmap = newcmp)
 #        levels=[1e-4, 1e-3, 1e-2, 1e-1, 1e0], norm = LogNorm(),
 #        cmap = newcmp)
     # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
@@ -547,7 +554,7 @@ def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     ax = plt.gca()
     # ax.set_facecolor('gainsboro')
     plt.contourf(ra2t_data['time'], np.squeeze(ra2t_data['height'][0,:]), np.transpose(ra2t_data['model_lwc'])*1e3,
-            cmap=newcmp,vmin = 0.0, vmax = cmax)
+        levels=clev,cmap = newcmp)
 #        levels=[1e-4, 1e-3, 1e-2, 1e-1, 1e0], norm = LogNorm(),
 #        cmap = newcmp)
 
@@ -571,7 +578,7 @@ def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     ax = plt.gca()
     # ax.set_facecolor('aliceblue')
     plt.contourf(um_data['time'], np.squeeze(um_data['height'][0,:]), np.transpose(um_data['model_lwc'])*1e3,
-            cmap=newcmp,vmin = 0.0, vmax = cmax)
+        levels=clev,cmap = newcmp)
 #        levels=[1e-4, 1e-3, 1e-2, 1e-1, 1e0], norm = LogNorm(),
 #        cmap = newcmp)
 
@@ -600,7 +607,7 @@ def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
         ax = plt.gca()
         # ax.set_facecolor('aliceblue')
         plt.contourf(monc_data['time2']/60/60, np.squeeze(monc_data['z'][:]), np.transpose(monc_data['model_lwc'])*1e3,
-            cmap=newcmp,vmin = 0.0, vmax = cmax)
+        levels=clev,cmap = newcmp)
 #        levels=[1e-4, 1e-3, 1e-2, 1e-1, 1e0], norm = LogNorm(),
 #        cmap = newcmp)
 
