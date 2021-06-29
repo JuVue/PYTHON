@@ -950,14 +950,12 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     plt.subplot(numsp,1,4)
     ax = plt.gca()
     # ax.set_facecolor('aliceblue')
-    # plt.contourf(um_data['time'], np.squeeze(um_data['height'][0,:]), np.transpose(um_data['model_twc'])*1e3,
+     plt.contourf(um_data['time'], np.squeeze(um_data['height'][0,:]), np.transpose(um_data['model_twc'])*1e3,
     #     #levels=clev,cmap = newcmp)
     #     # np.arange(0,0.31,0.01),
     #     # locator=ticker.LogLocator(base = 10.0),
-    #     levels=[1e-4, 1e-3, 1e-2, 1e-1, 1e0], norm = LogNorm(),
-    #     cmap = newcmp)
-    plt.pcolor(um_data['time'], np.squeeze(um_data['height'][0,:]), np.transpose(um_data['model_twc'])*1e3,
-            cmap = newcmp)        # )
+         levels=[1e-4, 1e-3, 1e-2, 1e-1, 1e0], norm = LogNorm(),
+         cmap = newcmp)
     # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
     # plt.plot(data1['time_hrly'][::6], bldepth1[::6], 'k', linewidth = 1.0)
     nans = ax.get_ylim()
@@ -976,7 +974,7 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
         # plt.colorbar()
     if numsp ==4:
         plt.xlabel('Date')
-
+    plt.show()
 
     if numsp == 5:
         plt.subplot(numsp,1,5)
