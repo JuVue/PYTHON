@@ -6904,7 +6904,7 @@ def main():
     varlist_obs = ['Cv', 'lwc_adiabatic', 'iwc', 'lwp']
     varlist_um = ['model_Cv_filtered', 'model_lwc', 'model_iwc_filtered', 'model_lwp']
     # print(um_data.keys())
-
+    embed()
     ## remove missing Cv obs timesteps (remove from all)
     print(' remove missing Cv obs timesteps (remove from all)')
     for c in range(0, 1):
