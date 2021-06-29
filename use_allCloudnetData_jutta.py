@@ -895,9 +895,10 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
         ax.xaxis.set_major_locator(ticker.MultipleLocator(2))
         plt.xlabel('Time (UTC)')
         nans = ax.get_ylim()
-        ax2 = ax.twinx()
-        ax2.set_ylabel('MONC', rotation = 270, labelpad = 17)
-        ax2.set_yticks([])
+        plt.title('MONC')
+        #ax2 = ax.twinx()
+        #ax2.set_ylabel('MONC', rotation = 270, labelpad = 17)
+        #ax2.set_yticks([])
 
     print ('******')
     print ('')
