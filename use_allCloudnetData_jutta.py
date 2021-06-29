@@ -493,7 +493,7 @@ def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     plt.subplot(numsp,1,1)
     ax = plt.gca()
     # ax.set_facecolor('aliceblue')
-    img = plt.contourf(obs_data['time'], np.squeeze(obs_data['height'][0,:]), twc0,
+    img = plt.contourf(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(obs_data['lwc_adiabatic'])*1e3,
         # np.arange(0,0.31,0.01),
         # locator=ticker.LogLocator(base = 10.0),
         levels=[1e-4, 1e-3, 1e-2, 1e-1, 1e0], norm = LogNorm(),
