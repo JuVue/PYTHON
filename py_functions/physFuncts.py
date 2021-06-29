@@ -233,10 +233,10 @@ def calcRH(temperature, pressure, q):
     return rh
 
 def calcT(theta,pressure):
-        cp = 1004.6      # J/kg.K
-        cpd = 1005.7     # J/kg.K
-        Rd = 287.04   # dry air J kg^-1 K^-1
-        p0 = 1e5   # hPa
+    cp = 1004.6      # J/kg.K
+    cpd = 1005.7     # J/kg.K
+    Rd = 287.04   # dry air J kg^-1 K^-1
+    p0 = 1e5   # hPa
 
     temperature = theta / np.power(p0 / pressure,Rd/cp)
     return temperature
