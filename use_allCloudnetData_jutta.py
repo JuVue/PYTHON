@@ -974,8 +974,6 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
         # plt.colorbar()
     if numsp ==4:
         plt.xlabel('Date')
-    plt.show()
-    embed()
     if numsp == 5:
         plt.subplot(numsp,1,5)
         ax = plt.gca()
