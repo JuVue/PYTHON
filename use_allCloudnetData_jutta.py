@@ -648,21 +648,14 @@ def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, 
     yticks=np.arange(0,2.5e3,0.5e3)
     ytlabels=yticks/1e3
 
-    if bool(args):
-        monc_data['model_iwc']= monc_data['ice_mmr_mean']*monc_data['rho']
-
-
-
     obs_data['iwc'][obs_data['iwc'] <= 0] = np.nan
     um_data['model_iwc_filtered'][um_data['model_iwc_filtered'] <= 0.0] = np.nan
     misc_data['model_iwc_filtered'][misc_data['model_iwc_filtered'] <= 0.0] = np.nan
     ra2t_data['model_iwc_filtered'][ra2t_data['model_iwc_filtered'] <= 0.0] = np.nan
 
-    viridis = mpl_cm.get_cmap('viridis', 256) # nice colormap purple to yellow
-    newcolors = viridis(np.linspace(0, 1, 256)) #assgin new colormap with viridis colors
-    greyclr = np.array([0.1, 0.1, 0.1, 0.1])
-    newcolors[:1, :] = greyclr   # make first 20 colors greyclr
-    newcmp = ListedColormap(newcolors)
+    if bool(args):
+        monc_data['model_iwc']= monc_data['ice_mmr_mean']*monc_data['rho']
+        monc_data['model_iwc'][monc_data['model_iwc'] <= 0.0] = np.nan
 
     print ('******')
     print ('')
@@ -679,12 +672,18 @@ def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, 
     plt.rc('xtick',labelsize=MED_SIZE)
     plt.rc('ytick',labelsize=MED_SIZE)
     plt.rc('legend',fontsize=MED_SIZE)
+
+    viridis = mpl_cm.get_cmap('viridis', 256) # nice colormap purple to yellow
+    newcolors = viridis(np.linspace(0, 1, 256)) #assgin new colormap with viridis colors
+    greyclr = np.array([0.1, 0.1, 0.1, 0.1])
+    newcolors[:1, :] = greyclr   # make first 20 colors greyclr
+    newcmp = ListedColormap(newcolors)
+
+    cmax = 0.05
+
     fig = plt.figure(figsize=(9.5,13))
     plt.subplots_adjust(top = 0.92, bottom = 0.06, right = 0.92, left = 0.08,
             hspace = 0.4, wspace = 0.2)
-
-
-    cmax = 0.05
 
     plt.subplot(numsp,1,1)
     ax = plt.gca()
