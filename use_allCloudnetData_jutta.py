@@ -950,7 +950,7 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     plt.subplot(numsp,1,4)
     ax = plt.gca()
     # ax.set_facecolor('aliceblue')
-     plt.contourf(um_data['time'], np.squeeze(um_data['height'][0,:]), np.transpose(um_data['model_twc'])*1e3,
+    plt.contourf(um_data['time'], np.squeeze(um_data['height'][0,:]), np.transpose(um_data['model_twc'])*1e3,
     #     #levels=clev,cmap = newcmp)
     #     # np.arange(0,0.31,0.01),
     #     # locator=ticker.LogLocator(base = 10.0),
