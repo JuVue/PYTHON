@@ -420,8 +420,11 @@ def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates, plots_out_
         plt.yticks(yticks)
         ax.set_yticklabels(ytlabels)
         #plt.xlim(monc_data['time2']/60/60])
-        ax.xaxis.set_minor_locator(ticker.MultipleLocator(1))
-        ax.xaxis.set_major_locator(ticker.MultipleLocator(2))
+        xticks=np.arange(np.floor(monc_data['time2'][0]/60/60),np.ceil(monc_data['time2'][-1]/60/60)+1,2,dtype=int)
+        xlabs=[x*100 for x in xticks]
+        xlabs=["{0:-04d}".format(t) for t in xlabs]
+        plt.xticks(xticks)
+        ax.set_xticklabels(xlabs)
         plt.xlabel('Time (UTC)')
         nans = ax.get_ylim()
         ax2 = ax.twinx()
@@ -902,9 +905,9 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
         plt.yticks(yticks)
         ax.set_yticklabels(ytlabels)
         #plt.xlim(monc_data['time2']/60/60])
-        xticks=np.arange(np.floor(monc_data['time2'][0]/60/60),np.ceil(monc_data['time2'][-1]/60/60),2)
-        embed()
-        xlabs="{0:-04d}".format(xticks*100)
+        xticks=np.arange(np.floor(monc_data['time2'][0]/60/60),np.ceil(monc_data['time2'][-1]/60/60)+1,2,dtype=int)
+        xlabs=[x*100 for x in xticks]
+        xlabs=["{0:-04d}".format(t) for t in xlabs]
         plt.xticks(xticks)
         ax.set_xticklabels(xlabs)
         plt.xlabel('Time (UTC)')
