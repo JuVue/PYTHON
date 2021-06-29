@@ -629,6 +629,7 @@ def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     if numsp ==5:
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_MONC_LWCTimeseries.png'
     plt.savefig(fileout)
+    plt.close()
 
 def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch,**args): #, lon, lat):
 
@@ -806,13 +807,6 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
         monc_data['model_lwc']= monc_data['liquid_mmr_mean']*monc_data['rho']
         monc_data['model_twc'] = monc_data['model_lwc'] +monc_data['model_iwc']
 
-
-
-    # bldepth1 = data1['bl_depth'][data1['hrly_flag']]
-    # bldepth2 = data2['bl_depth'][data2['hrly_flag']]
-    # bldepth3 = data3['sfc_bl_height'][data3['hrly_flag']]
-    # bldepth4 = data4['bl_depth'][data4['hrly_flag']]
-    #
     twc0 = np.transpose(obs_data['twc'])*1e3
 
     cmax = 0.3
@@ -6952,10 +6946,10 @@ def main():
     # -------------------------------------------------------------
     # Cloudnet plot: Plot contour timeseries
     # -------------------------------------------------------------
-    figure = plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates,plots_out_dir,monc_data=monc_data)
+    #figure = plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates,plots_out_dir,monc_data=monc_data)
     figure = plot_LWCTimeseries(um_data, misc_data, ra2t_data,obs_data, plots_out_dir, dates, obs_switch)
     #figure = plot_IWCTimeseries(um_data, misc_data, ra2t_data,obs_data, plots_out_dir, dates, obs_switch)
-    figure = plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch,nanind,wcind,monc_data=monc_data)
+    #figure = plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch,nanind,wcind,monc_data=monc_data)
     # figure = plot_TWCTesting(um_data, ifs_data, misc_data, obs_data, data1, data2, data3, obs, month_flag, missing_files, doy)
 
     # -------------------------------------------------------------
