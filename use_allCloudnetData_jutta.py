@@ -810,6 +810,8 @@ def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, 
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_IWCTimeseries.png'
     if numsp ==5:
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_MONC_IWCTimeseries.png'
+    print(fileout)
+    embed()
     plt.savefig(fileout)
     plt.close()
 
