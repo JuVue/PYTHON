@@ -483,9 +483,6 @@ def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     plt.rc('xtick',labelsize=MED_SIZE)
     plt.rc('ytick',labelsize=MED_SIZE)
     plt.rc('legend',fontsize=MED_SIZE)
-    fig = plt.figure(figsize=(9.5,13))
-    plt.subplots_adjust(top = 0.92, bottom = 0.06, right = 0.92, left = 0.08,
-            hspace = 0.4, wspace = 0.2)
 
     viridis = mpl_cm.get_cmap('viridis', 256) # nice colormap purple to yellow
     newcolors = viridis(np.linspace(0, 1, 256)) #assgin new colormap with viridis colors
@@ -509,7 +506,6 @@ def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
         # locator=ticker.LogLocator(base = 10.0),
 #        levels=[1e-4, 1e-3, 1e-2, 1e-1, 1e0], norm = LogNorm(),
         # )
-    # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
     nans = ax.get_ylim()
     plt.ylabel('Z [km]')
     plt.ylim(ylims)
@@ -655,6 +651,13 @@ def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, 
     if bool(args):
         monc_data['model_iwc']= monc_data['ice_mmr_mean']*monc_data['rho']
 
+
+
+    obs_data['iwc'][obs_data['iwc'] <= 0] = np.nan
+    um_data['model_iwc_filtered'][um_data['model_iwc_filtered'] <= 0.0] = np.nan
+    misc_data['model_iwc_filtered'][misc_data['model_iwc_filtered'] <= 0.0] = np.nan
+    ra2t_data['model_iwc_filtered'][ra2t_data['model_iwc_filtered'] <= 0.0] = np.nan
+
     viridis = mpl_cm.get_cmap('viridis', 256) # nice colormap purple to yellow
     newcolors = viridis(np.linspace(0, 1, 256)) #assgin new colormap with viridis colors
     greyclr = np.array([0.1, 0.1, 0.1, 0.1])
@@ -676,16 +679,10 @@ def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, 
     plt.rc('xtick',labelsize=MED_SIZE)
     plt.rc('ytick',labelsize=MED_SIZE)
     plt.rc('legend',fontsize=MED_SIZE)
-    plt.figure(figsize=(10,9))
-    plt.subplots_adjust(top = 0.9, bottom = 0.1, right = 1.0, left = 0.1,
-            hspace = 0.4, wspace = 0.05)
+    fig = plt.figure(figsize=(9.5,13))
+    plt.subplots_adjust(top = 0.92, bottom = 0.06, right = 0.92, left = 0.08,
+            hspace = 0.4, wspace = 0.2)
 
-
-
-    obs_data['iwc'][obs_data['iwc'] <= 0] = np.nan
-    um_data['model_iwc_filtered'][um_data['model_iwc_filtered'] <= 0.0] = np.nan
-    misc_data['model_iwc_filtered'][misc_data['model_iwc_filtered'] <= 0.0] = np.nan
-    ra2t_data['model_iwc_filtered'][ra2t_data['model_iwc_filtered'] <= 0.0] = np.nan
 
     cmax = 0.05
 
