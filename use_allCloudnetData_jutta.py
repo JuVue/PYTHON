@@ -6790,7 +6790,7 @@ def main():
                     'vapour_mmr_mean','liquid_mmr_mean','rain_mmr_mean','ice_mmr_mean','snow_mmr_mean',
                     'graupel_mmr_mean'],
                     ['vwp','lwp','rwp','iwp','swp','gwp','tot_iwp'],
-                    'q_vapour','q_cloud_liquid_mass','q_rain_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
+                    ['q_vapour','q_cloud_liquid_mass','q_rain_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
 
 
     print(monc_var_list)
