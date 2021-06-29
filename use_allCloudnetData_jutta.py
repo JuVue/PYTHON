@@ -756,7 +756,6 @@ def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, 
     ax2.set_ylabel('UM_RA2T', rotation = 270, labelpad = 35)
     ax2.set_yticks([])
 
-
     plt.subplot(numsp,1,4)
     ax = plt.gca()
     plt.contourf(um_data['time'], np.squeeze(um_data['height'][0,:]), np.transpose(um_data['model_iwc_filtered'])*1e3,
@@ -799,10 +798,13 @@ def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, 
         ax2 = ax.twinx()
         ax2.set_ylabel('MONC', rotation = 270, labelpad = 17)
         ax2.set_yticks([])
+
     print ('******')
     print ('')
     print ('Finished plotting! :)')
     print ('')
+    plt.show()
+    embed()
     dstr=datenum2date(dates[1])
     if numsp ==4:
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_IWCTimeseries.png'
@@ -6987,7 +6989,7 @@ def main():
     #figure = plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, monc_data=monc_data)
     #figure = plot_LWCTimeseries(um_data, misc_data, ra2t_data,obs_data, plots_out_dir, dates, obs_switch,monc_data=monc_data)
     figure = plot_IWCTimeseries(um_data, misc_data, ra2t_data,obs_data, plots_out_dir, dates, obs_switch,monc_data=monc_data)
-    figure = plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch,nanind,wcind,monc_data=monc_data)
+    #figure = plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch,nanind,wcind,monc_data=monc_data)
     # figure = plot_TWCTesting(um_data, ifs_data, misc_data, obs_data, data1, data2, data3, obs, month_flag, missing_files, doy)
 
     # -------------------------------------------------------------
