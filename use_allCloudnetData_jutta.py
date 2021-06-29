@@ -803,7 +803,6 @@ def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, 
     print ('')
     print ('Finished plotting! :)')
     print ('')
-    plt.show()
 
     dstr=datenum2date(dates[1])
     if numsp ==4:
