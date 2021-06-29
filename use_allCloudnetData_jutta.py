@@ -442,12 +442,22 @@ def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates, plots_out_
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_MONC_CvTimeseries.png'
     print(fileout)
     plt.savefig(fileout)
-    #plt.close()
-def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch): #, lon, lat):
+    plt.close()
 
-    ylims=[0,5]
-    yticks=np.arange(0,5e3,1e3)
+def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch,**args): #, lon, lat):
+
+    numsp=4
+    pltmonc=False
+    if bool(args):
+        monc_data=args[list(args.keys())[0]]
+        numsp = 5
+
+    ylims=[0,2.5]
+    yticks=np.arange(0,2.5e3,0.5e3)
     ytlabels=yticks/1e3
+
+    if bool(args):
+        monc_data['model_lwc']= monc_data['liquid_mmr_mean']*monc_data['rho']
 
     print ('******')
     print ('')
@@ -468,9 +478,6 @@ def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     plt.subplots_adjust(top = 0.92, bottom = 0.06, right = 0.92, left = 0.08,
             hspace = 0.4, wspace = 0.2)
 
-    ### define axis instance
-    ax = plt.gca()
-
     viridis = mpl_cm.get_cmap('viridis', 256) # nice colormap purple to yellow
     newcolors = viridis(np.linspace(0, 1, 256)) #assgin new colormap with viridis colors
     greyclr = np.array([0.1, 0.1, 0.1, 0.1])
@@ -478,19 +485,22 @@ def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     newcmp = ListedColormap(newcolors)
 
 
-    ### set colour max as var
-    cmax = 0.3
+    #####Plot Twc###############################################
+    fig = plt.figure(figsize=(9.5,13))
+    plt.subplots_adjust(top = 0.9, bottom = 0.06, right = 0.92, left = 0.08,
+            hspace = 0.4, wspace = 0.2)
 
-    plt.subplot(411)
+    plt.subplot(numsp,1,1)
     ax = plt.gca()
-    if obs_switch == 'RADAR':
-        img = plt.pcolor(obs_data['time'][::6], obs_data['height'][:394], np.transpose(obs_data['lwc'][::6,:394])*1e3,
-            vmin = 0.0, vmax = cmax)
-            #cmap = newcmp)
-    else:
-        img = plt.pcolor(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(obs_data['lwc_adiabatic'])*1e3,
-            cmap=newcmp,vmin = 0.0, vmax = cmax)
-            #cmap = newcmp)
+    # ax.set_facecolor('aliceblue')
+    img = plt.contourf(obs_data['time'], np.squeeze(obs_data['height'][0,:]), twc0,
+        # np.arange(0,0.31,0.01),
+        # locator=ticker.LogLocator(base = 10.0),
+        levels=[1e-4, 1e-3, 1e-2, 1e-1, 1e0], norm = LogNorm(),
+        cmap = newcmp)
+        # )
+    # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
+    nans = ax.get_ylim()
     plt.ylabel('Z [km]')
     plt.ylim(ylims)
     plt.yticks(yticks)
@@ -499,19 +509,26 @@ def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-    nans = ax.get_ylim()
+    #nans = ax.get_ylim()
     ax2 = ax.twinx()
     ax2.set_ylabel('Measurements \n (1 hour sampling)', rotation = 270, labelpad = 35)
     ax2.set_yticks([])
-    cbaxes = fig.add_axes([0.225, 0.96, 0.6, 0.015])
+    #plt.title('Obs-' + obs_switch + 'grid')
+    cbaxes = fig.add_axes([0.225, 0.95, 0.6, 0.015])
     cb = plt.colorbar(img, cax = cbaxes, orientation = 'horizontal')
-    plt.title('LWC')
+    plt.title('LWC [g m$^{-3}$]')
 
-    plt.subplot(412)
+    plt.subplot(numsp,1,2)
     ax = plt.gca()
-    plt.pcolor(misc_data['time'], np.squeeze(misc_data['height'][0,:]), np.transpose(misc_data['model_lwc'])*1e3,
-        cmap=newcmp,vmin = 0.0, vmax = cmax)
-        # cmap = newcmp)
+    # ax.set_facecolor('aliceblue')
+    plt.contourf(misc_data['time'], np.squeeze(misc_data['height'][0,:]), np.transpose(misc_data['model_lwc'])*1e3,
+        # locator=ticker.LogLocator(base = 10.0),
+        levels=[1e-4, 1e-3, 1e-2, 1e-1, 1e0], norm = LogNorm(),
+        # np.arange(0,0.31,0.001),
+        cmap = newcmp)
+    # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
+    # plt.plot(data2['time_hrly'][::6], bldepth2[::6], 'k', linewidth = 1.0)
+    nans = ax.get_ylim()
     plt.ylabel('Z [km]')
     plt.ylim(ylims)
     plt.yticks(yticks)
@@ -520,17 +537,22 @@ def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-    nans = ax.get_ylim()
     ax2 = ax.twinx()
     ax2.set_ylabel('UM_CASIM', rotation = 270, labelpad = 17)
     ax2.set_yticks([])
+    # plt.colorbar()
 
-
-    plt.subplot(413)
+    plt.subplot(numsp,1,3)
     ax = plt.gca()
-    plt.pcolor(ra2t_data['time'], np.squeeze(ra2t_data['height'][0,:]), np.transpose(ra2t_data['model_lwc'])*1e3,
-    cmap=newcmp,vmin = 0.0, vmax = cmax)
-    # cmap = newcmp)
+    # ax.set_facecolor('gainsboro')
+    plt.contourf(ra2t_data['time'], np.squeeze(ra2t_data['height'][0,:]), np.transpose(ra2t_data['model_lwc'])*1e3,
+        # locator=ticker.LogLocator(base = 10.0),
+        levels=[1e-4, 1e-3, 1e-2, 1e-1, 1e0], norm = LogNorm(),
+        # np.arange(0,0.31,0.001),
+        cmap = newcmp)
+    # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
+    # plt.plot(data4['time_hrly'][::6], bldepth4[::6], 'k', linewidth = 1.0)
+    nans = ax.get_ylim()
     plt.ylabel('Z [km]')
     plt.ylim(ylims)
     plt.yticks(yticks)
@@ -539,17 +561,22 @@ def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-    nans = ax.get_ylim()
     ax2 = ax.twinx()
     ax2.set_ylabel('UM_RA2T', rotation = 270, labelpad = 17)
     ax2.set_yticks([])
+    # plt.colorbar()
 
-
-    plt.subplot(414)
+    plt.subplot(numsp,1,4)
     ax = plt.gca()
-    plt.pcolor(um_data['time'], np.squeeze(um_data['height'][0,:]), np.transpose(um_data['model_lwc'])*1e3,
-        cmap=newcmp,vmin = 0.0, vmax = cmax)
-    # cmap = newcmp)
+    # ax.set_facecolor('aliceblue')
+    plt.contourf(um_data['time'], np.squeeze(um_data['height'][0,:]), np.transpose(um_data['model_lwc'])*1e3,
+        # locator=ticker.LogLocator(base = 10.0),
+        levels=[1e-4, 1e-3, 1e-2, 1e-1, 1e0], norm = LogNorm(),
+        # np.arange(0,0.31,0.001),
+        cmap = newcmp)
+    # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
+    # plt.plot(data1['time_hrly'][::6], bldepth1[::6], 'k', linewidth = 1.0)
+    nans = ax.get_ylim()
     plt.ylabel('Z [km]')
     plt.ylim(ylims)
     plt.yticks(yticks)
@@ -558,22 +585,51 @@ def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-    nans = ax.get_ylim()
     ax2 = ax.twinx()
     ax2.set_ylabel('UM_RA2M', rotation = 270, labelpad = 17)
     ax2.set_yticks([])
+    xlabs=ax.get_xticks().tolist()
+        # plt.colorbar()
+    if numsp ==4:
+        plt.xlabel('Date')
 
+
+    if numsp == 5:
+        plt.subplot(numsp,1,5)
+        ax = plt.gca()
+        # ax.set_facecolor('aliceblue')
+        plt.contourf(monc_data['time2']/60/60, np.squeeze(monc_data['z'][:]), np.transpose(monc_data['model_lwc'])*1e3,
+            levels=[1e-4, 1e-3, 1e-2, 1e-1, 1e0], norm = LogNorm(),
+            cmap = newcmp,
+            zorder = 1)
+        # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
+        # plt.plot(data1['time_hrly'][::6], bldepth1[::6], 'k', linewidth = 1.0)
+        plt.ylabel('Z [km]')
+        plt.ylim(ylims)
+        plt.yticks(yticks)
+        ax.set_yticklabels(ytlabels)
+        xticks=np.arange(np.floor(monc_data['time2'][0]/60/60),np.ceil(monc_data['time2'][-1]/60/60)+1,2,dtype=int)
+        xlabs=[x*100 for x in xticks]
+        xlabs=["{0:-04d}".format(t) for t in xlabs]
+        plt.xticks(xticks)
+        ax.set_xticklabels(xlabs)
+        plt.xlabel('Time (UTC)')
+        ax2 = ax.twinx()
+        ax2.set_ylabel('MONC', rotation = 270, labelpad = 17)
+        ax2.set_yticks([])
     print ('******')
     print ('')
     print ('Finished plotting! :)')
     print ('')
+
     dstr=datenum2date(dates[1])
-
-    fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_LWCTimeseries.png'
+    if numsp ==4:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_LWCTimeseries.png'
+    if numsp ==5:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_MONC_LWCTimeseries.png'
     plt.savefig(fileout)
-    plt.close()
 
-def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch): #, lon, lat):
+def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch,**args): #, lon, lat):
 
     ylims=[0,5]
     yticks=np.arange(0,5e3,1e3)
@@ -779,11 +835,9 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     plt.rc('ytick',labelsize=MED_SIZE)
     plt.rc('legend',fontsize=MED_SIZE)
 
-
-
     #####Plot Twc###############################################
     fig = plt.figure(figsize=(9.5,13))
-    plt.subplots_adjust(top = 0.9, bottom = 0.06, right = 0.98, left = 0.08,
+    plt.subplots_adjust(top = 0.9, bottom = 0.06, right = 0.92, left = 0.08,
             hspace = 0.4, wspace = 0.2)
 
     plt.subplot(numsp,1,1)
@@ -904,7 +958,6 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
         plt.ylim(ylims)
         plt.yticks(yticks)
         ax.set_yticklabels(ytlabels)
-        #plt.xlim(monc_data['time2']/60/60])
         xticks=np.arange(np.floor(monc_data['time2'][0]/60/60),np.ceil(monc_data['time2'][-1]/60/60)+1,2,dtype=int)
         xlabs=[x*100 for x in xticks]
         xlabs=["{0:-04d}".format(t) for t in xlabs]
@@ -914,9 +967,6 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
         ax2 = ax.twinx()
         ax2.set_ylabel('MONC', rotation = 270, labelpad = 17)
         ax2.set_yticks([])
-        #ax2 = ax.twinx()
-        #ax2.set_ylabel('MONC', rotation = 270, labelpad = 17)
-        #ax2.set_yticks([])
     print ('******')
     print ('')
     print ('Finished plotting! :)')
@@ -1281,31 +1331,6 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
 
     fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_TWC-MASK_profiles.png'
     plt.savefig(fileout)
-
-    # print ('Z1 = ')
-    # print (np.round(np.nanmean(um_data['height'],0),-2))
-    # print ('Z3 = ')
-    # print (np.round(np.nanmean(ifs_data['height'],0),-2))
-    #
-    # Zindex1 = np.where(np.round(np.nanmean(um_data['height'],0),-2) < 600)#<= 2e3) #== 5.e+02)#
-    # Zindex3 = np.where(np.round(np.nanmean(ifs_data['height'],0),-2) < 600)# <= 2e3) #== 5.e+02)#
-    # print ('Zindex1 = ')
-    # print (np.nanmean(um_data['height'][:,Zindex1[0]],0))
-    # print ('Zindex3 = ')
-    # print (np.nanmean(ifs_data['height'][:,Zindex3[0]],0))
-    # print ('UM_RA2M = ')
-    # print (np.nanmean(mask1[:,Zindex1[0]],0))
-    # print ('UM_RA2T = ')
-    # print (np.nanmean(mask4[:,Zindex1[0]],0))
-    # print ('UM_CASIM-100 = ')
-    # print (np.nanmean(mask2[:,Zindex1[0]],0))
-    # print ('ECMWF_IFS = ')
-    # print (np.nanmean(mask3[:,Zindex3[0]],0))
-    # print ('Obs = ')
-    # print (np.nanmean(mask0[:,Zindex1[0]],0))
-
-    # print ('ECMWF_IFS/Obs = ')
-    # print ((np.nanmean(mask3[:,Zindex3[0]],0) - np.nanmean(mask0[:,Zindex1[0]],0)) / np.nanmean(mask0[:,Zindex1[0]],0))
 
 
 def plot_lwcProfiles(um_data, ifs_data, misc_data, ra2t_data, obs_data, month_flag, missing_files, um_out_dir, doy, obs_switch): #, lon, lat):
