@@ -675,7 +675,7 @@ def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, 
     #### set flagged um_data to nans
     obs_data['iwc'][obs_data['iwc'] == -999] = np.nan
     um_data['model_iwc_filtered'][um_data['model_iwc_filtered'] == -999.0] = np.nan
-    ra2t_data['model_iwc_filtered'][ra2t['model_iwc_filtered'] == -999.0] = np.nan
+    ra2t_data['model_iwc_filtered'][ra2t_data['model_iwc_filtered'] == -999.0] = np.nan
     misc_data['model_iwc_filtered'][misc_data['model_iwc_filtered'] == -999.0] = np.nan
 
     obs_data['iwc'][obs_data['iwc'] == 0] = np.nan
