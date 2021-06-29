@@ -238,5 +238,5 @@ def calcT(theta,pressure):
         Rd = 287.04   # dry air J kg^-1 K^-1
         p0 = 1e5   # hPa
 
-    temperature = theta / np.power(p0 / pressure,Rd/cp))
+    temperature = theta / np.power(p0 / pressure,Rd/cp)
     return temperature
