@@ -854,7 +854,7 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     plt.rc('ytick',labelsize=MED_SIZE)
     plt.rc('legend',fontsize=MED_SIZE)
 
-    clev = np.arange(0,1.5,0.2)
+    clev = np.arange(0,1,0.1)
 
 
     #####Plot Twc###############################################
