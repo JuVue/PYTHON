@@ -486,7 +486,7 @@ def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     newcmp = ListedColormap(newcolors)
 
 
-    #####Plot Twc###############################################
+    #####PlotLwc###############################################
     fig = plt.figure(figsize=(9.5,13))
     plt.subplots_adjust(top = 0.9, bottom = 0.06, right = 0.92, left = 0.08,
             hspace = 0.4, wspace = 0.2)
@@ -633,9 +633,18 @@ def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
 
 def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch,**args): #, lon, lat):
 
-    ylims=[0,5]
-    yticks=np.arange(0,5e3,1e3)
+    numsp=4
+    pltmonc=False
+    if bool(args):
+        monc_data=args[list(args.keys())[0]]
+        numsp = 5
+
+    ylims=[0,2.5]
+    yticks=np.arange(0,2.5e3,0.5e3)
     ytlabels=yticks/1e3
+
+    if bool(args):
+        monc_data['model_iwc']= monc_data['ice_mmr_mean']*monc_data['rho']
 
     viridis = mpl_cm.get_cmap('viridis', 256) # nice colormap purple to yellow
     newcolors = viridis(np.linspace(0, 1, 256)) #assgin new colormap with viridis colors
@@ -662,27 +671,21 @@ def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, 
     plt.subplots_adjust(top = 0.92, bottom = 0.06, right = 0.92, left = 0.08,
             hspace = 0.4, wspace = 0.2)
 
-    ### define axis instance
-    ax = plt.gca()
 
     #### set flagged um_data to nans
     obs_data['iwc'][obs_data['iwc'] == -999] = np.nan
     um_data['model_iwc_filtered'][um_data['model_iwc_filtered'] == -999.0] = np.nan
+    ra2t_data['model_iwc_filtered'][ra2t['model_iwc_filtered'] == -999.0] = np.nan
     misc_data['model_iwc_filtered'][misc_data['model_iwc_filtered'] == -999.0] = np.nan
 
     obs_data['iwc'][obs_data['iwc'] == 0] = np.nan
     um_data['model_iwc_filtered'][um_data['model_iwc_filtered'] <= 0.0] = np.nan
     misc_data['model_iwc_filtered'][misc_data['model_iwc_filtered'] <= 0.0] = np.nan
-
-    # viridis = mpl_cm.get_cmap('viridis', 256)
-    # newcolors = viridis(np.linspace(0, 1, 256))
-    # greyclr = np.array([0.1, 0.1, 0.1, 0.1])
-    # newcolors[:20, :] = greyclr
-    # newcmp = ListedColormap(newcolors)
+    ra2t_data['model_iwc_filtered'][ra2t_data['model_iwc_filtered'] <= 0.0] = np.nan
 
     cmax = 0.05
 
-    plt.subplot(411)
+    plt.subplot(numsp,1,1)
     ax = plt.gca()
     if obs_switch == 'RADAR':
         img = plt.pcolor(obs_data['time'], obs_data['height'], np.transpose(obs_data['iwc'])*1e3,
@@ -710,7 +713,7 @@ def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, 
     plt.title('IWC')
 
 
-    plt.subplot(413)
+    plt.subplot(numsp,1,3)
     ax = plt.gca()
     plt.pcolor(ra2t_data['time'], np.squeeze(ra2t_data['height'][0,:]), np.transpose(ra2t_data['model_iwc_filtered'])*1e3,
         cmap=newcmp,vmin = 0.0, vmax = cmax)
@@ -729,7 +732,7 @@ def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, 
     ax2.set_ylabel('UM_RA2T', rotation = 270, labelpad = 35)
     ax2.set_yticks([])
 
-    plt.subplot(412)
+    plt.subplot(numsp,1,2)
     ax = plt.gca()
     plt.pcolor(misc_data['time'], np.squeeze(misc_data['height'][0,:]), np.transpose(misc_data['model_iwc_filtered'])*1e3,
         cmap=newcmp,vmin = 0.0, vmax = cmax)
@@ -747,12 +750,11 @@ def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, 
     ax2.set_ylabel('UM_CASIM', rotation = 270, labelpad = 35)
     ax2.set_yticks([])
 
-    plt.subplot(414)
+    plt.subplot(numsp,1,4)
     ax = plt.gca()
     plt.pcolor(um_data['time'], np.squeeze(um_data['height'][0,:]), np.transpose(um_data['model_iwc_filtered'])*1e3,
         cmap=newcmp,vmin = 0.0, vmax = cmax)
         #cmap = newcmp)
-
     plt.ylabel('Z [km]')
     plt.ylim(ylims)
     plt.yticks(yticks)
@@ -765,14 +767,38 @@ def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, 
     ax2 = ax.twinx()
     ax2.set_ylabel('UM_RA2M', rotation = 270, labelpad = 35)
     ax2.set_yticks([])
+    if numsp ==4:
+        plt.xlabel('Date')
 
+
+    if numsp == 5:
+        plt.subplot(numsp,1,5)
+        ax = plt.gca()
+        # ax.set_facecolor('aliceblue')
+        plt.contourf(monc_data['time2']/60/60, np.squeeze(monc_data['z'][:]), np.transpose(monc_data['model_lwc'])*1e3,
+        cmap=newcmp,vmin = 0.0, vmax = cmax)
+        plt.ylabel('Z [km]')
+        plt.ylim(ylims)
+        plt.yticks(yticks)
+        ax.set_yticklabels(ytlabels)
+        xticks=np.arange(np.floor(monc_data['time2'][0]/60/60),np.ceil(monc_data['time2'][-1]/60/60)+1,2,dtype=int)
+        xlabs=[x*100 for x in xticks]
+        xlabs=["{0:-04d}".format(t) for t in xlabs]
+        plt.xticks(xticks)
+        ax.set_xticklabels(xlabs)
+        plt.xlabel('Time (UTC)')
+        ax2 = ax.twinx()
+        ax2.set_ylabel('MONC', rotation = 270, labelpad = 17)
+        ax2.set_yticks([])
     print ('******')
     print ('')
     print ('Finished plotting! :)')
     print ('')
     dstr=datenum2date(dates[1])
-
-    fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_IWCTimeseries.png'
+    if numsp ==4:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_IWCTimeseries.png'
+    if numsp ==5:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_MONC_IWCTimeseries.png'
     plt.savefig(fileout)
     plt.close()
 
@@ -6948,7 +6974,7 @@ def main():
     # -------------------------------------------------------------
     #figure = plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, dates,plots_out_dir,monc_data=monc_data)
     figure = plot_LWCTimeseries(um_data, misc_data, ra2t_data,obs_data, plots_out_dir, dates, obs_switch,monc_data=monc_data)
-    #figure = plot_IWCTimeseries(um_data, misc_data, ra2t_data,obs_data, plots_out_dir, dates, obs_switch)
+    figure = plot_IWCTimeseries(um_data, misc_data, ra2t_data,obs_data, plots_out_dir, dates, obs_switch,monc_data=monc_data)
     #figure = plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch,nanind,wcind,monc_data=monc_data)
     # figure = plot_TWCTesting(um_data, ifs_data, misc_data, obs_data, data1, data2, data3, obs, month_flag, missing_files, doy)
 
