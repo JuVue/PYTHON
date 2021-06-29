@@ -150,8 +150,6 @@ def calcThetaVL(temperature, pressure, q, ql, qi, tim, height):
 
     return theta, theta_l, theta_vl
 
-
-
 def svp(T):
 
     """
@@ -233,3 +231,12 @@ def calcRH(temperature, pressure, q):
                 #### gives RH as a percentage
 
     return rh
+
+def calcT(theta,pressure):
+        cp = 1004.6      # J/kg.K
+        cpd = 1005.7     # J/kg.K
+        Rd = 287.04   # dry air J kg^-1 K^-1
+        p0 = 1e5   # hPa
+
+    temperature = theta / np.power(p0 / pressure,Rd/cp))
+    return temperature
