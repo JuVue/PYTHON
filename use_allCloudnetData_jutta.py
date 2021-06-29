@@ -6798,9 +6798,9 @@ def main():
     ncm = {}
     monc_data = {}
     ncm = Dataset(monc_filename,'r')
-    for var in ncm.variables: print (var)
     for c in range(0,len(monc_var_list)):
         for j in range(0,len(monc_var_list[c])):
+            print(monc_var_list[c][j])
             monc_data[monc_var_list[c][j]] = ncm.variables[monc_var_list[c][j]][:]
 
     monc_data['time1']=monc_data['time_series_2_60'] #1d data
