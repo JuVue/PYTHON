@@ -863,7 +863,7 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     plt.rc('xtick',labelsize=MED_SIZE)
     plt.rc('ytick',labelsize=MED_SIZE)
     plt.rc('legend',fontsize=MED_SIZE)
-
+    embed()
 
     #####Plot Twc###############################################
     fig = plt.figure(figsize=(9.5,13))
