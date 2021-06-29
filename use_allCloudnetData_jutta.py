@@ -458,6 +458,7 @@ def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     ytlabels=yticks/1e3
 
     obs_data['lwc'][obs_data['lwc'] == 0] = np.nan
+    obs_data['lwc_adiabatic'][obs_data['lwc_adiabatic'] == 0] = np.nan
     um_data['model_lwc'][um_data['model_lwc'] <= 0.0] = np.nan
     misc_data['model_lwc'][misc_data['model_lwc'] <= 0.0] = np.nan
     ra2t_data['model_lwc'][ra2t_data['model_lwc'] <= 0.0] = np.nan
@@ -493,7 +494,7 @@ def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     newcmp = ListedColormap(newcolors)
 
     cmax=0.3
-    clev=np.arange(0,0.35,0.05)
+    clev=np.arange(0,0.45,0.05)
     #####PlotLwc###############################################
     fig = plt.figure(figsize=(9.5,13))
     plt.subplots_adjust(top = 0.9, bottom = 0.06, right = 0.92, left = 0.08,
@@ -675,19 +676,13 @@ def plot_IWCTimeseries(um_data,  misc_data, ra2t_data, obs_data, plots_out_dir, 
     plt.rc('xtick',labelsize=MED_SIZE)
     plt.rc('ytick',labelsize=MED_SIZE)
     plt.rc('legend',fontsize=MED_SIZE)
-    fig = plt.figure(figsize=(9.5,13))
-    plt.subplots_adjust(top = 0.92, bottom = 0.06, right = 0.92, left = 0.08,
-            hspace = 0.4, wspace = 0.2)
+    plt.figure(figsize=(10,9))
+    plt.subplots_adjust(top = 0.9, bottom = 0.1, right = 1.0, left = 0.1,
+            hspace = 0.4, wspace = 0.05)
 
 
-    embed()
-    #### set flagged um_data to nans
-    obs_data['iwc'][obs_data['iwc'] == -999] = np.nan
-    um_data['model_iwc_filtered'][um_data['model_iwc_filtered'] == -999.0] = np.nan
-    ra2t_data['model_iwc_filtered'][ra2t_data['model_iwc_filtered'] == -999.0] = np.nan
-    misc_data['model_iwc_filtered'][misc_data['model_iwc_filtered'] == -999.0] = np.nan
 
-    obs_data['iwc'][obs_data['iwc'] == 0] = np.nan
+    obs_data['iwc'][obs_data['iwc'] <= 0] = np.nan
     um_data['model_iwc_filtered'][um_data['model_iwc_filtered'] <= 0.0] = np.nan
     misc_data['model_iwc_filtered'][misc_data['model_iwc_filtered'] <= 0.0] = np.nan
     ra2t_data['model_iwc_filtered'][ra2t_data['model_iwc_filtered'] <= 0.0] = np.nan
