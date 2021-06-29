@@ -881,13 +881,14 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
     ax2 = ax.twinx()
     ax2.set_ylabel('UM_RA2M', rotation = 270, labelpad = 17)
     ax2.set_yticks([])
-    # plt.colorbar()
+    xlabs=ax.get_xticks().tolist()
+        # plt.colorbar()
     if numsp ==4:
         plt.xlabel('Date')
 
 
     if numsp == 5:
-        plt.subplot(numsp,1,1)
+        plt.subplot(numsp,1,5)
         ax = plt.gca()
         # ax.set_facecolor('aliceblue')
         plt.contourf(monc_data['time2']/60/60, np.squeeze(monc_data['z'][:]), np.transpose(monc_data['model_twc'])*1e3,
@@ -901,10 +902,8 @@ def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, d
         plt.yticks(yticks)
         ax.set_yticklabels(ytlabels)
         #plt.xlim(monc_data['time2']/60/60])
-        ax.xaxis.set_minor_locator(ticker.MultipleLocator(1))
-        ax.xaxis.set_major_locator(ticker.MultipleLocator(2))
-        embed()
-        ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+        xticks=np.arange(np.floor(monc_data['time2'][0]/60/60),np.ceil(monc_data['time2'][-1]/60/60),2)
+        plt.xticks(xticks)
         plt.xlabel('Time (UTC)')
         ax2 = ax.twinx()
         ax2.set_ylabel('MONC', rotation = 270, labelpad = 17)
