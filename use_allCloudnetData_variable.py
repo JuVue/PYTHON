@@ -143,9 +143,9 @@ def plot_CvTimeseries(um_data,  obs_data, label, plots_out_dir,dates,  **args):
 
     dstr=datenum2date(dates[1])
     if bool(args):
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' '_'.join(outstr) '_MONC_CvTimeseries.png'
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_MONC_CvTimeseries.png'
     else:
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' '_'.join(outstr) '_CvTimeseries.png'
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_CvTimeseries.png'
     print(fileout)
     plt.savefig(fileout)
     plt.close()
