@@ -2308,7 +2308,7 @@ def main():
         cn_nc0 = {} # observations
         for c in range(0,3):
             cn_nc0[c] = Dataset(cn_filename_obs[c],'r')
-
+        embed()
         cn_nc1={}
         for m in range(0,len(out_dir)): #UM model data
             for c in range(0,3):
