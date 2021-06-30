@@ -2382,6 +2382,7 @@ def main():
 
 
         um_data={}
+        time_um={}
         for m in range(0,len(out_dir)): #UM model data
             if i == 0:
                 um_data[m] = {}             ### initialise cloudnet data dictionaries
@@ -2433,7 +2434,8 @@ def main():
     #################################################################
     ## save time to dictionaries now we're not looping over all diags anymore
     #################################################################
-    for m in range(0,len(out_dir)): um_data[m]['time'] = time_um
+    for m in range(0,len(out_dir)):
+        um_data[m]['time'] = time_um[m]
     obs_data['time'] = time_obs
 
     #################################################################
