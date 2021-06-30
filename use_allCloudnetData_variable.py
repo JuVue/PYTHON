@@ -29,12 +29,11 @@ from manipFuncts import int2list
 # from conversionFuncts import reGrid_Sondes
 
 
-def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir,dates,  **args):
-    numsp=4
-    pltmonc=False
+def plot_CvTimeseries(um_data,  obs_data, label, plots_out_dir,dates,  **args):
+    numsp=len(um_data+1)
     if bool(args):
         monc_data=args[list(args.keys())[0]]
-        numsp = 5
+        numsp += 1
 
     ylims=[0,2.5]
     yticks=np.arange(0,2.5e3,0.5e3)
@@ -42,7 +41,7 @@ def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir,dat
 
     print ('******')
     print ('')
-    print ('Plotting Cv timeseries for whole drift period:')
+    print ('Plotting Cv timeseries:')
     print ('')
     print('plotting ' , numsp, ' subplots')
 
@@ -60,9 +59,6 @@ def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir,dat
     plt.subplots_adjust(top = 0.92, bottom = 0.06, right = 0.92, left = 0.08,
             hspace = 0.4, wspace = 0.2)
 
-    ### define axis instance
-    ax = plt.gca()
-
     viridis = mpl_cm.get_cmap('viridis', 256) # nice colormap purple to yellow
     newcolors = viridis(np.linspace(0, 1, 256)) #assgin new colormap with viridis colors
     greyclr = np.array([0.1, 0.1, 0.1, 0.1])
@@ -76,8 +72,6 @@ def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir,dat
           np.arange(0,1.1,0.1),
           cmap = newcmp,
           zorder = 1)
-    # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
-    # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['sfmlheight']), color = 'grey', linewidth = 1.0)
 
     plt.ylabel('Z [km]')
     plt.ylim(ylims)
@@ -89,7 +83,6 @@ def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir,dat
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
     #ax.xaxis.set_major_locator(mdates.DayLocator(interval=5))
     #ax.xaxis.set_major_formatter(mdates.DateFormatter('%d%m'))
-    nans = ax.get_ylim()
     ax2 = ax.twinx()
     ax2.set_ylabel('Measurements \n (1 hour sampling)', rotation = 270, labelpad = 35)
     ax2.set_yticks([])
@@ -98,75 +91,32 @@ def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir,dat
     plt.title('C$_{V}$')
     # plt.colorbar()
 
-    plt.subplot(numsp,1,2)
-    ax = plt.gca()
-    # ax.set_facecolor('aliceblue')
-    plt.contourf(misc_data['time'], np.squeeze(misc_data['height'][0,:]), np.transpose(misc_data['model_Cv_filtered']),
-         np.arange(0,1.1,0.1),
-         cmap = newcmp,
-         zorder = 1)
-    plt.ylabel('Z [km]')
-    plt.ylim(ylims)
-    plt.yticks(yticks)
-    ax.set_yticklabels(ytlabels)
-    plt.xlim([dates[0], dates[1]])
-    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
-    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-    nans = ax.get_ylim()
-    ax2 = ax.twinx()
-    ax2.set_ylabel('UM_CASIM', rotation = 270, labelpad = 17)
-    ax2.set_yticks([])
+    for m in range(0,len(um_data)):
+        plt.subplot(numsp,1,m)
+        ax = plt.gca()
+        plt.contourf(um_data[m]['time'], np.squeeze(um_data[m]['height'][0,:]), np.transpose(um_data[m]['model_Cv_filtered']),
+            np.arange(0,1.1,0.1),
+            cmap = newcmp,
+            zorder = 1)
+        # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
+        # plt.plot(data1['time_hrly'][::6], bldepth1[::6], 'k', linewidth = 1.0)
+        plt.ylabel('Z [km]')
+        plt.ylim(ylims)
+        plt.yticks(yticks)
+        ax.set_yticklabels(ytlabels)
+        plt.xlim([dates[0], dates[1]])
+        ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+        ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+        if m == numsp:
+            plt.xlabel('Date')
+        nans = ax.get_ylim()
+        ax2 = ax.twinx()
+        ax2.set_ylabel(label[m], rotation = 270, labelpad = 17)
+        ax2.set_yticks([])
 
-    plt.subplot(numsp,1,3)
-    ax = plt.gca()
-    # ax.set_facecolor('aliceblue')
-    plt.contourf(ra2t_data['time'], np.squeeze(ra2t_data['height'][0,:]), np.transpose(ra2t_data['model_Cv_filtered']),
-        np.arange(0,1.1,0.1),
-        cmap = newcmp,
-        zorder = 1)
-    # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
-    # plt.plot(data2['time_hrly'][::6], bldepth4[::6], 'k', linewidth = 1.0)
-    plt.ylabel('Z [km]')
-    plt.ylim(ylims)
-    plt.yticks(yticks)
-    ax.set_yticklabels(ytlabels)
-    plt.xlim([dates[0], dates[1]])
-    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
-    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-    nans = ax.get_ylim()
-    ax2 = ax.twinx()
-    ax2.set_ylabel('UM_RA2T', rotation = 270, labelpad = 17)
-    ax2.set_yticks([])
-
-
-    plt.subplot(numsp,1,4)
-    ax = plt.gca()
-    # ax.set_facecolor('aliceblue')
-    plt.contourf(um_data['time'], np.squeeze(um_data['height'][0,:]), np.transpose(um_data['model_Cv_filtered']),
-        np.arange(0,1.1,0.1),
-        cmap = newcmp,
-        zorder = 1)
-    # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
-    # plt.plot(data1['time_hrly'][::6], bldepth1[::6], 'k', linewidth = 1.0)
-    plt.ylabel('Z [km]')
-    plt.ylim(ylims)
-    plt.yticks(yticks)
-    ax.set_yticklabels(ytlabels)
-    plt.xlim([dates[0], dates[1]])
-    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
-    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-    if numsp ==4:
-        plt.xlabel('Date')
-    nans = ax.get_ylim()
-    ax2 = ax.twinx()
-    ax2.set_ylabel('UM_RA2M', rotation = 270, labelpad = 17)
-    ax2.set_yticks([])
-
-    if numsp == 5:
-        plt.subplot(numsp,1,5)
+    if bool(args):
+        plt.subplot(numsp,1,numsp)
         ax = plt.gca()
         # ax.set_facecolor('aliceblue')
         plt.contourf(monc_data['time2']/60/60, np.squeeze(monc_data['z'][:]), np.transpose(monc_data['total_cloud_fraction']),
@@ -191,18 +141,19 @@ def plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir,dat
         ax2.set_ylabel('MONC', rotation = 270, labelpad = 17)
         ax2.set_yticks([])
 
+    dstr=datenum2date(dates[1])
+    if bool(args):
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' '_'.join(outstr) '_MONC_CvTimeseries.png'
+    else:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' '_'.join(outstr) '_CvTimeseries.png'
+    print(fileout)
+    plt.savefig(fileout)
+    plt.close()
+
     print ('******')
     print ('')
     print ('Finished plotting! :)')
     print ('')
-    dstr=datenum2date(dates[1])
-    if numsp ==4:
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_CvTimeseries.png'
-    elif numsp==5:
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_RA2M_CASIM_RA2T_MONC_CvTimeseries.png'
-    print(fileout)
-    plt.savefig(fileout)
-    plt.close()
 
 def plot_LWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch,**args): #, lon, lat):
 
@@ -2453,15 +2404,11 @@ def main():
                 #    ['vwp','lwp','rwp','iwp','swp','gwp','tot_iwp'],
                 #    ['q_vapour','q_cloud_liquid_mass','q_rain_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
 
-
-    print(monc_var_list)
-
     ncm = {}
     monc_data = {}
     ncm = Dataset(monc_filename,'r')
     for c in range(0,len(monc_var_list)):
         for j in range(0,len(monc_var_list[c])):
-            print(monc_var_list[c][j])
             monc_data[monc_var_list[c][j]] = ncm.variables[monc_var_list[c][j]][:]
 
     monc_data['time1']=monc_data['time_series_2_60'] #1d data
@@ -2488,16 +2435,15 @@ def main():
     # print(um_data.keys())
 
     ## remove missing Cv obs timesteps (remove from all)
-    print(' remove missing Cv obs timesteps (remove from all)')
+    print(' remove missing Cv obs timesteps')
     for c in range(0, 1):
-        um_data[varlist_um[c]][nanind, :] = np.nan
-        misc_data[varlist_um[c]][nanind, :] = np.nan
-        ra2t_data[varlist_um[c]][nanind, :] = np.nan
+        for m in range(0, len(out_dir)):
+            um_data[m][varlist_um[c]][nanind, :] = np.nan
+
     ### remove missing water content obs timestep (only remove from water contents)
     for c in range(1, 3):
-        um_data[varlist_um[c]][wcind, :] = np.nan
-        misc_data[varlist_um[c]][wcind, :] = np.nan
-        ra2t_data[varlist_um[c]][wcind, :] = np.nan
+        for m in range(0, len(out_dir)):
+            um_data[varlist_um[c]][wcind, :] = np.nan
 
 
     # ### remove zeroed water content on obs timestep (only remove from water contents)
@@ -2515,29 +2461,33 @@ def main():
     #     ra2t_data[varlist_um[c]][lwpind, :] = np.nan
     #
     ## lwp only 1d
-    um_data['model_lwp'][lwpind] = np.nan
-    misc_data['model_lwp'][lwpind] = np.nan
-    ra2t_data['model_lwp'][lwpind] = np.nan
-
+    for m in range(0, len(out_dir)):
+        um_data[m]['model_lwp'][lwpind] = np.nan
 
     #################################################################
     ## create labels for figure legends - done here so only needs to be done once!
     #################################################################
-    label1 = 'undefined_label'
-    if out_dir1[:10] == '25_u-cc568': label1 = 'UM_RA2M'
-    if out_dir1[:10] == '24_u-cc324': label1 = 'UM_RA2T_' + out_dir1[-4:-1]
-    if out_dir1[:10] == '23_u-cc278': label1 = 'UM_CASIM-100'
+    label=[]
+    out_str=[]
+    for m in range(0, len(out_dir)):
+        label[m] = 'undefined_label'
+        out_str[m]=''
+        if out_dir[m][:10] == '24_u-cc324':
+            label[m] = 'UM_RA2T_' + out_dir[m][-4:-1]
+            out_str[m]='RA2T'
+        if out_dir[m][:10] == '25_u-cc568':
+            label[m] = 'UM_RA2M'
+            out_str[m]='RA2M'
+        if out_dir[m][:10] == '23_u-cc278':
+            label[m] = 'UM_CASIM-100'
+            out_str[m]='CASIM100'
+        if out_dir[m][:10] == '26_u-cd847':
+            label[m] = 'UM_CASIM-AP'
+            out_str[m]='CASIM-AP'
+        if out_dir[m][:10] == '27_u-ce112':
+            label[m] = 'UM_CASIM-AP-PasProc'
+            out_str[m]='CASIM-AP-PasProc'
 
-    label2 = 'undefined_label'
-    if out_dir2[:10] == '25_u-cc568': label2 = 'UM_RA2M'
-    if out_dir2[:10] == '24_u-cc324': label2 = 'UM_RA2T_' + out_dir2[-4:-1]
-    if out_dir2[:10] == '23_u-cc278': label2 = 'UM_CASIM-100'
-
-    label3 = 'undefined_label'
-    if out_dir3 == 'OUT_25H/': label3 = 'ECMWF_IFS'
-    if out_dir3[:10] == '25_u-cc568': label3 = 'UM_RA2M'
-    if out_dir3[:10] == '24_u-cc324': label3 = 'UM_RA2T_' + out_dir3[-4:-1]
-    if out_dir3[:10] == '23_u-cc278': label3 = 'UM_CASIM-100'
 
     # -------------------------------------------------------------
     # save out working data for debugging purposes
@@ -2570,10 +2520,10 @@ def main():
     # -------------------------------------------------------------
     # Cloudnet plot: Plot contour timeseries
     # -------------------------------------------------------------
-    #figure = plot_CvTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, monc_data=monc_data)
-    #figure = plot_LWCTimeseries(um_data, misc_data, ra2t_data,obs_data, plots_out_dir, dates, obs_switch,monc_data=monc_data)
-    figure = plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch,nanind,wcind,x=monc_data)
-    figure = plot_IWCTimeseries(um_data, misc_data, ra2t_data,obs_data, plots_out_dir, dates, obs_switch,x=monc_data)
+    #figure = plot_CvTimeseries(um_data, obs_data, label, plots_out_dir, dates, monc_data=monc_data)
+    #figure = plot_LWCTimeseries(um_data,obs_data, label, plots_out_dir, dates, obs_switch,monc_data=monc_data)
+    figure = plot_TWCTimeseries(um_data, obs_data, label,outstr, plots_out_dir, dates, obs_switch,nanind,wcind,x=monc_data)
+    figure = plot_IWCTimeseries(um_data, obs_data, label, outstr,plots_out_dir, dates, obs_switch,x=monc_data)
     # figure = plot_TWCTesting(um_data, ifs_data, misc_data, obs_data, data1, data2, data3, obs, month_flag, missing_files, doy)
 
     # -------------------------------------------------------------
