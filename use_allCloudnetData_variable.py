@@ -2310,7 +2310,7 @@ def main():
 
         cn_nc1={}
         for m in range(0,len(out_dir)): #UM model data
-            for c in range(0,3):        
+            for c in range(0,3):
                 cn_nc1[m][c] = Dataset(cn_filename_um[m][c],'r')
 
         # -------------------------------------------------------------
@@ -2382,41 +2382,41 @@ def main():
 
 
         for m in range(0,len(out_dir)): #UM model data
-        if i == 0:
-            um_data[m] = {}             ### initialise cloudnet data dictionaries
-            ### --------------------------------------------------------------------
-            ### create time arrays for all cloudnet data
-            ### --------------------------------------------------------------------
-            time_um[m] = datenum + np.float64((cn_nc1[m][0].variables['time'][:])/24.0)
-            ### --------------------------------------------------------------------
-            ### loop over each Cloudnet class
-            ### --------------------------------------------------------------------
-            for c in range(0,3):
+            if i == 0:
+                um_data[m] = {}             ### initialise cloudnet data dictionaries
                 ### --------------------------------------------------------------------
-                ### load in initial UM data
+                ### create time arrays for all cloudnet data
                 ### --------------------------------------------------------------------
-                for j in range(0,len(um_var_list[c])):
-                    if np.ndim(cn_nc1[m][c].variables[um_var_list[c][j]]) == 1:  # 1d timeseries only
-                        um_data[m][um_var_list[c][j]] = cn_nc1[m][c].variables[um_var_list[c][j]][:]
-                    else:                                   # 2d column um_data
-                        um_data[m][um_var_list[c][j]] = cn_nc1[m][c].variables[um_var_list[c][j]][:]
-        ### --------------------------------------------------------------------
-        ### fill arrays with remaining data
-        ### --------------------------------------------------------------------
-        else:
-            time_um[m] = np.append(time_um[m], datenum + np.float64((cn_nc1[m][0].variables['time'][:])/24.0))
-        ### --------------------------------------------------------------------
-            ### loop over all Cloudnet classes
+                time_um[m] = datenum + np.float64((cn_nc1[m][0].variables['time'][:])/24.0)
+                ### --------------------------------------------------------------------
+                ### loop over each Cloudnet class
+                ### --------------------------------------------------------------------
+                for c in range(0,3):
+                    ### --------------------------------------------------------------------
+                    ### load in initial UM data
+                    ### --------------------------------------------------------------------
+                    for j in range(0,len(um_var_list[c])):
+                        if np.ndim(cn_nc1[m][c].variables[um_var_list[c][j]]) == 1:  # 1d timeseries only
+                            um_data[m][um_var_list[c][j]] = cn_nc1[m][c].variables[um_var_list[c][j]][:]
+                        else:                                   # 2d column um_data
+                            um_data[m][um_var_list[c][j]] = cn_nc1[m][c].variables[um_var_list[c][j]][:]
             ### --------------------------------------------------------------------
-            for c in range(0,3):
+            ### fill arrays with remaining data
+            ### --------------------------------------------------------------------
+            else:
+                time_um[m] = np.append(time_um[m], datenum + np.float64((cn_nc1[m][0].variables['time'][:])/24.0))
+            ### --------------------------------------------------------------------
+                ### loop over all Cloudnet classes
                 ### --------------------------------------------------------------------
-                ### append rest of UM_RA2M data
-                ### --------------------------------------------------------------------
-                for j in range(0,len(um_var_list[c])):
-                    if np.ndim(cn_nc1[m][c].variables[um_var_list[c][j]]) == 1:
-                        um_data[m][um_var_list[c][j]] = np.append(um_data[m][um_var_list[c][j]],cn_nc1[m][c].variables[um_var_list[c][j]][:])
-                    else:
-                        um_data[m][um_var_list[c][j]] = np.append(um_data[m][um_var_list[c][j]],cn_nc1[m][c].variables[um_var_list[c][j]][:],0)
+                for c in range(0,3):
+                    ### --------------------------------------------------------------------
+                    ### append rest of UM_RA2M data
+                    ### --------------------------------------------------------------------
+                    for j in range(0,len(um_var_list[c])):
+                        if np.ndim(cn_nc1[m][c].variables[um_var_list[c][j]]) == 1:
+                            um_data[m][um_var_list[c][j]] = np.append(um_data[m][um_var_list[c][j]],cn_nc1[m][c].variables[um_var_list[c][j]][:])
+                        else:
+                            um_data[m][um_var_list[c][j]] = np.append(um_data[m][um_var_list[c][j]],cn_nc1[m][c].variables[um_var_list[c][j]][:],0)
 
         ### --------------------------------------------------------------------
         ### Close cloudnet netCDF files
