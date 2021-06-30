@@ -2380,12 +2380,14 @@ def main():
                             obs_data[obs_var_list[c][j]] = np.append(obs_data[obs_var_list[c][j]],cn_nc0[c].variables[obs_var_list[c][j]][:],0)
         print('observation data loaded')
 
-        if i == 0: um_data={}
+        if i == 0:
+            um_data={}
+            time_um={}
 
         for m in range(0,len(out_dir)): #UM model data
             if i == 0:
-                time_um={}
                 um_data[m] = {}             ### initialise cloudnet data dictionaries
+                time_um[m] = {}
                 ### --------------------------------------------------------------------
                 ### create time arrays for all cloudnet data
                 ### --------------------------------------------------------------------
