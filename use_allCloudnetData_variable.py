@@ -2467,6 +2467,7 @@ def main():
     #################################################################
     ## create labels for figure legends - done here so only needs to be done once!
     #################################################################
+    embed()
     label=[]
     out_str=[]
     for m in range(0, len(out_dir)):
