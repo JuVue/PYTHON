@@ -2290,7 +2290,7 @@ def main():
     for i in range(0,len(names)):
         dstr=names[i][0:8]
         datenum = date2datenum(dtime.datetime.strptime(dstr,'%Y%m%d'))
-        cn_filenem_um=[]
+        cn_filename_um=[]
         print ('load cloudnet data:')
         for m in range(0,len(out_dir)):
             cn_filename_um.append([cn_um_dir + out_dir[m] + cn_um_out_dir[0] + names[i] + cn_um_out_dir[0][-31:-6] + '.nc',
