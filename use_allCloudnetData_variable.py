@@ -2311,6 +2311,7 @@ def main():
         embed()
         cn_nc1={}
         for m in range(0,len(out_dir)): #UM model data
+            cn_nc1[m]={}
             for c in range(0,3):
                 cn_nc1[m][c] = Dataset(cn_filename_um[m][c],'r')
 
