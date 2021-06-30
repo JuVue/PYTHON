@@ -6561,20 +6561,10 @@ def main():
     print ('')
 
     names = ['20180912_oden_','20180913_oden_']
-    # names = ['20180814_oden_','20180815_oden_','20180816_oden_',
-    #         '20180817_oden_','20180818_oden_','20180819_oden_','20180820_oden_',
-    #         '20180821_oden_','20180822_oden_','20180823_oden_','20180824_oden_',
-    #         '20180825_oden_','20180826_oden_','20180827_oden_','20180828_oden_',
-    #         '20180829_oden_','20180830_oden_','20180831_oden_','20180901_oden_',
-    #         '20180902_oden_','20180903_oden_','20180904_oden_','20180905_oden_',
-    #         '20180906_oden_','20180907_oden_','20180908_oden_','20180909_oden_',
-    #         '20180911_oden_','20180912_oden_','20180913_oden_',
-    #         '20180914_oden_']
 
     sdate = dtime.datetime.strptime('2018091300','%Y%m%d%H')
     edate = dtime.datetime.strptime('2018091314','%Y%m%d%H')
-    # sdate = dtime.datetime.strptime('2018081400','%Y%m%d%H')
-    # edate = dtime.datetime.strptime('2018091500','%Y%m%d%H')
+
     dates = [date2datenum(sdate),date2datenum(edate)]
     moccha_missing_files = ['20180813_oden_','20180910_oden_']   ### cloud radar not working    #,'20180914_oden_'
 
@@ -6582,23 +6572,27 @@ def main():
     monc_spin = 6 *60 *60
 
     ### Set output directory for plots
-    plots_out_dir='/nfs/a96/MOCCHA/working/jutta/plots/CaseStudies/ModelComparison/allinterp/'
+    plots_out_dir='/nfs/a96/MOCCHA/working/jutta/plots/CaseStudies/ModelComparison/'
     if not os.path.exists(plots_out_dir):
         os.makedirs(plots_out_dir)
 
     ### Choose observations vertical gridding used in Cloudnet processing (UM/IFS/RADAR)
-    obs_switch = 'UM'
-
-    um_root_dir = '/nfs/a96/MOCCHA/working/jutta/CloudNet/Oden/data/calibrated/metum/'
+    obs_switch = 'UM' #RADAR
+    #/nfs/a96/MOCCHA/working/gillian/UM/DATA
+    um_root_dir = '/nfs/a96/MOCCHA/working/gillian/UM/DATA/'
     cn_obs_dir = '/nfs/a96/MOCCHA/working/jutta/CloudNet/Oden/output/Halo/measurements_V7/'
     cn_um_dir = '/nfs/a96/MOCCHA/working/jutta/CloudNet/Oden/output/metum/V7/'
-    cn_monc_dir = '/nfs/a96/MOCCHA/working/gillian/MONC_CASES/MOCCHA/output/4_control_20180913T0000Z_Wsub-1.5/'
-    monc_filename = cn_monc_dir + 'moccha_casim_dg_72000.nc'
+    monc_root_dir = '/nfs/a96/MOCCHA/working/gillian/MONC_CASES/MOCCHA/output/'
+
     ### -----------------------------------------------------------------
-    ### CHOSEN RUN - MODEL DATA
+    ### CHOOSE UM RUNS - MODEL DATA
     out_dir1 = '25_u-cc568_RA2M_CON/'
     out_dir3 = '24_u-cc324_RA2T_CON/'
     out_dir2 = '23_u-cc278_RA1M_CASIM/'
+
+    ### CHOOSE MONC RUNS
+    m_out_dir[0] = '4_control_20180913T0000Z_Wsub-1.5/'
+    monc_filename[0] = monc_root_dir + m_out_dir[0] + 'moccha_casim_dg_72000.nc'
 
     ### -----------------------------------------------------------------
     ### CHOSEN RUN - CLOUDNET DATA
@@ -6649,10 +6643,6 @@ def main():
         cn_filename_obs = [cn_obs_dir + cn_obs_out_dir[0] + names[i] + cn_obs_out_dir[0][:-13] + '.nc',
                         cn_obs_dir + cn_obs_out_dir[1] + names[i] + cn_obs_out_dir[1][:-6] + '.nc',
                         cn_obs_dir + cn_obs_out_dir[2] + names[i] + cn_obs_out_dir[2][:-6] + '.nc']
-        #print (cn_filename_um)
-        #print (cn_filename_misc)
-        #print (cn_filename_ra2t)
-        #print (cn_filename_obs)
         print ('')
 
     ### --------------------------------------------------------------------
@@ -6821,14 +6811,6 @@ def main():
         for c in range(0,3): cn_nc1[c].close()
         for c in range(0,3): cn_nc2[c].close()
         for c in range(0,3): cn_nc3[c].close()
-
-        # print (time_obs.shape)
-        # print (time_ifs.shape)
-        # print (obs_data['lwp'].shape)
-        # print (time_obs)
-        # print ((len(doy)*24.0))
-        # print (len(moccha_names))
-        # obs_data['lwp'] = lwp
 
         print ('Loaded!')
         print ('')
