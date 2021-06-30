@@ -2308,9 +2308,9 @@ def main():
         cn_nc0 = {} # observations
         cn_nc0[c] = Dataset(cn_filename_obs[c],'r')
 
+        cn_nc1={}
         for m in range(0,len(out_dir)): #UM model data
-            for c in range(0,3)
-                cn_nc1={}
+            for c in range(0,3):        
                 cn_nc1[m][c] = Dataset(cn_filename_um[m][c],'r')
 
         # -------------------------------------------------------------
