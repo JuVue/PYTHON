@@ -30,7 +30,7 @@ from manipFuncts import int2list
 
 
 def plot_CvTimeseries(um_data,  obs_data, label, plots_out_dir,dates,  **args):
-    numsp=len(um_data+1)
+    numsp=len(um_data)+1
     if bool(args):
         monc_data=args[list(args.keys())[0]]
         numsp += 1
@@ -2469,25 +2469,26 @@ def main():
     #################################################################
     embed()
     label=[]
-    out_str=[]
+    outstr=[]
     for m in range(0, len(out_dir)):
-        label[m] = 'undefined_label'
-        out_str[m]=''
         if out_dir[m][:10] == '24_u-cc324':
-            label[m] = 'UM_RA2T_' + out_dir[m][-4:-1]
-            out_str[m]='RA2T'
-        if out_dir[m][:10] == '25_u-cc568':
-            label[m] = 'UM_RA2M'
-            out_str[m]='RA2M'
-        if out_dir[m][:10] == '23_u-cc278':
-            label[m] = 'UM_CASIM-100'
-            out_str[m]='CASIM100'
-        if out_dir[m][:10] == '26_u-cd847':
-            label[m] = 'UM_CASIM-AP'
-            out_str[m]='CASIM-AP'
-        if out_dir[m][:10] == '27_u-ce112':
-            label[m] = 'UM_CASIM-AP-PasProc'
-            out_str[m]='CASIM-AP-PasProc'
+            label.append('UM_RA2T_' + out_dir[m][-4:-1])
+            outstr.append('RA2T')
+        elif out_dir[m][:10] == '25_u-cc568':
+            label.append('UM_RA2M')
+            outstr.append('RA2M')
+        elif out_dir[m][:10] == '23_u-cc278':
+            label.append('UM_CASIM-100')
+            outstr.append('CASIM100')
+        elif out_dir[m][:10] == '26_u-cd847':
+            label.append('UM_CASIM-AP')
+            outstr.append('CASIM-AP')
+        elif out_dir[m][:10] == '27_u-ce112':
+            label.append('UM_CASIM-AP-PasProc')
+            outstr.append('CASIM-AP-PasProc')
+        else:
+            label.append('undefined_label')
+            outstr.append('')
 
 
     # -------------------------------------------------------------
@@ -2521,7 +2522,7 @@ def main():
     # -------------------------------------------------------------
     # Cloudnet plot: Plot contour timeseries
     # -------------------------------------------------------------
-    #figure = plot_CvTimeseries(um_data, obs_data, label, plots_out_dir, dates, monc_data=monc_data)
+    figure = plot_CvTimeseries(um_data, obs_data, label, plots_out_dir, dates, monc_data=monc_data)
     #figure = plot_LWCTimeseries(um_data,obs_data, label, plots_out_dir, dates, obs_switch,monc_data=monc_data)
     figure = plot_TWCTimeseries(um_data, obs_data, label,outstr, plots_out_dir, dates, obs_switch,nanind,wcind,x=monc_data)
     figure = plot_IWCTimeseries(um_data, obs_data, label, outstr,plots_out_dir, dates, obs_switch,x=monc_data)
