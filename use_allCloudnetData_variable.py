@@ -2422,7 +2422,8 @@ def main():
         ### Close cloudnet netCDF files
         ### --------------------------------------------------------------------
         for c in range(0,3): cn_nc0[c].close()
-        for m in range(0,len(out_dir)): for c in range(0,3): cn_nc1[m][c].close()
+        for m in range(0,len(out_dir)):
+             for c in range(0,3): cn_nc1[m][c].close()
 
         print ('Loaded!')
         print ('')
