@@ -2291,7 +2291,6 @@ def main():
         dstr=names[i][0:8]
         datenum = date2datenum(dtime.datetime.strptime(dstr,'%Y%m%d'))
         cn_filename_um=[]
-        print ('load cloudnet data:')
         for m in range(0,len(out_dir)):
             cn_filename_um.append([cn_um_dir + out_dir[m] + cn_um_out_dir[0] + names[i] + cn_um_out_dir[0][-31:-6] + '.nc',
                         cn_um_dir + out_dir[m] + cn_um_out_dir[1] + names[i] + cn_um_out_dir[1][-27:-6] + '.nc',
@@ -2331,8 +2330,8 @@ def main():
         ### --------------------------------------------------------------------
         ### create arrays for all cloudnet data
         ### --------------------------------------------------------------------
-        obs_data = {}  ### OBS data
         if i == 0:
+            obs_data = {}  ### OBS data
             if obs_switch == 'RADAR':
                 time_obs = datenum + np.float64((cn_nc0[1].variables['time'][:])/24.0)
             else:
@@ -2379,12 +2378,13 @@ def main():
                             continue
                         else:
                             obs_data[obs_var_list[c][j]] = np.append(obs_data[obs_var_list[c][j]],cn_nc0[c].variables[obs_var_list[c][j]][:],0)
+        print('observation data loaded')
 
+        if i == 0: um_data={}
 
-        um_data={}
-        time_um={}
         for m in range(0,len(out_dir)): #UM model data
             if i == 0:
+                time_um={}
                 um_data[m] = {}             ### initialise cloudnet data dictionaries
                 ### --------------------------------------------------------------------
                 ### create time arrays for all cloudnet data
@@ -2429,7 +2429,7 @@ def main():
 
         print ('Loaded!')
         print ('')
-        print ('*************** NEXT:')
+        print ('*************** NEXT DAY:')
         print ('')
     #################################################################
     ## save time to dictionaries now we're not looping over all diags anymore
@@ -2471,7 +2471,6 @@ def main():
 
     ## remove spin up time from monc data
     monc_data=removeSpinUp(monc_data,monc_spin)
-    embed()
     ##################################################################################################################################
     ## -------------------------------------------------------------
     ## maximise obs data available and build mask for available data
