@@ -2308,7 +2308,6 @@ def main():
         cn_nc0 = {} # observations
         for c in range(0,3):
             cn_nc0[c] = Dataset(cn_filename_obs[c],'r')
-        embed()
         cn_nc1={}
         for m in range(0,len(out_dir)): #UM model data
             cn_nc1[m]={}
@@ -2382,7 +2381,7 @@ def main():
                             obs_data[obs_var_list[c][j]] = np.append(obs_data[obs_var_list[c][j]],cn_nc0[c].variables[obs_var_list[c][j]][:],0)
 
 
-
+        um_data={}
         for m in range(0,len(out_dir)): #UM model data
             if i == 0:
                 um_data[m] = {}             ### initialise cloudnet data dictionaries
