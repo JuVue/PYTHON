@@ -1639,7 +1639,7 @@ def main():
     print ('Start: ' + time.strftime("%c"))
     print ('')
 
-    names = ['20180912_oden_','20180913_oden_']
+    names = ['20180913_oden_']
 
     sdate = dtime.datetime.strptime('2018091300','%Y%m%d%H')
     edate = dtime.datetime.strptime('2018091314','%Y%m%d%H')
