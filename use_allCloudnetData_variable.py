@@ -305,6 +305,7 @@ def plot_IWCTimeseries(um_data, obs_data,label,outstr, plots_out_dir, dates, obs
         monc_data['model_iwc']= monc_data['ice_mmr_mean']*monc_data['rho']
         monc_data['model_iwc'][monc_data['model_iwc'] <= 0.0] = np.nan
 
+    embed()
     print ('******')
     print ('')
     print ('Plotting IWC timeseries for whole drift period:')
@@ -330,7 +331,7 @@ def plot_IWCTimeseries(um_data, obs_data,label,outstr, plots_out_dir, dates, obs
     #####PlotIwc###############################################
     cmax = 0.05
     clev=np.arange(0.0,0.05,0.001)
-    clev=[1e-5,0.5e-4,1e-4,0.5e-3, 1e-3, 0.5e-2,1e-2]
+    clev=[1e-5,0.5e-4,1e-4,0.5e-3, 1e-3, 0.5e-2,1e-2,0.5e-1,1e-1]
 
     yheight=3
     fig = plt.figure(figsize=(9.5,yheight*numsp+1))
