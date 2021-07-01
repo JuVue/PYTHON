@@ -217,7 +217,6 @@ def plot_LWCTimeseries(um_data, obs_data, label,outstr,plots_out_dir, dates,obs_
     plt.ylim(ylims)
     plt.yticks(yticks)
     ax.set_yticklabels(ytlabels)
-    embed()
     plt.xlim([dates[0], dates[1]])
     ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
@@ -234,7 +233,7 @@ def plot_LWCTimeseries(um_data, obs_data, label,outstr,plots_out_dir, dates,obs_
     for m in range(0,len(um_data)):
         plt.subplot(numsp,1,m+2)
         ax = plt.gca()
-        plt.contourf(misc_data['time'], np.squeeze(misc_data['height'][0,:]), np.transpose(misc_data['model_lwc'])*1e3,
+        plt.contourf(um_data[m]['time'], np.squeeze(um_data[m]['height'][0,:]), np.transpose(um_data[m]['model_lwc'])*1e3,
             levels=clev,cmap = newcmp)
         nans = ax.get_ylim()
         plt.ylabel('Z [km]')
@@ -366,7 +365,7 @@ def plot_IWCTimeseries(um_data, obs_data,label,outstr, plots_out_dir, dates, obs
     for m in range(0,len(um_data)):
         plt.subplot(numsp,1,m+2)
         ax = plt.gca()
-        plt.contourf(misc_data['time'], np.squeeze(misc_data['height'][0,:]), np.transpose(misc_data['model_iwc_filtered'])*1e3,
+        plt.contourf(um_data[m]['time'], np.squeeze(um_data[m]['height'][0,:]), np.transpose(um_data[m]['model_iwc_filtered'])*1e3,
             levels=clev,norm = LogNorm(),cmap = newcmp)
             #cmap = newcmp)
         plt.ylabel('Z [km]')
@@ -421,7 +420,7 @@ def plot_IWCTimeseries(um_data, obs_data,label,outstr, plots_out_dir, dates, obs
     print ('Finished plotting! :)')
     print ('')
 
-def plot_TWCTimeseries(um_data, misc_data, ra2t_data, obs_data, plots_out_dir, dates, obs_switch,nanind,wcind, **args):
+def plot_TWCTimeseries(um_data,  obs_data,label,outstr, plots_out_dir, dates, obs_switch, **args):
 
     numsp=len(um_data)+1
     if bool(args):
@@ -2270,7 +2269,7 @@ def main():
     figure = plot_CvTimeseries(um_data, obs_data, label, outstr, plots_out_dir, dates, monc_data=monc_data)
     figure = plot_LWCTimeseries(um_data,obs_data, label, outstr, plots_out_dir, dates, obs_switch,x=monc_data)
     figure = plot_TWCTimeseries(um_data, obs_data, label,outstr, plots_out_dir, dates, obs_switch,nanind,wcind,x=monc_data)
-    figure = plot_IWCTimeseries(um_data, obs_data, label, outstr,plots_out_dir, dates, obs_switch,x=monc_data)
+    figure = plot_IWCTimeseries(um_data, obs_data, label, outstr,plots_outdir, dates, obs_switch,x=monc_data)
     # figure = plot_TWCTesting(um_data, ifs_data, misc_data, obs_data, data1, data2, data3, obs, month_flag, missing_files, doy)
 
     # -------------------------------------------------------------
