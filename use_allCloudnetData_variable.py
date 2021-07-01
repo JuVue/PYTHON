@@ -90,7 +90,7 @@ def plot_CvTimeseries(um_data,  obs_data, label, plots_out_dir,dates,  **args):
     cb = plt.colorbar(img, cax = cbaxes, orientation = 'horizontal')
     plt.title('C$_{V}$')
     # plt.colorbar()
-
+    embed()
     for m in range(1,len(um_data)+1):
         plt.subplot(numsp,1,m)
         ax = plt.gca()
@@ -2467,7 +2467,6 @@ def main():
     #################################################################
     ## create labels for figure legends - done here so only needs to be done once!
     #################################################################
-    embed()
     label=[]
     outstr=[]
     for m in range(0, len(out_dir)):
