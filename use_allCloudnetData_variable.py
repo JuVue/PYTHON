@@ -1673,7 +1673,8 @@ def main():
               #'27_u-ce112_RA1M_CASIM']
     ### CHOOSE MONC RUNS
     m_out_dir = ['4_control_20180913T0000Z_Wsub-1.5/',
-                '5_control_20180913T0000Z_Wsub-1.5_Fletcher/']
+                '5_control_20180913T0000Z_Wsub-1.5_Fletcher/',
+                '6_control_20180913T0000Z_Wsub-1.5_1km/']
     monc_filename=[]
     for m in range(0, len(m_out_dir)):
         monc_filename.append(monc_root_dir + m_out_dir[m] + 'moccha_casim_dg_72000.nc')
@@ -1929,6 +1930,9 @@ def main():
         elif m_out_dir[m][:1] == '5':
             mlabel.append('MONC Wsub1.5 \n Fletcher')
             moutstr.append('Mwsubfle')
+        elif m_out_dir[m][:1] == '6':
+            mlabel.append('MONC Wsub1.5-1km')
+            moutstr.append('Mwsub1km')
         else:
             label.append('undefined_label')
             moutstr.append('')
@@ -1949,10 +1953,10 @@ def main():
     # -------------------------------------------------------------
     # Cloudnet plot: Plot contour timeseries
     # -------------------------------------------------------------
-    #figure = plot_CvTimeseries(um_data, obs_data, label, outstr, plots_out_dir, dates, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_CvTimeseries(um_data, obs_data, label, outstr, plots_out_dir, dates, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     figure = plot_LWCTimeseries(um_data,obs_data, label, outstr, plots_out_dir, dates, obs_switch,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    #figure = plot_TWCTimeseries(um_data, obs_data, label,outstr, plots_out_dir, dates, obs_switch,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    #figure = plot_IWCTimeseries(um_data, obs_data, label, outstr,plots_out_dir, dates, obs_switch,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_TWCTimeseries(um_data, obs_data, label,outstr, plots_out_dir, dates, obs_switch,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_IWCTimeseries(um_data, obs_data, label, outstr,plots_out_dir, dates, obs_switch,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     # figure = plot_TWCTesting(um_data, ifs_data, misc_data, obs_data, data1, data2, data3, obs, month_flag, missing_files, doy)
 
     # -------------------------------------------------------------
