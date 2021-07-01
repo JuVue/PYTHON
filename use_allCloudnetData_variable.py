@@ -44,7 +44,7 @@ def plot_CvTimeseries(um_data,  obs_data, label,outstr, plots_out_dir,dates,  **
     print ('')
     print ('Plotting Cv timeseries:')
     print ('')
-    print('plotting ' , numsp, ' subplots')
+    print('plotting' , numsp, 'subplots')
 
     SMALL_SIZE = 12
     MED_SIZE = 14
@@ -150,10 +150,10 @@ def plot_CvTimeseries(um_data,  obs_data, label,outstr, plots_out_dir,dates,  **
     plt.savefig(fileout)
     plt.close()
 
-    print ('******')
     print ('')
     print ('Finished plotting! :)')
     print ('')
+    print ('******')
 
 def plot_LWCTimeseries(um_data, obs_data, label,outstr,plots_out_dir, dates,obs_switch, **args): #, lon, lat):
 
@@ -280,10 +280,10 @@ def plot_LWCTimeseries(um_data, obs_data, label,outstr,plots_out_dir, dates,obs_
     plt.savefig(fileout)
     plt.close()
 
-    print ('******')
     print ('')
     print ('Finished plotting! :)')
     print ('')
+    print ('******')
 
 def plot_IWCTimeseries(um_data, obs_data,label,outstr, plots_out_dir, dates, obs_switch,**args): #, lon, lat):
 
@@ -415,10 +415,10 @@ def plot_IWCTimeseries(um_data, obs_data,label,outstr, plots_out_dir, dates, obs
     plt.savefig(fileout)
     plt.close()
 
-    print ('******')
     print ('')
     print ('Finished plotting! :)')
     print ('')
+    print ('******')
 
 def plot_TWCTimeseries(um_data,  obs_data,label,outstr, plots_out_dir, dates, obs_switch, **args):
 
@@ -1900,7 +1900,6 @@ def removeSpinUp(monc_data,monc_spin):
     id1 = np.squeeze(np.argwhere(monc_data['time1']<=monc_spin)) #1D data
     id2 = np.squeeze(np.argwhere(monc_data['time2']<=monc_spin))
     for j in range(0,len(monc_var_list)):
-        print(j)
         if any(np.array(monc_data[monc_var_list[j]].shape) == len(monc_data['time1'])):
             monc_data[monc_var_list[j]]=np.delete(monc_data[monc_var_list[j]],id1,0)
         elif any(np.array(monc_data[monc_var_list[j]].shape) == len(monc_data['time2'])):
@@ -1980,7 +1979,7 @@ def main():
     # # -------------------------------------------------------------
     print ('******')
     print ('')
-    print ('Begin nc read in at ' + time.strftime("%c"))
+    print ('Begin nc read in')
     print (' ')
 
     for i in range(0,len(names)):
@@ -1999,6 +1998,8 @@ def main():
     ### --------------------------------------------------------------------
     ###     READ IN ALL CLOUDNET FILES: reinitialise diagnostic dictionaries
     ### --------------------------------------------------------------------
+        print ('')
+        print ('*************** LOAD DAY:', i)
         print ('Loading multiple diagnostics from cloudnet results:')
         cn_nc0 = {} # observations
         for c in range(0,3):
@@ -2008,9 +2009,6 @@ def main():
             cn_nc1[m]={}
             for c in range(0,3):
                 cn_nc1[m][c] = Dataset(cn_filename_um[m][c],'r')
-
-        # -------------------------------------------------------------
-        print ('')
 
         ### --------------------------------------------------------------------
         ###     LOAD CLOUDNET DIAGS INTO DICTIONARY
@@ -2074,7 +2072,8 @@ def main():
                             continue
                         else:
                             obs_data[obs_var_list[c][j]] = np.append(obs_data[obs_var_list[c][j]],cn_nc0[c].variables[obs_var_list[c][j]][:],0)
-        print('observation data loaded')
+
+        print ('   observation data loaded!')
 
         if i == 0:
             um_data={}
@@ -2125,9 +2124,7 @@ def main():
         for m in range(0,len(out_dir)):
              for c in range(0,3): cn_nc1[m][c].close()
 
-        print ('Loaded!')
-        print ('')
-        print ('*************** NEXT DAY:')
+        print ('    UM data loaded!')
         print ('')
     #################################################################
     ## save time to dictionaries now we're not looping over all diags anymore
@@ -2161,7 +2158,7 @@ def main():
     monc_data.pop('time_series_2_60')
     monc_data.pop('time_series_20_600')
 
-    print ('Loaded!')
+    print (' Monc data Loaded!')
 
     ## remove spin up time from monc data
     monc_data=removeSpinUp(monc_data,monc_spin)
@@ -2169,6 +2166,7 @@ def main():
     ## -------------------------------------------------------------
     ## maximise obs data available and build mask for available data
     ## -------------------------------------------------------------
+    print ('*******************')
     print('setting missing data to nan and interpolate missing obs')
     obs_data, um_data = setFlags(obs_data, um_data, obs_var_list, um_var_list)
     obs_data = interpCloudnet(obs_data)
