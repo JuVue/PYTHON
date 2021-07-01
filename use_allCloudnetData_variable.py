@@ -378,7 +378,7 @@ def plot_IWCTimeseries(um_data, obs_data,label,outstr, plots_out_dir, dates, obs
         ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
         nans = ax.get_ylim()
         ax2 = ax.twinx()
-        ax2.set_ylabel('UM_CASIM', rotation = 270, labelpad = 35)
+        ax2.set_ylabel(label[m], rotation = 270, labelpad = 27)
         ax2.set_yticks([])
 
         if m == numsp:
@@ -403,7 +403,7 @@ def plot_IWCTimeseries(um_data, obs_data,label,outstr, plots_out_dir, dates, obs
         ax.set_xticklabels(xlabs)
         plt.xlabel('Time (UTC)')
         ax2 = ax.twinx()
-        ax2.set_ylabel('MONC', rotation = 270, labelpad = 17)
+        ax2.set_ylabel('MONC', rotation = 270, labelpad = 27)
         ax2.set_yticks([])
 
 
@@ -506,7 +506,7 @@ def plot_TWCTimeseries(um_data,  obs_data,label,outstr, plots_out_dir, dates, ob
     for m in range(0,len(um_data)):
         plt.subplot(numsp,1,m+2)
         ax = plt.gca()
-        plt.contourf(misc_data['time'], np.squeeze(misc_data['height'][0,:]), np.transpose(misc_data['model_twc'])*1e3,
+        plt.contourf(um_data[m]['time'], np.squeeze(um_data[m]['height'][0,:]), np.transpose(um_data[m]['model_twc'])*1e3,
             levels=[1e-4, 1e-3, 1e-2, 1e-1, 1e0], norm = LogNorm(),
             cmap = newcmp)
         nans = ax.get_ylim()
@@ -519,7 +519,7 @@ def plot_TWCTimeseries(um_data,  obs_data,label,outstr, plots_out_dir, dates, ob
         ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
         ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
         ax2 = ax.twinx()
-        ax2.set_ylabel('UM_CASIM', rotation = 270, labelpad = 17)
+        ax2.set_ylabel(label[m], rotation = 270, labelpad = 27)
         ax2.set_yticks([])
 
         if m== numsp:
@@ -544,7 +544,7 @@ def plot_TWCTimeseries(um_data,  obs_data,label,outstr, plots_out_dir, dates, ob
         ax.set_xticklabels(xlabs)
         plt.xlabel('Time (UTC)')
         ax2 = ax.twinx()
-        ax2.set_ylabel('MONC', rotation = 270, labelpad = 17)
+        ax2.set_ylabel('MONC', rotation = 270, labelpad = 27)
         ax2.set_yticks([])
 
     dstr=datenum2date(dates[1])
