@@ -34,7 +34,7 @@ def plot_CvTimeseries(um_data,  obs_data, label,outstr, plots_out_dir,dates,  **
     if bool(args):
         for n in range(0,len(args)):
             if  list(args.keys())[n] == 'monc_data':
-                monc_data=args[list(args.keys())[0]]
+                monc_data=args[list(args.keys())[n]]
                 numsp += len(monc_data)
             elif list(args.keys())[n] == 'mlabel':
                 mlabel = args[list(args.keys())[n]]
