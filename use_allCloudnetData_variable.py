@@ -626,7 +626,7 @@ def plot_lwcProfiles(um_data, obs_data, m, um_out_dir, doy, obs_switch): #, lon,
     obs_data['twc'] = obs_data['lwc'] + obs_data['iwc']
     obs_data['twc_ad'] = obs_data['lwc_adiabatic'] + obs_data['iwc']
     obs_data['twc_ad_nolwp'] = obs_data['lwc_adiabatic_inc_nolwp'] + obs_data['iwc']
-    for m in range(0,len(um_data))
+    for m in range(0,len(um_data)):
         um_data[m]['model_twc'] = um_data[m]['model_lwc'] + um_data[m]['model_iwc_filtered']
     if bool(args):
         for m in range(0,len(monc_data)):
