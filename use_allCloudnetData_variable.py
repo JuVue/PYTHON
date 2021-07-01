@@ -1707,7 +1707,7 @@ def main():
                 '5_control_20180913T0000Z_Wsub-1.5_Fletcher/']
     monc_filename=[]
     for m in range(0, len(m_out_dir)):
-        monc_filename[m] = monc_root_dir + m_out_dir[m] + 'moccha_casim_dg_72000.nc'
+        monc_filename.append(monc_root_dir + m_out_dir[m] + 'moccha_casim_dg_72000.nc')
 
     ### -----------------------------------------------------------------
     ### CHOSEN RUN - CLOUDNET DATA
