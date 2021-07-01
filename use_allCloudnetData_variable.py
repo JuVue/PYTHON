@@ -144,6 +144,7 @@ def plot_CvTimeseries(um_data,  obs_data, label,outstr, plots_out_dir,dates,  **
             plt.xlabel('Time (UTC)')
             nans = ax.get_ylim()
             ax2 = ax.twinx()
+            embed()
             ax2.set_ylabel(mlabel[m], rotation = 270, labelpad = 27)
             ax2.set_yticks([])
 
