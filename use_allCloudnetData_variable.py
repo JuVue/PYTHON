@@ -331,6 +331,7 @@ def plot_IWCTimeseries(um_data, obs_data,label,outstr, plots_out_dir, dates, obs
     cmax = 0.05
     clev=np.arange(0.0,0.05,0.001)
     clev=[1e-4, 1e-3, 1e-2, 1e-1]
+    clev=[1e-4, 0.5e-3, 1e-3,0.5e-2, 1e-2, 0.5e-1,1e-1]
 
     yheight=3
     fig = plt.figure(figsize=(9.5,yheight*numsp+1))
