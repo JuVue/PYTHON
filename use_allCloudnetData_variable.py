@@ -284,6 +284,7 @@ def plot_LWCTimeseries(um_data, obs_data, label,outstr,plots_out_dir, dates,obs_
             plt.xlabel('Time (UTC)')
             ax2 = ax.twinx()
             ax2.set_ylabel(mlabel[m], rotation = 270, labelpad = 27)
+            print(mlabel[m])
             ax2.set_yticks([])
 
     dstr=datenum2date(dates[1])
@@ -1949,10 +1950,10 @@ def main():
     # -------------------------------------------------------------
     # Cloudnet plot: Plot contour timeseries
     # -------------------------------------------------------------
-    figure = plot_CvTimeseries(um_data, obs_data, label, outstr, plots_out_dir, dates, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    #figure = plot_CvTimeseries(um_data, obs_data, label, outstr, plots_out_dir, dates, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     figure = plot_LWCTimeseries(um_data,obs_data, label, outstr, plots_out_dir, dates, obs_switch,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    figure = plot_TWCTimeseries(um_data, obs_data, label,outstr, plots_out_dir, dates, obs_switch,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    figure = plot_IWCTimeseries(um_data, obs_data, label, outstr,plots_out_dir, dates, obs_switch,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    #figure = plot_TWCTimeseries(um_data, obs_data, label,outstr, plots_out_dir, dates, obs_switch,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    #figure = plot_IWCTimeseries(um_data, obs_data, label, outstr,plots_out_dir, dates, obs_switch,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     # figure = plot_TWCTesting(um_data, ifs_data, misc_data, obs_data, data1, data2, data3, obs, month_flag, missing_files, doy)
 
     # -------------------------------------------------------------
