@@ -1918,7 +1918,7 @@ def main():
         else:
             label.append('undefined_label')
             outstr.append('')
-
+            print(label)
     mlabel=[]
     moutstr=[]
     for m in range(0, len(m_out_dir)):
