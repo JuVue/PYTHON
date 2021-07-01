@@ -1703,10 +1703,11 @@ def main():
                '25_u-cc568_RA2M_CON/']
 
     ### CHOOSE MONC RUNS
-    m_out_dir = ['4_control_20180913T0000Z_Wsub-1.5/','5_control_20180913T0000Z_Wsub-1.5_Fletcher/']
+    m_out_dir = ['4_control_20180913T0000Z_Wsub-1.5/',
+                '5_control_20180913T0000Z_Wsub-1.5_Fletcher/']
     monc_filename=[]
     for m in range(0, len(m_out_dir)):
-        monc_filename[m] = monc_root_dir + m_out_dir + 'moccha_casim_dg_72000.nc'
+        monc_filename[m] = monc_root_dir + m_out_dir[m] + 'moccha_casim_dg_72000.nc'
 
     ### -----------------------------------------------------------------
     ### CHOSEN RUN - CLOUDNET DATA
