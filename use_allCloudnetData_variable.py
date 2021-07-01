@@ -644,7 +644,7 @@ def plot_lwcProfiles(um_data, obs_data, label,outstr,plots_out_dir, **args): #, 
             monc_data[m]['model_iwc']= (monc_data[m]['ice_mmr_mean']+monc_data[m]['graupel_mmr_mean']+monc_data[m]['snow_mmr_mean'])*monc_data[m]['rho']
             monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
             monc_data[m]['model_twc'] = monc_data[m]['model_lwc'] +monc_data[m]['model_iwc']
-
+    embed()
     ####-------------------------------------------------------------------------
     ### from Michael's paper:
     ####    "we consider a grid point cloudy when cloud water exceeded
