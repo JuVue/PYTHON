@@ -155,7 +155,7 @@ def plot_CvTimeseries(um_data,  obs_data, label,outstr, plots_out_dir,dates,  **
     print ('Finished plotting! :)')
     print ('')
 
-def plot_LWCTimeseries(um_data, obs_data, label,outstr,plots_out_dir, dates, **args): #, lon, lat):
+def plot_LWCTimeseries(um_data, obs_data, label,outstr,plots_out_dir, dates,obs_switch, **args): #, lon, lat):
 
     numsp=len(um_data)+1
     if bool(args):
@@ -2268,7 +2268,7 @@ def main():
     # Cloudnet plot: Plot contour timeseries
     # -------------------------------------------------------------
     figure = plot_CvTimeseries(um_data, obs_data, label, outstr, plots_out_dir, dates, monc_data=monc_data)
-    figure = plot_LWCTimeseries(um_data,obs_data, label, outstr, plots_out_dir, dates, obs_switch,monc_data=monc_data)
+    figure = plot_LWCTimeseries(um_data,obs_data, label, outstr, plots_out_dir, dates, obs_switch,x=monc_data)
     figure = plot_TWCTimeseries(um_data, obs_data, label,outstr, plots_out_dir, dates, obs_switch,nanind,wcind,x=monc_data)
     figure = plot_IWCTimeseries(um_data, obs_data, label, outstr,plots_out_dir, dates, obs_switch,x=monc_data)
     # figure = plot_TWCTesting(um_data, ifs_data, misc_data, obs_data, data1, data2, data3, obs, month_flag, missing_files, doy)
