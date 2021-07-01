@@ -30,7 +30,6 @@ from manipFuncts import int2list
 
 
 def plot_CvTimeseries(um_data,  obs_data, label,outstr, plots_out_dir,dates,  **args):
-    embed()
     numsp=len(um_data)+1
     if bool(args):
         monc_data=args[list(args.keys())[0]]
@@ -1987,7 +1986,6 @@ def main():
     # -------------------------------------------------------------
     # Cloudnet plot: Plot contour timeseries
     # -------------------------------------------------------------
-    embed()
     figure = plot_CvTimeseries(um_data, obs_data, label, outstr, plots_out_dir, dates, x=monc_data,mlabel=mlabel,moutsr=moutstr)
     #figure = plot_LWCTimeseries(um_data,obs_data, label, outstr, plots_out_dir, dates, obs_switch,x=monc_data)
     #figure = plot_TWCTimeseries(um_data, obs_data, label,outstr, plots_out_dir, dates, obs_switch,x=monc_data)
