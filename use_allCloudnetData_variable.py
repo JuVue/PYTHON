@@ -217,6 +217,7 @@ def plot_LWCTimeseries(um_data, obs_data, label,outstr,plots_out_dir, dates, **a
     plt.ylim(ylims)
     plt.yticks(yticks)
     ax.set_yticklabels(ytlabels)
+    embed(0)
     plt.xlim([dates[0], dates[1]])
     ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
