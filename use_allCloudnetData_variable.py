@@ -1669,8 +1669,8 @@ def main():
     #           '24_u-cc324_RA2T_CON/',
     #           '25_u-cc568_RA2M_CON/']
     out_dir = ['23_u-cc278_RA1M_CASIM/',
-              '26_u-cd847_RA1M_CASIM',
-              '27_u-ce112_RA1M_CASIM']
+              '26_u-cd847_RA1M_CASIM']
+              #'27_u-ce112_RA1M_CASIM']
     ### CHOOSE MONC RUNS
     m_out_dir = ['4_control_20180913T0000Z_Wsub-1.5/',
                 '5_control_20180913T0000Z_Wsub-1.5_Fletcher/']
