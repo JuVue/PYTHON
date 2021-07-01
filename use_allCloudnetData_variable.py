@@ -1669,12 +1669,56 @@ def main():
     #           '24_u-cc324_RA2T_CON/',
     #           '25_u-cc568_RA2M_CON/']
     out_dir = ['23_u-cc278_RA1M_CASIM/',
-              '26_u-cd847_RA1M_CASIM/']
-              #'27_u-ce112_RA1M_CASIM']
+              '26_u-cd847_RA1M_CASIM/',
+              '27_u-ce112_RA1M_CASIM']
     ### CHOOSE MONC RUNS
     m_out_dir = ['4_control_20180913T0000Z_Wsub-1.5/',
                 '5_control_20180913T0000Z_Wsub-1.5_Fletcher/',
                 '6_control_20180913T0000Z_Wsub-1.5_1km/']
+
+    #################################################################
+    ## create labels for figure legends - done here so only needs to be done once!
+    #################################################################
+    label=[]
+    outstr=[]
+    for m in range(0, len(out_dir)):
+        if out_dir[m][:10] == '24_u-cc324':
+            label.append('UM_RA2T_' + out_dir[m][-4:-1])
+            outstr.append('RA2T')
+        elif out_dir[m][:10] == '25_u-cc568':
+            label.append('UM_RA2M')
+            outstr.append('RA2M')
+        elif out_dir[m][:10] == '23_u-cc278':
+            label.append('UM_CASIM-100')
+            outstr.append('CASIM100')
+        elif out_dir[m][:10] == '26_u-cd847':
+            label.append('UM_CASIM-AP')
+            outstr.append('CASIM-AP')
+        elif out_dir[m][:10] == '27_u-ce112':
+            label.append('UM_CASIM-AP-PasProc')
+            outstr.append('CASIM-AP-PasProc')
+        else:
+            label.append('undefined_label')
+            outstr.append('')
+            print(label)
+    mlabel=[]
+    moutstr=[]
+    for m in range(0, len(m_out_dir)):
+        if m_out_dir[m][:1] == '4':
+            mlabel.append('MONC Wsub1.5')
+            moutstr.append('Mwsub')
+        elif m_out_dir[m][:1] == '5':
+            mlabel.append('MONC Wsub1.5 \n Fletcher')
+            moutstr.append('Mwsubfle')
+        elif m_out_dir[m][:1] == '6':
+            mlabel.append('MONC Wsub1.5-1km')
+            moutstr.append('Mwsub1km')
+        else:
+            label.append('undefined_label')
+            moutstr.append('')
+
+    ### -----------------------------------------------------------------
+    ### create monc filenames
     monc_filename=[]
     for m in range(0, len(m_out_dir)):
         monc_filename.append(monc_root_dir + m_out_dir[m] + 'moccha_casim_dg_72000.nc')
@@ -1896,46 +1940,7 @@ def main():
     for m in range(0, len(out_dir)):
         um_data[m]['model_lwp'][lwpind] = np.nan
 
-    #################################################################
-    ## create labels for figure legends - done here so only needs to be done once!
-    #################################################################
-    label=[]
-    outstr=[]
-    for m in range(0, len(out_dir)):
-        if out_dir[m][:10] == '24_u-cc324':
-            label.append('UM_RA2T_' + out_dir[m][-4:-1])
-            outstr.append('RA2T')
-        elif out_dir[m][:10] == '25_u-cc568':
-            label.append('UM_RA2M')
-            outstr.append('RA2M')
-        elif out_dir[m][:10] == '23_u-cc278':
-            label.append('UM_CASIM-100')
-            outstr.append('CASIM100')
-        elif out_dir[m][:10] == '26_u-cd847':
-            label.append('UM_CASIM-AP')
-            outstr.append('CASIM-AP')
-        elif out_dir[m][:10] == '27_u-ce112':
-            label.append('UM_CASIM-AP-PasProc')
-            outstr.append('CASIM-AP-PasProc')
-        else:
-            label.append('undefined_label')
-            outstr.append('')
-            print(label)
-    mlabel=[]
-    moutstr=[]
-    for m in range(0, len(m_out_dir)):
-        if m_out_dir[m][:1] == '4':
-            mlabel.append('MONC Wsub1.5')
-            moutstr.append('Mwsub')
-        elif m_out_dir[m][:1] == '5':
-            mlabel.append('MONC Wsub1.5 \n Fletcher')
-            moutstr.append('Mwsubfle')
-        elif m_out_dir[m][:1] == '6':
-            mlabel.append('MONC Wsub1.5-1km')
-            moutstr.append('Mwsub1km')
-        else:
-            label.append('undefined_label')
-            moutstr.append('')
+
 ###################################################################################################################
 ###################################################################################################################
 ################################################ FIGURES ##########################################################
