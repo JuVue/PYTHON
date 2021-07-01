@@ -258,7 +258,7 @@ def plot_LWCTimeseries(um_data, obs_data, label,outstr,plots_out_dir, dates,obs_
         ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
         ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
         ax2 = ax.twinx()
-        ax2.set_ylabel('UM_CASIM', rotation = 270, labelpad = 17)
+        ax2.set_ylabel(label[m], rotation = 270, labelpad = 27)
         ax2.set_yticks([])
         # plt.colorbar()
         if m== numsp:
@@ -284,7 +284,6 @@ def plot_LWCTimeseries(um_data, obs_data, label,outstr,plots_out_dir, dates,obs_
             plt.xlabel('Time (UTC)')
             ax2 = ax.twinx()
             ax2.set_ylabel(mlabel[m], rotation = 270, labelpad = 27)
-            print(mlabel[m])
             ax2.set_yticks([])
 
     dstr=datenum2date(dates[1])
