@@ -348,7 +348,7 @@ def plot_IWCTimeseries(um_data, obs_data,label,outstr, plots_out_dir, dates, obs
             #cmap = newcmp)
     else:
         img = plt.contourf(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(obs_data['iwc'])*1e3,
-            levels=clev, norm = LogNorm(),cmap = newcmp)
+            levels=clev,cmap = newcmp)
     plt.ylabel('Z [km]')
     plt.ylim(ylims)
     plt.yticks(yticks)
@@ -369,7 +369,7 @@ def plot_IWCTimeseries(um_data, obs_data,label,outstr, plots_out_dir, dates, obs
         plt.subplot(numsp,1,m+2)
         ax = plt.gca()
         plt.contourf(um_data[m]['time'], np.squeeze(um_data[m]['height'][0,:]), np.transpose(um_data[m]['model_iwc_filtered'])*1e3,
-            levels=clev,norm = LogNorm(),cmap = newcmp)
+            levels=clev,cmap = newcmp)
             #cmap = newcmp)
         plt.ylabel('Z [km]')
         plt.ylim(ylims)
@@ -393,7 +393,7 @@ def plot_IWCTimeseries(um_data, obs_data,label,outstr, plots_out_dir, dates, obs
         ax = plt.gca()
         # ax.set_facecolor('aliceblue')
         plt.contourf(monc_data['time2']/60/60, np.squeeze(monc_data['z'][:]), np.transpose(monc_data['model_iwc'])*1e3,
-        levels=clev,norm = LogNorm(),cmap = newcmp)
+        levels=clev,cmap = newcmp)
 #        cmap=newcmp,vmin = 0.0, vmax = cmax)
         plt.ylabel('Z [km]')
         plt.ylim(ylims)
