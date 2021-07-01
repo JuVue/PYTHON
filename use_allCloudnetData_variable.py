@@ -40,7 +40,7 @@ def plot_CvTimeseries(um_data,  obs_data, label,outstr, plots_out_dir,dates,  **
                     mlabel = args[list(args.keys())[n]]
                 elif list(args.keys())[n] == 'moutdir':
                     moutdir= args[list(args.keys())[n]]
-
+    embed()
     ylims=[0,2.5]
     yticks=np.arange(0,2.5e3,0.5e3)
     ytlabels=yticks/1e3
