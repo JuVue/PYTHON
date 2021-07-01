@@ -40,7 +40,7 @@ def plot_CvTimeseries(um_data,  obs_data, label,outstr, plots_out_dir,dates,  **
                 mlabel = args[list(args.keys())[n]]
             elif list(args.keys())[n] == 'moutstr':
                 moutstr= args[list(args.keys())[n]]
-    embed()
+
     ylims=[0,2.5]
     yticks=np.arange(0,2.5e3,0.5e3)
     ytlabels=yticks/1e3
@@ -165,8 +165,14 @@ def plot_LWCTimeseries(um_data, obs_data, label,outstr,plots_out_dir, dates,obs_
 
     numsp=len(um_data)+1
     if bool(args):
-        monc_data=args[list(args.keys())[0]]
-        numsp += 1
+        for n in range(0,len(args)):
+            if  list(args.keys())[n] == 'monc_data':
+                monc_data=args[list(args.keys())[n]]
+                numsp += len(monc_data)
+            elif list(args.keys())[n] == 'mlabel':
+                mlabel = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'moutstr':
+                moutstr= args[list(args.keys())[n]]
 
     ylims=[0,2.5]
     yticks=np.arange(0,2.5e3,0.5e3)
@@ -195,8 +201,9 @@ def plot_LWCTimeseries(um_data, obs_data, label,outstr,plots_out_dir, dates,obs_
             um_data[m]['model_lwc'][um_data[m]['model_lwc'] <= 0.0] = np.nan
 
     if bool(args):
-        monc_data['model_lwc']= monc_data['liquid_mmr_mean']*monc_data['rho']
-        monc_data['model_lwc'][monc_data['model_lwc'] <= 0.0] = np.nan
+        for m in range(0,len(monc_data)):
+            monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
+            monc_data[m]['model_lwc'][monc_data[m]['model_lwc'] <= 0.0] = np.nan
 
     print ('******')
     print ('')
@@ -259,31 +266,32 @@ def plot_LWCTimeseries(um_data, obs_data, label,outstr,plots_out_dir, dates,obs_
 
 
     if bool(args):
-        plt.subplot(numsp,1,numsp)
-        ax = plt.gca()
-        # ax.set_facecolor('aliceblue')
-        plt.contourf(monc_data['time2']/60/60, np.squeeze(monc_data['z'][:]), np.transpose(monc_data['model_lwc'])*1e3,
-        levels=clev,cmap = newcmp)
-        plt.ylabel('Z [km]')
-        plt.ylim(ylims)
-        plt.yticks(yticks)
-        ax.set_yticklabels(ytlabels)
-        xticks=np.arange(np.floor(monc_data['time2'][0]/60/60),np.ceil(monc_data['time2'][-1]/60/60)+1,2,dtype=int)
-        xlabs=[x*100 for x in xticks]
-        xlabs=["{0:-04d}".format(t) for t in xlabs]
-        plt.xticks(xticks)
-        ax.set_xticklabels(xlabs)
-        plt.xlabel('Time (UTC)')
-        ax2 = ax.twinx()
-        ax2.set_ylabel('MONC', rotation = 270, labelpad = 17)
-        ax2.set_yticks([])
+        for m in range(0,len(monc_data)):
+            plt.subplot(numsp,1,numsp-len(monc_data)+1+m)
+            ax = plt.gca()
+            # ax.set_facecolor('aliceblue')
+            plt.contourf(monc_data[m]['time2']/60/60, np.squeeze(monc_data[m]['z'][:]), np.transpose(monc_data[m]['model_lwc'])*1e3,
+            levels=clev,cmap = newcmp)
+            plt.ylabel('Z [km]')
+            plt.ylim(ylims)
+            plt.yticks(yticks)
+            ax.set_yticklabels(ytlabels)
+            xticks=np.arange(np.floor(monc_data[m]['time2'][0]/60/60),np.ceil(monc_data[m]['time2'][-1]/60/60)+1,2,dtype=int)
+            xlabs=[x*100 for x in xticks]
+            xlabs=["{0:-04d}".format(t) for t in xlabs]
+            plt.xticks(xticks)
+            ax.set_xticklabels(xlabs)
+            plt.xlabel('Time (UTC)')
+            ax2 = ax.twinx()
+            ax2.set_ylabel(mlabel[m], rotation = 270, labelpad = 27)
+            ax2.set_yticks([])
 
     dstr=datenum2date(dates[1])
-    if bool(args):
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_'  + '_'.join(outstr) + '_MONC_LWCTimeseries.png'
-    else:
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_'  + '_'.join(outstr) + '_LWCTimeseries.png'
-    plt.savefig(fileout)
+        if bool(args):
+            fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_'.join(moutstr) + '_LWCTimeseries.png'
+        else:
+            fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_LWCTimeseries.png'
+        plt.savefig(fileout)
     plt.close()
 
     print ('')
@@ -295,9 +303,14 @@ def plot_IWCTimeseries(um_data, obs_data,label,outstr, plots_out_dir, dates, obs
 
     numsp=len(um_data)+1
     if bool(args):
-        monc_data=args[list(args.keys())[0]]
-        numsp += 1
-
+        for n in range(0,len(args)):
+            if  list(args.keys())[n] == 'monc_data':
+                monc_data=args[list(args.keys())[n]]
+                numsp += len(monc_data)
+            elif list(args.keys())[n] == 'mlabel':
+                mlabel = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'moutstr':
+                moutstr= args[list(args.keys())[n]]
 
     ylims=[0,2.5]
     yticks=np.arange(0,2.5e3,0.5e3)
@@ -308,8 +321,9 @@ def plot_IWCTimeseries(um_data, obs_data,label,outstr, plots_out_dir, dates, obs
         um_data[m]['model_iwc_filtered'][um_data[m]['model_iwc_filtered'] <= 0.0] = np.nan
 
     if bool(args):
-        monc_data['model_iwc']= (monc_data['ice_mmr_mean']+monc_data['graupel_mmr_mean']+monc_data['snow_mmr_mean'])*monc_data['rho']
-        monc_data['model_iwc'][monc_data['model_iwc'] <= 0.0] = np.nan
+        for m in ragne(0,len(monc_data)):
+            monc_data[m]['model_iwc']= (monc_data[m]['ice_mmr_mean']+monc_data[m]['graupel_mmr_mean']+monc_data['snow_mmr_mean'])*monc_data['rho']
+            monc_data[m]['model_iwc'][monc_data[m]['model_iwc'] <= 0.0] = np.nan
 
     embed()
     print ('******')
@@ -393,30 +407,30 @@ def plot_IWCTimeseries(um_data, obs_data,label,outstr, plots_out_dir, dates, obs
 
 
     if bool(args):
-        plt.subplot(numsp,1,numsp)
-        ax = plt.gca()
-        # ax.set_facecolor('aliceblue')
-        plt.contourf(monc_data['time2']/60/60, np.squeeze(monc_data['z'][:]), np.transpose(monc_data['model_iwc'])*1e3,
-        levels=clev,norm = LogNorm(),cmap = newcmp)
-#        cmap=newcmp,vmin = 0.0, vmax = cmax)
-        plt.ylabel('Z [km]')
-        plt.ylim(ylims)
-        plt.yticks(yticks)
-        ax.set_yticklabels(ytlabels)
-        xticks=np.arange(np.floor(monc_data['time2'][0]/60/60),np.ceil(monc_data['time2'][-1]/60/60)+1,2,dtype=int)
-        xlabs=[x*100 for x in xticks]
-        xlabs=["{0:-04d}".format(t) for t in xlabs]
-        plt.xticks(xticks)
-        ax.set_xticklabels(xlabs)
-        plt.xlabel('Time (UTC)')
-        ax2 = ax.twinx()
-        ax2.set_ylabel('MONC', rotation = 270, labelpad = 27)
-        ax2.set_yticks([])
-
+        for m in range(0,len(monc_data)):
+            plt.subplot(numsp,1,numsp-len(monc_data)+1+m)
+            ax = plt.gca()
+            # ax.set_facecolor('aliceblue')
+            plt.contourf(monc_data[m]['time2']/60/60, np.squeeze(monc_data[m]['z'][:]), np.transpose(monc_data[m]['model_iwc'])*1e3,
+            levels=clev,norm = LogNorm(),cmap = newcmp)
+    #        cmap=newcmp,vmin = 0.0, vmax = cmax)
+            plt.ylabel('Z [km]')
+            plt.ylim(ylims)
+            plt.yticks(yticks)
+            ax.set_yticklabels(ytlabels)
+            xticks=np.arange(np.floor(monc_data[m]['time2'][0]/60/60),np.ceil(monc_data[m]['time2'][-1]/60/60)+1,2,dtype=int)
+            xlabs=[x*100 for x in xticks]
+            xlabs=["{0:-04d}".format(t) for t in xlabs]
+            plt.xticks(xticks)
+            ax.set_xticklabels(xlabs)
+            plt.xlabel('Time (UTC)')
+            ax2 = ax.twinx()
+            ax2.set_ylabel(mlabel[m], rotation = 270, labelpad = 27)
+            ax2.set_yticks([])
 
     dstr=datenum2date(dates[1])
     if bool(args):
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_MONC_IWCTimeseries.png'
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_'.join(moutstr) + '_IWCTimeseries.png'
     else:
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_IWCTimeseries.png'
     plt.savefig(fileout)
@@ -431,8 +445,14 @@ def plot_TWCTimeseries(um_data,  obs_data,label,outstr, plots_out_dir, dates, ob
 
     numsp=len(um_data)+1
     if bool(args):
-        monc_data=args[list(args.keys())[0]]
-        numsp += 1
+        for n in range(0,len(args)):
+            if  list(args.keys())[n] == 'monc_data':
+                monc_data=args[list(args.keys())[n]]
+                numsp += len(monc_data)
+            elif list(args.keys())[n] == 'mlabel':
+                mlabel = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'moutstr':
+                moutstr= args[list(args.keys())[n]]
 
     ylims=[0,2.5]
     yticks=np.arange(0,2.5e3,0.5e3)
@@ -452,9 +472,10 @@ def plot_TWCTimeseries(um_data,  obs_data,label,outstr, plots_out_dir, dates, ob
         um_data[m]['model_twc'] = um_data[m]['model_lwc'] + um_data[m]['model_iwc_filtered']
 
     if bool(args):
-        monc_data['model_iwc']= (monc_data['ice_mmr_mean']+monc_data['graupel_mmr_mean']+monc_data['snow_mmr_mean'])*monc_data['rho']
-        monc_data['model_lwc']= monc_data['liquid_mmr_mean']*monc_data['rho']
-        monc_data['model_twc'] = monc_data['model_lwc'] +monc_data['model_iwc']
+        for m in range(0,len(monc_data)):
+        monc_data[m]['model_iwc']= (monc_data[m]['ice_mmr_mean']+monc_data[m]['graupel_mmr_mean']+monc_data[m]['snow_mmr_mean'])*monc_data[m]['rho']
+        monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
+        monc_data[m]['model_twc'] = monc_data[m]['model_lwc'] +monc_data[m]['model_iwc']
 
     twc0 = np.transpose(obs_data['twc'])*1e3
 
@@ -533,32 +554,33 @@ def plot_TWCTimeseries(um_data,  obs_data,label,outstr, plots_out_dir, dates, ob
             plt.xlabel('Time UTC')
 
     if bool(args):
-        plt.subplot(numsp,1,numsp)
-        ax = plt.gca()
-        # ax.set_facecolor('aliceblue')
-        plt.contourf(monc_data['time2']/60/60, np.squeeze(monc_data['z'][:]), np.transpose(monc_data['model_twc'])*1e3,
-        levels=[1e-4, 1e-3, 1e-2, 1e-1, 1e0], norm = LogNorm(),
-        cmap = newcmp)
-        # )
-        plt.ylabel('Z [km]')
-        plt.ylim(ylims)
-        plt.yticks(yticks)
-        ax.set_yticklabels(ytlabels)
-        xticks=np.arange(np.floor(monc_data['time2'][0]/60/60),np.ceil(monc_data['time2'][-1]/60/60)+1,2,dtype=int)
-        xlabs=[x*100 for x in xticks]
-        xlabs=["{0:-04d}".format(t) for t in xlabs]
-        plt.xticks(xticks)
-        ax.set_xticklabels(xlabs)
-        plt.xlabel('Time (UTC)')
-        ax2 = ax.twinx()
-        ax2.set_ylabel('MONC', rotation = 270, labelpad = 27)
-        ax2.set_yticks([])
+        for m in range(0,len(monc_data)):
+            plt.subplot(numsp,1,numsp-len(monc_data)+1+m)
+            ax = plt.gca()
+            # ax.set_facecolor('aliceblue')
+            plt.contourf(monc_data[m]['time2']/60/60, np.squeeze(monc_data[m]['z'][:]), np.transpose(monc_data[m]['model_twc'])*1e3,
+            levels=[1e-4, 1e-3, 1e-2, 1e-1, 1e0], norm = LogNorm(),
+            cmap = newcmp)
+            # )
+            plt.ylabel('Z [km]')
+            plt.ylim(ylims)
+            plt.yticks(yticks)
+            ax.set_yticklabels(ytlabels)
+            xticks=np.arange(np.floor(monc_data[m]['time2'][0]/60/60),np.ceil(monc_data[m]['time2'][-1]/60/60)+1,2,dtype=int)
+            xlabs=[x*100 for x in xticks]
+            xlabs=["{0:-04d}".format(t) for t in xlabs]
+            plt.xticks(xticks)
+            ax.set_xticklabels(xlabs)
+            plt.xlabel('Time (UTC)')
+            ax2 = ax.twinx()
+            ax2.set_ylabel('MONC', rotation = 270, labelpad = 27)
+            ax2.set_yticks([])
 
     dstr=datenum2date(dates[1])
     if bool(args):
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_MONC_TWCTimeseries.png'
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_'.join(moutstr) + '_TWCTimeseries.png'
     else:
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid' + '_'.join(outstr) + '_TWCTimeseries.png'
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_TWCTimeseries.png'
     plt.savefig(fileout)
     plt.close()
     print ('******')
@@ -1962,13 +1984,12 @@ def main():
         if m_out_dir[m][:1] == '4':
             mlabel.append('MONC Wsub1.5')
             moutstr.append('MONC-wsub')
-        elif out_dir[m][:1] == '5':
+        elif m_out_dir[m][:1] == '5':
             mlabel.append('MONC Wsub1.5 \n Fletcher')
             moutstr.append('MONC-wsub-fle')
         else:
             label.append('undefined_label')
-            outstr.append('')
-    embed()
+            moutstr.append('')
 ###################################################################################################################
 ###################################################################################################################
 ################################################ FIGURES ##########################################################
@@ -1987,9 +2008,9 @@ def main():
     # Cloudnet plot: Plot contour timeseries
     # -------------------------------------------------------------
     figure = plot_CvTimeseries(um_data, obs_data, label, outstr, plots_out_dir, dates, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    #figure = plot_LWCTimeseries(um_data,obs_data, label, outstr, plots_out_dir, dates, obs_switch,x=monc_data)
-    #figure = plot_TWCTimeseries(um_data, obs_data, label,outstr, plots_out_dir, dates, obs_switch,x=monc_data)
-    #figure = plot_IWCTimeseries(um_data, obs_data, label, outstr,plots_out_dir, dates, obs_switch,x=monc_data)
+    figure = plot_LWCTimeseries(um_data,obs_data, label, outstr, plots_out_dir, dates, obs_switch,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_TWCTimeseries(um_data, obs_data, label,outstr, plots_out_dir, dates, obs_switch,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_IWCTimeseries(um_data, obs_data, label, outstr,plots_out_dir, dates, obs_switch,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     # figure = plot_TWCTesting(um_data, ifs_data, misc_data, obs_data, data1, data2, data3, obs, month_flag, missing_files, doy)
 
     # -------------------------------------------------------------
