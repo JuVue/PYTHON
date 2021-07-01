@@ -302,7 +302,7 @@ def plot_IWCTimeseries(um_data, obs_data,label,outstr, plots_out_dir, dates, obs
         um_data[m]['model_iwc_filtered'][um_data[m]['model_iwc_filtered'] <= 0.0] = np.nan
 
     if bool(args):
-        monc_data['model_iwc']= monc_data['ice_mmr_mean']*monc_data['rho']
+        monc_data['model_iwc']= (monc_data['ice_mmr_mean']+monc_data['graupel_mmr_mean']+monc_data['snow_mmr_mean'])*monc_data['rho']
         monc_data['model_iwc'][monc_data['model_iwc'] <= 0.0] = np.nan
 
     embed()
@@ -446,7 +446,7 @@ def plot_TWCTimeseries(um_data,  obs_data,label,outstr, plots_out_dir, dates, ob
         um_data[m]['model_twc'] = um_data[m]['model_lwc'] + um_data[m]['model_iwc_filtered']
 
     if bool(args):
-        monc_data['model_iwc']= monc_data['ice_mmr_mean']*monc_data['rho']
+        monc_data['model_iwc']= (monc_data['ice_mmr_mean']+monc_data['graupel_mmr_mean']+monc_data['snow_mmr_mean'])*monc_data['rho']
         monc_data['model_lwc']= monc_data['liquid_mmr_mean']*monc_data['rho']
         monc_data['model_twc'] = monc_data['model_lwc'] +monc_data['model_iwc']
 
@@ -2267,7 +2267,7 @@ def main():
     # -------------------------------------------------------------
     #figure = plot_CvTimeseries(um_data, obs_data, label, outstr, plots_out_dir, dates, monc_data=monc_data)
     #figure = plot_LWCTimeseries(um_data,obs_data, label, outstr, plots_out_dir, dates, obs_switch,x=monc_data)
-    #figure = plot_TWCTimeseries(um_data, obs_data, label,outstr, plots_out_dir, dates, obs_switch,x=monc_data)
+    figure = plot_TWCTimeseries(um_data, obs_data, label,outstr, plots_out_dir, dates, obs_switch,x=monc_data)
     figure = plot_IWCTimeseries(um_data, obs_data, label, outstr,plots_out_dir, dates, obs_switch,x=monc_data)
     # figure = plot_TWCTesting(um_data, ifs_data, misc_data, obs_data, data1, data2, data3, obs, month_flag, missing_files, doy)
 
