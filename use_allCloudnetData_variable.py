@@ -2419,7 +2419,7 @@ def main():
     # -------------------------------------------------------------
     # Cloudnet plot: Plot contour timeseries
     # -------------------------------------------------------------
-    figure = plot_CvTimeseries(um_data, obs_data, label, outstr plots_out_dir, dates, monc_data=monc_data)
+    figure = plot_CvTimeseries(um_data, obs_data, label, outstr, plots_out_dir, dates, monc_data=monc_data)
     #figure = plot_LWCTimeseries(um_data,obs_data, label, plots_out_dir, dates, obs_switch,monc_data=monc_data)
     figure = plot_TWCTimeseries(um_data, obs_data, label,outstr, plots_out_dir, dates, obs_switch,nanind,wcind,x=monc_data)
     figure = plot_IWCTimeseries(um_data, obs_data, label, outstr,plots_out_dir, dates, obs_switch,x=monc_data)
