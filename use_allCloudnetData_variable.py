@@ -1982,10 +1982,10 @@ def main():
     for m in range(0, len(m_out_dir)):
         if m_out_dir[m][:1] == '4':
             mlabel.append('MONC Wsub1.5')
-            moutstr.append('MONC-wsub')
+            moutstr.append('Mwsub')
         elif m_out_dir[m][:1] == '5':
             mlabel.append('MONC Wsub1.5 \n Fletcher')
-            moutstr.append('MONC-wsub-fle')
+            moutstr.append('Mwsubfle')
         else:
             label.append('undefined_label')
             moutstr.append('')
