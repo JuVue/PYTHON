@@ -149,7 +149,7 @@ def plot_CvTimeseries(um_data,  obs_data, label,outstr, plots_out_dir,dates,  **
 
     dstr=datenum2date(dates[1])
     if bool(args):
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_'.join(moutstr) + '_CvTimeseries.png'
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_CvTimeseries.png'
     else:
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_CvTimeseries.png'
     print(fileout)
@@ -288,7 +288,7 @@ def plot_LWCTimeseries(um_data, obs_data, label,outstr,plots_out_dir, dates,obs_
 
     dstr=datenum2date(dates[1])
     if bool(args):
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_'.join(moutstr) + '_LWCTimeseries.png'
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) +'_' + '_'.join(moutstr) + '_LWCTimeseries.png'
     else:
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_LWCTimeseries.png'
     plt.savefig(fileout)
@@ -430,7 +430,7 @@ def plot_IWCTimeseries(um_data, obs_data,label,outstr, plots_out_dir, dates, obs
 
     dstr=datenum2date(dates[1])
     if bool(args):
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_'.join(moutstr) + '_IWCTimeseries.png'
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) +'_' + '_'.join(moutstr) + '_IWCTimeseries.png'
     else:
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_IWCTimeseries.png'
     plt.savefig(fileout)
@@ -573,12 +573,12 @@ def plot_TWCTimeseries(um_data,  obs_data,label,outstr, plots_out_dir, dates, ob
             ax.set_xticklabels(xlabs)
             plt.xlabel('Time (UTC)')
             ax2 = ax.twinx()
-            ax2.set_ylabel('MONC', rotation = 270, labelpad = 27)
+            ax2.set_ylabel(mlabel[m], rotation = 270, labelpad = 27)
             ax2.set_yticks([])
 
     dstr=datenum2date(dates[1])
     if bool(args):
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_'.join(moutstr) + '_TWCTimeseries.png'
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_TWCTimeseries.png'
     else:
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_TWCTimeseries.png'
     plt.savefig(fileout)
