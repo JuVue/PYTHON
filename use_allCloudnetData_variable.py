@@ -287,11 +287,11 @@ def plot_LWCTimeseries(um_data, obs_data, label,outstr,plots_out_dir, dates,obs_
             ax2.set_yticks([])
 
     dstr=datenum2date(dates[1])
-        if bool(args):
-            fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_'.join(moutstr) + '_LWCTimeseries.png'
-        else:
-            fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_LWCTimeseries.png'
-        plt.savefig(fileout)
+    if bool(args):
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_'.join(moutstr) + '_LWCTimeseries.png'
+    else:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_LWCTimeseries.png'
+    plt.savefig(fileout)
     plt.close()
 
     print ('')
