@@ -91,7 +91,7 @@ def plot_CvTimeseries(um_data,  obs_data, label, plots_out_dir,dates,  **args):
     plt.title('C$_{V}$')
     # plt.colorbar()
 
-    for m in range(0,len(um_data)):
+    for m in range(1,len(um_data)+1):
         plt.subplot(numsp,1,m)
         ax = plt.gca()
         plt.contourf(um_data[m]['time'], np.squeeze(um_data[m]['height'][0,:]), np.transpose(um_data[m]['model_Cv_filtered']),
