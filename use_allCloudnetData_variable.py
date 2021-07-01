@@ -185,9 +185,8 @@ def plot_LWCTimeseries(um_data, obs_data, label,outstr,plots_out_dir, dates, **a
 
     obs_data['lwc'][obs_data['lwc'] <= 0] = np.nan
     obs_data['lwc_adiabatic'][obs_data['lwc_adiabatic'] <= 0] = np.nan
-    um_data['model_lwc'][um_data['model_lwc'] <= 0.0] = np.nan
-    misc_data['model_lwc'][misc_data['model_lwc'] <= 0.0] = np.nan
-    ra2t_data['model_lwc'][ra2t_data['model_lwc'] <= 0.0] = np.nan
+    for m in range(0,len(um_data)):
+            um_data[m]['model_lwc'][um_data[m]['model_lwc'] <= 0.0] = np.nan
 
     if bool(args):
         monc_data['model_lwc']= monc_data['liquid_mmr_mean']*monc_data['rho']
@@ -299,9 +298,8 @@ def plot_IWCTimeseries(um_data, obs_data,label,outstr, plots_out_dir, dates, obs
     ytlabels=yticks/1e3
 
     obs_data['iwc'][obs_data['iwc'] <= 0.0] = np.nan
-    um_data['model_iwc_filtered'][um_data['model_iwc_filtered'] <= 0.0] = np.nan
-    misc_data['model_iwc_filtered'][misc_data['model_iwc_filtered'] <= 0.0] = np.nan
-    ra2t_data['model_iwc_filtered'][ra2t_data['model_iwc_filtered'] <= 0.0] = np.nan
+    for m in range(0,len(um_data)):
+        um_data[m]['model_iwc_filtered'][um_data[m]['model_iwc_filtered'] <= 0.0] = np.nan
 
     if bool(args):
         monc_data['model_iwc']= monc_data['ice_mmr_mean']*monc_data['rho']
