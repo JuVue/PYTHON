@@ -34,7 +34,13 @@ def plot_CvTimeseries(um_data,  obs_data, label,outstr, plots_out_dir,dates,  **
     numsp=len(um_data)+1
     if bool(args):
         monc_data=args[list(args.keys())[0]]
-        numsp += 1
+        numsp += len(monc_data)
+        if len(args)>1:
+            for n in range(1,len(args)):
+                if args.keys()[n] == 'mlabel':
+                    mlabel = args[list(args.keys())[n]]
+                elif args.keys()[n] == 'moutdir':
+                    moutdir= args[list(args.keys())[n]]
 
     ylims=[0,2.5]
     yticks=np.arange(0,2.5e3,0.5e3)
@@ -117,33 +123,34 @@ def plot_CvTimeseries(um_data,  obs_data, label,outstr, plots_out_dir,dates,  **
         ax2.set_yticks([])
 
     if bool(args):
-        plt.subplot(numsp,1,numsp)
-        ax = plt.gca()
-        plt.contourf(monc_data['time2']/60/60, np.squeeze(monc_data['z'][:]), np.transpose(monc_data['total_cloud_fraction']),
-            np.arange(0,1.1,0.1),
-            cmap = newcmp,
-            zorder = 1)
-        # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
-        # plt.plot(data1['time_hrly'][::6], bldepth1[::6], 'k', linewidth = 1.0)
-        plt.ylabel('Z [km]')
-        plt.ylim(ylims)
-        plt.yticks(yticks)
-        ax.set_yticklabels(ytlabels)
-        #plt.xlim(monc_data['time2']/60/60])
-        xticks=np.arange(np.floor(monc_data['time2'][0]/60/60),np.ceil(monc_data['time2'][-1]/60/60)+1,2,dtype=int)
-        xlabs=[x*100 for x in xticks]
-        xlabs=["{0:-04d}".format(t) for t in xlabs]
-        plt.xticks(xticks)
-        ax.set_xticklabels(xlabs)
-        plt.xlabel('Time (UTC)')
-        nans = ax.get_ylim()
-        ax2 = ax.twinx()
-        ax2.set_ylabel('MONC', rotation = 270, labelpad = 27)
-        ax2.set_yticks([])
+        for m in range(0,len(monc_data))
+            plt.subplot(numsp,1,numsp-len(monc_data)+1+m)
+            ax = plt.gca()
+            plt.contourf(monc_data[m]['time2']/60/60, np.squeeze(monc_data[m]['z'][:]), np.transpose(monc_data[m]['total_cloud_fraction']),
+                np.arange(0,1.1,0.1),
+                cmap = newcmp,
+                zorder = 1)
+            # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
+            # plt.plot(data1['time_hrly'][::6], bldepth1[::6], 'k', linewidth = 1.0)
+            plt.ylabel('Z [km]')
+            plt.ylim(ylims)
+            plt.yticks(yticks)
+            ax.set_yticklabels(ytlabels)
+            #plt.xlim(monc_data['time2']/60/60])
+            xticks=np.arange(np.floor(monc_data[m]['time2'][0]/60/60),np.ceil(monc_data[m]['time2'][-1]/60/60)+1,2,dtype=int)
+            xlabs=[x*100 for x in xticks]
+            xlabs=["{0:-04d}".format(t) for t in xlabs]
+            plt.xticks(xticks)
+            ax.set_xticklabels(xlabs)
+            plt.xlabel('Time (UTC)')
+            nans = ax.get_ylim()
+            ax2 = ax.twinx()
+            ax2.set_ylabel(mlabel[m], rotation = 270, labelpad = 27)
+            ax2.set_yticks([])
 
     dstr=datenum2date(dates[1])
     if bool(args):
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_MONC_CvTimeseries.png'
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_'.join(moutstr) + '_CvTimeseries.png'
     else:
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_CvTimeseries.png'
     print(fileout)
@@ -1981,7 +1988,7 @@ def main():
     # Cloudnet plot: Plot contour timeseries
     # -------------------------------------------------------------
     embed()
-    figure = plot_CvTimeseries(um_data, obs_data, label, outstr, plots_out_dir, dates, x=monc_data)
+    figure = plot_CvTimeseries(um_data, obs_data, label, outstr, plots_out_dir, dates, x=monc_data,mlabel=mlabel,moutsr=moutstr)
     #figure = plot_LWCTimeseries(um_data,obs_data, label, outstr, plots_out_dir, dates, obs_switch,x=monc_data)
     #figure = plot_TWCTimeseries(um_data, obs_data, label,outstr, plots_out_dir, dates, obs_switch,x=monc_data)
     #figure = plot_IWCTimeseries(um_data, obs_data, label, outstr,plots_out_dir, dates, obs_switch,x=monc_data)
