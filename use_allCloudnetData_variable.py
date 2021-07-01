@@ -32,14 +32,14 @@ from manipFuncts import int2list
 def plot_CvTimeseries(um_data,  obs_data, label,outstr, plots_out_dir,dates,  **args):
     numsp=len(um_data)+1
     if bool(args):
-        monc_data=args[list(args.keys())[0]]
-        numsp += len(monc_data)
-        if len(args)>1:
-            for n in range(1,len(args)):
-                if list(args.keys())[n] == 'mlabel':
-                    mlabel = args[list(args.keys())[n]]
-                elif list(args.keys())[n] == 'moutdir':
-                    moutdir= args[list(args.keys())[n]]
+        for n in range(0,len(args)):
+            if  list(args.keys())[n] == 'monc_data':
+                monc_data=args[list(args.keys())[0]]
+                numsp += len(monc_data)
+            elif list(args.keys())[n] == 'mlabel':
+                mlabel = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'moutstr':
+                moutstr= args[list(args.keys())[n]]
     embed()
     ylims=[0,2.5]
     yticks=np.arange(0,2.5e3,0.5e3)
@@ -1961,7 +1961,7 @@ def main():
     moutstr=[]
     for m in range(0, len(m_out_dir)):
         if m_out_dir[m][:1] == '4':
-            mlabel.append('MONC Wsub1.5' + out_dir[m][-4:-1])
+            mlabel.append('MONC Wsub1.5')
             moutstr.append('MONC-wsub')
         elif out_dir[m][:1] == '5':
             mlabel.append('MONC Wsub1.5 \n Fletcher')
@@ -1987,7 +1987,7 @@ def main():
     # -------------------------------------------------------------
     # Cloudnet plot: Plot contour timeseries
     # -------------------------------------------------------------
-    figure = plot_CvTimeseries(um_data, obs_data, label, outstr, plots_out_dir, dates, x=monc_data,mlabel=mlabel,moutsr=moutstr)
+    figure = plot_CvTimeseries(um_data, obs_data, label, outstr, plots_out_dir, dates, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_LWCTimeseries(um_data,obs_data, label, outstr, plots_out_dir, dates, obs_switch,x=monc_data)
     #figure = plot_TWCTimeseries(um_data, obs_data, label,outstr, plots_out_dir, dates, obs_switch,x=monc_data)
     #figure = plot_IWCTimeseries(um_data, obs_data, label, outstr,plots_out_dir, dates, obs_switch,x=monc_data)
