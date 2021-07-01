@@ -122,7 +122,7 @@ def plot_CvTimeseries(um_data,  obs_data, label,outstr, plots_out_dir,dates,  **
         ax2.set_yticks([])
 
     if bool(args):
-        for m in range(0,len(monc_data))
+        for m in range(0,len(monc_data)):
             plt.subplot(numsp,1,numsp-len(monc_data)+1+m)
             ax = plt.gca()
             plt.contourf(monc_data[m]['time2']/60/60, np.squeeze(monc_data[m]['z'][:]), np.transpose(monc_data[m]['total_cloud_fraction']),
