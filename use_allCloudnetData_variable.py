@@ -970,7 +970,7 @@ def plot_iwcProfiles(um_data, obs_data, label,outstr,plots_out_dir, **args): #, 
     print ('******')
 
 
-def plot_twcProfilesnew(um_data, obs_data, label,outstr,plots_out_dir, **args): #, lon, lat):
+def plot_twcProfiles(um_data, obs_data, label,outstr,plots_out_dir, **args): #, lon, lat):
 
     obs_zorder = len(um_data)+1
     if bool(args):
@@ -1152,9 +1152,9 @@ def plot_twcProfilesnew(um_data, obs_data, label,outstr,plots_out_dir, **args): 
 
     # plt.grid('on')
     if bool(args):
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + 'TWC-MTThresholding' +twcstr '.png'
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + 'TWC-MTThresholding' + twcstr + '.png'
     else:
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + 'TWC-MTThresholding' +twcstr '.png'
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + 'TWC-MTThresholding' +twcstr +'.png'
     plt.savefig(fileout)
 
     print ('******')
