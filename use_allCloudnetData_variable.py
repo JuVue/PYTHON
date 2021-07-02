@@ -1373,7 +1373,8 @@ def main():
               '26_u-cd847_RA1M_CASIM/',
               '27_u-ce112_RA1M_CASIM/']
     ### CHOOSE MONC RUNS
-    m_out_dir = ['4_control_20180913T0000Z_Wsub-1.5/',
+    m_out_dir = ['3_control_20180913T0000Z/',
+                #'4_control_20180913T0000Z_Wsub-1.5/',
                 '5_control_20180913T0000Z_Wsub-1.5_Fletcher/',
                 '6_control_20180913T0000Z_Wsub-1.5-1km/']
 
@@ -1405,6 +1406,9 @@ def main():
     mlabel=[]
     moutstr=[]
     for m in range(0, len(m_out_dir)):
+        if m_out_dir[m][:1] == '3':
+            mlabel.append('MONC nosub')
+            moutstr.append('Mnowsub')
         if m_out_dir[m][:1] == '4':
             mlabel.append('MONC Wsub1.5')
             moutstr.append('Mwsub')
