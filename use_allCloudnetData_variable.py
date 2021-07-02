@@ -779,7 +779,6 @@ def plot_lwcProfiles(um_data, obs_data, label,outstr,plots_out_dir, **args): #, 
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + 'LWC-MTThresholding-LWC' + lwcstr + '.png'
     else:
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + 'LWC-MTThresholding-LWC'+ lwcstr + '.png'
-    else:
     plt.savefig(fileout)
 
     print ('')
