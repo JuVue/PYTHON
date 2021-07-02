@@ -653,26 +653,19 @@ def plot_lwcProfiles(um_data, obs_data, label,outstr,plots_out_dir, **args): #, 
     ####-------------------------------------------------------------------------
     m=0 # use first um model run for height grid definition
     twc_thresh_um = np.zeros([np.size(um_data[m]['model_twc'],1)])
-    twc_thresh_monc = np.zeros([np.size(monc_data[m]['model_twc'],1)])
     ####-------------------------------------------------------------------------
     ### first look at values below 1 km
     ###     find Z indices <= 1km, then set twc_thresh values to 1e-6
     um_lt1km = np.where(um_data[m]['height'][0,:]<=1e3)
     twc_thresh_um[um_lt1km] = 1e-6
-    monc_lt1km = np.where(monc_data[m]['height'][0,:]<=1e3)
-    twc_thresh_monc[monc_lt1km] = 1e-6
-
     ####-------------------------------------------------------------------------
     ### next look at values above 4 km
     ###     find Z indices >= 4km, then set twc_thresh values to 1e-7
     um_lt1km = np.where(um_data[m]['height'][0,:]>=4e3)
     twc_thresh_um[um_lt1km] = 1e-7
-    monc_lt1km = np.where(monc_data[m]['height'][0,:]>=4e3)
-    twc_thresh_monc[monc_lt1km] = 1e-7
 
     ### find heights not yet assigned
     um_intZs = np.where(twc_thresh_um == 0.0)
-    monc_intZs = np.where(twc_thresh_monc == 0.0)
 
     ### interpolate for twc_thresh_um
     x = [1e-6, 1e-7]
@@ -702,9 +695,9 @@ def plot_lwcProfiles(um_data, obs_data, label,outstr,plots_out_dir, **args): #, 
         twc_thresh_monc = np.zeros([np.size(monc_data[m]['model_twc'],1)])
         ### first look at values below 1 km
         ###     find Z indices <= 1km, then set twc_thresh values to 1e-6
-        monc_lt1km = np.where(monc_data[m]['height'][0,:]<=1e3)
+        monc_lt1km = np.where(monc_data[m]['z'][:]<=1e3)
         twc_thresh_monc[monc_lt1km] = 1e-6
-        monc_lt1km = np.where(monc_data[m]['height'][0,:]>=4e3)
+        monc_lt1km = np.where(monc_data[m]['z'][:]>=4e3)
         twc_thresh_monc[monc_lt1km] = 1e-7
         monc_intZs = np.where(twc_thresh_monc == 0.0)
 
@@ -713,7 +706,7 @@ def plot_lwcProfiles(um_data, obs_data, label,outstr,plots_out_dir, **args): #, 
         y = [1e3, 4e3]
         f = interp1d(y, x)
         for m in range(0,len(monc_data)):
-            twc_thresh_monc[monc_intZs] = f(monc_data[m]['height'][0,monc_intZs].data)
+            twc_thresh_monc[monc_intZs] = f(monc_data[m]['z'][0,monc_intZs].data)
 
         for t in range(0,np.size(monc_data[m]['model_twc'],0)):
             for k in range(0,np.size(monc_data[m]['model_twc'],1)):
@@ -722,6 +715,12 @@ def plot_lwcProfiles(um_data, obs_data, label,outstr,plots_out_dir, **args): #, 
                         monc_data[m]['model_twc'][t,k] = np.nan
                         monc_data[m]['model_lwc'][t,k] = np.nan
 
+        ### plot profile of threshold as sanity check
+        plt.plot(twc_thresh_um, um_data['height'][0,:])
+        plt.plot(twc_thresh_monc, monc_data['z'][:]); plt.show()
+        print (twc_thresh_monc)
+
+        embed()
     ###----------------------------------------------------------------
     ###         Plot figure - Mean profiles
     ###----------------------------------------------------------------
@@ -780,17 +779,17 @@ def plot_lwcProfiles(um_data, obs_data, label,outstr,plots_out_dir, **args): #, 
                 '--', color = lcols[m], linewidth = 0.5)
         if bool(args):
             for m in range(0,len(monc_data)):
-                ax1.fill_betweenx(np.nanmean(monc_data[m]['height'],0),np.nanmean(monc_data[m]['model_lwc'],0)*1e3 - np.nanstd(monc_data[m]['model_lwc']*1e3,0),
+                ax1.fill_betweenx(np.nanmean(monc_data[m]['z'],0),np.nanmean(monc_data[m]['model_lwc'],0)*1e3 - np.nanstd(monc_data[m]['model_lwc']*1e3,0),
                     np.nanmean(monc_data[m]['model_lwc'],0)*1e3 + np.nanstd(monc_data[m]['model_lwc'],0)*1e3, color = fcolsmonc[m], alpha = 0.05)
-                plt.plot(np.nanmean(monc_data[m]['model_lwc'],0)*1e3 - np.nanstd(monc_data[m]['model_lwc'],0)*1e3, np.nanmean(monc_data[m]['height'],0),
+                plt.plot(np.nanmean(monc_data[m]['model_lwc'],0)*1e3 - np.nanstd(monc_data[m]['model_lwc'],0)*1e3, np.nanmean(monc_data[m]['z'],0),
                     '--', color =lcolsmonc[m], linewidth = 0.5)
-                plt.plot(np.nanmean(monc_data[m]['model_lwc'],0)*1e3 + np.nanstd(monc_data[m]['model_lwc'],0)*1e3, np.nanmean(monc_data[m]['height'],0),
+                plt.plot(np.nanmean(monc_data[m]['model_lwc'],0)*1e3 + np.nanstd(monc_data[m]['model_lwc'],0)*1e3, np.nanmean(monc_data[m]['z'],0),
                     '--', color = lcolsmonc[m], linewidth = 0.5)
         for m in range(0,len(um_data)):
             plt.plot(np.nanmean(um_data['model_lwc'],0)*1e3,np.nanmean(um_data['height'],0), color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
         if bool(args):
             for m in range(0,len(monc_data)):
-                plt.plot(np.nanmean(monc_data['model_lwc'],0)*1e3,np.nanmean(monc_data['height'],0), color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+                plt.plot(np.nanmean(monc_data['model_lwc'],0)*1e3,np.nanmean(monc_data['z'],0), color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
 
     # plt.plot(np.nanmedian(ifs_data['model_lwc'],0)*1e3,np.nanmedian(ifs_data['height'],0), '--', color = 'gold', linewidth = 3, label = 'ECMWF_IFS', zorder = 4)
     # plt.plot(np.nanmedian(misc_data['model_lwc'],0)*1e3,np.nanmedian(misc_data['height'],0), '--', color = 'mediumseagreen', linewidth = 3, label = 'UM_CASIM-100', zorder = 3)
@@ -1710,7 +1709,7 @@ def main():
     ### CHOOSE MONC RUNS
     m_out_dir = ['4_control_20180913T0000Z_Wsub-1.5/',
                 '5_control_20180913T0000Z_Wsub-1.5_Fletcher/']
-    #            '6_control_20180913T0000Z_Wsub-1.5_1km/']
+                '6_control_20180913T0000Z_Wsub-1.5_1km/']
 
     #################################################################
     ## create labels for figure legends - done here so only needs to be done once!
