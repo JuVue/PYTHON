@@ -1616,7 +1616,6 @@ def main():
         monc_data[m].pop('time_series_20_600')
 
     print (' Monc data Loaded!')
-
     ## remove spin up time from monc data
     monc_data=removeSpinUp(monc_data,monc_spin)
     ##################################################################################################################################
@@ -1649,7 +1648,16 @@ def main():
     for m in range(0, len(out_dir)):
         um_data[m]['model_lwp'][lwpind] = np.nan
 
+    embed()
 
+    ax = plt.gca()
+    img = plt.contourf(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(obs_data['lwc_adiabatic']-obs_data['lwc_adiabatic_inc_nolwp'])*1e3,
+        levels=clev,cmap = newcmp)
+    nans = ax.get_ylim()
+    plt.ylabel('Z [km]')
+    plt.ylim(ylims)
+    plt.yticks(yticks)
+    ax.set_yticklabels(ytlabels)
 ###################################################################################################################
 ###################################################################################################################
 ################################################ FIGURES ##########################################################
