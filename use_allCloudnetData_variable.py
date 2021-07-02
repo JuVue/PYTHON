@@ -1145,9 +1145,9 @@ def plot_twcProfiles(um_data, obs_data, label,outstr,plots_out_dir,dates, **args
     ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
     ax1.set_yticklabels(np.arange(0,4.0,0.5))
     plt.xlim([0,0.25])
-    plt.xticks(np.arange(0,0.0251,0.005))
+    plt.xticks(np.arange(0,0.251,0.05))
     #ax1.set_xticklabels([0,' ',0.015,' ',0.03,' ',0.045,' ',0.06])
-    ax1.xaxis.set_minor_locator(ticker.MultipleLocator(0.0025))
+    ax1.xaxis.set_minor_locator(ticker.MultipleLocator(0.025))
     plt.legend()
 
     dstr=datenum2date(dates[1])
