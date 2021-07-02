@@ -676,16 +676,15 @@ def plot_lwcProfiles(um_data, obs_data, label,outstr,plots_out_dir, **args): #, 
 
     for t in range(0,np.size(um_data[m]['model_twc'],0)):
         for k in range(0,np.size(um_data[m]['model_twc'],1)):
-            if obs_switch == 'UM':
-                if obs_data['twc'][t,k] < twc_thresh_um[k]:
-                    obs_data['twc'][t,k] = np.nan
-                    obs_data['lwc'][t,k] = np.nan
-                if obs_data['twc_ad'][t,k] < twc_thresh_um[k]:
-                    obs_data['twc_ad'][t,k] = np.nan
-                    obs_data['lwc_adiabatic'][t,k] = np.nan
-                if obs_data['twc_ad_nolwp'][t,k] < twc_thresh_um[k]:
-                    obs_data['twc_ad_nolwp'][t,k] = np.nan
-                    obs_data['lwc_adiabatic_inc_nolwp'][t,k] = np.nan
+            if obs_data['twc'][t,k] < twc_thresh_um[k]:
+                obs_data['twc'][t,k] = np.nan
+                obs_data['lwc'][t,k] = np.nan
+            if obs_data['twc_ad'][t,k] < twc_thresh_um[k]:
+                obs_data['twc_ad'][t,k] = np.nan
+                obs_data['lwc_adiabatic'][t,k] = np.nan
+            if obs_data['twc_ad_nolwp'][t,k] < twc_thresh_um[k]:
+                obs_data['twc_ad_nolwp'][t,k] = np.nan
+                obs_data['lwc_adiabatic_inc_nolwp'][t,k] = np.nan
             for m in range(0,len(um_data)):
                 if  um_data[m]['model_twc'][t,k] < twc_thresh_um[k]:
                     um_data[m]['model_twc'][t,k] = np.nan
