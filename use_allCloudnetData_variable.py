@@ -969,7 +969,7 @@ def plot_iwcProfiles(um_data, obs_data, twcvar,twcstr, label,outstr,plots_out_di
     print ('******')
 
 
-def plot_twcProfiles(um_data, obs_data, label,outstr,plots_out_dir,dates, **args): #, lon, lat):
+def plot_twcProfiles(um_data, obs_data,twcvar,twcstr,  label,outstr,plots_out_dir,dates, **args): #, lon, lat):
 
     obs_zorder = len(um_data)+1
     if bool(args):
