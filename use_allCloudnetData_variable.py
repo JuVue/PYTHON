@@ -1216,7 +1216,6 @@ def buildNaNMask(obs_data):
 
     print ('*******')
     print ('Only include model data where we have observations:')
-    print ('*******')
     print ('')
 
     ### build nanmask
@@ -1225,7 +1224,6 @@ def buildNaNMask(obs_data):
     wcindex = np.zeros([np.size(obs_data['time'])])
     wc0index = np.zeros([np.size(obs_data['time'])])
     lwpindex = np.zeros([np.size(obs_data['time'])])
-    print('nanmask')
     for i in range(len(obs_data['time'])):
         if np.isnan(np.nanmean(obs_data['Cv'][i,:], 0)):       ## if there are only nans in the time profile
             nanmask[i,:] = 1.0
@@ -1245,6 +1243,8 @@ def buildNaNMask(obs_data):
     lwpind = np.where(lwpindex == 1)
 
     return nanind, nanmask, wcind, wc0ind, lwpind
+    print('done')
+    print('**********')
 
 def buildNaNMaskadv(obs_data):
 
@@ -1284,8 +1284,6 @@ def setFlags(obs_data, um_data,obs_var_list, um_var_list):
 
     print ('*******')
     print ('Set flagged data to nan:')
-    print ('*******')
-    print ('')
 
     ###----------------------------------------------------------------
     ###         Set flagged data to nans
@@ -1301,8 +1299,13 @@ def setFlags(obs_data, um_data,obs_var_list, um_var_list):
                 um_data[m][um_var_list[c][j]][um_data[m][um_var_list[c][j]] < 0] = 0.0
 
     return obs_data, um_data
+    print ('done')
+    print ('*******')
+    print ('')
 
 def removeSpinUp(monc_data,monc_spin):
+    print('')
+    print('remove MONC spinup time')
     for m in range(0,len(monc_data)):
         monc_var_list = list(monc_data[m].keys())
         monc_var_list.remove('time1')
@@ -1323,14 +1326,16 @@ def removeSpinUp(monc_data,monc_spin):
                     monc_data[m][monc_var_list[j]]=np.delete(monc_data[m][monc_var_list[j]],id2,2)
                 elif tmp2 == 3:
                     monc_data[m][monc_var_list[j]]=np.delete(monc_data[m][monc_var_list[j]],id2,3)
-            else:
-                print(monc_var_list[j], ': not time depend')
         monc_data[m]['time1']=np.delete(monc_data[m]['time1'],id1,0)
         monc_data[m]['time2']=np.delete(monc_data[m]['time2'],id2,0)
         monc_data[m]['time1']=monc_data[m]['time1']-monc_data[m]['time1'][0]
         monc_data[m]['time2']=monc_data[m]['time2']-monc_data[m]['time2'][0]
 
     return monc_data
+    print('done')
+    print('*************')
+    print ('')
+
 ################################################################################
 ################################################################################
 def main():
@@ -1440,7 +1445,7 @@ def main():
     # # -------------------------------------------------------------
     print ('******')
     print ('')
-    print ('Begin nc read in')
+    print ('Begin nc read in: ')
     print (' ')
 
     for i in range(0,len(names)):
@@ -1454,14 +1459,12 @@ def main():
         cn_filename_obs = [cn_obs_dir + cn_obs_out_dir[0] + names[i] + cn_obs_out_dir[0][:-13] + '.nc',
                         cn_obs_dir + cn_obs_out_dir[1] + names[i] + cn_obs_out_dir[1][:-6] + '.nc',
                         cn_obs_dir + cn_obs_out_dir[2] + names[i] + cn_obs_out_dir[2][:-6] + '.nc']
-        print ('')
 
     ### --------------------------------------------------------------------
     ###     READ IN ALL CLOUDNET FILES: reinitialise diagnostic dictionaries
     ### --------------------------------------------------------------------
-        print ('')
-        print ('*************** LOAD DAY:', i)
-        print ('Loading multiple diagnostics from cloudnet results:')
+        print ('** LOAD DAY:', i)
+        print ('   Loading multiple diagnostics from cloudnet results:')
         cn_nc0 = {} # observations
         for c in range(0,3):
             cn_nc0[c] = Dataset(cn_filename_obs[c],'r')
@@ -1533,7 +1536,7 @@ def main():
                         else:
                             obs_data[obs_var_list[c][j]] = np.append(obs_data[obs_var_list[c][j]],cn_nc0[c].variables[obs_var_list[c][j]][:],0)
 
-        print ('   observation data loaded!')
+        print ('OBS data loaded!')
 
         if i == 0:
             um_data={}
@@ -1572,7 +1575,7 @@ def main():
         for m in range(0,len(out_dir)):
              for c in range(0,3): cn_nc1[m][c].close()
 
-        print ('    UM data loaded!')
+        print ('UM data loaded!')
         print ('')
     #################################################################
     ## save time to dictionaries now we're not looping over all diags anymore
@@ -1584,7 +1587,7 @@ def main():
     #################################################################
     ###     READ IN MONC DATA
     #################################################################
-    print ('Loading monc results:')
+    print ('Loading MONC data:')
     print ('')
     ###1d variables, 2d variables (time,height), 3d variables (time,x,y), 4d variables(time,x,y,z)
     monc_var_list =[['time_series_2_60','time_series_20_600' ,'z','rho', 'LWP_mean','IWP_mean','SWP_mean','TOT_IWP_mean','GWP_mean'],
@@ -1660,7 +1663,7 @@ def main():
     twcvar='twc_ad_nolwp'
     twcstr='-adincNoLWP'  #''/'-adiabatic' / '-adincNoLWP'
 
-    # -------------------------------------------------------------
+        # -------------------------------------------------------------
     # Cloudnet plot: Plot Cv statistics from drift period
     # -------------------------------------------------------------
     #figure = plot_CvProfiles(um_data, ifs_data, misc_data, ra2t_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs, obs_switch)
