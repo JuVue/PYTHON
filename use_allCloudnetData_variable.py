@@ -1330,6 +1330,56 @@ def removeSpinUp(monc_data,monc_spin):
     print('*************')
     print ('')
 
+def CaseStudySelection(obs_data,um_data,monc_data,dates):
+    obs_vars=list(obs_data.keys())
+    time_ind = np.where(obs_data['time']<dates[1] | obs_data['time']>dates[2] )
+    tinit=len(obs_data['time'])
+    for j in range(0,len(obs_vars)):
+        tmp2=np.argwhere(np.array(obs_data[obs_vars[j]].shape) == tinit)
+        if tmp2 == 0:
+            obs_data[obs_vars[j]]=np.delete(obs_data[obs_vars[j]],time_ind,0)
+        elif tmp2 == 1:
+            obs_data[obs_vars[j]]=np.delete(obs_data[obs_vars[j]],time_ind,1)
+        elif tmp2 == 2:
+            obs_data[obs_vars[j]]=np.delete(obs_data[obs_vars[j]],time_ind,2)
+        elif tmp2 == 3:
+            obs_data[obs_vars[j]]=np.delete(obs_data[obs_vars[j]],time_ind,3)
+
+    for m in range(0,len(um_data))
+        um_vars=list(um_data[m].keys())
+        time_ind = np.where(um_data[m]['time']<dates[1] | um_data[m]['time']>dates[2] )
+        tinit=len(um_data['time'])
+        for j in range(0,len(um_vars)):
+            tmp2=np.argwhere(np.array(um_data[m][um_vars[j]].shape) == tinit)
+            if tmp2 == 0:
+                um_data[m][um_vars[j]]=np.delete(um_data[m][um_vars[j]],time_ind,0)
+            elif tmp2 == 1:
+                um_data[m][um_vars[j]]=np.delete(um_data[m][um_vars[j]],time_ind,1)
+            elif tmp2 == 2:
+                um_data[m][um_vars[j]]=np.delete(um_data[m][um_vars[j]],time_ind,2)
+            elif tmp2 == 3:
+                um_data[m][um_vars[j]]=np.delete(um_data[m][um_vars[j]],time_ind,3)
+    for m in range(0,len(monc_data))
+        monc_vars=list(monc_data[m].keys())
+        time1_ind = np.where(monc_data[m]['time1']<dates[1] | monc_data[m]['time1']>dates[2] )
+        t1init=len(monc_data['time1'])
+        time2_ind = np.where(monc_data[m]['time2']<dates[1] | monc_data[m]['time2']>dates[2] )
+        t2init=len(monc_data['time2'])
+        for j in range(0,len(monc_vars)):
+            if any(np.array(monc_data[m][monc_vars[j]].shape) == t1init):
+                monc_data[m][monc_vars[j]]=np.delete(monc_data[m][monc_vars[j]],time1_ind,0)
+            elif any(np.array(monc_data[m][monc_vars[j]].shape) == t2init):
+                tmp2=np.argwhere(np.array(monc_data[m][monc_vars[j]].shape) == t2init)
+                if tmp2 == 0:
+                    monc_data[m][monc_vars[j]]=np.delete(monc_data[m][monc_vars[j]],time2_ind,0)
+                elif tmp2 == 1:
+                    monc_data[m][monc_vars[j]]=np.delete(monc_data[m][monc_vars[j]],time2_ind,1)
+                elif tmp2 == 2:
+                    monc_data[m][monc_vars[j]]=np.delete(monc_data[m][monc_vars[j]],time2_ind,2)
+                elif tmp2 == 3:
+                    monc_data[m][monc_vars[j]]=np.delete(monc_data[m][monc_vars[j]],time2_ind,3)
+
+    return obs_data,um_data,monc_data
 ################################################################################
 ################################################################################
 def main():
@@ -1343,7 +1393,7 @@ def main():
     names = ['20180913_oden_']
 
     sdate = dtime.datetime.strptime('2018091300','%Y%m%d%H')
-    edate = dtime.datetime.strptime('2018091314','%Y%m%d%H')
+    edate = dtime.datetime.strptime('2018091313','%Y%m%d%H')
 
     dates = [date2datenum(sdate),date2datenum(edate)]
     moccha_missing_files = ['20180813_oden_','20180910_oden_']   ### cloud radar not working    #,'20180914_oden_'
@@ -1610,9 +1660,20 @@ def main():
         monc_data[m].pop('time_series_20_600')
 
     print (' Monc data Loaded!')
-    ## remove spin up time from monc data
-    monc_data=removeSpinUp(monc_data,monc_spin)
     ##################################################################################################################################
+    ## -------------------------------------------------------------
+    ## remove spin up time from monc data
+    ## -------------------------------------------------------------
+    monc_data=removeSpinUp(monc_data,monc_spin)
+
+    ## -------------------------------------------------------------
+    ## shorten obs/model data to case study time period
+    ## -------------------------------------------------------------
+
+    obs_data,um_data,monc_data = CaseStudySelection(obs_data,um_data,monc_data,dates)
+
+    embed()
+
     ## -------------------------------------------------------------
     ## maximise obs data available and build mask for available data
     ## -------------------------------------------------------------
