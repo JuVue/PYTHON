@@ -610,7 +610,7 @@ def plot_lwcProfiles(um_data, obs_data, label,outstr,plots_out_dir,dates, **args
     ## lwc_ad = calculated adiabitic lwc
     ## lwc_ad_nolwp = calculated adiabitic lwc including times withouth lwp
     lwcvar= 'lwc_adiabatic_inc_nolwp'
-    lwcstr='-adiabatic-incNoLWP'
+    lwcstr='-adincNoLWP'
 
     print ('******')
     print ('')
@@ -713,12 +713,12 @@ def plot_lwcProfiles(um_data, obs_data, label,outstr,plots_out_dir,dates, **args
     LARGE_SIZE = 16
 
     plt.rc('font',size=MED_SIZE)
-    plt.rc('axes',titlesize=LARGE_SIZE)
-    plt.rc('axes',labelsize=LARGE_SIZE)
-    plt.rc('xtick',labelsize=LARGE_SIZE)
-    plt.rc('ytick',labelsize=LARGE_SIZE)
-    plt.rc('legend',fontsize=LARGE_SIZE)
-    plt.figure(figsize=(4.5,6))
+    plt.rc('axes',titlesize=MED_SIZE)
+    plt.rc('axes',labelsize=MED_SIZE)
+    plt.rc('xtick',labelsize=MED_SIZE)
+    plt.rc('ytick',labelsize=MED_SIZE)
+    plt.rc('legend',fontsize=MED_SIZE)
+    plt.figure(figsize=(6,8.5))
     plt.subplots_adjust(top = 0.95, bottom = 0.12, right = 0.95, left = 0.15,
             hspace = 0.4, wspace = 0.1)
     ### define axis instance
@@ -776,9 +776,9 @@ def plot_lwcProfiles(um_data, obs_data, label,outstr,plots_out_dir,dates, **args
     dstr=datenum2date(dates[1])
     # plt.grid('on')
     if bool(args):
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + 'LWC-MTThresholding-LWC' + lwcstr + '.png'
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_LWC-MTThresh-LWC' + lwcstr + '.png'
     else:
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + 'LWC-MTThresholding-LWC'+ lwcstr + '.png'
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_LWC-MTThresh-LWC'+ lwcstr + '.png'
     plt.savefig(fileout)
 
     print ('')
@@ -896,12 +896,12 @@ def plot_iwcProfiles(um_data, obs_data, label,outstr,plots_out_dir,dates, **args
     LARGE_SIZE = 16
 
     plt.rc('font',size=MED_SIZE)
-    plt.rc('axes',titlesize=LARGE_SIZE)
-    plt.rc('axes',labelsize=LARGE_SIZE)
-    plt.rc('xtick',labelsize=LARGE_SIZE)
-    plt.rc('ytick',labelsize=LARGE_SIZE)
-    plt.rc('legend',fontsize=LARGE_SIZE)
-    plt.figure(figsize=(4.5,6))
+    plt.rc('axes',titlesize=MED_SIZE)
+    plt.rc('axes',labelsize=MED_SIZE)
+    plt.rc('xtick',labelsize=MED_SIZE)
+    plt.rc('ytick',labelsize=MED_SIZE)
+    plt.rc('legend',fontsize=MED_SIZE)
+    plt.figure(figsize=(6,8.5))
     plt.subplots_adjust(top = 0.95, bottom = 0.12, right = 0.95, left = 0.15,
             hspace = 0.4, wspace = 0.1)
     ### define axis instance
@@ -959,9 +959,9 @@ def plot_iwcProfiles(um_data, obs_data, label,outstr,plots_out_dir,dates, **args
     dstr=datenum2date(dates[1])
     # plt.grid('on')
     if bool(args):
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + 'IWC-MTThresholding-twcadnolwp.png'
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_IWC-MTThresh-adincnolwp.png'
     else:
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + 'IWC-MTThresholding-twcadnolwp.png'
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_IWC-MTThresh-adincnolwp.png'
     plt.savefig(fileout)
 
     print ('')
@@ -984,7 +984,7 @@ def plot_twcProfiles(um_data, obs_data, label,outstr,plots_out_dir,dates, **args
         obs_zorder += len(monc_data)
 
     twcvar= 'twc_ad_nolwp'
-    twcstr='-adiabatic-incNoLWP'
+    twcstr='-adincNoLWP'
 
 
 
@@ -1089,12 +1089,12 @@ def plot_twcProfiles(um_data, obs_data, label,outstr,plots_out_dir,dates, **args
     LARGE_SIZE = 16
 
     plt.rc('font',size=MED_SIZE)
-    plt.rc('axes',titlesize=LARGE_SIZE)
-    plt.rc('axes',labelsize=LARGE_SIZE)
-    plt.rc('xtick',labelsize=LARGE_SIZE)
-    plt.rc('ytick',labelsize=LARGE_SIZE)
-    plt.rc('legend',fontsize=LARGE_SIZE)
-    plt.figure(figsize=(4.5,6))
+    plt.rc('axes',titlesize=MED_SIZE)
+    plt.rc('axes',labelsize=MED_SIZE)
+    plt.rc('xtick',labelsize=MED_SIZE)
+    plt.rc('ytick',labelsize=MED_SIZE)
+    plt.rc('legend',fontsize=MED_SIZE)
+    plt.figure(figsize=(6,8.5))
     plt.subplots_adjust(top = 0.95, bottom = 0.12, right = 0.95, left = 0.15,
             hspace = 0.4, wspace = 0.1)
     ### define axis instance
@@ -1153,9 +1153,9 @@ def plot_twcProfiles(um_data, obs_data, label,outstr,plots_out_dir,dates, **args
     dstr=datenum2date(dates[1])
     # plt.grid('on')
     if bool(args):
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + 'TWC-MTThresholding' + twcstr + '.png'
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_TWC-MTThresh' + twcstr + '.png'
     else:
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + 'TWC-MTThresholding' +twcstr +'.png'
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_TWC-MTThresh' +twcstr +'.png'
     plt.savefig(fileout)
 
     print ('******')
