@@ -1333,7 +1333,7 @@ def removeSpinUp(monc_data,monc_spin):
 def CaseStudySelection(obs_data,um_data,monc_data,dates):
     obs_vars=list(obs_data.keys())
     embed()
-    time_ind = np.where(obs_data['time']<dates[1] | obs_data['time']>dates[2] )
+    time_ind = np.argwhere((obs_data['time']<dates[0]) | (obs_data['time']>dates[1] ))
     tinit=len(obs_data['time'])
     for j in range(0,len(obs_vars)):
         tmp2=np.argwhere(np.array(obs_data[obs_vars[j]].shape) == tinit)
@@ -1348,8 +1348,8 @@ def CaseStudySelection(obs_data,um_data,monc_data,dates):
 
     for m in range(0,len(um_data)):
         um_vars=list(um_data[m].keys())
-        time_ind = np.where(um_data[m]['time']<dates[1] | um_data[m]['time']>dates[2] )
-        tinit=len(um_data['time'])
+        time_ind = np.argwhere((um_data[m]['time']<dates[0]) | (um_data[m]['time']>dates[1] ))
+        tinit=len(um_data[m]['time'])
         for j in range(0,len(um_vars)):
             tmp2=np.argwhere(np.array(um_data[m][um_vars[j]].shape) == tinit)
             if tmp2 == 0:
@@ -1363,10 +1363,12 @@ def CaseStudySelection(obs_data,um_data,monc_data,dates):
 
     for m in range(0,len(monc_data)):
         monc_vars=list(monc_data[m].keys())
-        time1_ind = np.where(monc_data[m]['time1']<dates[1] | monc_data[m]['time1']>dates[2] )
-        t1init=len(monc_data['time1'])
-        time2_ind = np.where(monc_data[m]['time2']<dates[1] | monc_data[m]['time2']>dates[2] )
-        t2init=len(monc_data['time2'])
+        mt1=monc_data[m]['time1']/60/60 + date[0]
+        mt2=monc_data[m]['time2']/60/60 + date[0]
+        time1_ind = np.argwhere((mt1>dates[1] ))
+        t1init=len(mt1)
+        time2_ind = np.argwhere((mt2>dates[1] ))
+        t2init=len(mt2)
         for j in range(0,len(monc_vars)):
             if any(np.array(monc_data[m][monc_vars[j]].shape) == t1init):
                 monc_data[m][monc_vars[j]]=np.delete(monc_data[m][monc_vars[j]],time1_ind,0)
@@ -1381,7 +1383,7 @@ def CaseStudySelection(obs_data,um_data,monc_data,dates):
                 elif tmp2 == 3:
                     monc_data[m][monc_vars[j]]=np.delete(monc_data[m][monc_vars[j]],time2_ind,3)
 
-    return obs_data,um_data,monc_data
+    return obs_data, um_data, monc_data
 ################################################################################
 ################################################################################
 def main():
