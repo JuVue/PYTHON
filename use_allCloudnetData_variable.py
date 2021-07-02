@@ -501,11 +501,11 @@ def plot_TWCTimeseries(um_data, obs_data,twcvar,twcstr, label,outstr, plots_out_
     plt.rc('ytick',labelsize=MED_SIZE)
     plt.rc('legend',fontsize=MED_SIZE)
 
-    clevs=[1e-5, 0.5e-4, 1e-4,0.5e-3, 1e-3,0.5e-2, 1e-2,0.5e-1, 1e-1,0.5e0, 1e0]
+    #clevs=[1e-5, 0.5e-4, 1e-4,0.5e-3, 1e-3,0.5e-2, 1e-2,0.5e-1, 1e-1,0.5e0, 1e0]
     clevs=[1e-5,0.25e-4,0.5e-4,0.75e-4,
               1e-4,0.25e-3,0.5e-3,0.75e-3,
               1e-3,0.25e-2,0.5e-2,0.75e-2,
-              1e-2,0.25e-1,0.5e-1,0.75e-1,1e-1,
+              1e-2,0.25e-1,0.5e-1,0.75e-1,
               1e-1,0.25e-0,0.5e-0,0.75e-0,1e-0]
     #####Plot Twc###############################################
     yheight=3
