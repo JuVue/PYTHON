@@ -1331,9 +1331,11 @@ def removeSpinUp(monc_data,monc_spin):
     print ('')
 
 def CaseStudySelection(obs_data,um_data,monc_data,dates):
+    print('************')
+    print('shortening data to case study time frame:')
+
     obs_vars=list(obs_data.keys())
-    embed()
-    time_ind = np.argwhere((obs_data['time']<dates[0]) | (obs_data['time']>dates[1] ))
+    time_ind = np.argwhere((obs_data['time']<dates[0]) | (obs_data['time']>dates[1]+1/60/24 ))
     tinit=len(obs_data['time'])
     for j in range(0,len(obs_vars)):
         tmp2=np.argwhere(np.array(obs_data[obs_vars[j]].shape) == tinit)
@@ -1348,7 +1350,7 @@ def CaseStudySelection(obs_data,um_data,monc_data,dates):
 
     for m in range(0,len(um_data)):
         um_vars=list(um_data[m].keys())
-        time_ind = np.argwhere((um_data[m]['time']<dates[0]) | (um_data[m]['time']>dates[1] ))
+        time_ind = np.argwhere((um_data[m]['time']<dates[0]) | (um_data[m]['time']>dates[1]+1/60/24 ))
         tinit=len(um_data[m]['time'])
         for j in range(0,len(um_vars)):
             tmp2=np.argwhere(np.array(um_data[m][um_vars[j]].shape) == tinit)
@@ -1363,8 +1365,8 @@ def CaseStudySelection(obs_data,um_data,monc_data,dates):
 
     for m in range(0,len(monc_data)):
         monc_vars=list(monc_data[m].keys())
-        mt1=monc_data[m]['time1']/60/60 + date[0]
-        mt2=monc_data[m]['time2']/60/60 + date[0]
+        mt1=monc_data[m]['time1']/60/60/24 + dates[0]
+        mt2=monc_data[m]['time2']/60/60/24 + dates[0]
         time1_ind = np.argwhere((mt1>dates[1] ))
         t1init=len(mt1)
         time2_ind = np.argwhere((mt2>dates[1] ))
@@ -1384,6 +1386,9 @@ def CaseStudySelection(obs_data,um_data,monc_data,dates):
                     monc_data[m][monc_vars[j]]=np.delete(monc_data[m][monc_vars[j]],time2_ind,3)
 
     return obs_data, um_data, monc_data
+    print('done')
+    print('************')
+
 ################################################################################
 ################################################################################
 def main():
