@@ -365,12 +365,7 @@ def plot_IWCTimeseries(um_data, obs_data,label,outstr, plots_out_dir, dates,**ar
 
     plt.subplot(numsp,1,1)
     ax = plt.gca()
-    if obs_switch == 'RADAR':
-        img = plt.pcolor(obs_data['time'], obs_data['height'], np.transpose(obs_data['iwc'])*1e3,
-            cmap=newcmp,vmin = 0.0, vmax = cmax)
-            #cmap = newcmp)
-    else:
-        img = plt.contourf(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(obs_data['iwc'])*1e3,
+    img = plt.contourf(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(obs_data['iwc'])*1e3,
             levels=clev, norm = LogNorm(),cmap = newcmp)
     plt.ylabel('Z [km]')
     plt.ylim(ylims)
@@ -727,7 +722,6 @@ def plot_lwcProfiles(um_data, obs_data,lwcvar,lwcstr, label,outstr,plots_out_dir
     fcols=['mediumaquamarine','lightblue','blue']
     lcolsmonc=['gold','darkorange','darkgoldenrod']
     fcolsmonc=['navajowhite','moccasin','goldenrod']
-    embed()
     #### ADIABATIC LWC
     plt.plot(np.nanmean(obs_data[lwcvar],0)*1e3,np.nanmean(obs_data['height'],0), color = 'k', linewidth = 3, label = 'Obs_UMgrid'  + lwcstr, zorder = obs_zorder)
     ax1.fill_betweenx(np.nanmean(obs_data['height'],0),np.nanmean(obs_data[lwcvar],0)*1e3 - np.nanstd(obs_data['lwc'],0)*1e3,
