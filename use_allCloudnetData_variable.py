@@ -592,7 +592,7 @@ def plot_TWCTimeseries(um_data,  obs_data,label,outstr, plots_out_dir, dates, ob
     print ('******')
 
 
-def plot_lwcProfiles(um_data, obs_data, label,outstr,plots_out_dir, **args): #, lon, lat):
+def plot_lwcProfiles(um_data, obs_data, label,outstr,plots_out_dir,dates, **args): #, lon, lat):
 
     obs_zorder = len(um_data)+1
 
@@ -773,7 +773,7 @@ def plot_lwcProfiles(um_data, obs_data, label,outstr,plots_out_dir, **args): #, 
     ax1.set_xticklabels([0,' ',0.05,' ',0.1,' ',0.15,' ',0.2])
     ax1.xaxis.set_minor_locator(ticker.MultipleLocator(0.0125))
     plt.legend()
-
+    dstr=datenum2date(dates[1])
     # plt.grid('on')
     if bool(args):
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + 'LWC-MTThresholding-LWC' + lwcstr + '.png'
@@ -787,7 +787,7 @@ def plot_lwcProfiles(um_data, obs_data, label,outstr,plots_out_dir, **args): #, 
     print ('******')
 
 
-def plot_iwcProfiles(um_data, obs_data, label,outstr,plots_out_dir, **args): #, lon, lat):
+def plot_iwcProfiles(um_data, obs_data, label,outstr,plots_out_dir,dates, **args): #, lon, lat):
 
     obs_zorder = len(um_data)+1
 
@@ -956,7 +956,7 @@ def plot_iwcProfiles(um_data, obs_data, label,outstr,plots_out_dir, **args): #, 
     #ax1.set_xticklabels([0,' ',0.015,' ',0.03,' ',0.045,' ',0.06])
     ax1.xaxis.set_minor_locator(ticker.MultipleLocator(0.0075))
     plt.legend()
-
+    dstr=datenum2date(dates[1])
     # plt.grid('on')
     if bool(args):
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + 'IWC-MTThresholding-twcadnolwp.png'
@@ -970,7 +970,7 @@ def plot_iwcProfiles(um_data, obs_data, label,outstr,plots_out_dir, **args): #, 
     print ('******')
 
 
-def plot_twcProfiles(um_data, obs_data, label,outstr,plots_out_dir, **args): #, lon, lat):
+def plot_twcProfiles(um_data, obs_data, label,outstr,plots_out_dir,dates, **args): #, lon, lat):
 
     obs_zorder = len(um_data)+1
     if bool(args):
@@ -1150,6 +1150,7 @@ def plot_twcProfiles(um_data, obs_data, label,outstr,plots_out_dir, **args): #, 
     ax1.xaxis.set_minor_locator(ticker.MultipleLocator(0.0025))
     plt.legend()
 
+    dstr=datenum2date(dates[1])
     # plt.grid('on')
     if bool(args):
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + 'TWC-MTThresholding' + twcstr + '.png'
@@ -1653,14 +1654,14 @@ def main():
     # Cloudnet plot: Plot Cv statistics from drift period
     # -------------------------------------------------------------
     # figure = plot_CvProfiles(um_data, ifs_data, misc_data, ra2t_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs, obs_switch)
-    figure = plot_lwcProfiles(um_data, obs_data, label,outstr, plots_out_dir,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    figure = plot_iwcProfiles(um_data, obs_data, label,outstr, plots_out_dir,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    figure = plot_twcProfiles(um_data, obs_data, label,outstr, plots_out_dir,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_lwcProfiles(um_data, obs_data, label,outstr, plots_out_dir,dates  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_iwcProfiles(um_data, obs_data, label,outstr, plots_out_dir,dates  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_twcProfiles(um_data, obs_data, label,outstr, plots_out_dir,dates  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
     # -------------------------------------------------------------
     # Cloudnet plot: Plot contour timeseries
     # -------------------------------------------------------------
-    figure = plot_CvTimeseries(um_data, obs_data, label, outstr, plots_out_dir, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_CvTimeseries(um_data, obs_data, label, outstr, plots_out_dir, dates, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     figure = plot_LWCTimeseries(um_data,obs_data, label, outstr, plots_out_dir, dates, obs_switch,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     figure = plot_TWCTimeseries(um_data, obs_data, label,outstr, plots_out_dir, dates, obs_switch,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     figure = plot_IWCTimeseries(um_data, obs_data, label, outstr,plots_out_dir, dates, obs_switch,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
