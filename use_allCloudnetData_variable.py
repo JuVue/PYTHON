@@ -705,7 +705,7 @@ def plot_lwcProfiles(um_data, obs_data, label,outstr,plots_out_dir, **args): #, 
         y = [1e3, 4e3]
         f = interp1d(y, x)
         for m in range(0,len(monc_data)):
-            twc_thresh_monc[monc_intZs] = f(monc_data[m]['z'][0,monc_intZs].data)
+            twc_thresh_monc[monc_intZs] = f(monc_data[m]['z'][monc_intZs].data)
 
         for t in range(0,np.size(monc_data[m]['model_twc'],0)):
             for k in range(0,np.size(monc_data[m]['model_twc'],1)):
@@ -714,12 +714,11 @@ def plot_lwcProfiles(um_data, obs_data, label,outstr,plots_out_dir, **args): #, 
                         monc_data[m]['model_twc'][t,k] = np.nan
                         monc_data[m]['model_lwc'][t,k] = np.nan
 
-        ### plot profile of threshold as sanity check
-        plt.plot(twc_thresh_um, um_data['height'][0,:])
-        plt.plot(twc_thresh_monc, monc_data['z'][:]); plt.show()
-        print (twc_thresh_monc)
+        # ### plot profile of threshold as sanity check
+        # plt.plot(twc_thresh_um, um_data[0]['height'][0,:])
+        # plt.plot(twc_thresh_monc, monc_data[0]['z'][:]); plt.show()
+        # print (twc_thresh_monc)
 
-        embed()
     ###----------------------------------------------------------------
     ###         Plot figure - Mean profiles
     ###----------------------------------------------------------------
@@ -737,7 +736,7 @@ def plot_lwcProfiles(um_data, obs_data, label,outstr,plots_out_dir, **args): #, 
     plt.figure(figsize=(4.5,6))
     plt.subplots_adjust(top = 0.95, bottom = 0.12, right = 0.95, left = 0.15,
             hspace = 0.4, wspace = 0.1)
-
+    embed()
     ### define axis instance
     ax1 = plt.gca()
     if obs_switch == 'RADAR':
