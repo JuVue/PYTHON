@@ -1708,7 +1708,7 @@ def main():
               '27_u-ce112_RA1M_CASIM/']
     ### CHOOSE MONC RUNS
     m_out_dir = ['4_control_20180913T0000Z_Wsub-1.5/',
-                '5_control_20180913T0000Z_Wsub-1.5_Fletcher/']
+                '5_control_20180913T0000Z_Wsub-1.5_Fletcher/',
                 '6_control_20180913T0000Z_Wsub-1.5_1km/']
 
     #################################################################
