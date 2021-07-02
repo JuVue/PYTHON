@@ -466,7 +466,10 @@ def plot_TWCTimeseries(um_data,  obs_data,label,outstr, plots_out_dir, dates, ob
     ###         Calculate total water content
     ###----------------------------------------------------------------
     # obs_data['twc'] = obs_data['lwc_adiabatic'] + obs_data['iwc']
-    obs_data['twc'] = obs_data['lwc_adiabatic_inc_nolwp'] + obs_data['iwc']
+#    obs_data['twc'] = obs_data['lwc_adiabatic_inc_nolwp'] + obs_data['iwc']
+    obs_data['twc'] = obs_data['lwc'] + obs_data['iwc']
+    obs_data['twc_ad'] = obs_data['lwc_adiabatic'] + obs_data['iwc']
+    obs_data['twc_ad_nolwp'] = obs_data['lwc_adiabatic_inc_nolwp'] + obs_data['iwc']
     for m in range(0,len(um_data)):
         um_data[m]['model_twc'] = um_data[m]['model_lwc'] + um_data[m]['model_iwc_filtered']
 
@@ -476,7 +479,8 @@ def plot_TWCTimeseries(um_data,  obs_data,label,outstr, plots_out_dir, dates, ob
             monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
             monc_data[m]['model_twc'] = monc_data[m]['model_lwc'] +monc_data[m]['model_iwc']
 
-    twc0 = np.transpose(obs_data['twc'])*1e3
+    twc0 = np.transpose(obs_data['twc_ad_nolwp'])*1e3
+    twcstr='twcadnolwp'
 
     cmax = 0.3
 
@@ -577,9 +581,9 @@ def plot_TWCTimeseries(um_data,  obs_data,label,outstr, plots_out_dir, dates, ob
 
     dstr=datenum2date(dates[1])
     if bool(args):
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_TWCTimeseries.png'
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_TWCTimeseries' + twcstr + '.png'
     else:
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_TWCTimeseries.png'
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_TWCTimeseries_' + twcstr + '.png'
     plt.savefig(fileout)
     plt.close()
     print ('')
@@ -590,46 +594,28 @@ def plot_TWCTimeseries(um_data,  obs_data,label,outstr, plots_out_dir, dates, ob
 
 def plot_lwcProfiles(um_data, obs_data, label,outstr,plots_out_dir, **args): #, lon, lat):
 
-    numsp=len(um_data)+1
+    obs_zorder = len(um_data)+1
+
     if bool(args):
         for n in range(0,len(args)):
             if  list(args.keys())[n] == 'monc_data':
                 monc_data=args[list(args.keys())[n]]
-                numsp += len(monc_data)
             elif list(args.keys())[n] == 'mlabel':
                 mlabel = args[list(args.keys())[n]]
             elif list(args.keys())[n] == 'moutstr':
                 moutstr= args[list(args.keys())[n]]
+        obs_zorder += len(monc_data)
+    ###select which obs LWC should be plotted:
+    ## lwc = measured lwc,
+    ## lwc_ad = calculated adiabitic lwc
+    ## lwc_ad_nolwp = calculated adiabitic lwc including times withouth lwp
+    lwcvar= 'lwc_adiabatic_inc_nolwp'
+    lwcstr='-adiabatic-incNoLWP'
 
     print ('******')
     print ('')
-    print ('Plotting LWC mean profiles:')
+    print ('Plotting LWC mean profiles:' + lwcstr)
     print ('')
-
-
-    ###----------------------------------------------------------------
-    ###         1) LWC Method
-    ###----------------------------------------------------------------
-    # #### set flagged um_data to nans
-    # obs_data['lwc'][obs_data['lwc'] == -999] = np.nan
-    # obs_data['lwc'][obs_data['lwc'] == 0] = np.nan
-    # obs_data['lwc'][obs_data['lwc'] >= 1e-3] = np.nan       ## exclude >1g/m3
-    # obs_data['lwc'][obs_data['lwc'] < 1e-6] = np.nan       ## exclude <0.001g/m3
-    # um_data['model_lwc'][um_data['model_lwc'] <= 0.0] = np.nan
-    # um_data['model_lwc'][um_data['model_lwc'] < 1e-6] = np.nan
-
-    ###----------------------------------------------------------------
-    ###         2) TWC Method
-    ###----------------------------------------------------------------
-    #### set flagged um_data to nans
-    # obs_data['iwc'][obs_data['iwc'] < 0] = 0.0
-    # um_data['model_iwc_filtered'][um_data['model_iwc_filtered'] < 0.0] = 0.0
-
-    #### set flagged um_data to nans
-    # obs_data['lwc'][obs_data['lwc'] == -999] = 0.0
-    # obs_data['lwc_adiabatic'][obs_data['lwc_adiabatic'] == -999] = 0.0
-    # obs_data['lwc_adiabatic_inc_nolwp'][obs_data['lwc_adiabatic_inc_nolwp'] == -999] = 0.0
-    # um_data['model_lwc'][um_data['model_lwc'] < 0.0] = 0.0
 
     ###----------------------------------------------------------------
     ###         Calculate total water content
@@ -644,7 +630,6 @@ def plot_lwcProfiles(um_data, obs_data, label,outstr,plots_out_dir, **args): #, 
             monc_data[m]['model_iwc']= (monc_data[m]['ice_mmr_mean']+monc_data[m]['graupel_mmr_mean']+monc_data[m]['snow_mmr_mean'])*monc_data[m]['rho']
             monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
             monc_data[m]['model_twc'] = monc_data[m]['model_lwc'] +monc_data[m]['model_iwc']
-    embed()
     ####-------------------------------------------------------------------------
     ### from Michael's paper:
     ####    "we consider a grid point cloudy when cloud water exceeded
@@ -736,355 +721,176 @@ def plot_lwcProfiles(um_data, obs_data, label,outstr,plots_out_dir, **args): #, 
     plt.figure(figsize=(4.5,6))
     plt.subplots_adjust(top = 0.95, bottom = 0.12, right = 0.95, left = 0.15,
             hspace = 0.4, wspace = 0.1)
-    embed()
     ### define axis instance
     ax1 = plt.gca()
-    if obs_switch == 'RADAR':
-        plt.plot(np.nanmean(obs_data['lwc'],0)*1e3,obs_data['height'][:394], 'k--', linewidth = 3, label = 'Obs_' + obs_switch + 'grid')
-        ax1.fill_betweenx(obs_data['height'][:394],np.nanmean(obs_data['lwc'],0)*1e3 - np.nanstd(obs_data['lwc'],0)*1e3,
-            np.nanmean(obs_data['lwc'],0)*1e3 + np.nanstd(obs_data['lwc'],0)*1e3, color = 'lightgrey', alpha = 0.5)
-        plt.xlim([0,1.0])
-    else:
-        #### ADIABATIC LWC (where there are HATPRO LWP data available)
-        plt.plot(np.nanmean(obs_data['lwc_adiabatic'],0)*1e3,np.nanmean(obs_data['height'],0), color = 'k', linewidth = 3, label = 'Obs_' + obs_switch + 'grid-adiabatic', zorder = 5)
-        # plt.plot(np.nanmedian(obs_data['lwc_adiabatic'],0)*1e3,np.nanmedian(obs_data['height'],0), '--', color = 'k', linewidth = 3, label = 'Obs_' + obs_switch + 'grid-adiabatic', zorder = 5)
-        ax1.fill_betweenx(np.nanmean(obs_data['height'],0),np.nanmean(obs_data['lwc_adiabatic'],0)*1e3 - np.nanstd(obs_data['lwc'],0)*1e3,
-            np.nanmean(obs_data['lwc_adiabatic'],0)*1e3 + np.nanstd(obs_data['lwc_adiabatic'],0)*1e3, color = 'lightgrey', alpha = 0.5)
-        # plt.xlim([0,0.2])
-        plt.plot(np.nanmean(obs_data['lwc_adiabatic'],0)*1e3 - np.nanstd(obs_data['lwc_adiabatic'],0)*1e3, np.nanmean(obs_data['height'],0),
-            '--', color = 'k', linewidth = 0.5)
-        plt.plot(np.nanmean(obs_data['lwc_adiabatic'],0)*1e3 + np.nanstd(obs_data['lwc_adiabatic'],0)*1e3, np.nanmean(obs_data['height'],0),
-            '--', color = 'k', linewidth = 0.5)
-        # #### ADIABATIC LWC (all times)
-        # plt.plot(np.nanmean(obs_data['lwc_adiabatic_inc_nolwp'],0)*1e3,np.nanmean(obs_data['height'],0), color = 'purple', linewidth = 3, label = 'Obs_' + obs_switch + 'grid-adiabatic-incNoLWP', zorder = 5)
-        # ax1.fill_betweenx(np.nanmean(obs_data['height'],0),np.nanmean(obs_data['lwc_adiabatic_inc_nolwp'],0)*1e3 - np.nanstd(obs_data['lwc'],0)*1e3,
-        #     np.nanmean(obs_data['lwc_adiabatic_inc_nolwp'],0)*1e3 + np.nanstd(obs_data['lwc_adiabatic_inc_nolwp'],0)*1e3, color = 'lightgrey', alpha = 0.5)
-        # plt.xlim([0,0.2])
-        # plt.plot(np.nanmean(obs_data['lwc_adiabatic_inc_nolwp'],0)*1e3 - np.nanstd(obs_data['lwc_adiabatic_inc_nolwp'],0)*1e3, np.nanmean(obs_data['height'],0),
-        #     '--', color = 'k', linewidth = 0.5)
-        # plt.plot(np.nanmean(obs_data['lwc_adiabatic_inc_nolwp'],0)*1e3 + np.nanstd(obs_data['lwc_adiabatic_inc_nolwp'],0)*1e3, np.nanmean(obs_data['height'],0),
-        #     '--', color = 'k', linewidth = 0.5)
-        lcols=['mediumseagreen','steelblue','darkblue']
-        fcols=['mediumaquamarine','lightblue','blue']
-        lcolsmonc=['gold','darkorange']
-        fcolsmonc=['navajowhite','moccasin']
-        for m in range(0,len(um_data)):
-            ax1.fill_betweenx(np.nanmean(um_data[m]['height'],0),np.nanmean(um_data[m]['model_lwc'],0)*1e3 - np.nanstd(um_data[m]['model_lwc']*1e3,0),
-                np.nanmean(um_data[m]['model_lwc'],0)*1e3 + np.nanstd(um_data[m]['model_lwc'],0)*1e3, color = fcols[m], alpha = 0.05)
-            plt.plot(np.nanmean(um_data[m]['model_lwc'],0)*1e3 - np.nanstd(um_data[m]['model_lwc'],0)*1e3, np.nanmean(um_data[m]['height'],0),
-                '--', color =lcols[m], linewidth = 0.5)
-            plt.plot(np.nanmean(um_data[m]['model_lwc'],0)*1e3 + np.nanstd(um_data[m]['model_lwc'],0)*1e3, np.nanmean(um_data[m]['height'],0),
-                '--', color = lcols[m], linewidth = 0.5)
-        if bool(args):
-            for m in range(0,len(monc_data)):
-                ax1.fill_betweenx(np.nanmean(monc_data[m]['z'],0),np.nanmean(monc_data[m]['model_lwc'],0)*1e3 - np.nanstd(monc_data[m]['model_lwc']*1e3,0),
-                    np.nanmean(monc_data[m]['model_lwc'],0)*1e3 + np.nanstd(monc_data[m]['model_lwc'],0)*1e3, color = fcolsmonc[m], alpha = 0.05)
-                plt.plot(np.nanmean(monc_data[m]['model_lwc'],0)*1e3 - np.nanstd(monc_data[m]['model_lwc'],0)*1e3, np.nanmean(monc_data[m]['z'],0),
-                    '--', color =lcolsmonc[m], linewidth = 0.5)
-                plt.plot(np.nanmean(monc_data[m]['model_lwc'],0)*1e3 + np.nanstd(monc_data[m]['model_lwc'],0)*1e3, np.nanmean(monc_data[m]['z'],0),
-                    '--', color = lcolsmonc[m], linewidth = 0.5)
-        for m in range(0,len(um_data)):
-            plt.plot(np.nanmean(um_data['model_lwc'],0)*1e3,np.nanmean(um_data['height'],0), color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
-        if bool(args):
-            for m in range(0,len(monc_data)):
-                plt.plot(np.nanmean(monc_data['model_lwc'],0)*1e3,np.nanmean(monc_data['z'],0), color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+    ###define colors
+    lcols=['mediumseagreen','steelblue','darkblue']
+    fcols=['mediumaquamarine','lightblue','blue']
+    lcolsmonc=['gold','darkorange','darkgoldenrod']
+    fcolsmonc=['navajowhite','moccasin','goldenrod']
 
-    # plt.plot(np.nanmedian(ifs_data['model_lwc'],0)*1e3,np.nanmedian(ifs_data['height'],0), '--', color = 'gold', linewidth = 3, label = 'ECMWF_IFS', zorder = 4)
-    # plt.plot(np.nanmedian(misc_data['model_lwc'],0)*1e3,np.nanmedian(misc_data['height'],0), '--', color = 'mediumseagreen', linewidth = 3, label = 'UM_CASIM-100', zorder = 3)
-    # plt.plot(np.nanmedian(ra2t_data['model_lwc'],0)*1e3,np.nanmedian(ra2t_data['height'],0), '--', color = 'steelblue', linewidth = 3, label = 'UM_RA2T', zorder = 2)
-    # plt.plot(np.nanmedian(um_data['model_lwc'],0)*1e3,np.nanmedian(um_data['height'],0), '--', color = 'darkblue', linewidth = 3, label = 'UM_RA2M', zorder = 1)
+    #### ADIABATIC LWC
+    plt.plot(np.nanmean(obs_data[lwcvar],0)*1e3,np.nanmean(obs_data['height'],0), color = 'k', linewidth = 3, label = 'Obs_UMgrid'  + lwcstr, zorder = obs_zorder)
+    ax1.fill_betweenx(np.nanmean(obs_data['height'],0),np.nanmean(obs_data[lwcvar],0)*1e3 - np.nanstd(obs_data['lwc'],0)*1e3,
+        np.nanmean(obs_data[lwcvar],0)*1e3 + np.nanstd(obs_data[lwcvar],0)*1e3, color = 'lightgrey', alpha = 0.5)
+    # plt.xlim([0,0.2])
+    plt.plot(np.nanmean(obs_data[lwcvar],0)*1e3 - np.nanstd(obs_data[lwcvar],0)*1e3, np.nanmean(obs_data['height'],0),
+        '--', color = 'k', linewidth = 0.5)
+    plt.plot(np.nanmean(obs_data[lwcvar],0)*1e3 + np.nanstd(obs_data[lwcvar],0)*1e3, np.nanmean(obs_data['height'],0),
+        '--', color = 'k', linewidth = 0.5)
+    for m in range(0,len(um_data)):
+        ax1.fill_betweenx(np.nanmean(um_data[m]['height'],0),np.nanmean(um_data[m]['model_lwc'],0)*1e3 - np.nanstd(um_data[m]['model_lwc']*1e3,0),
+            np.nanmean(um_data[m]['model_lwc'],0)*1e3 + np.nanstd(um_data[m]['model_lwc'],0)*1e3, color = fcols[m], alpha = 0.05)
+        plt.plot(np.nanmean(um_data[m]['model_lwc'],0)*1e3 - np.nanstd(um_data[m]['model_lwc'],0)*1e3, np.nanmean(um_data[m]['height'],0),
+            '--', color =lcols[m], linewidth = 0.5)
+        plt.plot(np.nanmean(um_data[m]['model_lwc'],0)*1e3 + np.nanstd(um_data[m]['model_lwc'],0)*1e3, np.nanmean(um_data[m]['height'],0),
+            '--', color = lcols[m], linewidth = 0.5)
+    if bool(args):
+        for m in range(0,len(monc_data)):
+            ax1.fill_betweenx(monc_data[m]['z'],np.nanmean(monc_data[m]['model_lwc'],0)*1e3 - np.nanstd(monc_data[m]['model_lwc']*1e3,0),
+                np.nanmean(monc_data[m]['model_lwc'],0)*1e3 + np.nanstd(monc_data[m]['model_lwc'],0)*1e3, color = fcolsmonc[m], alpha = 0.05)
+            plt.plot(np.nanmean(monc_data[m]['model_lwc'],0)*1e3 - np.nanstd(monc_data[m]['model_lwc'],0)*1e3, monc_data[m]['z'],
+                '--', color =lcolsmonc[m], linewidth = 0.5)
+            plt.plot(np.nanmean(monc_data[m]['model_lwc'],0)*1e3 + np.nanstd(monc_data[m]['model_lwc'],0)*1e3, monc_data[m]['z'],
+                '--', color = lcolsmonc[m], linewidth = 0.5)
+    for m in range(0,len(um_data)):
+        plt.plot(np.nanmean(um_data[m]['model_lwc'],0)*1e3,np.nanmean(um_data[m]['height'],0), color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
+    if bool(args):
+        for m in range(0,len(monc_data)):
+            plt.plot(np.nanmean(monc_data[m]['model_lwc'],0)*1e3,monc_data[m]['z'], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
 
     plt.xlabel('Liquid water content [g m$^{-3}$]')
     plt.ylabel('Z [km]')
     # plt.ylim([0,5e3])
     # plt.yticks(np.arange(0,5.01e3,0.5e3))
     # ax1.set_yticklabels([0,' ',1,' ',2,' ',3,' ',4,' ',5])
-    plt.ylim([0,9000])
-    plt.yticks(np.arange(0,9.01e3,0.5e3))
-    ax1.set_yticklabels([0,' ',1,' ',2,' ',3,' ',4,' ',5,' ',6,' ',7,' ',8,' ',9])
+    plt.ylim([0,2500])
+    plt.yticks(np.arange(0,2.51e3,0.5e3))
+    ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
+    ax1.set_yticklabels(np.arange(0,4.0,0.5))
     plt.xlim([0,0.2])
-    plt.xticks(np.arange(0,0.21,0.025))
+    plt.xticks(np.arange(0,0.26,0.025))
     ax1.set_xticklabels([0,' ',0.05,' ',0.1,' ',0.15,' ',0.2])
+    ax1.xaxis.set_minor_locator(ticker.MultipleLocator(0.0125))
     plt.legend()
 
     # plt.grid('on')
     if bool(args):
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + 'LWC-MTThresholding-LWCadiabatic.png'
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + 'LWC-MTThresholding-LWC' + lwcstr + '.png'
     else:
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + 'LWC-MTThresholding-LWCadiabatic.png'
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + 'LWC-MTThresholding-LWC'+ lwcstr + '.png'
+    else:
     plt.savefig(fileout)
 
-    print ('******')
     print ('')
     print ('Finished plotting! :)')
     print ('')
+    print ('******')
 
 
-    ###----------------------------------------------------------------
-    ###         Plot figure - Median profiles
-    ###----------------------------------------------------------------
+def plot_iwcProfiles(um_data, obs_data, label,outstr,plots_out_dir, **args): #, lon, lat):
 
-    # SMALL_SIZE = 12
-    # MED_SIZE = 14
-    # LARGE_SIZE = 16
-    #
-    # plt.rc('font',size=MED_SIZE)
-    # plt.rc('axes',titlesize=LARGE_SIZE)
-    # plt.rc('axes',labelsize=LARGE_SIZE)
-    # plt.rc('xtick',labelsize=LARGE_SIZE)
-    # plt.rc('ytick',labelsize=LARGE_SIZE)
-    # plt.rc('legend',fontsize=LARGE_SIZE)
-    # plt.figure(figsize=(4.5,6))
-    # plt.subplots_adjust(top = 0.95, bottom = 0.12, right = 0.95, left = 0.15,
-    #         hspace = 0.4, wspace = 0.1)
-    #
-    # ### define axis instance
-    # ax1 = plt.gca()
-    # if obs_switch == 'RADAR':
-    #     plt.plot(np.nanmean(obs_data['lwc'],0)*1e3,obs_data['height'][:394], 'k--', linewidth = 3, label = 'Obs_' + obs_switch + 'grid')
-    #     ax1.fill_betweenx(obs_data['height'][:394],np.nanmean(obs_data['lwc'],0)*1e3 - np.nanstd(obs_data['lwc'],0)*1e3,
-    #         np.nanmean(obs_data['lwc'],0)*1e3 + np.nanstd(obs_data['lwc'],0)*1e3, color = 'lightgrey', alpha = 0.5)
-    #     plt.xlim([0,1.0])
-    # else:
-    #     # #### SCALED LWC
-    #     # plt.plot(np.nanmean(obs_data['lwc'],0)*1e3,np.nanmean(obs_data['height'],0), color = 'grey', linewidth = 3, label = 'Obs_' + obs_switch + 'grid-obsLWP', zorder = 5)
-    #     # ax1.fill_betweenx(np.nanmean(obs_data['height'],0),np.nanmean(obs_data['lwc'],0)*1e3 - np.nanstd(obs_data['lwc'],0)*1e3,
-    #     #     np.nanmean(obs_data['lwc'],0)*1e3 + np.nanstd(obs_data['lwc'],0)*1e3, color = 'lightgrey', alpha = 0.3)
-    #     # plt.plot(np.nanmean(obs_data['lwc'],0)*1e3 - np.nanstd(obs_data['lwc'],0)*1e3, np.nanmean(obs_data['height'],0),
-    #     #     '--', color = 'grey', linewidth = 0.5)
-    #     # plt.plot(np.nanmean(obs_data['lwc'],0)*1e3 + np.nanstd(obs_data['lwc'],0)*1e3, np.nanmean(obs_data['height'],0),
-    #     #     '--', color = 'grey', linewidth = 0.5)
-    #     #### ADIABATIC LWC (where there are HATPRO LWP data available)
-    #     # plt.plot(np.nanmean(obs_data['lwc_adiabatic'],0)*1e3,np.nanmean(obs_data['height'],0), color = 'k', linewidth = 3, label = 'Obs_' + obs_switch + 'grid-adiabatic', zorder = 5)
-    #     plt.plot(np.nanmedian(obs_data['lwc_adiabatic'],0)*1e3,np.nanmedian(obs_data['height'],0), color = 'k', linewidth = 3, label = 'Obs_' + obs_switch + 'grid-adiabatic', zorder = 5)
-    #     ax1.fill_betweenx(np.nanmedian(obs_data['height'],0),np.nanmedian(obs_data['lwc_adiabatic'],0)*1e3 - np.nanstd(obs_data['lwc'],0)*1e3,
-    #         np.nanmedian(obs_data['lwc_adiabatic'],0)*1e3 + np.nanstd(obs_data['lwc_adiabatic'],0)*1e3, color = 'lightgrey', alpha = 0.5)
-    #     # plt.xlim([0,0.2])
-    #     plt.plot(np.nanmedian(obs_data['lwc_adiabatic'],0)*1e3 - np.nanstd(obs_data['lwc_adiabatic'],0)*1e3, np.nanmedian(obs_data['height'],0),
-    #         '--', color = 'k', linewidth = 0.5)
-    #     plt.plot(np.nanmedian(obs_data['lwc_adiabatic'],0)*1e3 + np.nanstd(obs_data['lwc_adiabatic'],0)*1e3, np.nanmedian(obs_data['height'],0),
-    #         '--', color = 'k', linewidth = 0.5)
-    #     # #### ADIABATIC LWC (all times)
-    #     # plt.plot(np.nanmean(obs_data['lwc_adiabatic_inc_nolwp'],0)*1e3,np.nanmean(obs_data['height'],0), color = 'purple', linewidth = 3, label = 'Obs_' + obs_switch + 'grid-adiabatic-incNoLWP', zorder = 5)
-    #     # ax1.fill_betweenx(np.nanmean(obs_data['height'],0),np.nanmean(obs_data['lwc_adiabatic_inc_nolwp'],0)*1e3 - np.nanstd(obs_data['lwc'],0)*1e3,
-    #     #     np.nanmean(obs_data['lwc_adiabatic_inc_nolwp'],0)*1e3 + np.nanstd(obs_data['lwc_adiabatic_inc_nolwp'],0)*1e3, color = 'lightgrey', alpha = 0.5)
-    #     # plt.xlim([0,0.2])
-    #     # plt.plot(np.nanmean(obs_data['lwc_adiabatic_inc_nolwp'],0)*1e3 - np.nanstd(obs_data['lwc_adiabatic_inc_nolwp'],0)*1e3, np.nanmean(obs_data['height'],0),
-    #     #     '--', color = 'k', linewidth = 0.5)
-    #     # plt.plot(np.nanmean(obs_data['lwc_adiabatic_inc_nolwp'],0)*1e3 + np.nanstd(obs_data['lwc_adiabatic_inc_nolwp'],0)*1e3, np.nanmean(obs_data['height'],0),
-    #     #     '--', color = 'k', linewidth = 0.5)
-    #
-    # ax1.fill_betweenx(np.nanmedian(ifs_data['height'],0),np.nanmedian(ifs_data['model_lwc'],0)*1e3 - np.nanstd(ifs_data['model_lwc'],0)*1e3,
-    #     np.nanmedian(ifs_data['model_lwc'],0)*1e3 + np.nanstd(ifs_data['model_lwc'],0)*1e3, color = 'navajowhite', alpha = 0.35)
-    # plt.plot(np.nanmedian(ifs_data['model_lwc'],0)*1e3 - np.nanstd(ifs_data['model_lwc'],0)*1e3, np.nanmedian(ifs_data['height'],0),
-    #     '--', color = 'gold', linewidth = 0.5)
-    # plt.plot(np.nanmedian(ifs_data['model_lwc'],0)*1e3 + np.nanstd(ifs_data['model_lwc'],0)*1e3, np.nanmedian(ifs_data['height'],0),
-    #     '--', color = 'gold', linewidth = 0.5)
-    #
-    # ax1.fill_betweenx(np.nanmedian(misc_data['height'],0),np.nanmedian(misc_data['model_lwc'],0)*1e3 - np.nanstd(misc_data['model_lwc']*1e3,0),
-    #     np.nanmedian(misc_data['model_lwc'],0)*1e3 + np.nanstd(misc_data['model_lwc'],0)*1e3, color = 'mediumaquamarine', alpha = 0.15)
-    # plt.plot(np.nanmedian(misc_data['model_lwc'],0)*1e3 - np.nanstd(misc_data['model_lwc'],0)*1e3, np.nanmedian(misc_data['height'],0),
-    #     '--', color = 'mediumseagreen', linewidth = 0.5)
-    # plt.plot(np.nanmedian(misc_data['model_lwc'],0)*1e3 + np.nanstd(misc_data['model_lwc'],0)*1e3, np.nanmedian(misc_data['height'],0),
-    #     '--', color = 'mediumseagreen', linewidth = 0.5)
-    #
-    # ax1.fill_betweenx(np.nanmedian(ra2t_data['height'],0),np.nanmedian(ra2t_data['model_lwc'],0)*1e3 - np.nanstd(ra2t_data['model_lwc']*1e3,0),
-    #     np.nanmedian(ra2t_data['model_lwc'],0)*1e3 + np.nanstd(ra2t_data['model_lwc'],0)*1e3, color = 'lightblue', alpha = 0.3)
-    # plt.plot(np.nanmedian(ra2t_data['model_lwc'],0)*1e3 - np.nanstd(ra2t_data['model_lwc'],0)*1e3, np.nanmedian(ra2t_data['height'],0),
-    #     '--', color = 'steelblue', linewidth = 0.5)
-    # plt.plot(np.nanmedian(ra2t_data['model_lwc'],0)*1e3 + np.nanstd(ra2t_data['model_lwc'],0)*1e3, np.nanmedian(ra2t_data['height'],0),
-    #     '--', color = 'steelblue', linewidth = 0.5)
-    #
-    # ax1.fill_betweenx(np.nanmedian(um_data['height'],0),np.nanmedian(um_data['model_lwc'],0)*1e3 - np.nanstd(um_data['model_lwc']*1e3,0),
-    #     np.nanmedian(um_data['model_lwc'],0)*1e3 + np.nanstd(um_data['model_lwc'],0)*1e3, color = 'blue', alpha = 0.05)
-    # plt.plot(np.nanmedian(um_data['model_lwc'],0)*1e3 - np.nanstd(um_data['model_lwc'],0)*1e3, np.nanmedian(um_data['height'],0),
-    #     '--', color = 'darkblue', linewidth = 0.5)
-    # plt.plot(np.nanmedian(um_data['model_lwc'],0)*1e3 + np.nanstd(um_data['model_lwc'],0)*1e3, np.nanmedian(um_data['height'],0),
-    #     '--', color = 'darkblue', linewidth = 0.5)
-    #
-    # plt.plot(np.nanmedian(ifs_data['model_lwc'],0)*1e3,np.nanmedian(ifs_data['height'],0), color = 'gold', linewidth = 3, label = 'ECMWF_IFS', zorder = 4)
-    # plt.plot(np.nanmedian(misc_data['model_lwc'],0)*1e3,np.nanmedian(misc_data['height'],0), color = 'mediumseagreen', linewidth = 3, label = 'UM_CASIM-100', zorder = 3)
-    # plt.plot(np.nanmedian(ra2t_data['model_lwc'],0)*1e3,np.nanmedian(ra2t_data['height'],0), color = 'steelblue', linewidth = 3, label = 'UM_RA2T', zorder = 2)
-    # plt.plot(np.nanmedian(um_data['model_lwc'],0)*1e3,np.nanmedian(um_data['height'],0), color = 'darkblue', linewidth = 3, label = 'UM_RA2M', zorder = 1)
-    #
-    # plt.xlabel('Liquid water content [g m$^{-3}$]')
-    # plt.ylabel('Z [km]')
-    # # plt.ylim([0,5e3])
-    # # plt.yticks(np.arange(0,5.01e3,0.5e3))
-    # # ax1.set_yticklabels([0,' ',1,' ',2,' ',3,' ',4,' ',5])
-    # plt.ylim([0,9000])
-    # plt.yticks(np.arange(0,9.01e3,0.5e3))
-    # ax1.set_yticklabels([0,' ',1,' ',2,' ',3,' ',4,' ',5,' ',6,' ',7,' ',8,' ',9])
-    # plt.xlim([0,0.2])
-    # plt.xticks(np.arange(0,0.21,0.025))
-    # ax1.set_xticklabels([0,' ',0.05,' ',0.1,' ',0.15,' ',0.2])
-    # plt.legend()
-    #
-    # print ('******')
-    # print ('')
-    # print ('Finished plotting! :)')
-    # print ('')
-    #
-    # if month_flag == -1:
-    #     fileout = 'FIGS/Obs-' + obs_switch + 'grid-QF30_IFS_RA2M_CASIM-100_RA2T_LWC_MTThresholding-wLWCadiabatic-noOffsetLWP_226-257DOY_fixedRA2T_newColours_wSetFlags_Medians.svg'
-    #     # fileout = 'FIGS/Obs-' + obs_switch + 'grid-QF30_LWC_MTThresholding-wLWCadiabatic_noOffsetLWP_226-257DOY_blueNaNs_newColours.png'
-    # # plt.savefig(fileout)
-    # plt.show()
+    obs_zorder = len(um_data)+1
 
-    print ('Z1 = ')
-    print (np.round(np.nanmean(um_data['height'],0),-2))
-    print ('Z3 = ')
-    print (np.round(np.nanmean(ifs_data['height'],0),-2))
-
-    Zindex1 = np.where(np.round(np.nanmean(um_data['height'],0),-2) == 5.e+02)# == 4600)#<= 2e3) #
-    Zindex3 = np.where(np.round(np.nanmean(ifs_data['height'],0),-2) == 5.e+02)#== 4400)# <= 2e3) #
-    print ('Zindex1 = ')
-    print (np.nanmean(um_data['height'][:,Zindex1[0]],0))
-    print ('Zindex3 = ')
-    print (np.nanmean(ifs_data['height'][:,Zindex3[0]],0))
-    print ('UM_RA2M = ')
-    print (np.nanmean(um_data['model_lwc'][:,Zindex1[0]],0)*1e3)
-    print ('UM_RA2T = ')
-    print (np.nanmean(ra2t_data['model_lwc'][:,Zindex1[0]],0)*1e3)
-    print ('UM_CASIM-100 = ')
-    print (np.nanmean(misc_data['model_lwc'][:,Zindex1[0]],0)*1e3)
-    print ('ECMWF_IFS = ')
-    print (np.nanmean(ifs_data['model_lwc'][:,Zindex3[0]],0)*1e3)
-    print ('Obs = ')
-    print (np.nanmean(obs_data['lwc_adiabatic'][:,Zindex1[0]],0)*1e3)
-
-def plot_iwcProfiles(um_data, ifs_data, misc_data, ra2t_data, obs_data, month_flag, missing_files, um_out_dir, doy, obs_switch): #, lon, lat):
-
-    import iris.plot as iplt
-    import iris.quickplot as qplt
-    import iris.analysis.cartography
-    import cartopy.crs as ccrs
-    import cartopy
-    import matplotlib.cm as mpl_cm
-        # from matplotlib.patches import Polygon
-
-    ###################################
-    ## PLOT MAP
-    ###################################
+    if bool(args):
+        for n in range(0,len(args)):
+            if  list(args.keys())[n] == 'monc_data':
+                monc_data=args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'mlabel':
+                mlabel = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'moutstr':
+                moutstr= args[list(args.keys())[n]]
+    obs_zorder += len(monc_data)
 
     print ('******')
     print ('')
-    print ('Plotting IWC statistics for whole drift period:')
+    print ('Plotting IWC mean profiles:')
     print ('')
-
-    # print (um_data.keys())
-
-    ###----------------------------------------------------------------
-    ###         1) IWC Method
-    ###----------------------------------------------------------------
-    # #### set flagged um_data to nans
-    # obs_data['iwc'][obs_data['iwc'] == -999] = np.nan
-    # obs_data['iwc'][obs_data['iwc'] < 1e-6] = np.nan
-    # um_data['model_iwc_filtered'][um_data['model_iwc_filtered'] < 1e-6] = np.nan
-    # ifs_data['model_snow_iwc_filtered'][ifs_data['model_snow_iwc_filtered'] < 1e-6] = np.nan
-    # ifs_data['model_snow_iwc_filtered'][ifs_data['model_snow_iwc_filtered'] >= 20.0] = np.nan
-    # misc_data['model_iwc_filtered'][misc_data['model_iwc_filtered'] < 1e-6] = np.nan
-    # ra2t_data['model_iwc_filtered'][ra2t_data['model_iwc_filtered'] < 1e-6] = np.nan
-
-    ###----------------------------------------------------------------
-    ###         2) TWC Method
-    ###----------------------------------------------------------------
-    #### set flagged um_data to nans
-    # obs_data['iwc'][obs_data['iwc'] < 0] = 0.0
-    # um_data['model_iwc_filtered'][um_data['model_iwc_filtered'] < 0.0] = 0.0
-    # ifs_data['model_snow_iwc_filtered'][ifs_data['model_snow_iwc_filtered'] < 0.0] = 0.0
-    ifs_data['model_snow_iwc_filtered'][ifs_data['model_snow_iwc_filtered'] >= 5.0e-3] = np.nan
-    # misc_data['model_iwc_filtered'][misc_data['model_iwc_filtered'] < 0.0] = 0.0
-    # ra2t_data['model_iwc_filtered'][ra2t_data['model_iwc_filtered'] < 0.0] = 0.0
-
-    #### set flagged um_data to nans
-    # obs_data['lwc'][obs_data['lwc'] == -999] = 0.0
-    # obs_data['lwc_adiabatic'][obs_data['lwc_adiabatic'] == -999] = 0.0
-    # # obs_data['lwc_adiabatic_inc_nolwp'][obs_data['lwc_adiabatic_inc_nolwp'] == -999] = 0.0
-    # um_data['model_lwc'][um_data['model_lwc'] < 0.0] = 0.0
-    # ifs_data['model_lwc'][ifs_data['model_lwc'] < 0.0] = 0.0
-    ifs_data['model_lwc'][ifs_data['model_lwc'] >= 0.4] = np.nan
-    # misc_data['model_lwc'][misc_data['model_lwc'] < 0.0] = 0.0
-    # ra2t_data['model_lwc'][ra2t_data['model_lwc'] < 0.0] = 0.0
 
     ###----------------------------------------------------------------
     ###         Calculate total water content
     ###----------------------------------------------------------------
-    obs_data['twc'] = obs_data['lwc_adiabatic'] + obs_data['iwc']
-    um_data['model_twc'] = um_data['model_lwc'] + um_data['model_iwc_filtered']
-    misc_data['model_twc'] = misc_data['model_lwc'] + misc_data['model_iwc_filtered']
-    ifs_data['model_twc'] = ifs_data['model_lwc'] + ifs_data['model_snow_iwc_filtered']
-    ra2t_data['model_twc'] = ra2t_data['model_lwc'] + ra2t_data['model_iwc_filtered']
-
+    obs_data['twc'] = obs_data['lwc'] + obs_data['iwc']
+    obs_data['twc_ad'] = obs_data['lwc_adiabatic'] + obs_data['iwc']
+    obs_data['twc_ad_nolwp'] = obs_data['lwc_adiabatic_inc_nolwp'] + obs_data['iwc']
+    for m in range(0,len(um_data)):
+        um_data[m]['model_twc'] = um_data[m]['model_lwc'] + um_data[m]['model_iwc_filtered']
+    if bool(args):
+        for m in range(0,len(monc_data)):
+            monc_data[m]['model_iwc']= (monc_data[m]['ice_mmr_mean']+monc_data[m]['graupel_mmr_mean']+monc_data[m]['snow_mmr_mean'])*monc_data[m]['rho']
+            monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
+            monc_data[m]['model_twc'] = monc_data[m]['model_lwc'] +monc_data[m]['model_iwc']
     ####-------------------------------------------------------------------------
     ### from Michael's paper:
     ####    "we consider a grid point cloudy when cloud water exceeded
     ####    0.001 (0.0001) g kg-1 below 1 km (above 4 km), with linear
     ####    interpolation in between."
     ####-------------------------------------------------------------------------
-    twc_thresh_um = np.zeros([np.size(um_data['model_twc'],1)])
-    twc_thresh_ifs = np.zeros([np.size(ifs_data['model_twc'],1)])
-
+    m=0 # use first um model run for height grid definition
+    twc_thresh_um = np.zeros([np.size(um_data[m]['model_twc'],1)])
     ####-------------------------------------------------------------------------
     ### first look at values below 1 km
     ###     find Z indices <= 1km, then set twc_thresh values to 1e-6
-    um_lt1km = np.where(um_data['height'][0,:]<=1e3)
-    ifs_lt1km = np.where(ifs_data['height'][0,:]<=1e3)
+    um_lt1km = np.where(um_data[m]['height'][0,:]<=1e3)
     twc_thresh_um[um_lt1km] = 1e-6
-    twc_thresh_ifs[ifs_lt1km] = 1e-6
-
     ####-------------------------------------------------------------------------
     ### next look at values above 4 km
     ###     find Z indices >= 4km, then set twc_thresh values to 1e-7
-    um_lt1km = np.where(um_data['height'][0,:]>=4e3)
-    ifs_lt1km = np.where(ifs_data['height'][0,:]>=4e3)
+    um_lt1km = np.where(um_data[m]['height'][0,:]>=4e3)
     twc_thresh_um[um_lt1km] = 1e-7
-    twc_thresh_ifs[ifs_lt1km] = 1e-7
 
     ### find heights not yet assigned
     um_intZs = np.where(twc_thresh_um == 0.0)
-    ifs_intZs = np.where(twc_thresh_ifs == 0.0)
 
     ### interpolate for twc_thresh_um
     x = [1e-6, 1e-7]
     y = [1e3, 4e3]
     f = interp1d(y, x)
-    twc_thresh_um[um_intZs] = f(um_data['height'][0,um_intZs].data)
+    for m in range(0,len(um_data)):
+        twc_thresh_um[um_intZs] = f(um_data[m]['height'][0,um_intZs].data)
 
-    ### interpolate for twc_thresh_ifs
-    twc_thresh_ifs[ifs_intZs] = f(ifs_data['height'][0,ifs_intZs].data)
+    for t in range(0,np.size(um_data[m]['model_twc'],0)):
+        for k in range(0,np.size(um_data[m]['model_twc'],1)):
+            if obs_data['twc_ad_nolwp'][t,k] < twc_thresh_um[k]:  ### was twc shoul be twc_ad_nolwp!?!
+                obs_data['twc_ad_nolwp'][t,k] = np.nan
+                obs_data['iwc'][t,k] = np.nan
+            for m in range(0,len(um_data)):
+                if  um_data[m]['model_twc'][t,k] < twc_thresh_um[k]:
+                    um_data[m]['model_twc'][t,k] = np.nan
+                    um_data[m]['model_iwc_filtered'][t,k] = np.nan
+    if bool(args):
+        m=0 # use first um model run for height grid definition
+        twc_thresh_monc = np.zeros([np.size(monc_data[m]['model_twc'],1)])
+        ### first look at values below 1 km
+        ###     find Z indices <= 1km, then set twc_thresh values to 1e-6
+        monc_lt1km = np.where(monc_data[m]['z'][:]<=1e3)
+        twc_thresh_monc[monc_lt1km] = 1e-6
+        monc_lt1km = np.where(monc_data[m]['z'][:]>=4e3)
+        twc_thresh_monc[monc_lt1km] = 1e-7
+        monc_intZs = np.where(twc_thresh_monc == 0.0)
 
-    ### plot profile of threshold as sanity check
-    # plt.plot(twc_thresh_um, um_data['height'][0,:])
-    # plt.plot(twc_thresh_ifs, ifs_data['height'][0,:]); plt.show()
-    # print (twc_thresh_um)
+        ### interpolate for twc_thresh_um
+        x = [1e-6, 1e-7]
+        y = [1e3, 4e3]
+        f = interp1d(y, x)
+        for m in range(0,len(monc_data)):
+            twc_thresh_monc[monc_intZs] = f(monc_data[m]['z'][monc_intZs].data)
 
-    for t in range(0,np.size(um_data['model_twc'],0)):
-        for k in range(0,np.size(um_data['model_twc'],1)):
-            if obs_switch == 'UM':
-                if obs_data['twc'][t,k] < twc_thresh_um[k]:
-                    obs_data['twc'][t,k] = np.nan
-                    obs_data['iwc'][t,k] = np.nan
-                    obs_data['lwc_adiabatic'][t,k] = np.nan
-            if um_data['model_twc'][t,k] < twc_thresh_um[k]:
-                um_data['model_twc'][t,k] = np.nan
-                um_data['model_iwc_filtered'][t,k] = np.nan
-            if misc_data['model_twc'][t,k] < twc_thresh_um[k]:
-                misc_data['model_twc'][t,k] = np.nan
-                misc_data['model_iwc_filtered'][t,k] = np.nan
-            if ra2t_data['model_twc'][t,k] < twc_thresh_um[k]:
-                ra2t_data['model_twc'][t,k] = np.nan
-                ra2t_data['model_iwc_filtered'][t,k] = np.nan
-        for k in range(0,np.size(ifs_data['model_twc'],1)):
-            if ifs_data['model_twc'][t,k] < twc_thresh_ifs[k]:
-                ifs_data['model_twc'][t,k] = np.nan
-                ifs_data['model_snow_iwc_filtered'][t,k] = np.nan
+        for t in range(0,np.size(monc_data[m]['model_twc'],0)):
+            for k in range(0,np.size(monc_data[m]['model_twc'],1)):
+                for m in range(0,len(monc_data)):
+                    if  monc_data[m]['model_twc'][t,k] < twc_thresh_monc[k]:
+                        monc_data[m]['model_twc'][t,k] = np.nan
+                        monc_data[m]['model_iwc'][t,k] = np.nan
 
-    ##################################################
-    ##################################################
-    #### 	Plot mean profiles
-    ##################################################
-    ##################################################
+        # ### plot profile of threshold as sanity check
+        # plt.plot(twc_thresh_um, um_data[0]['height'][0,:])
+        # plt.plot(twc_thresh_monc, monc_data[0]['z'][:]); plt.show()
+        # print (twc_thresh_monc)
+
+    ###----------------------------------------------------------------
+    ###         Plot figure - Mean profiles
+    ###----------------------------------------------------------------
 
     SMALL_SIZE = 12
     MED_SIZE = 14
@@ -1099,213 +905,185 @@ def plot_iwcProfiles(um_data, ifs_data, misc_data, ra2t_data, obs_data, month_fl
     plt.figure(figsize=(4.5,6))
     plt.subplots_adjust(top = 0.95, bottom = 0.12, right = 0.95, left = 0.15,
             hspace = 0.4, wspace = 0.1)
-
     ### define axis instance
     ax1 = plt.gca()
+    ###define colors
+    lcols=['mediumseagreen','steelblue','darkblue']
+    fcols=['mediumaquamarine','lightblue','blue']
+    lcolsmonc=['gold','darkorange','darkgoldenrod']
+    fcolsmonc=['navajowhite','moccasin','goldenrod']
 
-    if obs_switch == 'RADAR':
-        plt.plot(np.nanmean(obs_data['iwc'],0)*1e3,obs_data['height'][:394], 'k--', linewidth = 3, label = 'Obs-' + obs_switch + 'grid')
-        ax1.fill_betweenx(obs_data['height'][:394],np.nanmean(obs_data['iwc'],0)*1e3 - np.nanstd(obs_data['iwc'],0)*1e3,
-            np.nanmean(obs_data['iwc'],0)*1e3 + np.nanstd(obs_data['iwc'],0)*1e3, color = 'lightgrey', alpha = 0.5)
-    else:
-        plt.plot(np.nanmean(obs_data['iwc'],0)*1e3,np.nanmean(obs_data['height'],0), 'k', linewidth = 3, label = 'Obs-' + obs_switch + 'grid', zorder = 5)
-        ax1.fill_betweenx(np.nanmean(obs_data['height'],0),np.nanmean(obs_data['iwc'],0)*1e3 - np.nanstd(obs_data['iwc'],0)*1e3,
-            np.nanmean(obs_data['iwc'],0)*1e3 + np.nanstd(obs_data['iwc'],0)*1e3, color = 'lightgrey', alpha = 0.5)
-        plt.plot(np.nanmean(obs_data['iwc'],0)*1e3 - np.nanstd(obs_data['iwc'],0)*1e3, np.nanmean(obs_data['height'],0),
-            '--', color = 'k', linewidth = 0.5)
-        plt.plot(np.nanmean(obs_data['iwc'],0)*1e3 + np.nanstd(obs_data['iwc'],0)*1e3, np.nanmean(obs_data['height'],0),
-            '--', color = 'k', linewidth = 0.5)
-
-    ax1.fill_betweenx(np.nanmean(ifs_data['height'],0),np.nanmean(ifs_data['model_snow_iwc_filtered'],0)*1e3 - np.nanstd(ifs_data['model_snow_iwc_filtered'],0)*1e3,
-        np.nanmean(ifs_data['model_snow_iwc_filtered'],0)*1e3 + np.nanstd(ifs_data['model_snow_iwc_filtered'],0)*1e3, color = 'navajowhite', alpha = 0.4)
-    plt.plot(np.nanmean(ifs_data['model_snow_iwc_filtered'],0)*1e3 - np.nanstd(ifs_data['model_snow_iwc_filtered'],0)*1e3, np.nanmean(ifs_data['height'],0),
-        '--', color = 'gold', linewidth = 0.5, zorder = 3)
-    plt.plot(np.nanmean(ifs_data['model_snow_iwc_filtered'],0)*1e3 + np.nanstd(ifs_data['model_snow_iwc_filtered'],0)*1e3, np.nanmean(ifs_data['height'],0),
-        '--', color = 'gold', linewidth = 0.5)
-
-    ax1.fill_betweenx(np.nanmean(misc_data['height'],0),np.nanmean(misc_data['model_iwc_filtered'],0)*1e3 - np.nanstd(misc_data['model_iwc_filtered']*1e3,0),
-        np.nanmean(misc_data['model_iwc_filtered'],0)*1e3 + np.nanstd(misc_data['model_iwc_filtered'],0)*1e3, color = 'mediumaquamarine', alpha = 0.15)
-    plt.plot(np.nanmean(misc_data['model_iwc_filtered'],0)*1e3 - np.nanstd(misc_data['model_iwc_filtered'],0)*1e3, np.nanmean(misc_data['height'],0),
-        '--', color = 'mediumseagreen', linewidth = 0.5)
-    plt.plot(np.nanmean(misc_data['model_iwc_filtered'],0)*1e3 + np.nanstd(misc_data['model_iwc_filtered'],0)*1e3, np.nanmean(misc_data['height'],0),
-        '--', color = 'mediumseagreen', linewidth = 0.5)
-
-    ax1.fill_betweenx(np.nanmean(ra2t_data['height'],0),np.nanmean(ra2t_data['model_iwc_filtered'],0)*1e3 - np.nanstd(ra2t_data['model_iwc_filtered']*1e3,0),
-        np.nanmean(ra2t_data['model_iwc_filtered'],0)*1e3 + np.nanstd(ra2t_data['model_iwc_filtered'],0)*1e3, color = 'lightblue', alpha = 0.3)
-    plt.plot(np.nanmean(ra2t_data['model_iwc_filtered'],0)*1e3 - np.nanstd(ra2t_data['model_iwc_filtered'],0)*1e3, np.nanmean(ra2t_data['height'],0),
-        '--', color = 'steelblue', linewidth = 0.5)
-    plt.plot(np.nanmean(ra2t_data['model_iwc_filtered'],0)*1e3 + np.nanstd(ra2t_data['model_iwc_filtered'],0)*1e3, np.nanmean(ra2t_data['height'],0),
-        '--', color = 'steelblue', linewidth = 0.5)
-
-    ax1.fill_betweenx(np.nanmean(um_data['height'],0),np.nanmean(um_data['model_iwc_filtered'],0)*1e3 - np.nanstd(um_data['model_iwc_filtered']*1e3,0),
-        np.nanmean(um_data['model_iwc_filtered'],0)*1e3 + np.nanstd(um_data['model_iwc_filtered'],0)*1e3, color = 'blue', alpha = 0.05)
-    plt.plot(np.nanmean(um_data['model_iwc_filtered'],0)*1e3 - np.nanstd(um_data['model_iwc_filtered'],0)*1e3, np.nanmean(um_data['height'],0),
-        '--', color = 'darkblue', linewidth = 0.5)
-    plt.plot(np.nanmean(um_data['model_iwc_filtered'],0)*1e3 + np.nanstd(um_data['model_iwc_filtered'],0)*1e3, np.nanmean(um_data['height'],0),
-        '--', color = 'darkblue', linewidth = 0.5)
-
-    plt.plot(np.nanmean(ifs_data['model_snow_iwc_filtered'],0)*1e3,np.nanmean(ifs_data['height'],0), color = 'gold', linewidth = 3, label = 'ECMWF_IFS', zorder = 4)
-    plt.plot(np.nanmean(misc_data['model_iwc_filtered'],0)*1e3,np.nanmean(misc_data['height'],0), color = 'mediumseagreen', linewidth = 3, label = 'UM_CASIM-100', zorder = 3)
-    plt.plot(np.nanmean(ra2t_data['model_iwc_filtered'],0)*1e3,np.nanmean(ra2t_data['height'],0), color = 'steelblue', linewidth = 3, label = 'UM_RA2T', zorder = 2)
-    plt.plot(np.nanmean(um_data['model_iwc_filtered'],0)*1e3,np.nanmean(um_data['height'],0), color = 'darkblue', linewidth = 3, label = 'UM_RA2M', zorder = 1)
+    #### ADIABATIC IWC (all times)
+    plt.plot(np.nanmean(obs_data['iwc'],0)*1e3,np.nanmean(obs_data['height'],0), color = 'k', linewidth = 3, label = 'Obs_UMgrid', zorder = obs_zorder)
+    ax1.fill_betweenx(np.nanmean(obs_data['height'],0),np.nanmean(obs_data['iwc'],0)*1e3 - np.nanstd(obs_data['lwc'],0)*1e3,
+        np.nanmean(obs_data['iwc'],0)*1e3 + np.nanstd(obs_data['iwc'],0)*1e3, color = 'lightgrey', alpha = 0.5)
+    # plt.xlim([0,0.2])
+    plt.plot(np.nanmean(obs_data['iwc'],0)*1e3 - np.nanstd(obs_data['iwc'],0)*1e3, np.nanmean(obs_data['height'],0),
+        '--', color = 'k', linewidth = 0.5)
+    plt.plot(np.nanmean(obs_data['iwc'],0)*1e3 + np.nanstd(obs_data['iwc'],0)*1e3, np.nanmean(obs_data['height'],0),
+        '--', color = 'k', linewidth = 0.5)
+    for m in range(0,len(um_data)):
+        ax1.fill_betweenx(np.nanmean(um_data[m]['height'],0),np.nanmean(um_data[m]['model_iwc'],0)*1e3 - np.nanstd(um_data[m]['model_iwc']*1e3,0),
+            np.nanmean(um_data[m]['model_iwc'],0)*1e3 + np.nanstd(um_data[m]['model_iwc'],0)*1e3, color = fcols[m], alpha = 0.05)
+        plt.plot(np.nanmean(um_data[m]['model_iwc'],0)*1e3 - np.nanstd(um_data[m]['model_iwc'],0)*1e3, np.nanmean(um_data[m]['height'],0),
+            '--', color =lcols[m], linewidth = 0.5)
+        plt.plot(np.nanmean(um_data[m]['model_iwc'],0)*1e3 + np.nanstd(um_data[m]['model_iwc'],0)*1e3, np.nanmean(um_data[m]['height'],0),
+            '--', color = lcols[m], linewidth = 0.5)
+    if bool(args):
+        for m in range(0,len(monc_data)):
+            ax1.fill_betweenx(monc_data[m]['z'],np.nanmean(monc_data[m]['model_iwc'],0)*1e3 - np.nanstd(monc_data[m]['model_iwc']*1e3,0),
+                np.nanmean(monc_data[m]['model_iwc'],0)*1e3 + np.nanstd(monc_data[m]['model_iwc'],0)*1e3, color = fcolsmonc[m], alpha = 0.05)
+            plt.plot(np.nanmean(monc_data[m]['model_iwc'],0)*1e3 - np.nanstd(monc_data[m]['model_iwc'],0)*1e3, monc_data[m]['z'],
+                '--', color =lcolsmonc[m], linewidth = 0.5)
+            plt.plot(np.nanmean(monc_data[m]['model_iwc'],0)*1e3 + np.nanstd(monc_data[m]['model_iwc'],0)*1e3, monc_data[m]['z'],
+                '--', color = lcolsmonc[m], linewidth = 0.5)
+    for m in range(0,len(um_data)):
+        plt.plot(np.nanmean(um_data[m]['model_iwc'],0)*1e3,np.nanmean(um_data[m]['height'],0), color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
+    if bool(args):
+        for m in range(0,len(monc_data)):
+            plt.plot(np.nanmean(monc_data[m]['model_iwc'],0)*1e3,monc_data[m]['z'], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
 
     plt.xlabel('Ice water content [g m$^{-3}$]')
     plt.ylabel('Z [km]')
-    plt.ylim([0,9000])
-    plt.yticks(np.arange(0,9.01e3,0.5e3))
-    ax1.set_yticklabels([0,' ',1,' ',2,' ',3,' ',4,' ',5,' ',6,' ',7,' ',8,' ',9])
+    # plt.ylim([0,5e3])
+    # plt.yticks(np.arange(0,5.01e3,0.5e3))
+    # ax1.set_yticklabels([0,' ',1,' ',2,' ',3,' ',4,' ',5])
+    plt.ylim([0,2500])
+    plt.yticks(np.arange(0,2.51e3,0.5e3))
+    ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
+    ax1.set_yticklabels(np.arange(0,4.0,0.5))
     plt.xlim([0,0.06])
-    plt.xticks(np.arange(0,0.061,0.0075))
-    ax1.set_xticklabels([0,' ',0.015,' ',0.03,' ',0.045,' ',0.06])
+    plt.xticks(np.arange(0,0.061,0.015))
+    #ax1.set_xticklabels([0,' ',0.015,' ',0.03,' ',0.045,' ',0.06])
+    ax1.xaxis.set_minor_locator(ticker.MultipleLocator(0.0075))
     plt.legend()
 
     # plt.grid('on')
+    if bool(args):
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + 'IWC-MTThresholding-twcadnolwp.png'
+    else:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + 'IWC-MTThresholding-twcadnolwp.png'
+    plt.savefig(fileout)
 
-    print ('******')
     print ('')
     print ('Finished plotting! :)')
     print ('')
+    print ('******')
 
-    if month_flag == -1:
-        fileout = 'FIGS/Obs-' + obs_switch + 'grid-V6_UM_IFS_CASIM-100_IWC-MTThresholding-wLWCadiabatic-noOfsetLWP_226-257DOY_fixedRA2T_newColours_wSetFlags.png'
-    plt.savefig(fileout)
-    plt.show()
 
-    ##################################################
-    ##################################################
-    #### 	Plot median profiles
-    ##################################################
-    ##################################################
+def plot_twcProfilesnew(um_data, obs_data, label,outstr,plots_out_dir, **args): #, lon, lat):
 
-    # SMALL_SIZE = 12
-    # MED_SIZE = 14
-    # LARGE_SIZE = 16
-    #
-    # plt.rc('font',size=MED_SIZE)
-    # plt.rc('axes',titlesize=LARGE_SIZE)
-    # plt.rc('axes',labelsize=LARGE_SIZE)
-    # plt.rc('xtick',labelsize=LARGE_SIZE)
-    # plt.rc('ytick',labelsize=LARGE_SIZE)
-    # plt.rc('legend',fontsize=LARGE_SIZE)
-    # plt.figure(figsize=(4.5,6))
-    # plt.subplots_adjust(top = 0.95, bottom = 0.12, right = 0.95, left = 0.15,
-    #         hspace = 0.4, wspace = 0.1)
-    #
-    # ### define axis instance
-    # ax1 = plt.gca()
-    #
-    # plt.plot(np.nanmedian(obs_data['iwc'],0)*1e3,np.nanmedian(obs_data['height'],0), 'k', linewidth = 3, label = 'Obs-' + obs_switch + 'grid', zorder = 5)
-    # ax1.fill_betweenx(np.nanmedian(obs_data['height'],0),np.nanmedian(obs_data['iwc'],0)*1e3 - np.nanstd(obs_data['iwc'],0)*1e3,
-    #     np.nanmedian(obs_data['iwc'],0)*1e3 + np.nanstd(obs_data['iwc'],0)*1e3, color = 'lightgrey', alpha = 0.5)
-    # plt.plot(np.nanmedian(obs_data['iwc'],0)*1e3 - np.nanstd(obs_data['iwc'],0)*1e3, np.nanmedian(obs_data['height'],0),
-    #     '--', color = 'k', linewidth = 0.5)
-    # plt.plot(np.nanmedian(obs_data['iwc'],0)*1e3 + np.nanstd(obs_data['iwc'],0)*1e3, np.nanmedian(obs_data['height'],0),
-    #     '--', color = 'k', linewidth = 0.5)
-    #
-    # ax1.fill_betweenx(np.nanmedian(ifs_data['height'],0),np.nanmedian(ifs_data['model_snow_iwc_filtered'],0)*1e3 - np.nanstd(ifs_data['model_snow_iwc_filtered'],0)*1e3,
-    #     np.nanmedian(ifs_data['model_snow_iwc_filtered'],0)*1e3 + np.nanstd(ifs_data['model_snow_iwc_filtered'],0)*1e3, color = 'navajowhite', alpha = 0.4)
-    # plt.plot(np.nanmedian(ifs_data['model_snow_iwc_filtered'],0)*1e3 - np.nanstd(ifs_data['model_snow_iwc_filtered'],0)*1e3, np.nanmedian(ifs_data['height'],0),
-    #     '--', color = 'gold', linewidth = 0.5, zorder = 3)
-    # plt.plot(np.nanmedian(ifs_data['model_snow_iwc_filtered'],0)*1e3 + np.nanstd(ifs_data['model_snow_iwc_filtered'],0)*1e3, np.nanmedian(ifs_data['height'],0),
-    #     '--', color = 'gold', linewidth = 0.5)
-    #
-    # ax1.fill_betweenx(np.nanmedian(misc_data['height'],0),np.nanmedian(misc_data['model_iwc_filtered'],0)*1e3 - np.nanstd(misc_data['model_iwc_filtered']*1e3,0),
-    #     np.nanmedian(misc_data['model_iwc_filtered'],0)*1e3 + np.nanstd(misc_data['model_iwc_filtered'],0)*1e3, color = 'mediumaquamarine', alpha = 0.15)
-    # plt.plot(np.nanmedian(misc_data['model_iwc_filtered'],0)*1e3 - np.nanstd(misc_data['model_iwc_filtered'],0)*1e3, np.nanmedian(misc_data['height'],0),
-    #     '--', color = 'mediumseagreen', linewidth = 0.5)
-    # plt.plot(np.nanmedian(misc_data['model_iwc_filtered'],0)*1e3 + np.nanstd(misc_data['model_iwc_filtered'],0)*1e3, np.nanmedian(misc_data['height'],0),
-    #     '--', color = 'mediumseagreen', linewidth = 0.5)
-    #
-    # ax1.fill_betweenx(np.nanmedian(ra2t_data['height'],0),np.nanmedian(ra2t_data['model_iwc_filtered'],0)*1e3 - np.nanstd(ra2t_data['model_iwc_filtered']*1e3,0),
-    #     np.nanmedian(ra2t_data['model_iwc_filtered'],0)*1e3 + np.nanstd(ra2t_data['model_iwc_filtered'],0)*1e3, color = 'lightblue', alpha = 0.3)
-    # plt.plot(np.nanmedian(ra2t_data['model_iwc_filtered'],0)*1e3 - np.nanstd(ra2t_data['model_iwc_filtered'],0)*1e3, np.nanmedian(ra2t_data['height'],0),
-    #     '--', color = 'steelblue', linewidth = 0.5)
-    # plt.plot(np.nanmedian(ra2t_data['model_iwc_filtered'],0)*1e3 + np.nanstd(ra2t_data['model_iwc_filtered'],0)*1e3, np.nanmedian(ra2t_data['height'],0),
-    #     '--', color = 'steelblue', linewidth = 0.5)
-    #
-    # ax1.fill_betweenx(np.nanmedian(um_data['height'],0),np.nanmedian(um_data['model_iwc_filtered'],0)*1e3 - np.nanstd(um_data['model_iwc_filtered']*1e3,0),
-    #     np.nanmedian(um_data['model_iwc_filtered'],0)*1e3 + np.nanstd(um_data['model_iwc_filtered'],0)*1e3, color = 'blue', alpha = 0.05)
-    # plt.plot(np.nanmedian(um_data['model_iwc_filtered'],0)*1e3 - np.nanstd(um_data['model_iwc_filtered'],0)*1e3, np.nanmedian(um_data['height'],0),
-    #     '--', color = 'darkblue', linewidth = 0.5)
-    # plt.plot(np.nanmedian(um_data['model_iwc_filtered'],0)*1e3 + np.nanstd(um_data['model_iwc_filtered'],0)*1e3, np.nanmedian(um_data['height'],0),
-    #     '--', color = 'darkblue', linewidth = 0.5)
-    #
-    # plt.plot(np.nanmedian(ifs_data['model_snow_iwc_filtered'],0)*1e3,np.nanmedian(ifs_data['height'],0), color = 'gold', linewidth = 3, label = 'ECMWF_IFS', zorder = 4)
-    # plt.plot(np.nanmedian(misc_data['model_iwc_filtered'],0)*1e3,np.nanmedian(misc_data['height'],0), color = 'mediumseagreen', linewidth = 3, label = 'UM_CASIM-100', zorder = 3)
-    # plt.plot(np.nanmedian(ra2t_data['model_iwc_filtered'],0)*1e3,np.nanmedian(ra2t_data['height'],0), color = 'steelblue', linewidth = 3, label = 'UM_RA2T', zorder = 2)
-    # plt.plot(np.nanmedian(um_data['model_iwc_filtered'],0)*1e3,np.nanmedian(um_data['height'],0), color = 'darkblue', linewidth = 3, label = 'UM_RA2M', zorder = 1)
-    #
-    # plt.xlabel('Ice water content [g m$^{-3}$]')
-    # plt.ylabel('Z [km]')
-    # plt.ylim([0,9000])
-    # plt.yticks(np.arange(0,9.01e3,0.5e3))
-    # ax1.set_yticklabels([0,' ',1,' ',2,' ',3,' ',4,' ',5,' ',6,' ',7,' ',8,' ',9])
-    # plt.xlim([0,0.06])
-    # plt.xticks(np.arange(0,0.061,0.0075))
-    # ax1.set_xticklabels([0,' ',0.015,' ',0.03,' ',0.045,' ',0.06])
-    # plt.legend()
-    #
-    # print ('******')
-    # print ('')
-    # print ('Finished plotting! :)')
-    # print ('')
-    #
-    # if month_flag == -1:
-    #     fileout = 'FIGS/Obs-' + obs_switch + 'grid_UM_IFS_CASIM-100_IWC-MTThresholding-wLWCadiabatic-noOfsetLWP_226-257DOY_fixedRA2T_newColours_wSetFlags_Median.svg'
-    # plt.savefig(fileout)
-    # plt.show()
+    obs_zorder = len(um_data)+1
+    if bool(args):
+        for n in range(0,len(args)):
+            if  list(args.keys())[n] == 'monc_data':
+                monc_data=args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'mlabel':
+                mlabel = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'moutstr':
+                moutstr= args[list(args.keys())[n]]
+        obs_zorder += len(monc_data)
 
-    # print ('Z1 = ')
-    # print (np.round(np.nanmean(um_data['height'],0),-2))
-    # print ('Z3 = ')
-    # print (np.round(np.nanmean(ifs_data['height'],0),-2))
+    twcvar= 'twc_ad_nolwp'
+    twcstr='-adiabatic-incNoLWP'
 
-    Zindex1 = np.where(np.round(np.nanmean(um_data['height'],0),-2) <= 4000)#<= 2e3) # == 5.e+02)#
-    Zindex3 = np.where(np.round(np.nanmean(ifs_data['height'],0),-2) <= 4000)# <= 2e3) #== 5.e+02)#
-    print ('Zindex1 = ')
-    print (np.nanmean(um_data['height'][:,Zindex1[0]],0))
-    print ('Zindex3 = ')
-    print (np.nanmean(ifs_data['height'][:,Zindex3[0]],0))
-    # print ('UM_RA2M = ')
-    # print (np.nanmean(um_data['model_iwc_filtered'][:,Zindex1[0]],0)*1e3)
-    print ('UM_RA2T = ')
-    print (np.nanmean(ra2t_data['model_iwc_filtered'],0)*1e3)
-    # print ('UM_CASIM-100 = ')
-    # print (np.nanmean(misc_data['model_iwc_filtered'][:,Zindex1[0]],0)*1e3)
-    # print ('ECMWF_IFS = ')
-    # print (np.nanmean(ifs_data['model_snow_iwc_filtered'][:,Zindex3[0]],0)*1e3)
-    print ('Obs = ')
-    print (np.nanmean(obs_data['iwc'],0)*1e3)
 
-    print ('UM_RA2T - Obs = ')
-    print ((np.nanmean(ra2t_data['model_iwc_filtered'][:,Zindex1[0]],0) - np.nanmean(obs_data['iwc'][:,Zindex1[0]],0))*1e3)
-
-def plot_twcProfiles(um_data, ifs_data, misc_data, ra2t_data, obs_data, month_flag, missing_files, um_out_dir, doy, obs_switch): #, lon, lat):
-
-    import iris.plot as iplt
-    import iris.quickplot as qplt
-    import iris.analysis.cartography
-    import cartopy.crs as ccrs
-    import cartopy
-    import matplotlib.cm as mpl_cm
-    import matplotlib.colors as colors
-    from matplotlib.colors import ListedColormap, LinearSegmentedColormap
-        # from matplotlib.patches import Polygon
-
-    ###################################
-    ## PLOT MAP
-    ###################################
 
     print ('******')
     print ('')
-    print ('Plotting TWC profiles for whole drift period:')
+    print ('Plotting TWC mean profiles:' + twcstr)
     print ('')
 
-    ##################################################
-    ##################################################
-    #### 	CARTOPY
-    ##################################################
-    ##################################################
+    ###----------------------------------------------------------------
+    ###         Calculate total water content
+    ###----------------------------------------------------------------
+    obs_data['twc'] = obs_data['lwc'] + obs_data['iwc']
+    obs_data['twc_ad'] = obs_data['lwc_adiabatic'] + obs_data['iwc']
+    obs_data['twc_ad_nolwp'] = obs_data['lwc_adiabatic_inc_nolwp'] + obs_data['iwc']
+    for m in range(0,len(um_data)):
+        um_data[m]['model_twc'] = um_data[m]['model_lwc'] + um_data[m]['model_iwc_filtered']
+    if bool(args):
+        for m in range(0,len(monc_data)):
+            monc_data[m]['model_iwc']= (monc_data[m]['ice_mmr_mean']+monc_data[m]['graupel_mmr_mean']+monc_data[m]['snow_mmr_mean'])*monc_data[m]['rho']
+            monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
+            monc_data[m]['model_twc'] = monc_data[m]['model_lwc'] +monc_data[m]['model_iwc']
+    ####-------------------------------------------------------------------------
+    ### from Michael's paper:
+    ####    "we consider a grid point cloudy when cloud water exceeded
+    ####    0.001 (0.0001) g kg-1 below 1 km (above 4 km), with linear
+    ####    interpolation in between."
+    ####-------------------------------------------------------------------------
+    m=0 # use first um model run for height grid definition
+    twc_thresh_um = np.zeros([np.size(um_data[m]['model_twc'],1)])
+    ####-------------------------------------------------------------------------
+    ### first look at values below 1 km
+    ###     find Z indices <= 1km, then set twc_thresh values to 1e-6
+    um_lt1km = np.where(um_data[m]['height'][0,:]<=1e3)
+    twc_thresh_um[um_lt1km] = 1e-6
+    ####-------------------------------------------------------------------------
+    ### next look at values above 4 km
+    ###     find Z indices >= 4km, then set twc_thresh values to 1e-7
+    um_lt1km = np.where(um_data[m]['height'][0,:]>=4e3)
+    twc_thresh_um[um_lt1km] = 1e-7
+
+    ### find heights not yet assigned
+    um_intZs = np.where(twc_thresh_um == 0.0)
+
+    ### interpolate for twc_thresh_um
+    x = [1e-6, 1e-7]
+    y = [1e3, 4e3]
+    f = interp1d(y, x)
+    for m in range(0,len(um_data)):
+        twc_thresh_um[um_intZs] = f(um_data[m]['height'][0,um_intZs].data)
+
+    for t in range(0,np.size(um_data[m]['model_twc'],0)):
+        for k in range(0,np.size(um_data[m]['model_twc'],1)):
+            if obs_data['twc'][t,k] < twc_thresh_um[k]:
+                obs_data['twc'][t,k] = np.nan
+                obs_data['lwc'][t,k] = np.nan
+            if obs_data['twc_ad'][t,k] < twc_thresh_um[k]:
+                obs_data['twc_ad'][t,k] = np.nan
+                obs_data['lwc_adiabatic'][t,k] = np.nan
+            if obs_data['twc_ad_nolwp'][t,k] < twc_thresh_um[k]:
+                obs_data['twc_ad_nolwp'][t,k] = np.nan
+                obs_data['lwc_adiabatic_inc_nolwp'][t,k] = np.nan
+            for m in range(0,len(um_data)):
+                if  um_data[m]['model_twc'][t,k] < twc_thresh_um[k]:
+                    um_data[m]['model_twc'][t,k] = np.nan
+                    um_data[m]['model_iwc_filtered'][t,k] = np.nan
+    if bool(args):
+        m=0 # use first um model run for height grid definition
+        twc_thresh_monc = np.zeros([np.size(monc_data[m]['model_twc'],1)])
+        ### first look at values below 1 km
+        ###     find Z indices <= 1km, then set twc_thresh values to 1e-6
+        monc_lt1km = np.where(monc_data[m]['z'][:]<=1e3)
+        twc_thresh_monc[monc_lt1km] = 1e-6
+        monc_lt1km = np.where(monc_data[m]['z'][:]>=4e3)
+        twc_thresh_monc[monc_lt1km] = 1e-7
+        monc_intZs = np.where(twc_thresh_monc == 0.0)
+
+        ### interpolate for twc_thresh_um
+        x = [1e-6, 1e-7]
+        y = [1e3, 4e3]
+        f = interp1d(y, x)
+        for m in range(0,len(monc_data)):
+            twc_thresh_monc[monc_intZs] = f(monc_data[m]['z'][monc_intZs].data)
+
+        for t in range(0,np.size(monc_data[m]['model_twc'],0)):
+            for k in range(0,np.size(monc_data[m]['model_twc'],1)):
+                for m in range(0,len(monc_data)):
+                    if  monc_data[m]['model_twc'][t,k] < twc_thresh_monc[k]:
+                        monc_data[m]['model_twc'][t,k] = np.nan
+                        monc_data[m]['model_iwc'][t,k] = np.nan
+
+        # ### plot profile of threshold as sanity check
+        # plt.plot(twc_thresh_um, um_data[0]['height'][0,:])
+        # plt.plot(twc_thresh_monc, monc_data[0]['z'][:]); plt.show()
+        # print (twc_thresh_monc)
+
+    ###----------------------------------------------------------------
+    ###         Plot figure - Mean profiles
+    ###----------------------------------------------------------------
 
     SMALL_SIZE = 12
     MED_SIZE = 14
@@ -1320,179 +1098,71 @@ def plot_twcProfiles(um_data, ifs_data, misc_data, ra2t_data, obs_data, month_fl
     plt.figure(figsize=(4.5,6))
     plt.subplots_adjust(top = 0.95, bottom = 0.12, right = 0.95, left = 0.15,
             hspace = 0.4, wspace = 0.1)
-
     ### define axis instance
     ax1 = plt.gca()
+    ###define colors
+    lcols=['mediumseagreen','steelblue','darkblue']
+    fcols=['mediumaquamarine','lightblue','blue']
+    lcolsmonc=['gold','darkorange','darkgoldenrod']
+    fcolsmonc=['navajowhite','moccasin','goldenrod']
 
-    print (um_data.keys())
-
-    ###----------------------------------------------------------------
-    ###         2) TWC Method
-    ###----------------------------------------------------------------
-    #### set flagged um_data to nans
-    obs_data['iwc'][obs_data['iwc'] < 0] = 0.0
-    um_data['model_iwc_filtered'][um_data['model_iwc_filtered'] < 0.0] = 0.0
-    ifs_data['model_snow_iwc_filtered'][ifs_data['model_snow_iwc_filtered'] < 0.0] = 0.0
-    ifs_data['model_snow_iwc_filtered'][ifs_data['model_snow_iwc_filtered'] >= 5.0e-3] = np.nan
-    misc_data['model_iwc_filtered'][misc_data['model_iwc_filtered'] < 0.0] = 0.0
-    ra2t_data['model_iwc_filtered'][ra2t_data['model_iwc_filtered'] < 0.0] = 0.0
-
-    #### set flagged um_data to nans
-    obs_data['lwc'][obs_data['lwc'] == -999] = 0.0
-    obs_data['lwc_adiabatic'][obs_data['lwc_adiabatic'] == -999] = 0.0
-    # obs_data['lwc_adiabatic_inc_nolwp'][obs_data['lwc_adiabatic_inc_nolwp'] == -999] = 0.0
-    um_data['model_lwc'][um_data['model_lwc'] < 0.0] = 0.0
-    ifs_data['model_lwc'][ifs_data['model_lwc'] < 0.0] = 0.0
-    ifs_data['model_lwc'][ifs_data['model_lwc'] >= 0.4] = np.nan
-    misc_data['model_lwc'][misc_data['model_lwc'] < 0.0] = 0.0
-    ra2t_data['model_lwc'][ra2t_data['model_lwc'] < 0.0] = 0.0
-
-    ###----------------------------------------------------------------
-    ###         Calculate total water content
-    ###----------------------------------------------------------------
-    obs_data['twc'] = obs_data['lwc_adiabatic'] + obs_data['iwc']
-    um_data['model_twc'] = um_data['model_lwc'] + um_data['model_iwc_filtered']
-    misc_data['model_twc'] = misc_data['model_lwc'] + misc_data['model_iwc_filtered']
-    ifs_data['model_twc'] = ifs_data['model_lwc'] + ifs_data['model_snow_iwc_filtered']
-    ra2t_data['model_twc'] = ra2t_data['model_lwc'] + ra2t_data['model_iwc_filtered']
-
-    ####-------------------------------------------------------------------------
-    ### from Michael's paper:
-    ####    "we consider a grid point cloudy when cloud water exceeded
-    ####    0.001 (0.0001) g kg-1 below 1 km (above 4 km), with linear
-    ####    interpolation in between."
-    ####-------------------------------------------------------------------------
-    twc_thresh_um = np.zeros([np.size(um_data['model_twc'],1)])
-    twc_thresh_ifs = np.zeros([np.size(ifs_data['model_twc'],1)])
-
-    ####-------------------------------------------------------------------------
-    ### first look at values below 1 km
-    ###     find Z indices <= 1km, then set twc_thresh values to 1e-6
-    um_lt1km = np.where(um_data['height'][0,:]<=1e3)
-    ifs_lt1km = np.where(ifs_data['height'][0,:]<=1e3)
-    twc_thresh_um[um_lt1km] = 1e-6
-    twc_thresh_ifs[ifs_lt1km] = 1e-6
-
-    ####-------------------------------------------------------------------------
-    ### next look at values above 4 km
-    ###     find Z indices >= 4km, then set twc_thresh values to 1e-7
-    um_lt1km = np.where(um_data['height'][0,:]>=4e3)
-    ifs_lt1km = np.where(ifs_data['height'][0,:]>=4e3)
-    twc_thresh_um[um_lt1km] = 1e-7
-    twc_thresh_ifs[ifs_lt1km] = 1e-7
-
-    ### find heights not yet assigned
-    um_intZs = np.where(twc_thresh_um == 0.0)
-    ifs_intZs = np.where(twc_thresh_ifs == 0.0)
-
-    ### interpolate for twc_thresh_um
-    x = [1e-6, 1e-7]
-    y = [1e3, 4e3]
-    f = interp1d(y, x)
-    twc_thresh_um[um_intZs] = f(um_data['height'][0,um_intZs].data)
-
-    ### interpolate for twc_thresh_ifs
-    twc_thresh_ifs[ifs_intZs] = f(ifs_data['height'][0,ifs_intZs].data)
-
-    ### plot profile of threshold as sanity check
-    # plt.plot(twc_thresh_um, um_data['height'][0,:])
-    # plt.plot(twc_thresh_ifs, ifs_data['height'][0,:]); plt.show()
-    # print (twc_thresh_um)
-
-    for t in range(0,np.size(um_data['model_twc'],0)):
-        for k in range(0,np.size(um_data['model_twc'],1)):
-            if obs_switch == 'UM':
-                if obs_data['twc'][t,k] < twc_thresh_um[k]:
-                    obs_data['twc'][t,k] = np.nan
-                    obs_data['iwc'][t,k] = np.nan
-                    obs_data['lwc_adiabatic'][t,k] = np.nan
-            if um_data['model_twc'][t,k] < twc_thresh_um[k]:
-                um_data['model_twc'][t,k] = np.nan
-                um_data['model_iwc_filtered'][t,k] = np.nan
-            if misc_data['model_twc'][t,k] < twc_thresh_um[k]:
-                misc_data['model_twc'][t,k] = np.nan
-                misc_data['model_iwc_filtered'][t,k] = np.nan
-            if ra2t_data['model_twc'][t,k] < twc_thresh_um[k]:
-                ra2t_data['model_twc'][t,k] = np.nan
-                ra2t_data['model_iwc_filtered'][t,k] = np.nan
-        for k in range(0,np.size(ifs_data['model_twc'],1)):
-            if ifs_data['model_twc'][t,k] < twc_thresh_ifs[k]:
-                ifs_data['model_twc'][t,k] = np.nan
-                ifs_data['model_snow_iwc_filtered'][t,k] = np.nan
-
-    # viridis = mpl_cm.get_cmap('viridis', 256)
-    # newcolors = viridis(np.linspace(0, 1, 256))
-    # greyclr = np.array([0.1, 0.1, 0.1, 0.1])
-    # newcolors[:20, :] = greyclr
-    # newcmp = ListedColormap(newcolors)
-
-    twc0 = np.transpose(obs_data['twc'])*1e3
-
-    if obs_switch == 'RADAR':
-        plt.plot(np.nanmean(obs_data['iwc'],0)*1e3,obs_data['height'][:394], 'k--', linewidth = 3, label = 'Obs-' + obs_switch + 'grid', zorder = 3)
-        ax1.fill_betweenx(obs_data['height'][:394],np.nanmean(obs_data['twc'],0)*1e3 - np.nanstd(obs_data['twc'],0)*1e3,
-            np.nanmean(obs_data['twc'],0)*1e3 + np.nanstd(obs_data['twc'],0)*1e3, color = 'lightgrey', alpha = 0.5)
-    else:
-        plt.plot(np.nanmean(obs_data['twc'],0)*1e3,np.nanmean(obs_data['height'],0), 'k', linewidth = 3, label = 'Obs-' + obs_switch + 'grid', zorder = 5)
-        ax1.fill_betweenx(np.nanmean(obs_data['height'],0),np.nanmean(obs_data['twc'],0)*1e3 - np.nanstd(obs_data['iwc'],0)*1e3,
-            np.nanmean(obs_data['twc'],0)*1e3 + np.nanstd(obs_data['twc'],0)*1e3, color = 'lightgrey', alpha = 0.5)
-        plt.plot(np.nanmean(obs_data['twc'],0)*1e3 - np.nanstd(obs_data['twc'],0)*1e3, np.nanmean(obs_data['height'],0),
-            '--', color = 'k', linewidth = 0.5)
-        plt.plot(np.nanmean(obs_data['twc'],0)*1e3 + np.nanstd(obs_data['twc'],0)*1e3, np.nanmean(obs_data['height'],0),
-            '--', color = 'k', linewidth = 0.5)
-
-    ax1.fill_betweenx(np.nanmean(ifs_data['height'],0),np.nanmean(ifs_data['model_twc'],0)*1e3 - np.nanstd(ifs_data['model_twc'],0)*1e3,
-        np.nanmean(ifs_data['model_twc'],0)*1e3 + np.nanstd(ifs_data['model_twc'],0)*1e3, color = 'navajowhite', alpha = 0.35)
-    plt.plot(np.nanmean(ifs_data['model_twc'],0)*1e3 - np.nanstd(ifs_data['model_twc'],0)*1e3, np.nanmean(ifs_data['height'],0),
-        '--', color = 'gold', linewidth = 0.5)
-    plt.plot(np.nanmean(ifs_data['model_twc'],0)*1e3 + np.nanstd(ifs_data['model_twc'],0)*1e3, np.nanmean(ifs_data['height'],0),
-        '--', color = 'gold', linewidth = 0.5)
-
-    ax1.fill_betweenx(np.nanmean(misc_data['height'],0),np.nanmean(misc_data['model_twc'],0)*1e3 - np.nanstd(misc_data['model_twc'],0)*1e3,
-        np.nanmean(misc_data['model_twc'],0)*1e3 + np.nanstd(misc_data['model_twc'],0)*1e3, color = 'mediumaquamarine', alpha = 0.15)
-    plt.plot(np.nanmean(misc_data['model_twc'],0)*1e3 - np.nanstd(misc_data['model_twc'],0)*1e3, np.nanmean(misc_data['height'],0),
-        '--', color = 'mediumseagreen', linewidth = 0.5)
-    plt.plot(np.nanmean(misc_data['model_twc'],0)*1e3 + np.nanstd(misc_data['model_twc'],0)*1e3, np.nanmean(misc_data['height'],0),
-        '--', color = 'mediumseagreen', linewidth = 0.5)
-
-    ax1.fill_betweenx(np.nanmean(ra2t_data['height'],0),np.nanmean(ra2t_data['model_twc'],0)*1e3 - np.nanstd(ra2t_data['model_twc'],0)*1e3,
-        np.nanmean(ra2t_data['model_twc'],0)*1e3 + np.nanstd(ra2t_data['model_twc'],0)*1e3, color = 'lightblue', alpha = 0.15)
-    plt.plot(np.nanmean(ra2t_data['model_twc'],0)*1e3 - np.nanstd(ra2t_data['model_twc'],0)*1e3, np.nanmean(ra2t_data['height'],0),
-        '--', color = 'steelblue', linewidth = 0.5)
-    plt.plot(np.nanmean(ra2t_data['model_twc'],0)*1e3 + np.nanstd(ra2t_data['model_twc'],0)*1e3, np.nanmean(ra2t_data['height'],0),
-        '--', color = 'steelblue', linewidth = 0.5)
-
-    ax1.fill_betweenx(np.nanmean(um_data['height'],0),np.nanmean(um_data['model_twc'],0)*1e3 - np.nanstd(um_data['model_twc'],0)*1e3,
-        np.nanmean(um_data['model_twc'],0)*1e3 + np.nanstd(um_data['model_twc'],0)*1e3, color = 'blue', alpha = 0.05)
-    plt.plot(np.nanmean(um_data['model_twc'],0)*1e3 - np.nanstd(um_data['model_twc'],0)*1e3, np.nanmean(um_data['height'],0),
-        '--', color = 'darkblue', linewidth = 0.5)
-    plt.plot(np.nanmean(um_data['model_twc'],0)*1e3 + np.nanstd(um_data['model_twc'],0)*1e3, np.nanmean(um_data['height'],0),
-        '--', color = 'darkblue', linewidth = 0.5)
-
-    plt.plot(np.nanmean(ifs_data['model_twc'],0)*1e3,np.nanmean(ifs_data['height'],0), color = 'gold', linewidth = 3, label = 'ECMWF_IFS', zorder = 4)
-    plt.plot(np.nanmean(misc_data['model_twc'],0)*1e3,np.nanmean(misc_data['height'],0), color = 'mediumseagreen', linewidth = 3, label = 'UM_CASIM-100', zorder = 3)
-    plt.plot(np.nanmean(ra2t_data['model_twc'],0)*1e3,np.nanmean(ra2t_data['height'],0), color = 'steelblue', linewidth = 3, label = 'UM_RA2T', zorder = 2)
-    plt.plot(np.nanmean(um_data['model_twc'],0)*1e3,np.nanmean(um_data['height'],0), color = 'darkblue', linewidth = 3, label = 'UM_RA2M', zorder = 1)
+    #### ADIABATIC LWC (where there are HATPRO LWP data available)
+    plt.plot(np.nanmean(obs_data[twcvar],0)*1e3,np.nanmean(obs_data['height'],0), color = 'k', linewidth = 3, label = 'Obs_UMgrid' + twcstr, zorder = obs_zorder)
+    ax1.fill_betweenx(np.nanmean(obs_data['height'],0),np.nanmean(obs_data[twcvar],0)*1e3 - np.nanstd(obs_data['lwc'],0)*1e3,
+        np.nanmean(obs_data[twcvar],0)*1e3 + np.nanstd(obs_data[twcvar],0)*1e3, color = 'lightgrey', alpha = 0.5)
+    # plt.xlim([0,0.2])
+    plt.plot(np.nanmean(obs_data[twcvar],0)*1e3 - np.nanstd(obs_data[twcvar],0)*1e3, np.nanmean(obs_data['height'],0),
+        '--', color = 'k', linewidth = 0.5)
+    plt.plot(np.nanmean(obs_data[twcvar],0)*1e3 + np.nanstd(obs_data[twcvar],0)*1e3, np.nanmean(obs_data['height'],0),
+        '--', color = 'k', linewidth = 0.5)
+    for m in range(0,len(um_data)):
+        ax1.fill_betweenx(np.nanmean(um_data[m]['height'],0),np.nanmean(um_data[m]['model_twc'],0)*1e3 - np.nanstd(um_data[m]['model_twc']*1e3,0),
+            np.nanmean(um_data[m]['model_twc'],0)*1e3 + np.nanstd(um_data[m]['model_twc'],0)*1e3, color = fcols[m], alpha = 0.05)
+        plt.plot(np.nanmean(um_data[m]['model_twc'],0)*1e3 - np.nanstd(um_data[m]['model_twc'],0)*1e3, np.nanmean(um_data[m]['height'],0),
+            '--', color =lcols[m], linewidth = 0.5)
+        plt.plot(np.nanmean(um_data[m]['model_twc'],0)*1e3 + np.nanstd(um_data[m]['model_twc'],0)*1e3, np.nanmean(um_data[m]['height'],0),
+            '--', color = lcols[m], linewidth = 0.5)
+    if bool(args):
+        for m in range(0,len(monc_data)):
+            ax1.fill_betweenx(monc_data[m]['z'],np.nanmean(monc_data[m]['model_twc'],0)*1e3 - np.nanstd(monc_data[m]['model_twc']*1e3,0),
+                np.nanmean(monc_data[m]['model_twc'],0)*1e3 + np.nanstd(monc_data[m]['model_twc'],0)*1e3, color = fcolsmonc[m], alpha = 0.05)
+            plt.plot(np.nanmean(monc_data[m]['model_twc'],0)*1e3 - np.nanstd(monc_data[m]['model_twc'],0)*1e3, monc_data[m]['z'],
+                '--', color =lcolsmonc[m], linewidth = 0.5)
+            plt.plot(np.nanmean(monc_data[m]['model_twc'],0)*1e3 + np.nanstd(monc_data[m]['model_twc'],0)*1e3, monc_data[m]['z'],
+                '--', color = lcolsmonc[m], linewidth = 0.5)
+    for m in range(0,len(um_data)):
+        plt.plot(np.nanmean(um_data[m]['model_twc'],0)*1e3,np.nanmean(um_data[m]['height'],0), color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
+    if bool(args):
+        for m in range(0,len(monc_data)):
+            plt.plot(np.nanmean(monc_data[m]['model_twc'],0)*1e3,monc_data[m]['z'], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
 
     plt.xlabel('Total water content [g m$^{-3}$]')
     plt.ylabel('Z [km]')
-    plt.ylim([0,9000])
-    plt.yticks(np.arange(0,9.01e3,0.5e3))
-    ax1.set_yticklabels([0,' ',1,' ',2,' ',3,' ',4,' ',5,' ',6,' ',7,' ',8,' ',9])
+    # plt.ylim([0,5e3])
+    # plt.yticks(np.arange(0,5.01e3,0.5e3))
+    # ax1.set_yticklabels([0,' ',1,' ',2,' ',3,' ',4,' ',5])
+    plt.ylim([0,2500])
+    plt.yticks(np.arange(0,2.51e3,0.5e3))
+    ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
+    ax1.set_yticklabels(np.arange(0,4.0,0.5))
     plt.xlim([0,0.25])
-    plt.xticks(np.arange(0,0.251,0.025))
-    ax1.set_xticklabels([0,' ',0.05,' ',0.1,' ',0.15,' ',0.2,' ',0.25])
+    plt.xticks(np.arange(0,0.0251,0.005))
+    #ax1.set_xticklabels([0,' ',0.015,' ',0.03,' ',0.045,' ',0.06])
+    ax1.xaxis.set_minor_locator(ticker.MultipleLocator(0.0025))
     plt.legend()
+
+    # plt.grid('on')
+    if bool(args):
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + 'TWC-MTThresholding' +twcstr '.png'
+    else:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + 'TWC-MTThresholding' +twcstr '.png'
+    plt.savefig(fileout)
 
     print ('******')
     print ('')
     print ('Finished plotting! :)')
     print ('')
 
-    if month_flag == -1:
-        fileout = 'FIGS/Obs-' + obs_switch + 'grid-QF30_IFS_CASIM-100_RA2M_RA2T_TWC_226-257DOY_TWC-MTThresholding_newColours.svg'
-    # plt.savefig(fileout)
-    plt.show()
 
 def interpCloudnet(obs_data):
     #interpolates missing times up to 1 hour
@@ -1984,9 +1654,9 @@ def main():
     # Cloudnet plot: Plot Cv statistics from drift period
     # -------------------------------------------------------------
     # figure = plot_CvProfiles(um_data, ifs_data, misc_data, ra2t_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs, obs_switch)
-    figure = plot_lwcProfiles(um_data, obs_data, label,outstr, plots_out_dir, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    # figure = plot_iwcProfiles(um_data, ifs_data, misc_data, ra2t_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs_switch)
-    # figure = plot_twcProfiles(um_data, ifs_data, misc_data, ra2t_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs_switch)
+    figure = plot_lwcProfiles(um_data, obs_data, label,outstr, plots_out_dir, obs_switch, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_iwcProfiles(um_data, obs_data, label,outstr, plots_out_dir, obs_switch, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_twcProfiles(um_data, obs_data, label,outstr, plots_out_dir, obs_switch, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
     # -------------------------------------------------------------
     # Cloudnet plot: Plot contour timeseries
