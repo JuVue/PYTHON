@@ -727,7 +727,7 @@ def plot_lwcProfiles(um_data, obs_data,lwcvar,lwcstr, label,outstr,plots_out_dir
     fcols=['mediumaquamarine','lightblue','blue']
     lcolsmonc=['gold','darkorange','darkgoldenrod']
     fcolsmonc=['navajowhite','moccasin','goldenrod']
-
+    embed()
     #### ADIABATIC LWC
     plt.plot(np.nanmean(obs_data[lwcvar],0)*1e3,np.nanmean(obs_data['height'],0), color = 'k', linewidth = 3, label = 'Obs_UMgrid'  + lwcstr, zorder = obs_zorder)
     ax1.fill_betweenx(np.nanmean(obs_data['height'],0),np.nanmean(obs_data[lwcvar],0)*1e3 - np.nanstd(obs_data['lwc'],0)*1e3,
