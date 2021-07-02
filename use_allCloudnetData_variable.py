@@ -1332,6 +1332,7 @@ def removeSpinUp(monc_data,monc_spin):
 
 def CaseStudySelection(obs_data,um_data,monc_data,dates):
     obs_vars=list(obs_data.keys())
+    embed()
     time_ind = np.where(obs_data['time']<dates[1] | obs_data['time']>dates[2] )
     tinit=len(obs_data['time'])
     for j in range(0,len(obs_vars)):
