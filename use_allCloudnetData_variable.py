@@ -1345,7 +1345,7 @@ def CaseStudySelection(obs_data,um_data,monc_data,dates):
         elif tmp2 == 3:
             obs_data[obs_vars[j]]=np.delete(obs_data[obs_vars[j]],time_ind,3)
 
-    for m in range(0,len(um_data))
+    for m in range(0,len(um_data)):
         um_vars=list(um_data[m].keys())
         time_ind = np.where(um_data[m]['time']<dates[1] | um_data[m]['time']>dates[2] )
         tinit=len(um_data['time'])
@@ -1359,7 +1359,8 @@ def CaseStudySelection(obs_data,um_data,monc_data,dates):
                 um_data[m][um_vars[j]]=np.delete(um_data[m][um_vars[j]],time_ind,2)
             elif tmp2 == 3:
                 um_data[m][um_vars[j]]=np.delete(um_data[m][um_vars[j]],time_ind,3)
-    for m in range(0,len(monc_data))
+
+    for m in range(0,len(monc_data)):
         monc_vars=list(monc_data[m].keys())
         time1_ind = np.where(monc_data[m]['time1']<dates[1] | monc_data[m]['time1']>dates[2] )
         t1init=len(monc_data['time1'])
