@@ -611,7 +611,8 @@ def plot_lwcProfiles(um_data, obs_data,lwcvar,lwcstr, label,outstr,plots_out_dir
                 moutstr= args[list(args.keys())[n]]
         obs_zorder += len(monc_data)
 
-    thresholding = False
+    thresholding = True
+
 
     print ('******')
     print ('')
@@ -810,7 +811,7 @@ def plot_iwcProfiles(um_data, obs_data, twcvar,twcstr, label,outstr,plots_out_di
                 moutstr= args[list(args.keys())[n]]
     obs_zorder += len(monc_data)
 
-    thresholding = False
+    thresholding = True
 
     print ('******')
     print ('')
@@ -1764,7 +1765,7 @@ def main():
 
     lwcvar='lwc' #'lwc_adiabatic_inc_nolwp'
     lwcstr='' #'-adincNoLWP'   #''/'-adiabatic' / '-adincNoLWP'
-    twcvar='twc' #'twc_ad_nolwp'
+    twcvar='twc_ad_nolwp'
     twcstr='' #'-adincNoLWP'  #''/'-adiabatic' / '-adincNoLWP'
 
         # -------------------------------------------------------------
