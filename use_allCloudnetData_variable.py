@@ -1188,7 +1188,7 @@ def plot_twcProfiles(um_data, obs_data,twcvar,twcstr,  label,outstr,plots_out_di
             fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_TWC' +twcstr +'.png'
 
     plt.savefig(fileout)
-
+    print(twcstr)
     print ('******')
     print ('')
     print ('Finished plotting! :)')
