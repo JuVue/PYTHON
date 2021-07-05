@@ -1466,10 +1466,11 @@ def main():
               '26_u-cd847_RA1M_CASIM/',
               '27_u-ce112_RA1M_CASIM/']
     ### CHOOSE MONC RUNS
-    m_out_dir = ['3_control_20180913T0000Z/',
+    m_out_dir = [#'3_control_20180913T0000Z/',
                 #'4_control_20180913T0000Z_Wsub-1.5/',
                 '5_control_20180913T0000Z_Wsub-1.5_Fletcher/',
-                '6_control_20180913T0000Z_Wsub-1.5-1km/']
+                '6_control_20180913T0000Z_Wsub-1.5-1km/',
+                '7_20180913T0000Z_Wsub-1.5-1km_solAccum-100_inuc-0_iact-3']
 
     #################################################################
     ## create labels for figure legends - done here so only needs to be done once!
@@ -1511,6 +1512,9 @@ def main():
         elif m_out_dir[m][:1] == '6':
             mlabel.append('MONC Wsub1.5-1km')
             moutstr.append('Mwsub1km')
+        elif m_out_dir[m][:1] == '7':
+            mlabel.append('MONC Wsub1.5-1km \n solACC-100')
+            moutstr.append('Mwsub1kmsolACC100')
         else:
             label.append('undefined_label')
             moutstr.append('')
@@ -1770,21 +1774,21 @@ def main():
     twcstr=''  #''/'-adiabatic' / '-adincNoLWP'
     #
     ### select if Michaels cloud mask should be used for plotting profiles
-    thresholding =False
+    thresholding =True
         # -------------------------------------------------------------
     # Cloudnet plot: Plot Cv statistics from drift period
     # -------------------------------------------------------------
     #figure = plot_CvProfiles(um_data, ifs_data, misc_data, ra2t_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs, obs_switch)
-    #figure = plot_lwcProfiles(um_data, obs_data, lwcvar,lwcstr,thresholding, label,outstr, plots_out_dir,dates,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_lwcProfiles(um_data, obs_data, lwcvar,lwcstr,thresholding, label,outstr, plots_out_dir,dates,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     figure = plot_iwcProfiles(um_data, obs_data, twcvar,twcstr,thresholding, label,outstr, plots_out_dir,dates,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    #figure = plot_twcProfiles(um_data, obs_data, twcvar,twcstr,thresholding,  label,outstr, plots_out_dir,dates,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_twcProfiles(um_data, obs_data, twcvar,twcstr,thresholding,  label,outstr, plots_out_dir,dates,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
     # -------------------------------------------------------------
     # Cloudnet plot: Plot contour timeseries
     # -------------------------------------------------------------
-    #figure = plot_CvTimeseries(um_data, obs_data, label, outstr, plots_out_dir, dates, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    #figure = plot_LWCTimeseries(um_data,obs_data,  lwcvar,lwcstr,label, outstr, plots_out_dir, dates, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    #figure = plot_TWCTimeseries(um_data, obs_data, twcvar,twcstr, label,outstr, plots_out_dir, dates, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_CvTimeseries(um_data, obs_data, label, outstr, plots_out_dir, dates, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_LWCTimeseries(um_data,obs_data,  lwcvar,lwcstr,label, outstr, plots_out_dir, dates, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_TWCTimeseries(um_data, obs_data, twcvar,twcstr, label,outstr, plots_out_dir, dates, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     figure = plot_IWCTimeseries(um_data, obs_data, label, outstr,plots_out_dir, dates, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_TWCTesting(um_data, ifs_data, misc_data, obs_data, data1, data2, data3, obs, month_flag, missing_files, doy)
 
