@@ -1002,9 +1002,6 @@ def plot_twcProfiles(um_data, obs_data,twcvar,twcstr, thresholding, label,outstr
         obs_zorder += len(monc_data)
 
 
-    thresholding=False
-
-
     print ('******')
     print ('')
     print ('Plotting TWC mean profiles:' + twcstr)
