@@ -1004,8 +1004,6 @@ def plot_twcProfiles(um_data, obs_data,twcvar,twcstr,  label,outstr,plots_out_di
                 moutstr= args[list(args.keys())[n]]
         obs_zorder += len(monc_data)
 
-    twcvar= 'twc_ad_nolwp'
-    twcstr='-adincNoLWP'
 
     thresholding=True
 
