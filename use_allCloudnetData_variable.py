@@ -1763,10 +1763,10 @@ def main():
     ###          twc_ad                  = using lwc_adiabatic
     ###          lwc_ad_nolwp            = using lwc_adiabatic_inc_nolwp
 
-    lwcvar='lwc'
-    lwcstr='' #'-adincNoLWP'   #''/'-adiabatic' / '-adincNoLWP'
-    twcvar='twc'#'twc_ad_nolwp'
-    twcstr='' #'-adincNoLWP'  #''/'-adiabatic' / '-adincNoLWP'
+    lwcvar='lwc_adiabatic_inc_nolwp'
+    lwcstr='-adincNoLWP'   #''/'-adiabatic' / '-adincNoLWP'
+    twcvar='twc_ad_nolwp'
+    twcstr='-adincNoLWP'  #''/'-adiabatic' / '-adincNoLWP'
 
         # -------------------------------------------------------------
     # Cloudnet plot: Plot Cv statistics from drift period
