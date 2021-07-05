@@ -731,7 +731,7 @@ def plot_lwcProfiles(um_data, obs_data,lwcvar,lwcstr, thresholding, label,outstr
     fcolsmonc=['navajowhite','moccasin','goldenrod']
     #### ADIABATIC LWC
     plt.plot(np.nanmean(obs_data[lwcvar],0)*1e3,np.nanmean(obs_data['height'],0), color = 'k', linewidth = 3, label = 'Obs_UMgrid'  + lwcstr, zorder = obs_zorder)
-    ax1.fill_betweenx(np.nanmean(obs_data['height'],0),np.nanmean(obs_data[lwcvar],0)*1e3 - np.nanstd(obs_data['lwc'],0)*1e3,
+    ax1.fill_betweenx(np.nanmean(obs_data['height'],0),np.nanmean(obs_data[lwcvar],0)*1e3 - np.nanstd(obs_data[lwcvar],0)*1e3,
         np.nanmean(obs_data[lwcvar],0)*1e3 + np.nanstd(obs_data[lwcvar],0)*1e3, color = 'lightgrey', alpha = 0.5)
     # plt.xlim([0,0.2])
     plt.plot(np.nanmean(obs_data[lwcvar],0)*1e3 - np.nanstd(obs_data[lwcvar],0)*1e3, np.nanmean(obs_data['height'],0),
@@ -924,7 +924,7 @@ def plot_iwcProfiles(um_data, obs_data, twcvar,twcstr, thresholding ,label,outst
 
     #### ADIABATIC IWC (all times)
     plt.plot(np.nanmean(obs_data['iwc'],0)*1e3,np.nanmean(obs_data['height'],0), color = 'k', linewidth = 3, label = 'Obs_UMgrid', zorder = obs_zorder)
-    ax1.fill_betweenx(np.nanmean(obs_data['height'],0),np.nanmean(obs_data['iwc'],0)*1e3 - np.nanstd(obs_data['lwc'],0)*1e3,
+    ax1.fill_betweenx(np.nanmean(obs_data['height'],0),np.nanmean(obs_data['iwc'],0)*1e3 - np.nanstd(obs_data['iwc'],0)*1e3,
         np.nanmean(obs_data['iwc'],0)*1e3 + np.nanstd(obs_data['iwc'],0)*1e3, color = 'lightgrey', alpha = 0.5)
     # plt.xlim([0,0.2])
     plt.plot(np.nanmean(obs_data['iwc'],0)*1e3 - np.nanstd(obs_data['iwc'],0)*1e3, np.nanmean(obs_data['height'],0),
@@ -1783,10 +1783,10 @@ def main():
     # -------------------------------------------------------------
     # Cloudnet plot: Plot contour timeseries
     # -------------------------------------------------------------
-    figure = plot_CvTimeseries(um_data, obs_data, label, outstr, plots_out_dir, dates, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    figure = plot_LWCTimeseries(um_data,obs_data,  lwcvar,lwcstr,label, outstr, plots_out_dir, dates, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    figure = plot_TWCTimeseries(um_data, obs_data, twcvar,twcstr, label,outstr, plots_out_dir, dates, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    figure = plot_IWCTimeseries(um_data, obs_data, label, outstr,plots_out_dir, dates, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    #figure = plot_CvTimeseries(um_data, obs_data, label, outstr, plots_out_dir, dates, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    #figure = plot_LWCTimeseries(um_data,obs_data,  lwcvar,lwcstr,label, outstr, plots_out_dir, dates, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    #figure = plot_TWCTimeseries(um_data, obs_data, twcvar,twcstr, label,outstr, plots_out_dir, dates, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    #figure = plot_IWCTimeseries(um_data, obs_data, label, outstr,plots_out_dir, dates, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_TWCTesting(um_data, ifs_data, misc_data, obs_data, data1, data2, data3, obs, month_flag, missing_files, doy)
 
     # -------------------------------------------------------------
