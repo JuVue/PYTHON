@@ -1760,16 +1760,16 @@ def main():
     ###          twc_ad                  = using lwc_adiabatic
     ###          lwc_ad_nolwp            = using lwc_adiabatic_inc_nolwp
 
-    # lwcvar='lwc_adiabatic_inc_nolwp'
-    # lwcstr='-adincNoLWP'   #''/'-adiabatic' / '-adincNoLWP'
-    # twcvar='twc_ad_nolwp'
-    # twcstr='-adincNoLWP'  #''/'-adiabatic' / '-adincNoLWP'
-
-    lwcvar='lwc'
-    lwcstr=''   #''/'-adiabatic' / '-adincNoLWP'
-    twcvar='twc'
-    twcstr=''  #''/'-adiabatic' / '-adincNoLWP'
-
+    lwcvar='lwc_adiabatic_inc_nolwp'
+    lwcstr='-adincNoLWP'   #''/'-adiabatic' / '-adincNoLWP'
+    twcvar='twc_ad_nolwp'
+    twcstr='-adincNoLWP'  #''/'-adiabatic' / '-adincNoLWP'
+    # 
+    # lwcvar='lwc'
+    # lwcstr=''   #''/'-adiabatic' / '-adincNoLWP'
+    # twcvar='twc'
+    # twcstr=''  #''/'-adiabatic' / '-adincNoLWP'
+    #
     ### select if Michaels cloud mask should be used for plotting profiles
     thresholding ==True
         # -------------------------------------------------------------
