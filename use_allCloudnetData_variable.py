@@ -1764,14 +1764,14 @@ def main():
     lwcstr='-adincNoLWP'   #''/'-adiabatic' / '-adincNoLWP'
     twcvar='twc_ad_nolwp'
     twcstr='-adincNoLWP'  #''/'-adiabatic' / '-adincNoLWP'
-    # 
+    #
     # lwcvar='lwc'
     # lwcstr=''   #''/'-adiabatic' / '-adincNoLWP'
     # twcvar='twc'
     # twcstr=''  #''/'-adiabatic' / '-adincNoLWP'
     #
     ### select if Michaels cloud mask should be used for plotting profiles
-    thresholding ==True
+    thresholding =True
         # -------------------------------------------------------------
     # Cloudnet plot: Plot Cv statistics from drift period
     # -------------------------------------------------------------
