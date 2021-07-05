@@ -1778,8 +1778,8 @@ def main():
     # -------------------------------------------------------------
     #figure = plot_CvProfiles(um_data, ifs_data, misc_data, ra2t_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs, obs_switch)
     #figure = plot_lwcProfiles(um_data, obs_data, lwcvar,lwcstr, label,outstr, plots_out_dir,dates,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    #figure = plot_iwcProfiles(um_data, obs_data, twcvar,twcstr, label,outstr, plots_out_dir,dates,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    figure = plot_twcProfiles(um_data, obs_data, twcvar,twcstr,  label,outstr, plots_out_dir,dates,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_iwcProfiles(um_data, obs_data, twcvar,twcstr, label,outstr, plots_out_dir,dates,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    #figure = plot_twcProfiles(um_data, obs_data, twcvar,twcstr,  label,outstr, plots_out_dir,dates,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
     # -------------------------------------------------------------
     # Cloudnet plot: Plot contour timeseries
