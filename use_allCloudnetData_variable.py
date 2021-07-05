@@ -808,7 +808,6 @@ def plot_iwcProfiles(um_data, obs_data, twcvar,twcstr, thresholding ,label,outst
                 moutstr= args[list(args.keys())[n]]
     obs_zorder += len(monc_data)
 
-    thresholding = True
 
     print ('******')
     print ('')
