@@ -1130,7 +1130,7 @@ def plot_twcProfiles(um_data, obs_data,twcvar,twcstr,  label,outstr,plots_out_di
 
     #### ADIABATIC LWC (where there are HATPRO LWP data available)
     plt.plot(np.nanmean(obs_data[twcvar],0)*1e3,np.nanmean(obs_data['height'],0), color = 'k', linewidth = 3, label = 'Obs_UMgrid' + twcstr, zorder = obs_zorder)
-    ax1.fill_betweenx(np.nanmean(obs_data['height'],0),np.nanmean(obs_data[twcvar],0)*1e3 - np.nanstd(obs_data['lwc'],0)*1e3,
+    ax1.fill_betweenx(np.nanmean(obs_data['height'],0),np.nanmean(obs_data[twcvar],0)*1e3 - np.nanstd(obs_data[twcvar],0)*1e3,
         np.nanmean(obs_data[twcvar],0)*1e3 + np.nanstd(obs_data[twcvar],0)*1e3, color = 'lightgrey', alpha = 0.5)
     # plt.xlim([0,0.2])
     plt.plot(np.nanmean(obs_data[twcvar],0)*1e3 - np.nanstd(obs_data[twcvar],0)*1e3, np.nanmean(obs_data['height'],0),
@@ -1765,7 +1765,7 @@ def main():
 
     lwcvar='lwc' #'lwc_adiabatic_inc_nolwp'
     lwcstr='' #'-adincNoLWP'   #''/'-adiabatic' / '-adincNoLWP'
-    twcvar='twc_ad_nolwp'
+    twcvar='twc'#'twc_ad_nolwp'
     twcstr='' #'-adincNoLWP'  #''/'-adiabatic' / '-adincNoLWP'
 
         # -------------------------------------------------------------
