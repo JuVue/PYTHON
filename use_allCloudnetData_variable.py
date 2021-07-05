@@ -1763,9 +1763,9 @@ def main():
     ###          twc_ad                  = using lwc_adiabatic
     ###          lwc_ad_nolwp            = using lwc_adiabatic_inc_nolwp
 
-    lwcvar='lwc' #'lwc_adiabatic_inc_nolwp'
+    lwcvar='lwc_adiabatic_inc_nolwp'
     lwcstr='' #'-adincNoLWP'   #''/'-adiabatic' / '-adincNoLWP'
-    twcvar='twc'#'twc_ad_nolwp'
+    twcvar='twc_ad_nolwp'
     twcstr='' #'-adincNoLWP'  #''/'-adiabatic' / '-adincNoLWP'
 
         # -------------------------------------------------------------
@@ -1774,14 +1774,14 @@ def main():
     #figure = plot_CvProfiles(um_data, ifs_data, misc_data, ra2t_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs, obs_switch)
     figure = plot_lwcProfiles(um_data, obs_data, lwcvar,lwcstr, label,outstr, plots_out_dir,dates,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_iwcProfiles(um_data, obs_data, twcvar,twcstr, label,outstr, plots_out_dir,dates,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    figure = plot_twcProfiles(um_data, obs_data, twcvar,twcstr,  label,outstr, plots_out_dir,dates,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    #figure = plot_twcProfiles(um_data, obs_data, twcvar,twcstr,  label,outstr, plots_out_dir,dates,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
     # -------------------------------------------------------------
     # Cloudnet plot: Plot contour timeseries
     # -------------------------------------------------------------
     #figure = plot_CvTimeseries(um_data, obs_data, label, outstr, plots_out_dir, dates, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    figure = plot_LWCTimeseries(um_data,obs_data,  lwcvar,lwcstr,label, outstr, plots_out_dir, dates, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    figure = plot_TWCTimeseries(um_data, obs_data, twcvar,twcstr, label,outstr, plots_out_dir, dates, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    #figure = plot_LWCTimeseries(um_data,obs_data,  lwcvar,lwcstr,label, outstr, plots_out_dir, dates, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    #figure = plot_TWCTimeseries(um_data, obs_data, twcvar,twcstr, label,outstr, plots_out_dir, dates, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_IWCTimeseries(um_data, obs_data, label, outstr,plots_out_dir, dates, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_TWCTesting(um_data, ifs_data, misc_data, obs_data, data1, data2, data3, obs, month_flag, missing_files, doy)
 
