@@ -1006,7 +1006,7 @@ def plot_twcProfiles(um_data, obs_data,twcvar,twcstr,  label,outstr,plots_out_di
         obs_zorder += len(monc_data)
 
 
-    thresholding=True
+    thresholding=False
 
 
     print ('******')
@@ -1763,18 +1763,23 @@ def main():
     ###          twc_ad                  = using lwc_adiabatic
     ###          lwc_ad_nolwp            = using lwc_adiabatic_inc_nolwp
 
-    lwcvar='lwc_adiabatic_inc_nolwp'
-    lwcstr='-adincNoLWP'   #''/'-adiabatic' / '-adincNoLWP'
-    twcvar='twc_ad_nolwp'
-    twcstr='-adincNoLWP'  #''/'-adiabatic' / '-adincNoLWP'
+    # lwcvar='lwc_adiabatic_inc_nolwp'
+    # lwcstr='-adincNoLWP'   #''/'-adiabatic' / '-adincNoLWP'
+    # twcvar='twc_ad_nolwp'
+    # twcstr='-adincNoLWP'  #''/'-adiabatic' / '-adincNoLWP'
+
+    lwcvar='lwc'
+    lwcstr=''   #''/'-adiabatic' / '-adincNoLWP'
+    twcvar='twc'
+    twcstr=''  #''/'-adiabatic' / '-adincNoLWP'
 
         # -------------------------------------------------------------
     # Cloudnet plot: Plot Cv statistics from drift period
     # -------------------------------------------------------------
     #figure = plot_CvProfiles(um_data, ifs_data, misc_data, ra2t_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs, obs_switch)
-    figure = plot_lwcProfiles(um_data, obs_data, lwcvar,lwcstr, label,outstr, plots_out_dir,dates,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    #figure = plot_lwcProfiles(um_data, obs_data, lwcvar,lwcstr, label,outstr, plots_out_dir,dates,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_iwcProfiles(um_data, obs_data, twcvar,twcstr, label,outstr, plots_out_dir,dates,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    #figure = plot_twcProfiles(um_data, obs_data, twcvar,twcstr,  label,outstr, plots_out_dir,dates,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_twcProfiles(um_data, obs_data, twcvar,twcstr,  label,outstr, plots_out_dir,dates,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
     # -------------------------------------------------------------
     # Cloudnet plot: Plot contour timeseries
