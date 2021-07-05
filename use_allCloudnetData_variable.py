@@ -1694,6 +1694,7 @@ def main():
     ncm = {}
     monc_data = {}
     for m in range(0, len(m_out_dir)):
+        print(monc_filename[m])
         ncm = Dataset(monc_filename[m],'r')
         monc_data[m]={}
         for c in range(0,len(monc_var_list)):
