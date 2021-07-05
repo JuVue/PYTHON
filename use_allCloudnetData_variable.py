@@ -597,7 +597,7 @@ def plot_TWCTimeseries(um_data, obs_data,twcvar,twcstr, label,outstr, plots_out_
     print ('******')
 
 
-def plot_lwcProfiles(um_data, obs_data,lwcvar,lwcstr, label,outstr,plots_out_dir,dates, **args): #, lon, lat):
+def plot_lwcProfiles(um_data, obs_data,lwcvar,lwcstr, thresholding, label,outstr,plots_out_dir,dates, **args): #, lon, lat):
 
     obs_zorder = len(um_data)+1
 
@@ -610,9 +610,6 @@ def plot_lwcProfiles(um_data, obs_data,lwcvar,lwcstr, label,outstr,plots_out_dir
             elif list(args.keys())[n] == 'moutstr':
                 moutstr= args[list(args.keys())[n]]
         obs_zorder += len(monc_data)
-
-    thresholding = True
-
 
     print ('******')
     print ('')
@@ -797,7 +794,7 @@ def plot_lwcProfiles(um_data, obs_data,lwcvar,lwcstr, label,outstr,plots_out_dir
     print ('******')
 
 
-def plot_iwcProfiles(um_data, obs_data, twcvar,twcstr, label,outstr,plots_out_dir,dates, **args): #, lon, lat):
+def plot_iwcProfiles(um_data, obs_data, twcvar,twcstr, thresholding ,label,outstr,plots_out_dir,dates, **args): #, lon, lat):
 
     obs_zorder = len(um_data)+1
 
@@ -992,7 +989,7 @@ def plot_iwcProfiles(um_data, obs_data, twcvar,twcstr, label,outstr,plots_out_di
     print ('******')
 
 
-def plot_twcProfiles(um_data, obs_data,twcvar,twcstr,  label,outstr,plots_out_dir,dates, **args): #, lon, lat):
+def plot_twcProfiles(um_data, obs_data,twcvar,twcstr, thresholding, label,outstr,plots_out_dir,dates, **args): #, lon, lat):
 
     obs_zorder = len(um_data)+1
     if bool(args):
@@ -1773,20 +1770,22 @@ def main():
     twcvar='twc'
     twcstr=''  #''/'-adiabatic' / '-adincNoLWP'
 
+    ### select if Michaels cloud mask should be used for plotting profiles
+    thresholding ==True
         # -------------------------------------------------------------
     # Cloudnet plot: Plot Cv statistics from drift period
     # -------------------------------------------------------------
     #figure = plot_CvProfiles(um_data, ifs_data, misc_data, ra2t_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs, obs_switch)
-    #figure = plot_lwcProfiles(um_data, obs_data, lwcvar,lwcstr, label,outstr, plots_out_dir,dates,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    figure = plot_iwcProfiles(um_data, obs_data, twcvar,twcstr, label,outstr, plots_out_dir,dates,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    #figure = plot_twcProfiles(um_data, obs_data, twcvar,twcstr,  label,outstr, plots_out_dir,dates,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    #figure = plot_lwcProfiles(um_data, obs_data, lwcvar,lwcstr,thresholding, label,outstr, plots_out_dir,dates,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_iwcProfiles(um_data, obs_data, twcvar,twcstr,thresholding, label,outstr, plots_out_dir,dates,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    #figure = plot_twcProfiles(um_data, obs_data, twcvar,twcstr,thresholding,  label,outstr, plots_out_dir,dates,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
     # -------------------------------------------------------------
     # Cloudnet plot: Plot contour timeseries
     # -------------------------------------------------------------
     #figure = plot_CvTimeseries(um_data, obs_data, label, outstr, plots_out_dir, dates, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_LWCTimeseries(um_data,obs_data,  lwcvar,lwcstr,label, outstr, plots_out_dir, dates, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    #figure = plot_TWCTimeseries(um_data, obs_data, twcvar,twcstr, label,outstr, plots_out_dir, dates, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_TWCTimeseries(um_data, obs_data, twcvar,twcstr, label,outstr, plots_out_dir, dates, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_IWCTimeseries(um_data, obs_data, label, outstr,plots_out_dir, dates, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_TWCTesting(um_data, ifs_data, misc_data, obs_data, data1, data2, data3, obs, month_flag, missing_files, doy)
 
