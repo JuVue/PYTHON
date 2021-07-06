@@ -1462,7 +1462,7 @@ def main():
     # out_dir = ['23_u-cc278_RA1M_CASIM/',
     #           '26_u-cd847_RA1M_CASIM/',
     #           '27_u-ce112_RA1M_CASIM/']
-    out_dir = []
+    out_dir = ['23_u-cc278_RA1M_CASIM/']
     ### CHOOSE MONC RUNS
     m_out_dir = ['5_control_20180913T0000Z_Wsub-1.5_Fletcher/',
                 '6_control_20180913T0000Z_Wsub-1.5-1km/',
@@ -1510,10 +1510,16 @@ def main():
             moutstr.append('Mwsubfle')
         elif m_out_dir[m][:1] == '6':
             mlabel.append('MONC Wsub1.5-1km')
-            moutstr.append('Mwsub1km')
+            moutstr.append('Mwsub1.5-1km')
         elif m_out_dir[m][:1] == '7':
             mlabel.append('MONC Wsub1.5-1km \n solACC-100')
             moutstr.append('Mwsub1kmsolACC100')
+        elif m_out_dir[m][:1] == '8':
+            mlabel.append('MONC Wsub1.0-1km')
+            moutstr.append('Mwsub1.0-1km')
+        elif m_out_dir[m][:1] == '9':
+            mlabel.append('MONC Wsub0.5-1km')
+            moutstr.append('Mwsub0.5-1km')
         else:
             label.append('undefined_label')
             moutstr.append('')
