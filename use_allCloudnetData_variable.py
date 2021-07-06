@@ -919,8 +919,8 @@ def plot_iwcProfiles(um_data, obs_data, twcvar,twcstr, thresholding ,label,outst
     ###define colors
     lcols=['mediumseagreen','steelblue','darkblue']
     fcols=['mediumaquamarine','lightblue','blue']
-    lcolsmonc=['gold','darkorange','darkgoldenrod']
-    fcolsmonc=['navajowhite','moccasin','goldenrod']
+    lcolsmonc=['gold','darkorange','darkgoldenrod','olive','darkolivegreen']
+    fcolsmonc=['navajowhite','moccasin','goldenrod','darkkhaki','khaki']
 
     #### ADIABATIC IWC (all times)
     plt.plot(np.nanmean(obs_data['iwc'],0)*1e3,np.nanmean(obs_data['height'],0), color = 'k', linewidth = 3, label = 'Obs_UMgrid', zorder = obs_zorder)
@@ -1118,8 +1118,8 @@ def plot_twcProfiles(um_data, obs_data,twcvar,twcstr, thresholding, label,outstr
     ###define colors
     lcols=['mediumseagreen','steelblue','darkblue']
     fcols=['mediumaquamarine','lightblue','blue']
-    lcolsmonc=['gold','darkorange','darkgoldenrod']
-    fcolsmonc=['navajowhite','moccasin','goldenrod']
+    lcolsmonc=['gold','darkorange','darkgoldenrod','olive','darkolivegreen']
+    fcolsmonc=['navajowhite','moccasin','goldenrod','darkkhaki','khaki']
 
     #### ADIABATIC LWC (where there are HATPRO LWP data available)
     plt.plot(np.nanmean(obs_data[twcvar],0)*1e3,np.nanmean(obs_data['height'],0), color = 'k', linewidth = 3, label = 'Obs_UMgrid' + twcstr, zorder = obs_zorder)
