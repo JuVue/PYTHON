@@ -727,8 +727,8 @@ def plot_lwcProfiles(um_data, obs_data,lwcvar,lwcstr, thresholding, label,outstr
     ###define colors
     lcols=['mediumseagreen','steelblue','darkblue']
     fcols=['mediumaquamarine','lightblue','blue']
-    lcolsmonc=['gold','darkorange','darkgoldenrod','olive','darkolivegreen']
-    fcolsmonc=['navajowhite','moccasin','goldenrod','darkkhaki','khaki']
+    lcolsmonc=['gold','darkorange','darkgoldenrod','orangered','firebrick']
+    fcolsmonc=['navajowhite','moccasin','goldenrod','lightsalmon','lightcoral']
     #### ADIABATIC LWC
     plt.plot(np.nanmean(obs_data[lwcvar],0)*1e3,np.nanmean(obs_data['height'],0), color = 'k', linewidth = 3, label = 'Obs_UMgrid'  + lwcstr, zorder = obs_zorder)
     ax1.fill_betweenx(np.nanmean(obs_data['height'],0),np.nanmean(obs_data[lwcvar],0)*1e3 - np.nanstd(obs_data[lwcvar],0)*1e3,
@@ -1118,9 +1118,8 @@ def plot_twcProfiles(um_data, obs_data,twcvar,twcstr, thresholding, label,outstr
     ###define colors
     lcols=['mediumseagreen','steelblue','darkblue']
     fcols=['mediumaquamarine','lightblue','blue']
-    lcolsmonc=['gold','darkorange','darkgoldenrod','olive','darkolivegreen']
-    fcolsmonc=['navajowhite','moccasin','goldenrod','darkkhaki','khaki']
-
+    lcolsmonc=['gold','darkorange','darkgoldenrod','orangered','firebrick']
+    fcolsmonc=['navajowhite','moccasin','goldenrod','lightsalmon','lightcoral']
     #### ADIABATIC LWC (where there are HATPRO LWP data available)
     plt.plot(np.nanmean(obs_data[twcvar],0)*1e3,np.nanmean(obs_data['height'],0), color = 'k', linewidth = 3, label = 'Obs_UMgrid' + twcstr, zorder = obs_zorder)
     ax1.fill_betweenx(np.nanmean(obs_data['height'],0),np.nanmean(obs_data[twcvar],0)*1e3 - np.nanstd(obs_data[twcvar],0)*1e3,
