@@ -1467,8 +1467,8 @@ def main():
     m_out_dir = ['5_control_20180913T0000Z_Wsub-1.5_Fletcher/',
                 '6_control_20180913T0000Z_Wsub-1.5-1km/',
                 '7_20180913T0000Z_Wsub-1.5-1km_solAccum-100_inuc-0_iact-3/',
-                '8_control_20180913T0000Z_Wsub-1.0-1km',
-                '9_control_20180913T0000Z_Wsub-0.5-1km']
+                '8_control_20180913T0000Z_Wsub-1.0-1km/',
+                '9_control_20180913T0000Z_Wsub-0.5-1km/']
             #'3_control_20180913T0000Z/',
             #'4_control_20180913T0000Z_Wsub-1.5/',
     #################################################################
