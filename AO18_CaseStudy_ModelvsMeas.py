@@ -24,7 +24,12 @@ from readMAT import readMatlabStruct
 #from pyFixes import py3_FixNPLoad
 
 
-def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3, datenum,edatenum, label1, label2, label3,plot_out_dir):
+def plot_surfaceVariables(um_data, obs_data, monc_data, label, mlabel, plot_out_dir, dates ):
+
+    numsp=len(um_data)+1
+    numsp += len(monc_data)
+
+
     print ('******')
     print ('')
     print ('Plotting  timeseries of surface variables:')
@@ -43,6 +48,10 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     plt.subplots_adjust(top = 0.95, bottom = 0.05, right = 0.95, left = 0.05,
             hspace = 0.4, wspace = 0.13)
 
+    lcols=['mediumseagreen','steelblue','darkblue']
+    fcols=['mediumaquamarine','lightblue','blue']
+    lcolsmonc=['gold','darkorange','darkgoldenrod']
+    fcolsmonc=['navajowhite','moccasin','goldenrod']
 
     #################################################################
     ## create figure and axes instances
@@ -57,12 +66,13 @@ def plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3
     ax = plt.gca()
     yB = [-10, 120]
     plt.plot(obs['metalley']['mday'], obs['metalley']['t'], color = 'black', label = 'ice_station')#plt.ylabel('SW$_{net}$ [W m$^{-2}$]')
-    plt.plot(data1['time'], data1['air_temperature_at_1.5m']-273.15, color = 'darkblue', label = label1)
-    plt.plot(data3['time'], data3['air_temperature_at_1.5m']-273.15, color = 'steelblue', label = label3[:-4])
-    plt.plot(data2['time'], data2['air_temperature_at_1.5m']-273.15, color = 'mediumseagreen', label = label2)
+    for m in range(0,len(um_data)):
+        plt.plot(um_data[m]['time'], um_data[m]['air_temperature_at_1.5m']-273.15, color = lcols[m], label = label[m])
+    for m in range(0,len(monc_data)):
+        plt.plot(monc_data[m]['time'], um_data[m]['air_temperature_at_1.5m']-273.15, color = lcolsmonc[m], label = mlabel[m])
     plt.ylabel('T [$^\circ$C]')
     plt.legend(bbox_to_anchor=(-0.08, 0.77, 1., .102), loc=4, ncol=4)
-    ax.set_xlim([datenum, edatenum])
+    ax.set_xlim([dates[0], dates[1]])
     plt.grid(which='both')
     ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
@@ -202,18 +212,30 @@ def main():
     print ('')
 
     ### INPUT FOLDERS
-    um_root_dir = '/nfs/a96/MOCCHA/working/jutta/CloudNet/Oden/data/calibrated/metum/'
+    um_root_dir = '/nfs/a96/MOCCHA/working/gillian/UM/DATA/'
     obs_met_dir=  '/nfs/a96/MOCCHA/working/jutta/final_data/met_alley/concatenated/';
     obs_acas_dir= '/nfs/a96/MOCCHA/data/ACAS/ACAS_AO2018_v2_May2019/';
     obs_rs_dir=   '/nfs/a96/MOCCHA/working/jutta/final_data/radiosondes/V3/';
     obs_hatpro_dir='/nfs/a96/MOCCHA/working/jutta/final_data/HATPRO/';
     obs_albedo_dir='/nfs/a96/MOCCHA/working/data/'
     obs_rad_dir='/nfs/a96/MOCCHA/working/jutta/requests/Gillian/'
-    ### CHOSEN RUN
-    out_dir1 = '25_u-cc568_RA2M_CON/'
-    out_dir2 = '23_u-cc278_RA1M_CASIM/'
-    out_dir3 = '24_u-cc324_RA2T_CON/'
+    monc_root_dir = '/nfs/a96/MOCCHA/working/gillian/MONC_CASES/MOCCHA/output/'
 
+
+    # ### CHOSEN RUN
+    # out_dir1 = '25_u-cc568_RA2M_CON/'
+    # out_dir2 = '23_u-cc278_RA1M_CASIM/'
+    # out_dir3 = '24_u-cc324_RA2T_CON/'
+
+    out_dir = ['23_u-cc278_RA1M_CASIM/',
+              '26_u-cd847_RA1M_CASIM/',
+              '27_u-ce112_RA1M_CASIM/']
+    ### CHOOSE MONC RUNS
+    m_out_dir = ['5_control_20180913T0000Z_Wsub-1.5_Fletcher/',
+                '6_control_20180913T0000Z_Wsub-1.5-1km/',
+                '7_20180913T0000Z_Wsub-1.5-1km_solAccum-100_inuc-0_iact-3/']
+
+    m_sub_dir = 'OUT_R0_24h'
     ### CHOOSE DATES TO PLOT
     DATES = 2018091300
     ENDDATE=2018091315
@@ -230,33 +252,22 @@ def main():
     print ('Identifying .nc file: ')
     print ('')
 
-    ### -------------------------------------------------------------------------
-    ### define input filename
-    ### -------------------------------------------------------------------------
 
     strdate = str(DATES)
     estrdate=str(ENDDATE)
     datenum = date2datenum(datetime.datetime.strptime(strdate,'%Y%m%d%H'))
     edatenum = date2datenum(datetime.datetime.strptime(estrdate,'%Y%m%d%H'))
-    filename_um1 = um_root_dir + out_dir1 + strdate + '_oden_metum.nc'
-    filename_um2 = um_root_dir + out_dir2 + strdate + '_oden_metum.nc'
-    filename_um3 = um_root_dir + out_dir3 + strdate + '_oden_metum.nc'
 
-    print (filename_um1)
-    print (filename_um2)
-    print (filename_um3)
-    print ('')
 
-        #### LOAD DATA
-    print( 'Loading first run diagnostics:')
-    nc1 = Dataset(filename_um1,'r')
-    print ('...')
-    print( 'Loading second run diagnostics:')
-    nc2 = Dataset(filename_um2,'r')
-    print ('...')
-    print ('Loading third run diagnostics:')
-    nc3 = Dataset(filename_um3,'r')
-    print ('...')
+    ### -------------------------------------------------------------------------
+    ### define UM input filename
+    ### -------------------------------------------------------------------------
+    filename_um=[]
+    nc={}
+    for m in range(0, len(m_out_dir)):
+        filename_um[m] = um_root_dir + out_dir[m] + strdate + '_oden_metum.nc'
+        print( 'Loading ', m 'th run diagnostics:')
+        nc[m] = Dataset(filename_um[m],'r')
     # -------------------------------------------------------------
     print ('')
     ##  for var in nc.variables: print (var)
@@ -264,7 +275,7 @@ def main():
     ### BASE UM RUNS (UM_RA2M/UM_RA2T)
     var_list1 = ['u_10m','v_10m', 'air_temperature_at_1.5m','q_1.5m','rh_1.5m','visibility','dew_point_temperature_at_1.5m','LWP','IWP',
                 'surface_net_SW_radiation','surface_net_LW_radiation','surface_downwelling_LW_radiation','surface_downwelling_SW_radiation',
-                'sensible_heat_flux','latent_heat_flux']
+                'sensible_heat_flux','latent_heat_flux','lwp']
                 #PLOT FROM CLOUDNET:
                 #'temperature','q','pressure','bl_depth','bl_type','qliq','qice','uwind','vwind','wwind',
                 #'cloud_fraction','radr_refl','rainfall_flux','snowfall_flux',]#
@@ -272,47 +283,54 @@ def main():
     #### CASIM var_list1 only different for  qnice and qndrop,qice / qsnow
     var_list2 = var_list1
 
-    data1 = {}
-    data2 = {}
-    data3 = {}
-    data1['time'] = datenum + (nc1.variables['forecast_time'][:]/24.0)
-    data2['time'] = datenum + (nc2.variables['forecast_time'][:]/24.0)
-    data3['time'] = datenum + (nc3.variables['forecast_time'][:]/24.0)
+    um_data = {}
+    for m in range(0,len(out_dir)):
+        um_data[m]['time'] = datenum + (nc[m].variables['forecast_time'][:]/24.0)
+        ### define height arrays explicitly
+        um_data[m]['height'] = nc[m].variables['height'][:]
 
-    ### define height arrays explicitly
-    data1['height'] = nc1.variables['height'][:]
-    data2['height'] = nc2.variables['height'][:]
-    data3['height'] = nc3.variables['height'][:]
-
-    ## um1
-    print ('Starting on t=0 RA2M data:')
-    for j in range(0,len(var_list1)):
-        if np.ndim(nc1.variables[var_list1[j]]) == 0:     # ignore horizontal_resolution
-            continue
-        elif np.ndim(nc1.variables[var_list1[j]]) >= 1:
-            data1[var_list1[j]] = nc1.variables[var_list1[j]][:]
-    nc1.close()
-
-    #### um2
-    print ('Starting on t=0 CASIM data:')
-    for j in range(0,len(var_list2)):
-        if np.ndim(nc2.variables[var_list2[j]]) == 0:     # ignore horizontal_resolution
-            continue
-        elif np.ndim(nc2.variables[var_list2[j]]) >= 1:
-            data2[var_list2[j]] = nc2.variables[var_list2[j]][:]
-    nc2.close()
-
-    print ('Starting on t=0 RA2T data:')
-    for j in range(0,len(var_list1)):
-        if var_list1[j] in nc3.variables:
-            if np.ndim(nc3.variables[var_list1[j]]) == 0:     # ignore horizontal_resolution
+        print ('Starting on t=0 RA2M data:')
+        for j in range(0,len(var_list1)):
+            if np.ndim(nc[m].variables[var_list1[j]]) == 0:     # ignore horizontal_resolution
                 continue
-            elif np.ndim(nc3.variables[var_list1[j]]) >= 1:
-                data3[var_list1[j]] = nc3.variables[var_list1[j]][:]
-    nc3.close()
-    print('')
-    print (var_list2[j])
-    print('')
+            elif np.ndim(nc[m].variables[var_list1[j]]) >= 1:
+                um_data[m][var_list1[j]] = nc[m].variables[var_list1[j]][:]
+        nc[m].close()
+
+    ### -----------------------------------------------------------------
+    ### create monc filenames
+    monc_filename=[]
+    for m in range(0, len(m_out_dir)):
+        monc_filename.append(monc_root_dir + m_out_dir[m] + 'moccha_casim_dg_72000.nc')
+    ### -----------------------------------------------------------------
+    ###     READ IN MONC DATA
+    print ('Loading MONC data:')
+    print ('')
+    ###1d variables, 2d variables (time,height), 3d variables (time,x,y), 4d variables(time,x,y,z)
+    monc_var_list =[['time_series_2_60','time_series_20_600' ,'z','rho', 'LWP_mean','IWP_mean','SWP_mean','TOT_IWP_mean','GWP_mean'],
+                    ['theta_mean','total_cloud_fraction', 'liquid_cloud_fraction','ice_cloud_fraction',
+                    'vapour_mmr_mean','liquid_mmr_mean','rain_mmr_mean','ice_mmr_mean','snow_mmr_mean',
+                    'graupel_mmr_mean']]
+                #    ['vwp','lwp','rwp','iwp','swp','gwp','tot_iwp'],
+                #    ['q_vapour','q_cloud_liquid_mass','q_rain_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
+
+    ncm = {}
+    monc_data = {}
+    for m in range(0, len(m_out_dir)):
+        print(monc_filename[m])
+        ncm = Dataset(monc_filename[m],'r')
+        monc_data[m]={}
+        for c in range(0,len(monc_var_list)):
+            for j in range(0,len(monc_var_list[c])):
+                monc_data[m][monc_var_list[c][j]] = ncm.variables[monc_var_list[c][j]][:]
+
+        monc_data[m]['time2']=monc_data[m]['time_series_20_600'] #2d data
+        monc_data[m]['time1']=monc_data[m]['time_series_2_60'] #1d data
+        monc_data[m].pop('time_series_2_60')
+        monc_data[m].pop('time_series_20_600')
+
+    print (' Monc data Loaded!')
+
 # -------------------------------------------------------------
 # Load observations
 # -------------------------------------------------------------
@@ -334,19 +352,17 @@ def main():
     obs['metalley'] = readMatlabStruct(obs_met_dir + filename)
     print(obs['metalley'].keys())
 
-    # print ('Load HATPRO data used by Cloudnet...')
-    # filename='HATPRO_LWP_IWV_30s_V3_userready.mat'
-    # obs['hatpro'] = readMatlabStruct(obs_hatpro_dir + filename)
-    # print (obs['hatpro'].keys())
-    #
-    # obs['hatpro']['iwv'] = np.squeeze(obs['hatpro']['iwv'])
-    # obs['hatpro']['mday'] = np.squeeze(obs['hatpro']['mday'])
-    # obs['hatpro']['lwp'] = np.squeeze(obs['hatpro']['lwp'])
-    # obs['hatpro']['lwpflag'] = np.squeeze(obs['hatpro']['lwp_corflag'])
-    # obs['hatpro']['iwvflag'] = np.squeeze(obs['hatpro']['iwv_corflag'])
-    # obs['hatpro']['rainflag'] = np.squeeze(obs['hatpro']['rainflag'])
-    # obs['hatpro']['doy'] = calcTime_Mat2DOY(obs['hatpro']['mday'])
+    print ('Load HATPRO data used by Cloudnet...')
+    filename='HATPRO_LWP_IWV_30s_V3_userready.mat'
+    obs['hatpro'] = readMatlabStruct(obs_hatpro_dir + filename)
+    print (obs['hatpro'].keys())
 
+    obs['hatpro']['iwv'] = np.squeeze(obs['hatpro']['iwv'])
+    obs['hatpro']['mday'] = np.squeeze(obs['hatpro']['mday'])
+    obs['hatpro']['lwp'] = np.squeeze(obs['hatpro']['lwp'])
+    obs['hatpro']['lwpflag'] = np.squeeze(obs['hatpro']['lwp_corflag'])
+    obs['hatpro']['iwvflag'] = np.squeeze(obs['hatpro']['iwv_corflag'])
+    obs['hatpro']['rainflag'] = np.squeeze(obs['hatpro']['rainflag'])
 
     #print ('Load albedo estimates from Michael...')
     #obs['albedo'] = readMatlabStruct(obs_albedo_dir + 'MOCCHA_Albedo_estimates_Michael.mat')
@@ -390,29 +406,58 @@ def main():
 
     print ('...')
 
-    #################################################################
-    ## create labels for figure legends - done here so only needs to be done once!
-    #################################################################
-    label1 = 'undefined_label'
-    if out_dir1[:10] == '25_u-cc568': label1 = 'UM_RA2M'
-    if out_dir1[:10] == '24_u-cc324': label1 = 'UM_RA2T_' + out_dir1[-4:-1]
-    if out_dir1[:10] == '23_u-cc278': label1 = 'UM_CASIM-100'
+        #################################################################
+        ## create labels for figure legends - done here so only needs to be done once!
+        #################################################################
+        label=[]
+        outstr=[]
+        for m in range(0, len(out_dir)):
+            if out_dir[m][:10] == '24_u-cc324':
+                label.append('UM_RA2T_' + out_dir[m][-4:-1])
+                outstr.append('RA2T')
+            elif out_dir[m][:10] == '25_u-cc568':
+                label.append('UM_RA2M')
+                outstr.append('RA2M')
+            elif out_dir[m][:10] == '23_u-cc278':
+                label.append('UM_CASIM-100')
+                outstr.append('CASIM100')
+            elif out_dir[m][:10] == '26_u-cd847':
+                label.append('UM_CASIM-AP')
+                outstr.append('CASIM-AP')
+            elif out_dir[m][:10] == '27_u-ce112':
+                label.append('UM_CASIM-AP-PasProc')
+                outstr.append('CASIM-AP-PasProc')
+            else:
+                label.append('undefined_label')
+                outstr.append('')
+                print(label)
+        mlabel=[]
+        moutstr=[]
+        for m in range(0, len(m_out_dir)):
+            if m_out_dir[m][:1] == '3':
+                mlabel.append('MONC nosub')
+                moutstr.append('Mnowsub')
+            if m_out_dir[m][:1] == '4':
+                mlabel.append('MONC Wsub1.5')
+                moutstr.append('Mwsub')
+            elif m_out_dir[m][:1] == '5':
+                mlabel.append('MONC Wsub1.5 \n Fletcher')
+                moutstr.append('Mwsubfle')
+            elif m_out_dir[m][:1] == '6':
+                mlabel.append('MONC Wsub1.5-1km')
+                moutstr.append('Mwsub1km')
+            elif m_out_dir[m][:1] == '7':
+                mlabel.append('MONC Wsub1.5-1km \n solACC-100')
+                moutstr.append('Mwsub1kmsolACC100')
+            else:
+                label.append('undefined_label')
+                moutstr.append('')
 
-    label2 = 'undefined_label'
-    if out_dir2[:10] == '25_u-cc568': label2 = 'UM_RA2M'
-    if out_dir2[:10] == '24_u-cc324': label2 = 'UM_RA2T_' + out_dir2[-4:-1]
-    if out_dir2[:10] == '23_u-cc278': label2 = 'UM_CASIM-100'
-
-    label3 = 'undefined_label'
-    if out_dir3 == 'OUT_25H/': label3 = 'ECMWF_IFS'
-    if out_dir3[:10] == '25_u-cc568': label3 = 'UM_RA2M'
-    if out_dir3[:10] == '24_u-cc324': label3 = 'UM_RA2T_' + out_dir3[-4:-1]
-    if out_dir3[:10] == '23_u-cc278': label3 = 'UM_CASIM-100'
 
     # -------------------------------------------------------------
     # Plot paper figures
     # -------------------------------------------------------------
-    figure = plot_surfaceVariables(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3,datenum,edatenum,label1,label2,label3,plot_out_dir)
+    figure = plot_surfaceVariables(um_data,obs, monc_data, plots_out_dir, dates,label1,label2,label3,plot_out_dir)
     figure = plot_radiation(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3,datenum,edatenum,label1,label2,label3,plot_out_dir)
     # figure = plot_paperFluxes(data1, data2, data3, month_flag, missing_files, out_dir1, out_dir2, out_dir3, obs, doy, label1, label2, label3)
     # figure = plot_paperRadiation(data1, data2, data3, out_dir1, out_dir2, out_dir3,datenum,label1,label2,label3,plot_out_dir)

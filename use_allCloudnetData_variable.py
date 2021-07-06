@@ -1459,14 +1459,17 @@ def main():
     #out_dir = ['23_u-cc278_RA1M_CASIM/',
     #           '24_u-cc324_RA2T_CON/',
     #           '25_u-cc568_RA2M_CON/']
-    out_dir = ['23_u-cc278_RA1M_CASIM/',
-              '26_u-cd847_RA1M_CASIM/',
-              '27_u-ce112_RA1M_CASIM/']
+    # out_dir = ['23_u-cc278_RA1M_CASIM/',
+    #           '26_u-cd847_RA1M_CASIM/',
+    #           '27_u-ce112_RA1M_CASIM/']
+    out_dir = []
     ### CHOOSE MONC RUNS
     m_out_dir = ['5_control_20180913T0000Z_Wsub-1.5_Fletcher/',
                 '6_control_20180913T0000Z_Wsub-1.5-1km/',
-                '7_20180913T0000Z_Wsub-1.5-1km_solAccum-100_inuc-0_iact-3/']
-                #'3_control_20180913T0000Z/',
+                '7_20180913T0000Z_Wsub-1.5-1km_solAccum-100_inuc-0_iact-3/',
+                '8_control_20180913T0000Z_Wsub-1.0-1km',
+                '9_control_20180913T0000Z_Wsub-0.5-1km']
+            #'3_control_20180913T0000Z/',
             #'4_control_20180913T0000Z_Wsub-1.5/',
     #################################################################
     ## create labels for figure legends - done here so only needs to be done once!
