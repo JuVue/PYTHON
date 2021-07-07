@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import os
 
+from IPython import embed
 
 ## import python functions
 import sys
