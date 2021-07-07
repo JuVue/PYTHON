@@ -29,8 +29,9 @@ from manipFuncts import int2list
 # from conversionFuncts import reGrid_Sondes
 
 
-def plot_CvTimeseries(um_data,  obs_data, label,outstr, plots_out_dir,dates,  **args):
-    numsp=len(um_data)+1
+def plot_CvTimeseries(obs_data, plots_out_dir,dates,  **args):
+
+    numsp=1
     if bool(args):
         for n in range(0,len(args)):
             if  list(args.keys())[n] == 'monc_data':
@@ -40,6 +41,13 @@ def plot_CvTimeseries(um_data,  obs_data, label,outstr, plots_out_dir,dates,  **
                 mlabel = args[list(args.keys())[n]]
             elif list(args.keys())[n] == 'moutstr':
                 moutstr= args[list(args.keys())[n]]
+            elif  list(args.keys())[n] == 'um_data':
+                um_data=args[list(args.keys())[n]]
+                numsp += len(um_data)
+            elif list(args.keys())[n] == 'label':
+                label = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'outstr':
+                outstr= args[list(args.keys())[n]]
 
     ylims=[0,2.5]
     yticks=np.arange(0,2.5e3,0.5e3)
@@ -161,9 +169,9 @@ def plot_CvTimeseries(um_data,  obs_data, label,outstr, plots_out_dir,dates,  **
     print ('')
     print ('******')
 
-def plot_LWCTimeseries(um_data, obs_data,lwcvar,lwcstr, label,outstr,plots_out_dir, dates, **args): #, lon, lat):
+def plot_LWCTimeseries(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): #, lon, lat):
 
-    numsp=len(um_data)+1
+    numsp=1
     if bool(args):
         for n in range(0,len(args)):
             if  list(args.keys())[n] == 'monc_data':
@@ -173,6 +181,13 @@ def plot_LWCTimeseries(um_data, obs_data,lwcvar,lwcstr, label,outstr,plots_out_d
                 mlabel = args[list(args.keys())[n]]
             elif list(args.keys())[n] == 'moutstr':
                 moutstr= args[list(args.keys())[n]]
+            elif  list(args.keys())[n] == 'um_data':
+                um_data=args[list(args.keys())[n]]
+                numsp += len(um_data)
+            elif list(args.keys())[n] == 'label':
+                label = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'outstr':
+                outstr= args[list(args.keys())[n]]
 
     ylims=[0,2.5]
     yticks=np.arange(0,2.5e3,0.5e3)
@@ -299,9 +314,9 @@ def plot_LWCTimeseries(um_data, obs_data,lwcvar,lwcstr, label,outstr,plots_out_d
     print ('')
     print ('******')
 
-def plot_IWCTimeseries(um_data, obs_data,label,outstr, plots_out_dir, dates,**args): #, lon, lat):
+def plot_IWCTimeseries( obs_data, plots_out_dir, dates,**args): #, lon, lat):
 
-    numsp=len(um_data)+1
+    numsp=1
     if bool(args):
         for n in range(0,len(args)):
             if  list(args.keys())[n] == 'monc_data':
@@ -311,6 +326,13 @@ def plot_IWCTimeseries(um_data, obs_data,label,outstr, plots_out_dir, dates,**ar
                 mlabel = args[list(args.keys())[n]]
             elif list(args.keys())[n] == 'moutstr':
                 moutstr= args[list(args.keys())[n]]
+            elif  list(args.keys())[n] == 'um_data':
+                um_data=args[list(args.keys())[n]]
+                numsp += len(um_data)
+            elif list(args.keys())[n] == 'label':
+                label = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'outstr':
+                outstr= args[list(args.keys())[n]]
 
     ylims=[0,2.5]
     yticks=np.arange(0,2.5e3,0.5e3)
@@ -441,9 +463,9 @@ def plot_IWCTimeseries(um_data, obs_data,label,outstr, plots_out_dir, dates,**ar
     print ('')
     print ('******')
 
-def plot_TWCTimeseries(um_data, obs_data,twcvar,twcstr, label,outstr, plots_out_dir, dates,  **args):
+def plot_TWCTimeseries(obs_data,twcvar,twcstr,plots_out_dir, dates,  **args):
 
-    numsp=len(um_data)+1
+    numsp=1
     if bool(args):
         for n in range(0,len(args)):
             if  list(args.keys())[n] == 'monc_data':
@@ -453,6 +475,13 @@ def plot_TWCTimeseries(um_data, obs_data,twcvar,twcstr, label,outstr, plots_out_
                 mlabel = args[list(args.keys())[n]]
             elif list(args.keys())[n] == 'moutstr':
                 moutstr= args[list(args.keys())[n]]
+            elif  list(args.keys())[n] == 'um_data':
+                um_data=args[list(args.keys())[n]]
+                numsp += len(um_data)
+            elif list(args.keys())[n] == 'label':
+                label = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'outstr':
+                outstr= args[list(args.keys())[n]]
 
     ylims=[0,2.5]
     yticks=np.arange(0,2.5e3,0.5e3)
@@ -597,19 +626,26 @@ def plot_TWCTimeseries(um_data, obs_data,twcvar,twcstr, label,outstr, plots_out_
     print ('******')
 
 
-def plot_lwcProfiles(um_data, obs_data,lwcvar,lwcstr, thresholding, label,outstr,plots_out_dir,dates, **args): #, lon, lat):
+def plot_lwcProfiles(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,dates, **args): #, lon, lat):
 
-    obs_zorder = len(um_data)+1
+    obs_zorder = 1
 
     if bool(args):
         for n in range(0,len(args)):
             if  list(args.keys())[n] == 'monc_data':
                 monc_data=args[list(args.keys())[n]]
+                obs_zorder += len(monc_data)
             elif list(args.keys())[n] == 'mlabel':
                 mlabel = args[list(args.keys())[n]]
             elif list(args.keys())[n] == 'moutstr':
                 moutstr= args[list(args.keys())[n]]
-        obs_zorder += len(monc_data)
+            elif  list(args.keys())[n] == 'um_data':
+                um_data=args[list(args.keys())[n]]
+                obs_zorder += len(um_data)
+            elif list(args.keys())[n] == 'label':
+                label = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'outstr':
+                outstr= args[list(args.keys())[n]]
 
     print ('******')
     print ('')
@@ -794,19 +830,26 @@ def plot_lwcProfiles(um_data, obs_data,lwcvar,lwcstr, thresholding, label,outstr
     print ('******')
 
 
-def plot_iwcProfiles(um_data, obs_data, twcvar,twcstr, thresholding ,label,outstr,plots_out_dir,dates, **args): #, lon, lat):
+def plot_iwcProfiles(obs_data, twcvar,twcstr, thresholding,plots_out_dir,dates, **args): #, lon, lat):
 
-    obs_zorder = len(um_data)+1
+    obs_zorder = 1
 
     if bool(args):
         for n in range(0,len(args)):
             if  list(args.keys())[n] == 'monc_data':
                 monc_data=args[list(args.keys())[n]]
+                obs_zorder += len(monc_data)
             elif list(args.keys())[n] == 'mlabel':
                 mlabel = args[list(args.keys())[n]]
             elif list(args.keys())[n] == 'moutstr':
                 moutstr= args[list(args.keys())[n]]
-    obs_zorder += len(monc_data)
+            elif  list(args.keys())[n] == 'um_data':
+                um_data=args[list(args.keys())[n]]
+                obs_zorder += len(um_data)
+            elif list(args.keys())[n] == 'label':
+                label = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'outstr':
+                outstr= args[list(args.keys())[n]]
 
 
     print ('******')
@@ -988,18 +1031,26 @@ def plot_iwcProfiles(um_data, obs_data, twcvar,twcstr, thresholding ,label,outst
     print ('******')
 
 
-def plot_twcProfiles(um_data, obs_data,twcvar,twcstr, thresholding, label,outstr,plots_out_dir,dates, **args): #, lon, lat):
+def plot_twcProfiles( obs_data,twcvar,twcstr, thresholding, plots_out_dir,dates, **args): #, lon, lat):
 
-    obs_zorder = len(um_data)+1
+    obs_zorder = 1
+
     if bool(args):
         for n in range(0,len(args)):
             if  list(args.keys())[n] == 'monc_data':
                 monc_data=args[list(args.keys())[n]]
+                obs_zorder += len(monc_data)
             elif list(args.keys())[n] == 'mlabel':
                 mlabel = args[list(args.keys())[n]]
             elif list(args.keys())[n] == 'moutstr':
                 moutstr= args[list(args.keys())[n]]
-        obs_zorder += len(monc_data)
+            elif  list(args.keys())[n] == 'um_data':
+                um_data=args[list(args.keys())[n]]
+                obs_zorder += len(um_data)
+            elif list(args.keys())[n] == 'label':
+                label = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'outstr':
+                outstr= args[list(args.keys())[n]]
 
 
     print ('******')
@@ -1783,17 +1834,17 @@ def main():
     # Cloudnet plot: Plot Cv statistics from drift period
     # -------------------------------------------------------------
     #figure = plot_CvProfiles(um_data, ifs_data, misc_data, ra2t_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs, obs_switch)
-    figure = plot_lwcProfiles(um_data, obs_data, lwcvar,lwcstr,thresholding, label,outstr, plots_out_dir,dates,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    figure = plot_iwcProfiles(um_data, obs_data, twcvar,twcstr,thresholding, label,outstr, plots_out_dir,dates,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    figure = plot_twcProfiles(um_data, obs_data, twcvar,twcstr,thresholding,  label,outstr, plots_out_dir,dates,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_lwcProfiles(obs_data, lwcvar,lwcstr,thresholding, plots_out_dir,dates, um_data=um_data,label=label,outstr=outsr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_iwcProfiles(obs_data, twcvar,twcstr,thresholding, plots_out_dir,dates, um_data=um_data,label=label,outstr=outsr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_twcProfiles(obs_data, twcvar,twcstr,thresholding, plots_out_dir,dates, um_data=um_data,label=label,outstr=outsr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
     # -------------------------------------------------------------
     # Cloudnet plot: Plot contour timeseries
     # -------------------------------------------------------------
-    figure = plot_CvTimeseries(um_data, obs_data, label, outstr, plots_out_dir, dates, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    figure = plot_LWCTimeseries(um_data,obs_data,  lwcvar,lwcstr,label, outstr, plots_out_dir, dates, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    figure = plot_TWCTimeseries(um_data, obs_data, twcvar,twcstr, label,outstr, plots_out_dir, dates, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    figure = plot_IWCTimeseries(um_data, obs_data, label, outstr,plots_out_dir, dates, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_CvTimeseries(obs_data,plots_out_dir, dates,  um_data=um_data,label=label,outstr=outsr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_LWCTimeseries(obs_data,  lwcvar,lwcstr, plots_out_dir, dates, um_data=um_data,label=label,outstr=outsr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_TWCTimeseries( obs_data, twcvar,twcstr, plots_out_dir, dates,  um_data=um_data,label=label,outstr=outsr,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_IWCTimeseries(obs_data, plots_out_dir, dates,  um_data=um_data,label=label,outstr=outsr,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_TWCTesting(um_data, ifs_data, misc_data, obs_data, data1, data2, data3, obs, month_flag, missing_files, doy)
 
     # -------------------------------------------------------------
