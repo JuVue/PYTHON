@@ -763,8 +763,8 @@ def plot_lwcProfiles(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,dates, 
     ###define colors
     lcols=['mediumseagreen','steelblue','darkblue']
     fcols=['mediumaquamarine','lightblue','blue']
-    lcolsmonc=['gold','darkorange','darkgoldenrod','orangered','firebrick']
-    fcolsmonc=['navajowhite','moccasin','goldenrod','lightsalmon','lightcoral']
+    lcolsmonc=['gold','darkgoldenrod','darkorange','orangered','firebrick']
+    fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
     #### ADIABATIC LWC
     plt.plot(np.nanmean(obs_data[lwcvar],0)*1e3,np.nanmean(obs_data['height'],0), color = 'k', linewidth = 3, label = 'Obs_UMgrid'  + lwcstr, zorder = obs_zorder)
     ax1.fill_betweenx(np.nanmean(obs_data['height'],0),np.nanmean(obs_data[lwcvar],0)*1e3 - np.nanstd(obs_data[lwcvar],0)*1e3,
@@ -962,8 +962,8 @@ def plot_iwcProfiles(obs_data, twcvar,twcstr, thresholding,plots_out_dir,dates, 
     ###define colors
     lcols=['mediumseagreen','steelblue','darkblue']
     fcols=['mediumaquamarine','lightblue','blue']
-    lcolsmonc=['gold','darkorange','darkgoldenrod','olive','darkolivegreen']
-    fcolsmonc=['navajowhite','moccasin','goldenrod','darkkhaki','khaki']
+    lcolsmonc=['gold','darkgoldenrod','darkorange','orangered','firebrick']
+    fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
 
     #### ADIABATIC IWC (all times)
     plt.plot(np.nanmean(obs_data['iwc'],0)*1e3,np.nanmean(obs_data['height'],0), color = 'k', linewidth = 3, label = 'Obs_UMgrid', zorder = obs_zorder)
@@ -1169,8 +1169,8 @@ def plot_twcProfiles( obs_data,twcvar,twcstr, thresholding, plots_out_dir,dates,
     ###define colors
     lcols=['mediumseagreen','steelblue','darkblue']
     fcols=['mediumaquamarine','lightblue','blue']
-    lcolsmonc=['gold','darkorange','darkgoldenrod','orangered','firebrick']
-    fcolsmonc=['navajowhite','moccasin','goldenrod','lightsalmon','lightcoral']
+    lcolsmonc=['gold','darkgoldenrod','darkorange','orangered','firebrick']
+    fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
     #### ADIABATIC LWC (where there are HATPRO LWP data available)
     plt.plot(np.nanmean(obs_data[twcvar],0)*1e3,np.nanmean(obs_data['height'],0), color = 'k', linewidth = 3, label = 'Obs_UMgrid' + twcstr, zorder = obs_zorder)
     ax1.fill_betweenx(np.nanmean(obs_data['height'],0),np.nanmean(obs_data[twcvar],0)*1e3 - np.nanstd(obs_data[twcvar],0)*1e3,
@@ -1480,10 +1480,10 @@ def main():
     print ('Start: ' + time.strftime("%c"))
     print ('')
 
-    names = ['20180913_oden_']
+    names = ['20180902_oden_']
 
-    sdate = dtime.datetime.strptime('2018091300','%Y%m%d%H')
-    edate = dtime.datetime.strptime('2018091313','%Y%m%d%H')
+    sdate = dtime.datetime.strptime('2018090200','%Y%m%d%H')
+    edate = dtime.datetime.strptime('2018090300','%Y%m%d%H')
 
     dates = [date2datenum(sdate),date2datenum(edate)]
     moccha_missing_files = ['20180813_oden_','20180910_oden_']   ### cloud radar not working    #,'20180914_oden_'
@@ -1739,8 +1739,8 @@ def main():
     print ('Loading MONC data:')
     print ('')
     ###1d variables, 2d variables (time,height), 3d variables (time,x,y), 4d variables(time,x,y,z)
-    monc_var_list =[['time_series_2_60','time_series_20_600' ,'z','rho', 'LWP_mean','IWP_mean','SWP_mean','TOT_IWP_mean','GWP_mean'],
-                    ['theta_mean','total_cloud_fraction', 'liquid_cloud_fraction','ice_cloud_fraction',
+    monc_var_list =[['time_series_2_60','time_series_20_600' ,'z', 'LWP_mean','IWP_mean','SWP_mean','TOT_IWP_mean','GWP_mean'],
+                    ['rho','theta_mean','total_cloud_fraction', 'liquid_cloud_fraction','ice_cloud_fraction',
                     'vapour_mmr_mean','liquid_mmr_mean','rain_mmr_mean','ice_mmr_mean','snow_mmr_mean',
                     'graupel_mmr_mean']]
                 #    ['vwp','lwp','rwp','iwp','swp','gwp','tot_iwp'],
