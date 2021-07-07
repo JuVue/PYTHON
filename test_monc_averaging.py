@@ -39,15 +39,15 @@ monc_var_list =[['time_series_2_60','time_series_20_600' ,'z','rho', 'LWP_mean',
 ncm = {}
 monc_data = {}
 print(monc_filename)
-  ncm = Dataset(monc_filename,'r')
-  for c in range(0,len(monc_var_list)):
-      for j in range(0,len(monc_var_list[c])):
-          monc_data[monc_var_list[c][j]] = ncm.variables[monc_var_list[c][j]][:]
+ncm = Dataset(monc_filename,'r')
+for c in range(0,len(monc_var_list)):
+  for j in range(0,len(monc_var_list[c])):
+      monc_data[monc_var_list[c][j]] = ncm.variables[monc_var_list[c][j]][:]
 
-  monc_data['time2']=monc_data['time_series_20_600'] #2d data
-  monc_data['time1']=monc_data['time_series_2_60'] #1d data
-  monc_data.pop('time_series_2_60')
-  monc_data.pop('time_series_20_600')
+monc_data['time2']=monc_data['time_series_20_600'] #2d data
+monc_data['time1']=monc_data['time_series_2_60'] #1d data
+monc_data.pop('time_series_2_60')
+monc_data.pop('time_series_20_600')
 
 print (' Monc data Loaded!')
 
