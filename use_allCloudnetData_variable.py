@@ -1793,6 +1793,7 @@ def main():
                     tvar[var].append('time2')
                 elif "'time_series_20_600'" in str(tmp):
                     tvar[var].append('time3')
+        embed()
         monc_data[m][zvar]=zvar
         monc_data[m][tvar]=tvar
 
