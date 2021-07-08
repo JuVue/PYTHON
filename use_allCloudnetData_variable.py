@@ -1406,7 +1406,7 @@ def removeSpinUp(monc_data,monc_spin):
                     monc_data[m][monc_var_list[j]]=np.delete(monc_data[m][monc_var_list[j]],id2,2)
                 elif tmp2 == 3:
                     monc_data[m][monc_var_list[j]]=np.delete(monc_data[m][monc_var_list[j]],id2,3)
-            elif monc_data[m][tvar][j]=='time3':
+            elif monc_data[m]['tvar'][monc_var_list[j]]=='time3':
             #elif any(np.array(monc_data[m][monc_var_list[j]].shape) == len(monc_data[m]['time2'])):
                 tmp2=np.argwhere(np.array(monc_data[m][monc_var_list[j]].shape) == len(monc_data[m]['time3']))
                 if tmp2 == 0:
