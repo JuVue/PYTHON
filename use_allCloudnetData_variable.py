@@ -1782,17 +1782,17 @@ def main():
                 ###getting right z and t dimensions
                 tmp=ncm.variables[var].dimensions
                 if "'z'" in str(tmp):
-                    zvar[var].append('z')
+                    zvar[var]='z'
                 elif "'zn'" in str(tmp):
-                    zvar[var].append('zn')
+                    zvar[var]='zn'
                 else:
                     zvar[var].append(np.nan)
                 if "'time_series_2_60'" in str(tmp):
-                    tvar[var].append('time1')
+                    tvar[var]='time1'
                 elif "'time_series_2_600'" in str(tmp):
-                    tvar[var].append('time2')
+                    tvar[var]='time2'
                 elif "'time_series_20_600'" in str(tmp):
-                    tvar[var].append('time3')
+                    tvar[var]='time3'
         embed()
         monc_data[m][zvar]=zvar
         monc_data[m][tvar]=tvar
