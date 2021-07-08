@@ -1392,10 +1392,10 @@ def removeSpinUp(monc_data,monc_spin):
 
 
         for j in range(0,len(monc_var_list)):
-            if monc_data[m][tvar][j]=='time1'
+            if monc_data[m][tvar][j]=='time1':
             #if any(np.array(monc_data[m][monc_var_list[j]].shape) == len(monc_data[m]['time1'])):
                 monc_data[m][monc_var_list[j]]=np.delete(monc_data[m][monc_var_list[j]],id1,0)
-            elif monc_data[m][tvar][j]=='time2'
+            elif monc_data[m][tvar][j]=='time2':
             #elif any(np.array(monc_data[m][monc_var_list[j]].shape) == len(monc_data[m]['time2'])):
                 tmp2=np.argwhere(np.array(monc_data[m][monc_var_list[j]].shape) == len(monc_data[m]['time2']))
                 if tmp2 == 0:
@@ -1406,7 +1406,7 @@ def removeSpinUp(monc_data,monc_spin):
                     monc_data[m][monc_var_list[j]]=np.delete(monc_data[m][monc_var_list[j]],id2,2)
                 elif tmp2 == 3:
                     monc_data[m][monc_var_list[j]]=np.delete(monc_data[m][monc_var_list[j]],id2,3)
-            elif monc_data[m][tvar][j]=='time3'
+            elif monc_data[m][tvar][j]=='time3':
             #elif any(np.array(monc_data[m][monc_var_list[j]].shape) == len(monc_data[m]['time2'])):
                 tmp2=np.argwhere(np.array(monc_data[m][monc_var_list[j]].shape) == len(monc_data[m]['time3']))
                 if tmp2 == 0:
