@@ -1775,7 +1775,7 @@ def main():
         tvar={}
         for c in range(0,len(monc_var_list)):
             for j in range(0,len(monc_var_list[c])):
-                var = monc_var_list[c][j]]
+                var = monc_var_list[c][j]
                 zvar[var]=[]
                 tvar[var]=[]
                 monc_data[m][var] = ncm.variables[var][:]
