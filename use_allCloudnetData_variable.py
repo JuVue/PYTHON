@@ -1786,16 +1786,15 @@ def main():
                 elif "'zn'" in str(tmp):
                     zvar[var]='zn'
                 else:
-                    zvar[var].append(np.nan)
+                    zvar[var]=np.nan
                 if "'time_series_2_60'" in str(tmp):
                     tvar[var]='time1'
                 elif "'time_series_2_600'" in str(tmp):
                     tvar[var]='time2'
                 elif "'time_series_20_600'" in str(tmp):
                     tvar[var]='time3'
-        embed()
-        monc_data[m][zvar]=zvar
-        monc_data[m][tvar]=tvar
+        monc_data[m]['zvar']=zvar
+        monc_data[m]['tvar']=tvar
 
         monc_data[m]['time3']=monc_data[m]['time_series_20_600'] #2d data
         monc_data[m]['time2']=monc_data[m]['time_series_2_600'] #2d data
