@@ -1385,6 +1385,8 @@ def removeSpinUp(monc_data,monc_spin):
         monc_var_list.remove('time1')
         monc_var_list.remove('time2')
         monc_var_list.remove('time3')
+        monc_var_list.remove('tvar')
+        monc_var_list.remove('zvar')
 
         id1 = np.squeeze(np.argwhere(monc_data[m]['time1']<=monc_spin)) #1D data
         id2 = np.squeeze(np.argwhere(monc_data[m]['time2']<=monc_spin))
