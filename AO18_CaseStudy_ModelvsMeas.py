@@ -24,10 +24,26 @@ from readMAT import readMatlabStruct
 #from pyFixes import py3_FixNPLoad
 
 
-def plot_surfaceVariables(um_data, obs_data, monc_data, label, mlabel, plot_out_dir, dates ):
+def plot_surfaceVariables(obs_data, label, mlabel, plot_out_dir, dates,**args ):
 
-    numsp=len(um_data)+1
-    numsp += len(monc_data)
+    numsp=1
+    if bool(args):
+        for n in range(0,len(args)):
+            if  list(args.keys())[n] == 'monc_data':
+                monc_data=args[list(args.keys())[n]]
+                numsp += len(monc_data)
+            elif list(args.keys())[n] == 'mlabel':
+                mlabel = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'moutstr':
+                moutstr= args[list(args.keys())[n]]
+            elif  list(args.keys())[n] == 'um_data':
+                um_data=args[list(args.keys())[n]]
+                numsp += len(um_data)
+            elif list(args.keys())[n] == 'label':
+                label = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'outstr':
+                outstr= args[list(args.keys())[n]]
+
 
 
     print ('******')
@@ -50,8 +66,8 @@ def plot_surfaceVariables(um_data, obs_data, monc_data, label, mlabel, plot_out_
 
     lcols=['mediumseagreen','steelblue','darkblue']
     fcols=['mediumaquamarine','lightblue','blue']
-    lcolsmonc=['gold','darkorange','darkgoldenrod']
-    fcolsmonc=['navajowhite','moccasin','goldenrod']
+    lcolsmonc=['gold','darkgoldenrod','darkorange','orangered','firebrick']
+    fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
 
     #################################################################
     ## create figure and axes instances
@@ -69,7 +85,7 @@ def plot_surfaceVariables(um_data, obs_data, monc_data, label, mlabel, plot_out_
     for m in range(0,len(um_data)):
         plt.plot(um_data[m]['time'], um_data[m]['air_temperature_at_1.5m']-273.15, color = lcols[m], label = label[m])
     for m in range(0,len(monc_data)):
-        plt.plot(monc_data[m]['time'], um_data[m]['air_temperature_at_1.5m']-273.15, color = lcolsmonc[m], label = mlabel[m])
+        plt.plot(monc_data[m]['time'], monc_data[m]['air_temperature_at_1.5m']-273.15, color = lcolsmonc[m], label = mlabel[m])
     plt.ylabel('T [$^\circ$C]')
     plt.legend(bbox_to_anchor=(-0.08, 0.77, 1., .102), loc=4, ncol=4)
     ax.set_xlim([dates[0], dates[1]])
@@ -237,8 +253,13 @@ def main():
 
     m_sub_dir = 'OUT_R0_24h'
     ### CHOOSE DATES TO PLOT
-    DATES = 2018091300
-    ENDDATE=2018091315
+    DATE = 20180913
+    strdate=str(DATE)
+
+    sdate = dtime.datetime.strptime('2018091300','%Y%m%d%H')
+    edate = dtime.datetime.strptime('2018091313','%Y%m%d%H')
+    dates = [date2datenum(sdate),date2datenum(edate)]
+
 
     ### SET OUTPUT DIRECTORY FOR PLOTS
     plot_out_dir = '/nfs/a96/MOCCHA/working/jutta/plots/CaseStudies/ModelComparison/'
@@ -251,13 +272,6 @@ def main():
     print ('')
     print ('Identifying .nc file: ')
     print ('')
-
-
-    strdate = str(DATES)
-    estrdate=str(ENDDATE)
-    datenum = date2datenum(datetime.datetime.strptime(strdate,'%Y%m%d%H'))
-    edatenum = date2datenum(datetime.datetime.strptime(estrdate,'%Y%m%d%H'))
-
 
     ### -------------------------------------------------------------------------
     ### define UM input filename
@@ -457,8 +471,8 @@ def main():
     # -------------------------------------------------------------
     # Plot paper figures
     # -------------------------------------------------------------
-    figure = plot_surfaceVariables(um_data,obs, monc_data, plots_out_dir, dates,label1,label2,label3,plot_out_dir)
-    figure = plot_radiation(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3,datenum,edatenum,label1,label2,label3,plot_out_dir)
+    figure = plot_surfaceVariables(obs,plots_out_dir, dates,plot_out_dir, um_data=um_data,label=label,outsr=outsr, monc_data=monc_data,mlabel=mlabel,moutsr=moutsr)
+    figure = plot_radiation(obs,plots_out_dir, dates,plot_out_dir, um_data=um_data,label=label,outsr=outsr, monc_data=monc_data,mlabel=mlabel,moutsr=moutsr)
     # figure = plot_paperFluxes(data1, data2, data3, month_flag, missing_files, out_dir1, out_dir2, out_dir3, obs, doy, label1, label2, label3)
     # figure = plot_paperRadiation(data1, data2, data3, out_dir1, out_dir2, out_dir3,datenum,label1,label2,label3,plot_out_dir)
     # figure = plot_Precipitation(data1, data2, data3, data4, month_flag, missing_files, out_dir1, out_dir2, out_dir3, obs, doy, label1, label2, label3, label4)
