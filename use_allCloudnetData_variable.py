@@ -133,7 +133,9 @@ def plot_CvTimeseries(obs_data, plots_out_dir,dates,  **args):
         for m in range(0,len(monc_data)):
             plt.subplot(numsp,1,numsp-len(monc_data)+1+m)
             ax = plt.gca()
-            plt.contourf(monc_data[m]['time2']/60/60, np.squeeze(monc_data[m]['z'][:]), np.transpose(monc_data[m]['total_cloud_fraction']),
+            plt.contourf(monc_data[m][monc_data[m]['tvar']['total_cloud_fraction']]/60/60,
+                np.squeeze(monc_data[m][monc_data[m]['zvar']['total_cloud_fraction']][:]),
+                np.transpose(monc_data[m]['total_cloud_fraction']),
                 np.arange(0,1.1,0.1),
                 cmap = newcmp,
                 zorder = 1)
@@ -220,7 +222,8 @@ def plot_LWCTimeseries(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): #,
         for m in range(0,len(monc_data)):
             monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
             monc_data[m]['model_lwc'][monc_data[m]['model_lwc'] <= 0.0] = np.nan
-
+            lwc_tvar=[monc_data[m]['tvar']['liquid_mmr_mean']
+            lwc_zvar=[monc_data[m]['zvar']['liquid_mmr_mean']
     print ('******')
     print ('')
     print ('Plotting LWC timeseries for whole drift period:')
@@ -285,13 +288,13 @@ def plot_LWCTimeseries(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): #,
             plt.subplot(numsp,1,numsp-len(monc_data)+1+m)
             ax = plt.gca()
             # ax.set_facecolor('aliceblue')
-            plt.contourf(monc_data[m]['time2']/60/60, np.squeeze(monc_data[m]['z'][:]), np.transpose(monc_data[m]['model_lwc'])*1e3,
+            plt.contourf(monc_data[m][tvar]/60/60, np.squeeze(monc_data[m][zvar][:]), np.transpose(monc_data[m]['model_lwc'])*1e3,
             levels=clev,cmap = newcmp)
             plt.ylabel('Z [km]')
             plt.ylim(ylims)
             plt.yticks(yticks)
             ax.set_yticklabels(ytlabels)
-            xticks=np.arange(np.floor(monc_data[m]['time2'][0]/60/60),np.ceil(monc_data[m]['time2'][-1]/60/60)+1,2,dtype=int)
+            xticks=np.arange(np.floor(monc_data[m][tvar][0]/60/60),np.ceil(monc_data[m][tvar][-1]/60/60)+1,2,dtype=int)
             xlabs=[x*100 for x in xticks]
             xlabs=["{0:-04d}".format(t) for t in xlabs]
             plt.xticks(xticks)
@@ -346,6 +349,8 @@ def plot_IWCTimeseries( obs_data, plots_out_dir, dates,**args): #, lon, lat):
         for m in range(0,len(monc_data)):
             monc_data[m]['model_iwc']= (monc_data[m]['ice_mmr_mean']+monc_data[m]['graupel_mmr_mean']+monc_data[m]['snow_mmr_mean'])*monc_data[m]['rho']
             monc_data[m]['model_iwc'][monc_data[m]['model_iwc'] <= 0.0] = np.nan
+            iwc_tvar=[monc_data[m]['tvar']['ice_mmr_mean']
+            iwc_zvar=[monc_data[m]['zvar']['ice_mmr_mean']
 
     print ('******')
     print ('')
@@ -433,14 +438,14 @@ def plot_IWCTimeseries( obs_data, plots_out_dir, dates,**args): #, lon, lat):
             plt.subplot(numsp,1,numsp-len(monc_data)+1+m)
             ax = plt.gca()
             # ax.set_facecolor('aliceblue')
-            plt.contourf(monc_data[m]['time2']/60/60, np.squeeze(monc_data[m]['z'][:]), np.transpose(monc_data[m]['model_iwc'])*1e3,
+            plt.contourf(monc_data[m][tvar]/60/60, np.squeeze(monc_data[m][zvar][:]), np.transpose(monc_data[m]['model_iwc'])*1e3,
             levels=clev,norm = LogNorm(),cmap = newcmp)
     #        cmap=newcmp,vmin = 0.0, vmax = cmax)
             plt.ylabel('Z [km]')
             plt.ylim(ylims)
             plt.yticks(yticks)
             ax.set_yticklabels(ytlabels)
-            xticks=np.arange(np.floor(monc_data[m]['time2'][0]/60/60),np.ceil(monc_data[m]['time2'][-1]/60/60)+1,2,dtype=int)
+            xticks=np.arange(np.floor(monc_data[m][tvar][0]/60/60),np.ceil(monc_data[m][tvar][-1]/60/60)+1,2,dtype=int)
             xlabs=[x*100 for x in xticks]
             xlabs=["{0:-04d}".format(t) for t in xlabs]
             plt.xticks(xticks)
@@ -508,6 +513,8 @@ def plot_TWCTimeseries(obs_data,twcvar,twcstr,plots_out_dir, dates,  **args):
             monc_data[m]['model_iwc']= (monc_data[m]['ice_mmr_mean']+monc_data[m]['graupel_mmr_mean']+monc_data[m]['snow_mmr_mean'])*monc_data[m]['rho']
             monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
             monc_data[m]['model_twc'] = monc_data[m]['model_lwc'] +monc_data[m]['model_iwc']
+            twc_tvar=[monc_data[m]['tvar']['liquid_mmr_mean']
+            twc_zvar=[monc_data[m]['zvar']['liquid_mmr_mean']
 
     twc0 = np.transpose(obs_data[twcvar])*1e3
 
@@ -595,7 +602,7 @@ def plot_TWCTimeseries(obs_data,twcvar,twcstr,plots_out_dir, dates,  **args):
             plt.subplot(numsp,1,numsp-len(monc_data)+1+m)
             ax = plt.gca()
             # ax.set_facecolor('aliceblue')
-            plt.contourf(monc_data[m]['time2']/60/60, np.squeeze(monc_data[m]['z'][:]), np.transpose(monc_data[m]['model_twc'])*1e3,
+            plt.contourf(monc_data[m][tvar]/60/60, np.squeeze(monc_data[m][zvar][:]), np.transpose(monc_data[m]['model_twc'])*1e3,
             levels=clevs, norm = LogNorm(),
             cmap = newcmp)
             # )
@@ -603,7 +610,7 @@ def plot_TWCTimeseries(obs_data,twcvar,twcstr,plots_out_dir, dates,  **args):
             plt.ylim(ylims)
             plt.yticks(yticks)
             ax.set_yticklabels(ytlabels)
-            xticks=np.arange(np.floor(monc_data[m]['time2'][0]/60/60),np.ceil(monc_data[m]['time2'][-1]/60/60)+1,2,dtype=int)
+            xticks=np.arange(np.floor(monc_data[m][tvar][0]/60/60),np.ceil(monc_data[m][tvar][-1]/60/60)+1,2,dtype=int)
             xlabs=[x*100 for x in xticks]
             xlabs=["{0:-04d}".format(t) for t in xlabs]
             plt.xticks(xticks)
@@ -665,6 +672,7 @@ def plot_lwcProfiles(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,dates, 
             monc_data[m]['model_iwc']= (monc_data[m]['ice_mmr_mean']+monc_data[m]['graupel_mmr_mean']+monc_data[m]['snow_mmr_mean'])*monc_data[m]['rho']
             monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
             monc_data[m]['model_twc'] = monc_data[m]['model_lwc'] +monc_data[m]['model_iwc']
+            lwc_zvar=[monc_data[m]['zvar']['liquid_mmr_mean']
 
     if thresholding == True:
         ####-------------------------------------------------------------------------
@@ -716,9 +724,9 @@ def plot_lwcProfiles(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,dates, 
             twc_thresh_monc = np.zeros([np.size(monc_data[m]['model_twc'],1)])
             ### first look at values below 1 km
             ###     find Z indices <= 1km, then set twc_thresh values to 1e-6
-            monc_lt1km = np.where(monc_data[m]['z'][:]<=1e3)
+            monc_lt1km = np.where(monc_data[m][zvar][:]<=1e3)
             twc_thresh_monc[monc_lt1km] = 1e-6
-            monc_lt1km = np.where(monc_data[m]['z'][:]>=4e3)
+            monc_lt1km = np.where(monc_data[m][zvar][:]>=4e3)
             twc_thresh_monc[monc_lt1km] = 1e-7
             monc_intZs = np.where(twc_thresh_monc == 0.0)
 
@@ -727,7 +735,7 @@ def plot_lwcProfiles(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,dates, 
             y = [1e3, 4e3]
             f = interp1d(y, x)
             for m in range(0,len(monc_data)):
-                twc_thresh_monc[monc_intZs] = f(monc_data[m]['z'][monc_intZs].data)
+                twc_thresh_monc[monc_intZs] = f(monc_data[m][zvar][monc_intZs].data)
 
             for t in range(0,np.size(monc_data[m]['model_twc'],0)):
                 for k in range(0,np.size(monc_data[m]['model_twc'],1)):
@@ -783,17 +791,17 @@ def plot_lwcProfiles(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,dates, 
             '--', color = lcols[m], linewidth = 0.5)
     if bool(args):
         for m in range(0,len(monc_data)):
-            ax1.fill_betweenx(monc_data[m]['z'],np.nanmean(monc_data[m]['model_lwc'],0)*1e3 - np.nanstd(monc_data[m]['model_lwc']*1e3,0),
+            ax1.fill_betweenx(monc_data[m][zvar],np.nanmean(monc_data[m]['model_lwc'],0)*1e3 - np.nanstd(monc_data[m]['model_lwc']*1e3,0),
                 np.nanmean(monc_data[m]['model_lwc'],0)*1e3 + np.nanstd(monc_data[m]['model_lwc'],0)*1e3, color = fcolsmonc[m], alpha = 0.05)
-            plt.plot(np.nanmean(monc_data[m]['model_lwc'],0)*1e3 - np.nanstd(monc_data[m]['model_lwc'],0)*1e3, monc_data[m]['z'],
+            plt.plot(np.nanmean(monc_data[m]['model_lwc'],0)*1e3 - np.nanstd(monc_data[m]['model_lwc'],0)*1e3, monc_data[m][zvar],
                 '--', color =lcolsmonc[m], linewidth = 0.5)
-            plt.plot(np.nanmean(monc_data[m]['model_lwc'],0)*1e3 + np.nanstd(monc_data[m]['model_lwc'],0)*1e3, monc_data[m]['z'],
+            plt.plot(np.nanmean(monc_data[m]['model_lwc'],0)*1e3 + np.nanstd(monc_data[m]['model_lwc'],0)*1e3, monc_data[m][zvar],
                 '--', color = lcolsmonc[m], linewidth = 0.5)
     for m in range(0,len(um_data)):
         plt.plot(np.nanmean(um_data[m]['model_lwc'],0)*1e3,np.nanmean(um_data[m]['height'],0), color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
     if bool(args):
         for m in range(0,len(monc_data)):
-            plt.plot(np.nanmean(monc_data[m]['model_lwc'],0)*1e3,monc_data[m]['z'], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+            plt.plot(np.nanmean(monc_data[m]['model_lwc'],0)*1e3,monc_data[m][zvar], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
 
     plt.xlabel('Liquid water content [g m$^{-3}$]')
     plt.ylabel('Z [km]')
@@ -870,6 +878,7 @@ def plot_iwcProfiles(obs_data, twcvar,twcstr, thresholding,plots_out_dir,dates, 
             monc_data[m]['model_iwc']= (monc_data[m]['ice_mmr_mean']+monc_data[m]['graupel_mmr_mean']+monc_data[m]['snow_mmr_mean'])*monc_data[m]['rho']
             monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
             monc_data[m]['model_twc'] = monc_data[m]['model_lwc'] +monc_data[m]['model_iwc']
+            twc_zvar=[monc_data[m]['zvar']['liquid_mmr_mean']
 
     if thresholding ==True:
         ####-------------------------------------------------------------------------
@@ -915,9 +924,9 @@ def plot_iwcProfiles(obs_data, twcvar,twcstr, thresholding,plots_out_dir,dates, 
             twc_thresh_monc = np.zeros([np.size(monc_data[m]['model_twc'],1)])
             ### first look at values below 1 km
             ###     find Z indices <= 1km, then set twc_thresh values to 1e-6
-            monc_lt1km = np.where(monc_data[m]['z'][:]<=1e3)
+            monc_lt1km = np.where(monc_data[m][zvar][:]<=1e3)
             twc_thresh_monc[monc_lt1km] = 1e-6
-            monc_lt1km = np.where(monc_data[m]['z'][:]>=4e3)
+            monc_lt1km = np.where(monc_data[m][zvar][:]>=4e3)
             twc_thresh_monc[monc_lt1km] = 1e-7
             monc_intZs = np.where(twc_thresh_monc == 0.0)
 
@@ -926,7 +935,7 @@ def plot_iwcProfiles(obs_data, twcvar,twcstr, thresholding,plots_out_dir,dates, 
             y = [1e3, 4e3]
             f = interp1d(y, x)
             for m in range(0,len(monc_data)):
-                twc_thresh_monc[monc_intZs] = f(monc_data[m]['z'][monc_intZs].data)
+                twc_thresh_monc[monc_intZs] = f(monc_data[m][zvar][monc_intZs].data)
 
             for t in range(0,np.size(monc_data[m]['model_twc'],0)):
                 for k in range(0,np.size(monc_data[m]['model_twc'],1)):
@@ -983,17 +992,17 @@ def plot_iwcProfiles(obs_data, twcvar,twcstr, thresholding,plots_out_dir,dates, 
             '--', color = lcols[m], linewidth = 0.5)
     if bool(args):
         for m in range(0,len(monc_data)):
-            ax1.fill_betweenx(monc_data[m]['z'],np.nanmean(monc_data[m]['model_iwc'],0)*1e3 - np.nanstd(monc_data[m]['model_iwc']*1e3,0),
+            ax1.fill_betweenx(monc_data[m][zvar],np.nanmean(monc_data[m]['model_iwc'],0)*1e3 - np.nanstd(monc_data[m]['model_iwc']*1e3,0),
                 np.nanmean(monc_data[m]['model_iwc'],0)*1e3 + np.nanstd(monc_data[m]['model_iwc'],0)*1e3, color = fcolsmonc[m], alpha = 0.05)
-            plt.plot(np.nanmean(monc_data[m]['model_iwc'],0)*1e3 - np.nanstd(monc_data[m]['model_iwc'],0)*1e3, monc_data[m]['z'],
+            plt.plot(np.nanmean(monc_data[m]['model_iwc'],0)*1e3 - np.nanstd(monc_data[m]['model_iwc'],0)*1e3, monc_data[m][zvar],
                 '--', color =lcolsmonc[m], linewidth = 0.5)
-            plt.plot(np.nanmean(monc_data[m]['model_iwc'],0)*1e3 + np.nanstd(monc_data[m]['model_iwc'],0)*1e3, monc_data[m]['z'],
+            plt.plot(np.nanmean(monc_data[m]['model_iwc'],0)*1e3 + np.nanstd(monc_data[m]['model_iwc'],0)*1e3, monc_data[m][zvar],
                 '--', color = lcolsmonc[m], linewidth = 0.5)
     for m in range(0,len(um_data)):
         plt.plot(np.nanmean(um_data[m]['model_iwc'],0)*1e3,np.nanmean(um_data[m]['height'],0), color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
     if bool(args):
         for m in range(0,len(monc_data)):
-            plt.plot(np.nanmean(monc_data[m]['model_iwc'],0)*1e3,monc_data[m]['z'], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+            plt.plot(np.nanmean(monc_data[m]['model_iwc'],0)*1e3,monc_data[m][zvar], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
 
     plt.xlabel('Ice water content [g m$^{-3}$]')
     plt.ylabel('Z [km]')
@@ -1071,7 +1080,6 @@ def plot_twcProfiles( obs_data,twcvar,twcstr, thresholding, plots_out_dir,dates,
             monc_data[m]['model_iwc']= (monc_data[m]['ice_mmr_mean']+monc_data[m]['graupel_mmr_mean']+monc_data[m]['snow_mmr_mean'])*monc_data[m]['rho']
             monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
             monc_data[m]['model_twc'] = monc_data[m]['model_lwc'] +monc_data[m]['model_iwc']
-            embed()
             monc_data[m]['twc_height'] = monc_data[m][monc_data[m]['zvar']['ice_mmr_mean']]
     if thresholding == True:
         ####-------------------------------------------------------------------------
@@ -1123,9 +1131,9 @@ def plot_twcProfiles( obs_data,twcvar,twcstr, thresholding, plots_out_dir,dates,
             twc_thresh_monc = np.zeros([np.size(monc_data[m]['model_twc'],1)])
             ### first look at values below 1 km
             ###     find Z indices <= 1km, then set twc_thresh values to 1e-6
-            monc_lt1km = np.where(monc_data[m]['z'][:]<=1e3)
+            monc_lt1km = np.where(monc_data[m][zvar][:]<=1e3)
             twc_thresh_monc[monc_lt1km] = 1e-6
-            monc_lt1km = np.where(monc_data[m]['z'][:]>=4e3)
+            monc_lt1km = np.where(monc_data[m][zvar][:]>=4e3)
             twc_thresh_monc[monc_lt1km] = 1e-7
             monc_intZs = np.where(twc_thresh_monc == 0.0)
 
@@ -1134,7 +1142,7 @@ def plot_twcProfiles( obs_data,twcvar,twcstr, thresholding, plots_out_dir,dates,
             y = [1e3, 4e3]
             f = interp1d(y, x)
             for m in range(0,len(monc_data)):
-                twc_thresh_monc[monc_intZs] = f(monc_data[m]['z'][monc_intZs].data)
+                twc_thresh_monc[monc_intZs] = f(monc_data[m][zvar][monc_intZs].data)
 
             for t in range(0,np.size(monc_data[m]['model_twc'],0)):
                 for k in range(0,np.size(monc_data[m]['model_twc'],1)):
@@ -1145,7 +1153,7 @@ def plot_twcProfiles( obs_data,twcvar,twcstr, thresholding, plots_out_dir,dates,
 
             # ### plot profile of threshold as sanity check
             # plt.plot(twc_thresh_um, um_data[0]['height'][0,:])
-            # plt.plot(twc_thresh_monc, monc_data[0]['z'][:]); plt.show()
+            # plt.plot(twc_thresh_monc, monc_data[0][zvar][:]); plt.show()
             # print (twc_thresh_monc)
 
     ###----------------------------------------------------------------
