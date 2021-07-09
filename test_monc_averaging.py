@@ -83,6 +83,7 @@ dnew={}
 vars=['lwp','iwp','swp','gwp']
 
 for c in vars:
+    monc_data[c][monc_data[c]<=0.0]=np.nan
     dnew[c.upper() +'_mean'] = np.nanmean(monc_data[c],axis=(1,2))
 
 vars = list(dnew.keys())
@@ -95,6 +96,5 @@ for c in vars:
     plt.plot(monc_data['time_series_2_600'],dnew[c],'bo')
     m+=1
 
-plt.pcolor(monc_data['lwp'][:,:,500])
 
 embed()
