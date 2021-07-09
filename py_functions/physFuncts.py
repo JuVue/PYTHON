@@ -24,16 +24,27 @@ def calcAirDensity(temperature, pressure):
 
     print('Calculating air density profile:')
     print('')
-    ### if temperature is 1D
-    if np.ndim(temperature) == 1:
-        rho = np.zeros([np.size(temperature)])
-        for k in range(0,np.size(temperature)):
-            rho[k] = pressure[k] / (R * temperature[k])
-    ### if temperature is 2D
-    elif np.ndim(temperature) == 2:
-        rho = np.zeros([np.size(temperature,0), np.size(temperature,1)])
-        for k in range(0,np.size(temperature, 1)):
-            rho[:,k] = pressure[:,k] / (R * temperature[:,k])
+    #converting to np array
+    if not isinstance(pressure,'np.ndarray'):
+        pressure= np.array(pressure)
+    if not isinstance(temperature, 'np.ndarray'):
+        temperature= np.array(temperature)
+
+    #converting to hpa and K
+    pressure[np.argwhere(pressure>1100)] = pressure[np.argwhere(pressure>1100)]/100
+    temperature[np.argwhere(temperature<200)] = temperature[np.argwhere(temperature<200)]+273.15
+
+    rho = pressure / (R*temperature)
+    # ### if temperature is 1D
+    # if np.ndim(temperature) == 1:
+    #     rho = np.zeros([np.size(temperature)])
+    #     for k in range(0,np.size(temperature)):
+    #         rho[k] = pressure[k] / (R * temperature[k])
+    # ### if temperature is 2D
+    # elif np.ndim(temperature) == 2:
+    #     rho = np.zeros([np.size(temperature,0), np.size(temperature,1)])
+    #     for k in range(0,np.size(temperature, 1)):
+    #         rho[:,k] = pressure[:,k] / (R * temperature[:,k])
 
     # print rho
 
@@ -236,7 +247,18 @@ def calcT(theta,pressure):
     cp = 1004.6      # J/kg.K
     cpd = 1005.7     # J/kg.K
     Rd = 287.04   # dry air J kg^-1 K^-1
-    p0 = 1e5   # hPa
+    p0 = 1e3   # hPa
+
+
+    #converting to np array
+    if not isinstance(pressure,'np.ndarray'):
+        pressure= np.array(pressure)
+    if not isinstance(theta, 'np.ndarray'):
+        theta= np.array(theta)
+
+    #converting to hpa and K
+    pressure[np.argwhere(pressure>1100)] = pressure[np.argwhere(pressure>1100)]/100
+    theta[np.argwhere(theta<200)] = theta[np.argwhere(theta<200)]+273.15
 
     temperature = theta / np.power(p0 / pressure,Rd/cp)
     return temperature
