@@ -37,7 +37,7 @@ print ('')
 #               'graupel_mmr_mean'],
 #               ['vwp','lwp','rwp','iwp','swp','gwp','tot_iwp']]
 #               #['q_vapour','q_cloud_liquid_mass','q_rain_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
-monc_var_list =[['time_series_2_60','time_series_2_600','time_series_20_600' ,'z','zn','prefn','p','thref','tinit'],
+monc_var_list =[['time_series_2_60','time_series_2_600','time_series_20_600' ,'z','zn','prefn','thref','tinit'],
               ['rho','rhon','theta_mean','w_wind_mean','u_wind_mean','v_wind_mean','total_cloud_fraction', 'liquid_cloud_fraction','ice_cloud_fraction',
               'vapour_mmr_mean','liquid_mmr_mean','rain_mmr_mean','ice_mmr_mean','snow_mmr_mean',
               'graupel_mmr_mean'],
@@ -48,6 +48,7 @@ ncm = {}
 monc_data = {}
 print(monc_filename)
 ncm = Dataset(monc_filename,'r')
+for var in ncm.variables(): print(var)
 monc_data={}
 zvar={}
 tvar={}
