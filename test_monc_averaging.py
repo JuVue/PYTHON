@@ -30,12 +30,17 @@ monc_filename= monc_root_dir + m_out_dir + 'moccha_casim_dg_72000.nc'
 print ('Loading MONC data:')
 print ('')
 ###1d variables, 2d variables (time,height), 3d variables (time,x,y), 4d variables(time,x,y,z)
-monc_var_list =[['time_series_2_60','time_series_2_600','time_series_20_600' ,'z','zn', 'LWP_mean','IWP_mean','SWP_mean','TOT_IWP_mean','GWP_mean'],
-              ['rho','rhon','theta_mean','total_cloud_fraction', 'liquid_cloud_fraction','ice_cloud_fraction',
+# monc_var_list =[['time_series_2_60','time_series_2_600','time_series_20_600' ,'z','zn', 'LWP_mean','IWP_mean','SWP_mean','TOT_IWP_mean','GWP_mean'],
+#               ['rho','rhon','theta_mean','total_cloud_fraction', 'liquid_cloud_fraction','ice_cloud_fraction',
+#               'vapour_mmr_mean','liquid_mmr_mean','rain_mmr_mean','ice_mmr_mean','snow_mmr_mean',
+#               'graupel_mmr_mean'],
+#               ['vwp','lwp','rwp','iwp','swp','gwp','tot_iwp']]
+#               #['q_vapour','q_cloud_liquid_mass','q_rain_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
+monc_var_list =[['time_series_2_60','time_series_2_600','time_series_20_600' ,'z','zn'],
+              ['rho','rhon','theta_mean','w_wind_mean','u_wind_mean','v_wind_mean','total_cloud_fraction', 'liquid_cloud_fraction','ice_cloud_fraction',
               'vapour_mmr_mean','liquid_mmr_mean','rain_mmr_mean','ice_mmr_mean','snow_mmr_mean',
               'graupel_mmr_mean'],
-              ['vwp','lwp','rwp','iwp','swp','gwp','tot_iwp']]
-              #['q_vapour','q_cloud_liquid_mass','q_rain_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
+              ['u','v','w','th']]#['q_vapour','q_cloud_liquid_mass','q_rain_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
 
 ncm = {}
 monc_data = {}
@@ -78,23 +83,33 @@ for c in range(1,len(monc_var_list)):
 # monc_data.pop('time_series_20_600')
 print (' Monc data Loaded!')
 
+##################################
 #### AVERAGING DATA MANUALLY
-dnew={}
-vars=['lwp','iwp','swp','gwp']
+##################################
+#
+# ### 3D variables
+# dnew={}
+# vars=['lwp','iwp','swp','gwp']
+#
+# for c in vars:
+#     monc_data[c][monc_data[c]<=0.0]=np.nan
+#     dnew[c.upper() +'_mean'] = np.nanmean(monc_data[c],axis=(1,2))
+#     dnew[c.upper() +'_mean'][np.isnan(dnew[c.upper() +'_mean'])]=0.0
+#
+# vars = list(dnew.keys())
+#
+# tvarid='time_series_2_60'
+# m=1
+# for c in vars:
+#     plt.subplot(len(vars),1,m)
+#     plt.plot(monc_data[tvarid],monc_data[c],'r')
+#     plt.plot(monc_data['time_series_2_600'],dnew[c],'bo')
+#     m+=1
 
-for c in vars:
-    monc_data[c][monc_data[c]<=0.0]=np.nan
-    dnew[c.upper() +'_mean'] = np.nanmean(monc_data[c],axis=(1,2))
 
-vars = list(dnew.keys())
-
-tvarid='time_series_2_60'
-m=1
-for c in vars:
-    plt.subplot(len(vars),1,m)
-    plt.plot(monc_data[tvarid],monc_data[c],'r')
-    plt.plot(monc_data['time_series_2_600'],dnew[c],'bo')
-    m+=1
-
-
+### 4D variables
+vars=['u','v','w','th']
 embed()
+for c in vars:
+    dnew[c.upper() +'_mean'] = np.nanmean(monc_data[c],axis=(1,2))
+    dnew[c.upper() +'_mean'][np.isnan(dnew[c.upper() +'_mean'])]=0.0
