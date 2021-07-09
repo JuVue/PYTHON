@@ -41,7 +41,7 @@ monc_var_list =[['time_series_2_60','time_series_2_600','time_series_20_600' ,'z
               ['rho','rhon','theta_mean','w_wind_mean','u_wind_mean','v_wind_mean','total_cloud_fraction', 'liquid_cloud_fraction','ice_cloud_fraction',
               'vapour_mmr_mean','liquid_mmr_mean','rain_mmr_mean','ice_mmr_mean','snow_mmr_mean',
               'graupel_mmr_mean'],
-              ['q_vapour_mass']#,'q_cloud_liquid_mass','q_rain_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
+              ['q_vapour_mass']]#,'q_cloud_liquid_mass','q_rain_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
 
 #rho_air =
 
