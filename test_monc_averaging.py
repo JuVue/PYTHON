@@ -87,7 +87,7 @@ monc_data.pop('time_series_20_600')
 # x = 50m
 # y = 50m
 th = ncm.variables['th'][:]+ ncm.variables['thinit'][0,:]
-p=nncm.variables['prefn'][0,:]
+p=ncm.variables['prefn'][0,:]
 p = np.array([[[p]*th.shape[2]]*th.shape[1]]*th.shape[0])
 T = calcT(th,p)
 monc_data['p_mean'] = np.nanmean(p,axis=(1,2))
