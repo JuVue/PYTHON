@@ -48,7 +48,7 @@ ncm = {}
 monc_data = {}
 print(monc_filename)
 ncm = Dataset(monc_filename,'r')
-for var in ncm.variables(): print(var)
+for var in ncm.variables: print(var)
 monc_data={}
 zvar={}
 tvar={}
