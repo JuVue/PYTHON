@@ -1466,10 +1466,10 @@ def CaseStudySelection(obs_data,um_data,monc_data,dates):
 
     for m in range(0,len(monc_data)):
         monc_vars=list(monc_data[m].keys())
-        monc_var_list.remove('tvar')
-        monc_var_list.remove('zvar')
+        monc_vars.remove('tvar')
+        monc_vars.remove('zvar')
 
-        
+
         mt1=monc_data[m]['time1']/60/60/24 + dates[0]
         mt2=monc_data[m]['time2']/60/60/24 + dates[0]
         time1_ind = np.argwhere((mt1>dates[1] ))
