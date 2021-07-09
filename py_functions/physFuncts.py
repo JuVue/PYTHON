@@ -25,9 +25,9 @@ def calcAirDensity(temperature, pressure):
     print('Calculating air density profile:')
     print('')
     #converting to np array
-    if not isinstance(pressure,'np.ndarray'):
+    if not isinstance(pressure,np.ndarray):
         pressure= np.array(pressure)
-    if not isinstance(temperature, 'np.ndarray'):
+    if not isinstance(temperature, np.ndarray):
         temperature= np.array(temperature)
 
     #converting to hpa and K
@@ -251,9 +251,9 @@ def calcT(theta,pressure):
 
 
     #converting to np array
-    if not isinstance(pressure,'np.ndarray'):
+    if not isinstance(pressure,np.ndarray):
         pressure= np.array(pressure)
-    if not isinstance(theta, 'np.ndarray'):
+    if not isinstance(theta, np.ndarray):
         theta= np.array(theta)
 
     #converting to hpa and K
