@@ -17,7 +17,7 @@ import sys
 sys.path.insert(1, '/nfs/a26/lecimb/jutta/GITHUB/PYTHON/py_functions/')
 from time_functions import datenum2date, date2datenum, calcTime_Mat2DOY, calcTime_Date2DOY
 from readMAT import readMatlabStruct
-#from physFuncts import calcThetaE, calcThetaVL
+from physFuncts import calcAirDensity, calcThetaE, calcThetaVL, calcT
 #from pyFixes import py3_FixNPLoad
 
 monc_root_dir = '/nfs/a96/MOCCHA/working/gillian/MONC_CASES/MOCCHA/output/'
@@ -37,13 +37,12 @@ print ('')
 #               'graupel_mmr_mean'],
 #               ['vwp','lwp','rwp','iwp','swp','gwp','tot_iwp']]
 #               #['q_vapour','q_cloud_liquid_mass','q_rain_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
-monc_var_list =[['time_series_2_60','time_series_2_600','time_series_20_600' ,'z','zn'],
+monc_var_list =[['time_series_2_60','time_series_2_600','time_series_20_600' ,'z','zn','prefn','p','thref','tinit'],
               ['rho','rhon','theta_mean','w_wind_mean','u_wind_mean','v_wind_mean','total_cloud_fraction', 'liquid_cloud_fraction','ice_cloud_fraction',
               'vapour_mmr_mean','liquid_mmr_mean','rain_mmr_mean','ice_mmr_mean','snow_mmr_mean',
               'graupel_mmr_mean'],
-              ['u']]#,'q_cloud_liquid_mass','q_rain_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
+              'q_cloud_liquid_mass']]#,'q_rain_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
 
-#rho_air =
 
 ncm = {}
 monc_data = {}
@@ -85,6 +84,7 @@ monc_data.pop('time_series_20_600')
 end = time.time()
 print(end - start)
 print (' Monc data Loaded!')
+embed()
 
 ##################################
 #### AVERAGING DATA MANUALLY
