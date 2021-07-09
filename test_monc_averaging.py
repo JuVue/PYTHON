@@ -86,14 +86,14 @@ monc_data.pop('time_series_20_600')
 ## averaging 4D variables
 # x = 50m
 # y = 50m
-th = ncm.variables['th'][:]+ ncm.variables['thinit'][0,:]
-p=ncm.variables['prefn'][0,:]
-p = np.array([[[p]*th.shape[2]]*th.shape[1]]*th.shape[0])
-T = calcT(th,p)
-monc_data['p_mean'] = np.nanmean(p,axis=(1,2))
-monc_data['temp_mean'] = np.nanmean(T,axis=(1,2))
-monc_data['th_mean'] = np.nanmean(th,axis=(1,2))
-del(p,T,th)
+# th = ncm.variables['th'][:]+ ncm.variables['thinit'][0,:]
+# p=ncm.variables['prefn'][0,:]
+# p = np.array([[[p]*th.shape[2]]*th.shape[1]]*th.shape[0])
+# T = calcT(th,p)
+# monc_data['p_mean'] = np.nanmean(p,axis=(1,2))
+# monc_data['temp_mean'] = np.nanmean(T,axis=(1,2))
+# monc_data['th_mean'] = np.nanmean(th,axis=(1,2))
+# del(p,T,th)
 
 
 for c in range(0,len(monc_var_list2)):
