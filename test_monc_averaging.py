@@ -80,10 +80,21 @@ print (' Monc data Loaded!')
 
 #### AVERAGING DATA MANUALLY
 dnew={}
-vars=['vwp','lwp','iwp','swp','gwp']
+vars=['lwp','iwp','swp','gwp']
 
 for c in vars:
-    dnew['vwp_mean'] = np.nanmean(monc_data[c],axis=(1,2))
+    dnew[c.upper() +'_mean'] = np.nanmean(monc_data[c],axis=(1,2))
 
+vars = list(dnew.keys())
+
+tvarid='time_series_2_60'
+m=1
+for c in vars:
+    plt.subplot(len(vars),1,m)
+    plt.plot(monc_data[tvarid],monc_data[c],'r')
+    plt.plot(monc_data['time_series_2_600'],dnew[c],'bo')
+    m+=1
+
+plt.pcolor(monc_data['lwp'][:,:,500])
 
 embed()

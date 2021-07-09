@@ -1392,7 +1392,6 @@ def removeSpinUp(monc_data,monc_spin):
         id2 = np.squeeze(np.argwhere(monc_data[m]['time2']<=monc_spin))
         id3 = np.squeeze(np.argwhere(monc_data[m]['time3']<=monc_spin))
 
-        embed()
         for j in range(0,len(monc_var_list)):
             if monc_data[m]['tvar'][monc_var_list[j]]=='time1':
             #if any(np.array(monc_data[m][monc_var_list[j]].shape) == len(monc_data[m]['time1'])):
@@ -1467,6 +1466,10 @@ def CaseStudySelection(obs_data,um_data,monc_data,dates):
 
     for m in range(0,len(monc_data)):
         monc_vars=list(monc_data[m].keys())
+        monc_var_list.remove('tvar')
+        monc_var_list.remove('zvar')
+
+        
         mt1=monc_data[m]['time1']/60/60/24 + dates[0]
         mt2=monc_data[m]['time2']/60/60/24 + dates[0]
         time1_ind = np.argwhere((mt1>dates[1] ))
