@@ -116,8 +116,27 @@ for c in range(0,len(monc_var_list2)):
     elif "'time_series_20_600'" in str(tmp):
         tvar[var]='time3'
     #calculate mean values
+    twc_thresh = np.zeros([np.size(monc_data[['zvar'][var]],1)])
+    monc_lt1km = np.where(monc_data[['zvar'][var]][:]<=1e3)
+    twc_thresh[monc_lt1km] = 1e-6
+    monc_lt1km = np.where(monc_data[m][['zvar'][var]][:]>=4e3)
+    twc_thresh[monc_lt1km] = 1e-7
+    monc_intZs = np.where(twc_thresh == 0.0)
+    x = [1e-6, 1e-7]
+    y = [1e3, 4e3]
+    f = interp1d(y, x)
+    twc_thresh[monc_intZs] = f(monc_data[['zvar'][var]][monc_intZs].data)
     tmp = ncm.variables[var][:]
     tmp[tmp<=0.0]=np.nan
+
+    for t in range(0,np.size(tmp,0)):
+        for k in range(0,np.size(twc,1)):
+            for m in range(0,len(monc_data)):
+                if  monc_data[m]['model_twc'][t,k] < twc_thresh_monc[k]:
+                    monc_data[m]['model_twc'][t,k] = np.nan
+                    monc_data[m]['model_lwc'][t,k] = np.nan
+
+
     monc_data[var +'_mean'] = np.nanmean(tmp,axis=(1,2))
     monc_data[var +'_mean'][np.isnan(monc_data[var +'_mean'])]=0.0
     del(tmp)
@@ -133,10 +152,11 @@ embed()
 
 for c in range(0,len(monc_var_list2)):
     var = monc_var_list2[c]
-    plt.figure
-    plt.plot(tvar[var],monc_data[ml2[c]])
-    plt.plot(tvar[var],monc_data[var +'_mean'],'bo')
-
+    plt.subplot(2,1,1)
+    plt.pcolor(monc_data[tvar[var]],monc_data[zvar[var]],np.transpose(monc_data[ml2[c]]))
+    plt.subplot(2,1,2)
+    plt.pcolor(monc_data[tvar[var]],monc_data[zvar[var]],np.transpose(monc_data[var +'_mean']))
+    plt.show()
 ##################################
 #### AVERAGING DATA MANUALLY
 ##################################
