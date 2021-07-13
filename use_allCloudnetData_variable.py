@@ -488,7 +488,7 @@ def plot_TWCTimeseries(obs_data,twcvar,twcstr,plots_out_dir, dates,  **args):
             elif list(args.keys())[n] == 'outstr':
                 outstr= args[list(args.keys())[n]]
 
-    ylims=[0,2.5]
+    ylims=[0,5]
     yticks=np.arange(0,2.5e3,0.5e3)
     ytlabels=yticks/1e3
 
@@ -1215,7 +1215,7 @@ def plot_twcProfiles( obs_data,twcvar,twcstr, thresholding, plots_out_dir,dates,
     # plt.ylim([0,5e3])
     # plt.yticks(np.arange(0,5.01e3,0.5e3))
     # ax1.set_yticklabels([0,' ',1,' ',2,' ',3,' ',4,' ',5])
-    plt.ylim([0,2500])
+    plt.ylim([0,5000])
     plt.yticks(np.arange(0,2.51e3,0.5e3))
     ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
     ax1.set_yticklabels(np.arange(0,4.0,0.5))
@@ -1513,10 +1513,10 @@ def main():
     print ('Start: ' + time.strftime("%c"))
     print ('')
 
-    names = ['20180902_oden_']
+    names = ['20180913_oden_']
 
-    sdate = dtime.datetime.strptime('2018090200','%Y%m%d%H')
-    edate = dtime.datetime.strptime('2018090300','%Y%m%d%H')
+    sdate = dtime.datetime.strptime('2018091300','%Y%m%d%H')
+    edate = dtime.datetime.strptime('2018091314','%Y%m%d%H')
 
     dates = [date2datenum(sdate),date2datenum(edate)]
     moccha_missing_files = ['20180813_oden_','20180910_oden_']   ### cloud radar not working    #,'20180914_oden_'
@@ -1899,7 +1899,7 @@ def main():
     # -------------------------------------------------------------
     #figure = plot_CvTimeseries(obs_data,plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_LWCTimeseries(obs_data,  lwcvar,lwcstr, plots_out_dir, dates, um_data=um_data,label=label, outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    #figure = plot_TWCTimeseries( obs_data, twcvar,twcstr, plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_TWCTimeseries( obs_data, twcvar,twcstr, plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_IWCTimeseries(obs_data, plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_TWCTesting(um_data, ifs_data, misc_data, obs_data, data1, data2, data3, obs, month_flag, missing_files, doy)
 
