@@ -488,8 +488,8 @@ def plot_TWCTimeseries(obs_data,twcvar,twcstr,plots_out_dir, dates,  **args):
             elif list(args.keys())[n] == 'outstr':
                 outstr= args[list(args.keys())[n]]
 
-    ylims=[0,5]
-    yticks=np.arange(0,5e3,1e3)
+    ylims=[0,6]
+    yticks=np.arange(0,6e3,1e3)
     ytlabels=yticks/1e3
 
     print ('******')
@@ -1215,8 +1215,9 @@ def plot_twcProfiles( obs_data,twcvar,twcstr, thresholding, plots_out_dir,dates,
     # plt.ylim([0,5e3])
     # plt.yticks(np.arange(0,5.01e3,0.5e3))
     # ax1.set_yticklabels([0,' ',1,' ',2,' ',3,' ',4,' ',5])
-    plt.ylim([0,5000])
+    plt.ylim([0,6000])
     plt.yticks(np.arange(0,2.51e3,0.5e3))
+    plt.yticks(np.arange(0,6.01e3,0.5e3))
     ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
     ax1.set_yticklabels(np.arange(0,4.0,0.5))
     plt.xlim([0,0.45])
@@ -1542,16 +1543,16 @@ def main():
     #out_dir = ['23_u-cc278_RA1M_CASIM/',
     #           '24_u-cc324_RA2T_CON/',
     #           '25_u-cc568_RA2M_CON/']
-    # out_dir = ['23_u-cc278_RA1M_CASIM/',
-    #           '26_u-cd847_RA1M_CASIM/',
-    #           '27_u-ce112_RA1M_CASIM/']
-    out_dir = ['23_u-cc278_RA1M_CASIM/']
+     out_dir = ['23_u-cc278_RA1M_CASIM/',
+               '26_u-cd847_RA1M_CASIM/',
+               '27_u-ce112_RA1M_CASIM/']
+    #out_dir = ['23_u-cc278_RA1M_CASIM/']
     ### CHOOSE MONC RUNS
-    m_out_dir = ['5_control_20180913T0000Z_Wsub-1.5_Fletcher/',
-                '6_control_20180913T0000Z_Wsub-1.5-1km/',
-                '8_control_20180913T0000Z_Wsub-1.0-1km/',
-                '9_control_20180913T0000Z_Wsub-0.5-1km/']
-            #'3_control_20180913T0000Z/',
+    # m_out_dir = ['5_control_20180913T0000Z_Wsub-1.5_Fletcher/',
+    #             '6_control_20180913T0000Z_Wsub-1.5-1km/',
+    #             '8_control_20180913T0000Z_Wsub-1.0-1km/',
+    #             '9_control_20180913T0000Z_Wsub-0.5-1km/']
+    #         #'3_control_20180913T0000Z/',
             #'4_control_20180913T0000Z_Wsub-1.5/',
     #################################################################
     ## create labels for figure legends - done here so only needs to be done once!
