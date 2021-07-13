@@ -602,7 +602,7 @@ def plot_TWCTimeseries(obs_data,twcvar,twcstr,plots_out_dir, dates,  **args):
             plt.subplot(numsp,1,numsp-len(monc_data)+1+m)
             ax = plt.gca()
             # ax.set_facecolor('aliceblue')
-            plt.contourf(monc_data[m][tvar]/60/60, np.squeeze(monc_data[m][zvar][:]), np.transpose(monc_data[m]['model_twc'])*1e3,
+            plt.contourf(monc_data[m][twc_tvar][:]/60/60, np.squeeze(monc_data[m][twc_zvar][:]), np.transpose(monc_data[m]['model_twc'])*1e3,
             levels=clevs, norm = LogNorm(),
             cmap = newcmp)
             # )
@@ -610,7 +610,7 @@ def plot_TWCTimeseries(obs_data,twcvar,twcstr,plots_out_dir, dates,  **args):
             plt.ylim(ylims)
             plt.yticks(yticks)
             ax.set_yticklabels(ytlabels)
-            xticks=np.arange(np.floor(monc_data[m][tvar][0]/60/60),np.ceil(monc_data[m][tvar][-1]/60/60)+1,2,dtype=int)
+            xticks=np.arange(np.floor(monc_data[m][twc_tvar][0]/60/60),np.ceil(monc_data[m][twc_tvar][-1]/60/60)+1,2,dtype=int)
             xlabs=[x*100 for x in xticks]
             xlabs=["{0:-04d}".format(t) for t in xlabs]
             plt.xticks(xticks)
