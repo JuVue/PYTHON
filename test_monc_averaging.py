@@ -44,6 +44,7 @@ monc_var_list =[['time_series_2_60','time_series_2_600','time_series_20_600' ,'z
 
 #separate list for 4 d variables
 monc_var_list2  = ['q_cloud_liquid_mass','q_rain_mass','q_ice_mass','q_snow_mass','q_graupel_mass']
+ml2  =            ['liquid_mmr_mean','rain_mmr_mean','ice_mmr_mean','snow_mmr_mean','graupel_mmr_mean']
 
 
 ncm = {}
@@ -129,6 +130,13 @@ print(end - start)
 print (' Monc data Loaded!')
 embed()
 
+
+for c in range(0,len(monc_var_list2)):
+    var = monc_var_list2[c]
+    plt.figure
+    plt.plot(tvar[var],monc_data[ml2[c]])
+    plt.plot(tvar[var],monc_data[var +'_mean'],'bo')
+
 ##################################
 #### AVERAGING DATA MANUALLY
 ##################################
@@ -151,11 +159,3 @@ embed()
 #     plt.plot(monc_data[tvarid],monc_data[c],'r')
 #     plt.plot(monc_data['time_series_2_600'],dnew[c],'bo')
 #     m+=1
-
-
-### 4D variables
-vars=['u','v','w','th']
-embed()
-for c in vars:
-    dnew[c.upper() +'_mean'] = np.nanmean(monc_data[c],axis=(1,2))
-    dnew[c.upper() +'_mean'][np.isnan(dnew[c.upper() +'_mean'])]=0.0
