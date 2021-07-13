@@ -1131,9 +1131,9 @@ def plot_twcProfiles( obs_data,twcvar,twcstr, thresholding, plots_out_dir,dates,
             twc_thresh_monc = np.zeros([np.size(monc_data[m]['model_twc'],1)])
             ### first look at values below 1 km
             ###     find Z indices <= 1km, then set twc_thresh values to 1e-6
-            monc_lt1km = np.where(monc_data[m][zvar][:]<=1e3)
+            monc_lt1km = np.where(monc_data[m]['twc_height'][:]<=1e3)
             twc_thresh_monc[monc_lt1km] = 1e-6
-            monc_lt1km = np.where(monc_data[m][zvar][:]>=4e3)
+            monc_lt1km = np.where(monc_data[m]['twc_height'][:]>=4e3)
             twc_thresh_monc[monc_lt1km] = 1e-7
             monc_intZs = np.where(twc_thresh_monc == 0.0)
 
@@ -1142,7 +1142,7 @@ def plot_twcProfiles( obs_data,twcvar,twcstr, thresholding, plots_out_dir,dates,
             y = [1e3, 4e3]
             f = interp1d(y, x)
             for m in range(0,len(monc_data)):
-                twc_thresh_monc[monc_intZs] = f(monc_data[m][zvar][monc_intZs].data)
+                twc_thresh_monc[monc_intZs] = f(monc_data[m]['twc_height'][monc_intZs].data)
 
             for t in range(0,np.size(monc_data[m]['model_twc'],0)):
                 for k in range(0,np.size(monc_data[m]['model_twc'],1)):
