@@ -1548,11 +1548,10 @@ def main():
                '27_u-ce112_RA1M_CASIM/']
     #out_dir = ['23_u-cc278_RA1M_CASIM/']
     ### CHOOSE MONC RUNS
-    m_out_dir=[]
-    # m_out_dir = ['5_control_20180913T0000Z_Wsub-1.5_Fletcher/',
-    #             '6_control_20180913T0000Z_Wsub-1.5-1km/',
-    #             '8_control_20180913T0000Z_Wsub-1.0-1km/',
-    #             '9_control_20180913T0000Z_Wsub-0.5-1km/']
+     m_out_dir = ['5_control_20180913T0000Z_Wsub-1.5_Fletcher/',
+                 '6_control_20180913T0000Z_Wsub-1.5-1km/',
+                 '8_control_20180913T0000Z_Wsub-1.0-1km/',
+                 '9_control_20180913T0000Z_Wsub-0.5-1km/']
     #         #'3_control_20180913T0000Z/',
             #'4_control_20180913T0000Z_Wsub-1.5/',
     #################################################################
@@ -1895,6 +1894,7 @@ def main():
     #figure = plot_lwcProfiles(obs_data, lwcvar,lwcstr,thresholding, plots_out_dir,dates, um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_iwcProfiles(obs_data, twcvar,twcstr,thresholding, plots_out_dir,dates, um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     figure = plot_twcProfiles(obs_data, twcvar,twcstr,thresholding, plots_out_dir,dates, um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_twcProfiles(obs_data, twcvar,twcstr,thresholding, plots_out_dir,dates, um_data=um_data,label=label,outstr=outstr)
 
     # -------------------------------------------------------------
     # Cloudnet plot: Plot contour timeseries
@@ -1902,6 +1902,8 @@ def main():
     #figure = plot_CvTimeseries(obs_data,plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_LWCTimeseries(obs_data,  lwcvar,lwcstr, plots_out_dir, dates, um_data=um_data,label=label, outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     figure = plot_TWCTimeseries( obs_data, twcvar,twcstr, plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_TWCTimeseries( obs_data, twcvar,twcstr, plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr)
+
     #figure = plot_IWCTimeseries(obs_data, plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_TWCTesting(um_data, ifs_data, misc_data, obs_data, data1, data2, data3, obs, month_flag, missing_files, doy)
 
