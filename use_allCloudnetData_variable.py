@@ -672,7 +672,7 @@ def plot_lwcProfiles(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,dates, 
             monc_data[m]['model_iwc']= (monc_data[m]['ice_mmr_mean']+monc_data[m]['graupel_mmr_mean']+monc_data[m]['snow_mmr_mean'])*monc_data[m]['rho']
             monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
             monc_data[m]['model_twc'] = monc_data[m]['model_lwc'] +monc_data[m]['model_iwc']
-            lwc_zvar=[monc_data[m]['zvar']['liquid_mmr_mean']
+            lwc_zvar=monc_data[m]['zvar']['liquid_mmr_mean']
 
     if thresholding == True:
         ####-------------------------------------------------------------------------
@@ -878,7 +878,7 @@ def plot_iwcProfiles(obs_data, twcvar,twcstr, thresholding,plots_out_dir,dates, 
             monc_data[m]['model_iwc']= (monc_data[m]['ice_mmr_mean']+monc_data[m]['graupel_mmr_mean']+monc_data[m]['snow_mmr_mean'])*monc_data[m]['rho']
             monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
             monc_data[m]['model_twc'] = monc_data[m]['model_lwc'] +monc_data[m]['model_iwc']
-            twc_zvar=[monc_data[m]['zvar']['liquid_mmr_mean']
+            twc_zvar=monc_data[m]['zvar']['liquid_mmr_mean']
 
     if thresholding ==True:
         ####-------------------------------------------------------------------------
