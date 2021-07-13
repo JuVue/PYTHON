@@ -489,7 +489,7 @@ def plot_TWCTimeseries(obs_data,twcvar,twcstr,plots_out_dir, dates,  **args):
                 outstr= args[list(args.keys())[n]]
 
     ylims=[0,5]
-    yticks=np.arange(0,2.5e3,0.5e3)
+    yticks=np.arange(0,5e3,1e3)
     ytlabels=yticks/1e3
 
     print ('******')
