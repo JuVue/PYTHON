@@ -349,8 +349,8 @@ def plot_IWCTimeseries( obs_data, plots_out_dir, dates,**args): #, lon, lat):
         for m in range(0,len(monc_data)):
             monc_data[m]['model_iwc']= (monc_data[m]['ice_mmr_mean']+monc_data[m]['graupel_mmr_mean']+monc_data[m]['snow_mmr_mean'])*monc_data[m]['rho']
             monc_data[m]['model_iwc'][monc_data[m]['model_iwc'] <= 0.0] = np.nan
-            iwc_tvar=[monc_data[m]['tvar']['ice_mmr_mean']
-            iwc_zvar=[monc_data[m]['zvar']['ice_mmr_mean']
+            iwc_tvar=monc_data[m]['tvar']['ice_mmr_mean']
+            iwc_zvar=monc_data[m]['zvar']['ice_mmr_mean']
 
     print ('******')
     print ('')
@@ -513,8 +513,8 @@ def plot_TWCTimeseries(obs_data,twcvar,twcstr,plots_out_dir, dates,  **args):
             monc_data[m]['model_iwc']= (monc_data[m]['ice_mmr_mean']+monc_data[m]['graupel_mmr_mean']+monc_data[m]['snow_mmr_mean'])*monc_data[m]['rho']
             monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
             monc_data[m]['model_twc'] = monc_data[m]['model_lwc'] +monc_data[m]['model_iwc']
-            twc_tvar=[monc_data[m]['tvar']['liquid_mmr_mean']
-            twc_zvar=[monc_data[m]['zvar']['liquid_mmr_mean']
+            twc_tvar=monc_data[m]['tvar']['liquid_mmr_mean']
+            twc_zvar=monc_data[m]['zvar']['liquid_mmr_mean']
 
     twc0 = np.transpose(obs_data[twcvar])*1e3
 
