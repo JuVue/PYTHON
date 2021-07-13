@@ -292,13 +292,13 @@ def plot_LWCTimeseries(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): #,
             plt.subplot(numsp,1,numsp-len(monc_data)+1+m)
             ax = plt.gca()
             # ax.set_facecolor('aliceblue')
-            plt.contourf(monc_data[m][tvar]/60/60, np.squeeze(monc_data[m][zvar][:]), np.transpose(monc_data[m]['model_lwc'])*1e3,
+            plt.contourf(monc_data[m][lwc_tvar]/60/60, np.squeeze(monc_data[m][lwc_zvar][:]), np.transpose(monc_data[m]['model_lwc'])*1e3,
             levels=clev,cmap = newcmp)
             plt.ylabel('Z [km]')
             plt.ylim(ylims)
             plt.yticks(yticks)
             ax.set_yticklabels(ytlabels)
-            xticks=np.arange(np.floor(monc_data[m][tvar][0]/60/60),np.ceil(monc_data[m][tvar][-1]/60/60)+1,2,dtype=int)
+            xticks=np.arange(np.floor(monc_data[m][lwc_tvar][0]/60/60),np.ceil(monc_data[m][lwc_tvar][-1]/60/60)+1,2,dtype=int)
             xlabs=[x*100 for x in xticks]
             xlabs=["{0:-04d}".format(t) for t in xlabs]
             plt.xticks(xticks)
@@ -444,14 +444,14 @@ def plot_IWCTimeseries( obs_data, plots_out_dir, dates,**args): #, lon, lat):
             plt.subplot(numsp,1,numsp-len(monc_data)+1+m)
             ax = plt.gca()
             # ax.set_facecolor('aliceblue')
-            plt.contourf(monc_data[m][tvar]/60/60, np.squeeze(monc_data[m][zvar][:]), np.transpose(monc_data[m]['model_iwc'])*1e3,
+            plt.contourf(monc_data[m][iwc_tvar]/60/60, np.squeeze(monc_data[m][iwc_zvar][:]), np.transpose(monc_data[m]['model_iwc'])*1e3,
             levels=clev,norm = LogNorm(),cmap = newcmp)
     #        cmap=newcmp,vmin = 0.0, vmax = cmax)
             plt.ylabel('Z [km]')
             plt.ylim(ylims)
             plt.yticks(yticks)
             ax.set_yticklabels(ytlabels)
-            xticks=np.arange(np.floor(monc_data[m][tvar][0]/60/60),np.ceil(monc_data[m][tvar][-1]/60/60)+1,2,dtype=int)
+            xticks=np.arange(np.floor(monc_data[m][iwc_tvar][0]/60/60),np.ceil(monc_data[m][iwc_tvar][-1]/60/60)+1,2,dtype=int)
             xlabs=[x*100 for x in xticks]
             xlabs=["{0:-04d}".format(t) for t in xlabs]
             plt.xticks(xticks)
