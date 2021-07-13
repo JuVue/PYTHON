@@ -195,6 +195,8 @@ def plot_LWCTimeseries(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): #,
 
     ylims=[0,2.5]
     yticks=np.arange(0,2.5e3,0.5e3)
+    ylims=[0,6]
+    yticks=np.arange(0,6e3,0.5e3)
     ytlabels=yticks/1e3
 
     SMALL_SIZE = 12
@@ -341,6 +343,8 @@ def plot_IWCTimeseries( obs_data, plots_out_dir, dates,**args): #, lon, lat):
 
     ylims=[0,2.5]
     yticks=np.arange(0,2.5e3,0.5e3)
+    ylims=[0,6]
+    yticks=np.arange(0,6e3,0.5e3)
     ytlabels=yticks/1e3
 
     obs_data['iwc'][obs_data['iwc'] <= 0.0] = np.nan
