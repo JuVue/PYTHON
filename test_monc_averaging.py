@@ -136,13 +136,6 @@ for c in range(0,len(monc_var_avg)):
     monc_data[var +'_mean'][np.isnan(monc_data[var +'_mean'])]=0.0
     monc_data.pop(var)
 
-fig = plt.figure()
-ax = plt.axes(projection='3d')
-ax.contour3D([0:128],[0:128],twc, 50, cmap='binary')
-plt.show()
-ax.set_xlabel('x')
-ax.set_ylabel('y')
-ax.set_zlabel('z');
 
 end = time.time()
 print(end - start)
