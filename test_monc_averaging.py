@@ -126,16 +126,13 @@ for c in range(0,len(monc_var_list2)):
     y = [1e3, 4e3]
     f = interp1d(y, x)
     twc_thresh[monc_intZs] = f(monc_data[['zvar'][var]][monc_intZs].data)
-    tmp = ncm.variables[var][:]
+    tmp = ncm.variables[var]
+    embed()
+    twc_thresh = np.array([[[twc_thres]*tmp.shape[2]]*th.shape[1]])
+    tmp=tmp[:]
     tmp[tmp<=0.0]=np.nan
-
     for t in range(0,np.size(tmp,0)):
-        for k in range(0,np.size(twc,1)):
-            for m in range(0,len(monc_data)):
-                if  monc_data[m]['model_twc'][t,k] < twc_thresh_monc[k]:
-                    monc_data[m]['model_twc'][t,k] = np.nan
-                    monc_data[m]['model_lwc'][t,k] = np.nan
-
+        tmp[tmp<twc_thresh] = np.nan
 
     monc_data[var +'_mean'] = np.nanmean(tmp,axis=(1,2))
     monc_data[var +'_mean'][np.isnan(monc_data[var +'_mean'])]=0.0
