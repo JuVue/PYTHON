@@ -121,7 +121,7 @@ twc_thresh[monc_intZs] = f(monc_data[zvar[var]][monc_intZs])
 twc_thresh = np.squeeze(np.array([[[twc_thresh]*monc_data['twc_tot'].shape[2]]*monc_data['twc_tot'].shape[1]]))
 
 for c in range(0,len(monc_var_avg)):
-    var = monc_var_list[c]
+    var = monc_var_avg[c]
     #calculate mean values
     monc_data[var +'_mean']=np.empty((np.size(monc_data[tvar[var]],0),np.size(monc_data[zvar[var]],0)))
     monc_data[var +'_mean'][:]=np.nan
