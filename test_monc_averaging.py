@@ -189,15 +189,15 @@ for c in range(0,len(monc_var_avg)):
         cmap = newcmp)
     plt.title(var)
 
-    fig=plt.figure(figsize=(6,9))
-    plt.subplots_adjust(top = 0.92, bottom = 0.06, right = 0.92, left = 0.08,
-        hspace = 0.4, wspace = 0.2)
-    plt.subplot(2,1,1)
-    ax = plt.gca()
-    img=plt.contourf(monc_data[tvar[ml2[c]]],monc_data[zvar[ml2[c]]],np.transpose(monc_data['twc_tot_mean']),
-        levels=clevs, norm = LogNorm(),
-        cmap = newcmp)
-    plt.show()
+# fig=plt.figure(figsize=(6,9))
+# plt.subplots_adjust(top = 0.92, bottom = 0.06, right = 0.92, left = 0.08,
+#     hspace = 0.4, wspace = 0.2)
+# plt.subplot(2,1,1)
+# ax = plt.gca()
+# img=plt.contourf(monc_data[tvar[ml2[c]]],monc_data[zvar[ml2[c]]],np.transpose(monc_data['twc_tot_mean']),
+#     levels=clevs, norm = LogNorm(),
+#     cmap = newcmp)
+# plt.show()
 ##################################
 #### AVERAGING DATA MANUALLY
 ##################################
