@@ -44,12 +44,18 @@ monc_var_list =[['time_series_2_60','time_series_2_600','time_series_20_600' ,'z
               'graupel_mmr_mean']]
 
 #separate list for 4 d variables
-monc_var_list2  = ['q_cloud_liquid_mass','q_rain_mass','q_ice_mass','q_snow_mass','q_graupel_mass']
 ml2  =            ['liquid_mmr_mean','rain_mmr_mean','ice_mmr_mean','snow_mmr_mean','graupel_mmr_mean']
 
 monc_var_list=[['time_series_2_60','time_series_2_600','time_series_20_600' ,'z','zn'],
-                ['q_cloud_liquid_mass','q_rain_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
+                ['q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
 
+monc_var_list =[['time_series_2_60','time_series_2_600','time_series_20_600' ,'z','zn','prefn','thref','thinit'],
+              ['rho','rhon','theta_mean','w_wind_mean','u_wind_mean','v_wind_mean','total_cloud_fraction', 'liquid_cloud_fraction','ice_cloud_fraction',
+              'vapour_mmr_mean','liquid_mmr_mean','rain_mmr_mean','ice_mmr_mean','snow_mmr_mean',
+              'graupel_mmr_mean']
+              ['q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
+
+m_var_avg= ['q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass']
 ncm = {}
 monc_data = {}
 print(monc_filename)
@@ -86,7 +92,7 @@ monc_data['time1']=monc_data['time_series_2_60'] #1d data
 monc_data.pop('time_series_2_60')
 monc_data.pop('time_series_2_600')
 monc_data.pop('time_series_20_600')
-embed()
+
 ## averaging 4D variables
 # x = 50m
 # y = 50m
@@ -99,49 +105,33 @@ embed()
 # monc_data['th_mean'] = np.nanmean(th,axis=(1,2))
 # del(p,T,th)
 
-for c in range(0,len(monc_var_list2)):
-    var = monc_var_list2[c]
-    zvar[var]=[]
-    tvar[var]=[]
-    ###getting right z and t dimensions
-    tmp=ncm.variables[var].dimensions
-    if "'z'" in str(tmp):
-        zvar[var]='z'
-    elif "'zn'" in str(tmp):
-        zvar[var]='zn'
-    else:
-        zvar[var]=np.nan
-    if "'time_series_2_60'" in str(tmp):
-        tvar[var]='time1'
-    elif "'time_series_2_600'" in str(tmp):
-        tvar[var]='time2'
-    elif "'time_series_20_600'" in str(tmp):
-        tvar[var]='time3'
+monc_data['twc_tot']=monc_data['q_ice_mass']+monc_data['q_snow_mass']+monc_data['q_graupel_mass']+monc_data['q_cloud_liquid_mass']
+#calculate mean values
+var='q_ice_mass'
+twc_thresh = np.zeros([np.size(monc_data[zvar[var]],0)])
+monc_lt1km = np.where(monc_data[zvar[var]][:]<=1e3)
+twc_thresh[monc_lt1km] = 1e-6
+monc_lt1km = np.where(monc_data[zvar[var]][:]>=4e3)
+twc_thresh[monc_lt1km] = 1e-7
+monc_intZs = np.where(twc_thresh == 0.0)
+x = [1e-6, 1e-7]
+y = [1e3, 4e3]
+f = interp1d(y, x)
+twc_thresh[monc_intZs] = f(monc_data[zvar[var]][monc_intZs])
+twc_thresh = np.squeeze(np.array([[[twc_thresh]*monc_data['twc_tot'].shape[2]]*monc_data['twc_tot'].shape[1]]))
+
+for c in range(0,len(monc_var_avg)):
+    var = monc_var_list[c]
     #calculate mean values
-    twc_thresh = np.zeros([np.size(monc_data[zvar[var]],0)])
-    monc_lt1km = np.where(monc_data[zvar[var]][:]<=1e3)
-    twc_thresh[monc_lt1km] = 1e-6
-    monc_lt1km = np.where(monc_data[zvar[var]][:]>=4e3)
-    twc_thresh[monc_lt1km] = 1e-7
-    monc_intZs = np.where(twc_thresh == 0.0)
-    x = [1e-6, 1e-7]
-    y = [1e3, 4e3]
-    f = interp1d(y, x)
-    twc_thresh[monc_intZs] = f(monc_data[zvar[var]][monc_intZs])
-    tmp = ncm.variables[var]
-    twc_thresh = np.squeeze(np.array([[[twc_thresh]*tmp.shape[2]]*tmp.shape[1]]))
-    tmp=tmp[:]
-    #tmp[tmp<=0.0]=np.nan
     monc_data[var +'_mean']=np.empty((np.size(monc_data[tvar[var]],0),np.size(monc_data[zvar[var]],0)))
     monc_data[var +'_mean'][:]=np.nan
     for t in range(0,np.size(tmp,0)):
-        tt=tmp[t,:]
-        tt[tt<twc_thresh] = np.nan
-        monc_data[var +'_mean'][t,:] = np.nanmean(tt,axis=(0,1))
-        del(tt)
+        #tt=monc_data[var][t,:]
+        monc_data[var][t,monc_data['twc_tot'][t,:]<twc_thresh] = np.nan
+        monc_data[var +'_mean'][t,:] = np.nanmean(monc_data[var][t,:],axis=(0,1))
 
     monc_data[var +'_mean'][np.isnan(monc_data[var +'_mean'])]=0.0
-    del(tmp)
+    monc_data.pop(var)
 
 
 end = time.time()
