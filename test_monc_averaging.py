@@ -128,7 +128,7 @@ for c in range(0,len(monc_var_list2)):
     f = interp1d(y, x)
     twc_thresh[monc_intZs] = f(monc_data[zvar[var]][monc_intZs].data)
     tmp = ncm.variables[var]
-    twc_thresh = np.array([[[[twc_thresh]*tmp.shape[2]]*tmp.shape[1]])
+    twc_thresh = np.array([[[twc_thresh]*tmp.shape[2]]*tmp.shape[1]])
     tmp=tmp[:]
     #tmp[tmp<=0.0]=np.nan
     for t in range(0,np.size(tmp,0)):
