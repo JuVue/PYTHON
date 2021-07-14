@@ -47,6 +47,8 @@ monc_var_list =[['time_series_2_60','time_series_2_600','time_series_20_600' ,'z
 monc_var_list2  = ['q_cloud_liquid_mass','q_rain_mass','q_ice_mass','q_snow_mass','q_graupel_mass']
 ml2  =            ['liquid_mmr_mean','rain_mmr_mean','ice_mmr_mean','snow_mmr_mean','graupel_mmr_mean']
 
+monc_var_list=[['time_series_2_60','time_series_2_600','time_series_20_600' ,'z','zn'],
+                ['q_cloud_liquid_mass','q_rain_mass','q_ice_mass','q_snow_mass','q_graupel_mass']
 
 ncm = {}
 monc_data = {}
@@ -84,7 +86,7 @@ monc_data['time1']=monc_data['time_series_2_60'] #1d data
 monc_data.pop('time_series_2_60')
 monc_data.pop('time_series_2_600')
 monc_data.pop('time_series_20_600')
-
+embed()
 ## averaging 4D variables
 # x = 50m
 # y = 50m
@@ -146,15 +148,43 @@ end = time.time()
 print(end - start)
 print (' Monc data Loaded!')
 embed()
+import matplotlib.cm as mpl_cm
+from matplotlib.colors import ListedColormap, LinearSegmentedColormap,LogNorm
 
+viridis = mpl_cm.get_cmap('viridis', 256)
+newcolors = viridis(np.linspace(0, 1, 256))
+greyclr = np.array([0.1, 0.1, 0.1, 0.1])
+newcolors[:10, :] = greyclr
+newcmp = ListedColormap(newcolors)
+
+clevs=[1e-7,1e-6,1e-5,1e-4,1e-3,1e-2]
+clevs=[1e-5,0.25e-4,0.5e-4,0.75e-4,
+    1e-4,0.25e-3,0.5e-3,0.75e-3,
+    1e-3,0.25e-2,0.5e-2,0.75e-2,
+    1e-2,0.25e-1,0.5e-1,0.75e-1,
+    1e-1,0.25e-0,0.5e-0,0.75e-0,1e-0]
 
 for c in range(0,len(monc_var_list2)):
     var = monc_var_list2[c]
-    plt.figure
+    fig=plt.figure(figsize=(6,9))
+    plt.subplots_adjust(top = 0.92, bottom = 0.06, right = 0.92, left = 0.08,
+        hspace = 0.4, wspace = 0.2)
     plt.subplot(2,1,1)
-    plt.pcolor(monc_data[tvar[ml2[c]]],monc_data[zvar[ml2[c]]],np.transpose(monc_data[ml2[c]]))
+    ax = plt.gca()
+    img=plt.contourf(monc_data[tvar[ml2[c]]],monc_data[zvar[ml2[c]]],np.transpose(monc_data[ml2[c]]),
+        levels=clevs, norm = LogNorm(),
+        cmap = newcmp)
+    cbaxes = fig.add_axes([0.225, 0.96, 0.6, 0.015])
+    cb = plt.colorbar(img, cax = cbaxes, orientation = 'horizontal')
+    plt.title(ml2[c])
+
     plt.subplot(2,1,2)
-    plt.pcolor(monc_data[tvar[var]],monc_data[zvar[var]],np.transpose(monc_data[var +'_mean']))
+    plt.contourf(monc_data[tvar[var]],monc_data[zvar[var]],np.transpose(monc_data[var +'_mean']),
+        levels=clevs, norm = LogNorm(),
+        cmap = newcmp)
+    plt.title(var)
+
+
     plt.show()
 ##################################
 #### AVERAGING DATA MANUALLY
