@@ -133,6 +133,7 @@ for c in range(0,len(monc_var_list2)):
     #tmp[tmp<=0.0]=np.nan
     for t in range(0,np.size(tmp,0)):
         tt=tmp[t,:]
+        embed()
         tt[tt<twc_thresh] = np.nan
         monc_data[var +'_mean'][t] = np.nanmean(tt,axis=(0,1))
         del(tt)
