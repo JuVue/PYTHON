@@ -125,8 +125,7 @@ for c in range(0,len(monc_var_list2)):
     x = [1e-6, 1e-7]
     y = [1e3, 4e3]
     f = interp1d(y, x)
-    embed()
-    twc_thresh[monc_intZs] = f(monc_data[zvar[var]][monc_intZs].data)
+    twc_thresh[monc_intZs] = f(monc_data[zvar[var]][monc_intZs])
     tmp = ncm.variables[var]
     twc_thresh = np.squeeze(np.array([[[twc_thresh]*tmp.shape[2]]*tmp.shape[1]]))
     tmp=tmp[:]
