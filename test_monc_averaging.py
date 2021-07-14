@@ -48,7 +48,7 @@ monc_var_list2  = ['q_cloud_liquid_mass','q_rain_mass','q_ice_mass','q_snow_mass
 ml2  =            ['liquid_mmr_mean','rain_mmr_mean','ice_mmr_mean','snow_mmr_mean','graupel_mmr_mean']
 
 monc_var_list=[['time_series_2_60','time_series_2_600','time_series_20_600' ,'z','zn'],
-                ['q_cloud_liquid_mass','q_rain_mass','q_ice_mass','q_snow_mass','q_graupel_mass']
+                ['q_cloud_liquid_mass','q_rain_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
 
 ncm = {}
 monc_data = {}
