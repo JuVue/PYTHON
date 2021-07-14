@@ -95,7 +95,7 @@ monc_data.pop('time_series_20_600')
 # monc_data['temp_mean'] = np.nanmean(T,axis=(1,2))
 # monc_data['th_mean'] = np.nanmean(th,axis=(1,2))
 # del(p,T,th)
-
+embed()
 
 for c in range(0,len(monc_var_list2)):
     var = monc_var_list2[c]
