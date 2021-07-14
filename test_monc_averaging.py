@@ -11,6 +11,7 @@ import matplotlib.dates as mdates
 import os
 
 from IPython import embed
+from scipy.interpolate import interp1d
 
 ## import python functions
 import sys
@@ -116,29 +117,28 @@ for c in range(0,len(monc_var_list2)):
     elif "'time_series_20_600'" in str(tmp):
         tvar[var]='time3'
     #calculate mean values
-    twc_thresh = np.zeros([np.size(monc_data[['zvar'][var]],1)])
-    monc_lt1km = np.where(monc_data[['zvar'][var]][:]<=1e3)
+    twc_thresh = np.zeros([np.size(monc_data[zvar[var]],0)])
+    monc_lt1km = np.where(monc_data[zvar[var]][:]<=1e3)
     twc_thresh[monc_lt1km] = 1e-6
-    monc_lt1km = np.where(monc_data[m][['zvar'][var]][:]>=4e3)
+    monc_lt1km = np.where(monc_data[zvar[var]][:]>=4e3)
     twc_thresh[monc_lt1km] = 1e-7
     monc_intZs = np.where(twc_thresh == 0.0)
     x = [1e-6, 1e-7]
     y = [1e3, 4e3]
     f = interp1d(y, x)
-    twc_thresh[monc_intZs] = f(monc_data[['zvar'][var]][monc_intZs].data)
+    twc_thresh[monc_intZs] = f(monc_data[zvar[var]][monc_intZs].data)
     tmp = ncm.variables[var]
-    embed()
-    twc_thresh = np.array([[[twc_thres]*tmp.shape[2]]*th.shape[1]])
+    twc_thresh = np.array([[[[twc_thresh]*tmp.shape[2]]*tmp.shape[1]])
     tmp=tmp[:]
-    tmp[tmp<=0.0]=np.nan
+    #tmp[tmp<=0.0]=np.nan
     for t in range(0,np.size(tmp,0)):
-        tmp[tmp<twc_thresh] = np.nan
+        tt=tmp[t,:]
+        tt[tt<twc_thresh] = np.nan
+        monc_data[var +'_mean'][t] = np.nanmean(tt,axis=(0,1))
+        del(tt)
 
-    monc_data[var +'_mean'] = np.nanmean(tmp,axis=(1,2))
     monc_data[var +'_mean'][np.isnan(monc_data[var +'_mean'])]=0.0
     del(tmp)
-
-
 
 
 end = time.time()
