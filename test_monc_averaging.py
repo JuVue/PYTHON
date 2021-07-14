@@ -44,7 +44,6 @@ monc_var_list =[['time_series_2_60','time_series_2_600','time_series_20_600' ,'z
               'graupel_mmr_mean']]
 
 #separate list for 4 d variables
-ml2  =            ['liquid_mmr_mean','rain_mmr_mean','ice_mmr_mean','snow_mmr_mean','graupel_mmr_mean']
 
 monc_var_list=[['time_series_2_60','time_series_2_600','time_series_20_600' ,'z','zn'],
                 ['q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
@@ -55,6 +54,7 @@ monc_var_list =[['time_series_2_60','time_series_2_600','time_series_20_600' ,'z
               'graupel_mmr_mean'],
               ['q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
 
+ml2  =        ['liquid_mmr_mean','ice_mmr_mean','snow_mmr_mean','graupel_mmr_mean']
 monc_var_avg= ['q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass']
 ncm = {}
 monc_data = {}
@@ -110,11 +110,11 @@ monc_data['twc_tot']=monc_data['q_ice_mass']+monc_data['q_snow_mass']+monc_data[
 var='q_ice_mass'
 twc_thresh = np.zeros([np.size(monc_data[zvar[var]],0)])
 monc_lt1km = np.where(monc_data[zvar[var]][:]<=1e3)
-twc_thresh[monc_lt1km] = 1e-8 #  1e-6
+twc_thresh[monc_lt1km] =  1e-6
 monc_lt1km = np.where(monc_data[zvar[var]][:]>=4e3)
-twc_thresh[monc_lt1km] = 1e-9   # 1e-7
+twc_thresh[monc_lt1km] = 1e-7
 monc_intZs = np.where(twc_thresh == 0.0)
-x = [1e-8, 1e-9] #[1e-6, 1e-7]
+x = [1e-6, 1e-7]
 y = [1e3, 4e3]
 f = interp1d(y, x)
 twc_thresh[monc_intZs] = f(monc_data[zvar[var]][monc_intZs])
@@ -125,7 +125,7 @@ for c in range(0,len(monc_var_avg)):
     #calculate mean values
     monc_data[var +'_mean']=np.empty((np.size(monc_data[tvar[var]],0),np.size(monc_data[zvar[var]],0)))
     monc_data[var +'_mean'][:]=np.nan
-    for t in range(0,np.size(tmp,0)):
+    for t in range(0,np.size(monc_data[tvar[var]],0)):
         #tt=monc_data[var][t,:]
         #twc=monc_data['twc_tot'][t,:]
         #tt[twc<twc_thresh] = np.nan
@@ -188,7 +188,7 @@ for c in range(0,len(monc_var_avg)):
         levels=clevs, norm = LogNorm(),
         cmap = newcmp)
     plt.title(var)
-
+    plt.show()
 # fig=plt.figure(figsize=(6,9))
 # plt.subplots_adjust(top = 0.92, bottom = 0.06, right = 0.92, left = 0.08,
 #     hspace = 0.4, wspace = 0.2)
