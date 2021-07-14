@@ -110,11 +110,11 @@ monc_data['twc_tot']=monc_data['q_ice_mass']+monc_data['q_snow_mass']+monc_data[
 var='q_ice_mass'
 twc_thresh = np.zeros([np.size(monc_data[zvar[var]],0)])
 monc_lt1km = np.where(monc_data[zvar[var]][:]<=1e3)
-twc_thresh[monc_lt1km] = 1e-6
+twc_thresh[monc_lt1km] = 1e-8 #  1e-6
 monc_lt1km = np.where(monc_data[zvar[var]][:]>=4e3)
-twc_thresh[monc_lt1km] = 1e-7
+twc_thresh[monc_lt1km] = 1e-9   # 1e-7
 monc_intZs = np.where(twc_thresh == 0.0)
-x = [1e-6, 1e-7]
+x = [1e-8, 1e-9] #[1e-6, 1e-7]
 y = [1e3, 4e3]
 f = interp1d(y, x)
 twc_thresh[monc_intZs] = f(monc_data[zvar[var]][monc_intZs])
@@ -127,12 +127,22 @@ for c in range(0,len(monc_var_avg)):
     monc_data[var +'_mean'][:]=np.nan
     for t in range(0,np.size(tmp,0)):
         #tt=monc_data[var][t,:]
+        #twc=monc_data['twc_tot'][t,:]
+        #tt[twc<twc_thresh] = np.nan
+        #monc_data[var +'_mean'][t,:] = np.nanmean(tt,axis=(0,1))
         monc_data[var][t,monc_data['twc_tot'][t,:]<twc_thresh] = np.nan
         monc_data[var +'_mean'][t,:] = np.nanmean(monc_data[var][t,:],axis=(0,1))
 
     monc_data[var +'_mean'][np.isnan(monc_data[var +'_mean'])]=0.0
     monc_data.pop(var)
 
+fig = plt.figure()
+ax = plt.axes(projection='3d')
+ax.contour3D([0:128],[0:128],twc, 50, cmap='binary')
+plt.show()
+ax.set_xlabel('x')
+ax.set_ylabel('y')
+ax.set_zlabel('z');
 
 end = time.time()
 print(end - start)
@@ -147,15 +157,27 @@ greyclr = np.array([0.1, 0.1, 0.1, 0.1])
 newcolors[:10, :] = greyclr
 newcmp = ListedColormap(newcolors)
 
-clevs=[1e-7,1e-6,1e-5,1e-4,1e-3,1e-2]
+clevs=[1e-9,1e-8,1e-7,1e-6,1e-5,1e-4,1e-3]
 clevs=[1e-5,0.25e-4,0.5e-4,0.75e-4,
     1e-4,0.25e-3,0.5e-3,0.75e-3,
     1e-3,0.25e-2,0.5e-2,0.75e-2,
     1e-2,0.25e-1,0.5e-1,0.75e-1,
     1e-1,0.25e-0,0.5e-0,0.75e-0,1e-0]
 
-for c in range(0,len(monc_var_list2)):
-    var = monc_var_list2[c]
+    fig=plt.figure(figsize=(6,9))
+    plt.subplots_adjust(top = 0.92, bottom = 0.06, right = 0.92, left = 0.08,
+        hspace = 0.4, wspace = 0.2)
+    plt.subplot(2,1,1)
+    img=plt.contourf(monc_data[tvar[ml2[c]]],monc_data[zvar[ml2[c]]],np.transpose(monc_data['q_cloud_liquid_mass_mean']),
+        levels=clevs, norm = LogNorm(),
+        cmap = newcmp)
+    cbaxes = fig.add_axes([0.225, 0.96, 0.6, 0.015])
+    cb = plt.colorbar(img, cax = cbaxes, orientation = 'horizontal')
+    plt.show()
+
+
+for c in range(0,len(monc_var_avg)):
+    var = monc_var_avg[c]
     fig=plt.figure(figsize=(6,9))
     plt.subplots_adjust(top = 0.92, bottom = 0.06, right = 0.92, left = 0.08,
         hspace = 0.4, wspace = 0.2)
@@ -174,7 +196,14 @@ for c in range(0,len(monc_var_list2)):
         cmap = newcmp)
     plt.title(var)
 
-
+    fig=plt.figure(figsize=(6,9))
+    plt.subplots_adjust(top = 0.92, bottom = 0.06, right = 0.92, left = 0.08,
+        hspace = 0.4, wspace = 0.2)
+    plt.subplot(2,1,1)
+    ax = plt.gca()
+    img=plt.contourf(monc_data[tvar[ml2[c]]],monc_data[zvar[ml2[c]]],np.transpose(monc_data['twc_tot_mean']),
+        levels=clevs, norm = LogNorm(),
+        cmap = newcmp)
     plt.show()
 ##################################
 #### AVERAGING DATA MANUALLY
