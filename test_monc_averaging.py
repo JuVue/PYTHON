@@ -96,7 +96,6 @@ monc_data.pop('time_series_20_600')
 # monc_data['temp_mean'] = np.nanmean(T,axis=(1,2))
 # monc_data['th_mean'] = np.nanmean(th,axis=(1,2))
 # del(p,T,th)
-embed()
 
 for c in range(0,len(monc_var_list2)):
     var = monc_var_list2[c]
@@ -128,14 +127,15 @@ for c in range(0,len(monc_var_list2)):
     f = interp1d(y, x)
     twc_thresh[monc_intZs] = f(monc_data[zvar[var]][monc_intZs].data)
     tmp = ncm.variables[var]
-    twc_thresh = np.array([[[twc_thresh]*tmp.shape[2]]*tmp.shape[1]])
+    twc_thresh = np.squeeze(np.array([[[twc_thresh]*tmp.shape[2]]*tmp.shape[1]]))
     tmp=tmp[:]
     #tmp[tmp<=0.0]=np.nan
+    monc_data[var +'_mean']=np.empty((np.size(monc_data[tvar[var]],0),np.size(monc_data[zvar[var]],0)))
+    monc_data[var +'_mean'][:]=np.nan
     for t in range(0,np.size(tmp,0)):
         tt=tmp[t,:]
-        embed()
         tt[tt<twc_thresh] = np.nan
-        monc_data[var +'_mean'][t] = np.nanmean(tt,axis=(0,1))
+        monc_data[var +'_mean'][t,:] = np.nanmean(tt,axis=(0,1))
         del(tt)
 
     monc_data[var +'_mean'][np.isnan(monc_data[var +'_mean'])]=0.0
@@ -150,8 +150,9 @@ embed()
 
 for c in range(0,len(monc_var_list2)):
     var = monc_var_list2[c]
+    plt.figure
     plt.subplot(2,1,1)
-    plt.pcolor(monc_data[tvar[var]],monc_data[zvar[var]],np.transpose(monc_data[ml2[c]]))
+    plt.pcolor(monc_data[tvar[ml2[c]]],monc_data[zvar[ml2[c]]],np.transpose(monc_data[ml2[c]]))
     plt.subplot(2,1,2)
     plt.pcolor(monc_data[tvar[var]],monc_data[zvar[var]],np.transpose(monc_data[var +'_mean']))
     plt.show()
