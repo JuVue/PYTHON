@@ -157,16 +157,16 @@ clevs=[1e-5,0.25e-4,0.5e-4,0.75e-4,
     1e-2,0.25e-1,0.5e-1,0.75e-1,
     1e-1,0.25e-0,0.5e-0,0.75e-0,1e-0]
 
-    fig=plt.figure(figsize=(6,9))
-    plt.subplots_adjust(top = 0.92, bottom = 0.06, right = 0.92, left = 0.08,
-        hspace = 0.4, wspace = 0.2)
-    plt.subplot(2,1,1)
-    img=plt.contourf(monc_data[tvar[ml2[c]]],monc_data[zvar[ml2[c]]],np.transpose(monc_data['q_cloud_liquid_mass_mean']),
-        levels=clevs, norm = LogNorm(),
-        cmap = newcmp)
-    cbaxes = fig.add_axes([0.225, 0.96, 0.6, 0.015])
-    cb = plt.colorbar(img, cax = cbaxes, orientation = 'horizontal')
-    plt.show()
+    # fig=plt.figure(figsize=(6,9))
+    # plt.subplots_adjust(top = 0.92, bottom = 0.06, right = 0.92, left = 0.08,
+    #     hspace = 0.4, wspace = 0.2)
+    # plt.subplot(2,1,1)
+    # img=plt.contourf(monc_data[tvar[ml2[c]]],monc_data[zvar[ml2[c]]],np.transpose(monc_data['q_cloud_liquid_mass_mean']),
+    #     levels=clevs, norm = LogNorm(),
+    #     cmap = newcmp)
+    # cbaxes = fig.add_axes([0.225, 0.96, 0.6, 0.015])
+    # cb = plt.colorbar(img, cax = cbaxes, orientation = 'horizontal')
+    # plt.show()
 
 
 for c in range(0,len(monc_var_avg)):
