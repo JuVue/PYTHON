@@ -131,7 +131,6 @@ for c in range(0,len(monc_var_avg)):
         #tt[twc<twc_thresh] = np.nan
         #monc_data[var +'_mean'][t,:] = np.nanmean(tt,axis=(0,1))
         monc_data[var][t,monc_data['twc_tot'][t,:]<twc_thresh] = np.nan
-        embed()
         monc_data[var +'_mean'][t,:] = np.mean(monc_data[var][t,:],axis=(0,1))
     monc_data[var +'_mean'][np.isnan(monc_data[var +'_mean'])]=0.0
     monc_data.pop(var)
