@@ -131,8 +131,8 @@ for c in range(0,len(monc_var_avg)):
         #tt[twc<twc_thresh] = np.nan
         #monc_data[var +'_mean'][t,:] = np.nanmean(tt,axis=(0,1))
         monc_data[var][t,monc_data['twc_tot'][t,:]<twc_thresh] = np.nan
+        embed()
         monc_data[var +'_mean'][t,:] = np.nanmean(monc_data[var][t,:],axis=(0,1))
-
     monc_data[var +'_mean'][np.isnan(monc_data[var +'_mean'])]=0.0
     monc_data.pop(var)
 
@@ -140,7 +140,6 @@ for c in range(0,len(monc_var_avg)):
 end = time.time()
 print(end - start)
 print (' Monc data Loaded!')
-embed()
 import matplotlib.cm as mpl_cm
 from matplotlib.colors import ListedColormap, LinearSegmentedColormap,LogNorm
 
@@ -189,6 +188,8 @@ for c in range(0,len(monc_var_avg)):
         cmap = newcmp)
     plt.title(var)
     plt.show()
+embed()
+
 # fig=plt.figure(figsize=(6,9))
 # plt.subplots_adjust(top = 0.92, bottom = 0.06, right = 0.92, left = 0.08,
 #     hspace = 0.4, wspace = 0.2)
