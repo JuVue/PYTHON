@@ -148,12 +148,12 @@ greyclr = np.array([0.1, 0.1, 0.1, 0.1])
 newcolors[:10, :] = greyclr
 newcmp = ListedColormap(newcolors)
 
-clevs=[1e-9,1e-8,1e-7,1e-6,1e-5,1e-4,1e-3]
-clevs=[1e-5,0.25e-4,0.5e-4,0.75e-4,
-    1e-4,0.25e-3,0.5e-3,0.75e-3,
-    1e-3,0.25e-2,0.5e-2,0.75e-2,
-    1e-2,0.25e-1,0.5e-1,0.75e-1,
-    1e-1,0.25e-0,0.5e-0,0.75e-0,1e-0]
+clevs=[1e-9,1e-8,1e-7,1e-6,1e-5,1e-4,1e-3,1e-2,1e-1]
+# clevs=[1e-5,0.25e-4,0.5e-4,0.75e-4,
+#     1e-4,0.25e-3,0.5e-3,0.75e-3,
+#     1e-3,0.25e-2,0.5e-2,0.75e-2,
+#     1e-2,0.25e-1,0.5e-1,0.75e-1,
+#     1e-1,0.25e-0,0.5e-0,0.75e-0,1e-0]
 
     # fig=plt.figure(figsize=(6,9))
     # plt.subplots_adjust(top = 0.92, bottom = 0.06, right = 0.92, left = 0.08,
@@ -187,7 +187,9 @@ for c in range(0,len(monc_var_avg)):
         cmap = newcmp)
     plt.title(var)
     plt.show()
-embed()
+    plots_out_dir='/nfs/a96/MOCCHA/working/jutta/plots/CaseStudies/ModelComparison/'
+    fileout = plots_out_dir + var + 'comparison.png'
+    plt.savefig(fileout)
 
 # fig=plt.figure(figsize=(6,9))
 # plt.subplots_adjust(top = 0.92, bottom = 0.06, right = 0.92, left = 0.08,
