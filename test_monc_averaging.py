@@ -186,9 +186,8 @@ for c in range(0,len(monc_var_avg)):
         levels=clevs, norm = LogNorm(),
         cmap = newcmp)
     plt.title(var)
-    plt.show()
     plots_out_dir='/nfs/a96/MOCCHA/working/jutta/plots/CaseStudies/ModelComparison/'
-    fileout = plots_out_dir + var + 'comparison.png'
+    fileout = plots_out_dir + var + '_comparison.png'
     plt.savefig(fileout)
 
 # fig=plt.figure(figsize=(6,9))
