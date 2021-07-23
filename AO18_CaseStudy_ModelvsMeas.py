@@ -2,7 +2,7 @@
 from  __future__ import print_function
 import time
 import datetime as dtime
-
+from IPython import embed
 import numpy as np
 #import pandas as pd
 from netCDF4 import Dataset
