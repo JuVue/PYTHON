@@ -513,49 +513,49 @@ def main():
         #################################################################
         ## create labels for figure legends - done here so only needs to be done once!
         #################################################################
-        label=[]
-        outstr=[]
-        for m in range(0, len(out_dir)):
-            if out_dir[m][:10] == '24_u-cc324':
-                label.append('UM_RA2T_' + out_dir[m][-4:-1])
-                outstr.append('RA2T')
-            elif out_dir[m][:10] == '25_u-cc568':
-                label.append('UM_RA2M')
-                outstr.append('RA2M')
-            elif out_dir[m][:10] == '23_u-cc278':
-                label.append('UM_CASIM-100')
-                outstr.append('CASIM100')
-            elif out_dir[m][:10] == '26_u-cd847':
-                label.append('UM_CASIM-AP')
-                outstr.append('CASIM-AP')
-            elif out_dir[m][:10] == '27_u-ce112':
-                label.append('UM_CASIM-AP-PasProc')
-                outstr.append('CASIM-AP-PasProc')
-            else:
-                label.append('undefined_label')
-                outstr.append('')
-                print(label)
-        mlabel=[]
-        moutstr=[]
-        for m in range(0, len(m_out_dir)):
-            if m_out_dir[m][:1] == '3':
-                mlabel.append('MONC nosub')
-                moutstr.append('Mnowsub')
-            if m_out_dir[m][:1] == '4':
-                mlabel.append('MONC Wsub1.5')
-                moutstr.append('Mwsub')
-            elif m_out_dir[m][:1] == '5':
-                mlabel.append('MONC Wsub1.5 \n Fletcher')
-                moutstr.append('Mwsubfle')
-            elif m_out_dir[m][:1] == '6':
-                mlabel.append('MONC Wsub1.5-1km')
-                moutstr.append('Mwsub1km')
-            elif m_out_dir[m][:1] == '7':
-                mlabel.append('MONC Wsub1.5-1km \n solACC-100')
-                moutstr.append('Mwsub1kmsolACC100')
-            else:
-                label.append('undefined_label')
-                moutstr.append('')
+    label=[]
+    outstr=[]
+    for m in range(0, len(out_dir)):
+        if out_dir[m][:10] == '24_u-cc324':
+            label.append('UM_RA2T_' + out_dir[m][-4:-1])
+            outstr.append('RA2T')
+        elif out_dir[m][:10] == '25_u-cc568':
+            label.append('UM_RA2M')
+            outstr.append('RA2M')
+        elif out_dir[m][:10] == '23_u-cc278':
+            label.append('UM_CASIM-100')
+            outstr.append('CASIM100')
+        elif out_dir[m][:10] == '26_u-cd847':
+            label.append('UM_CASIM-AP')
+            outstr.append('CASIM-AP')
+        elif out_dir[m][:10] == '27_u-ce112':
+            label.append('UM_CASIM-AP-PasProc')
+            outstr.append('CASIM-AP-PasProc')
+        else:
+            label.append('undefined_label')
+            outstr.append('')
+            print(label)
+    mlabel=[]
+    moutstr=[]
+    for m in range(0, len(m_out_dir)):
+        if m_out_dir[m][:1] == '3':
+            mlabel.append('MONC nosub')
+            moutstr.append('Mnowsub')
+        if m_out_dir[m][:1] == '4':
+            mlabel.append('MONC Wsub1.5')
+            moutstr.append('Mwsub')
+        elif m_out_dir[m][:1] == '5':
+            mlabel.append('MONC Wsub1.5 \n Fletcher')
+            moutstr.append('Mwsubfle')
+        elif m_out_dir[m][:1] == '6':
+            mlabel.append('MONC Wsub1.5-1km')
+            moutstr.append('Mwsub1km')
+        elif m_out_dir[m][:1] == '7':
+            mlabel.append('MONC Wsub1.5-1km \n solACC-100')
+            moutstr.append('Mwsub1kmsolACC100')
+        else:
+            label.append('undefined_label')
+            moutstr.append('')
 
 
     # -------------------------------------------------------------
