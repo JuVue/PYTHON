@@ -38,15 +38,7 @@ print ('')
 #               'graupel_mmr_mean'],
 #               ['vwp','lwp','rwp','iwp','swp','gwp','tot_iwp']]
 #               #['q_vapour','q_cloud_liquid_mass','q_rain_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
-monc_var_list =[['time_series_2_60','time_series_2_600','time_series_20_600' ,'z','zn','prefn','thref','thinit'],
-              ['rho','rhon','theta_mean','w_wind_mean','u_wind_mean','v_wind_mean','total_cloud_fraction', 'liquid_cloud_fraction','ice_cloud_fraction',
-              'vapour_mmr_mean','liquid_mmr_mean','rain_mmr_mean','ice_mmr_mean','snow_mmr_mean',
-              'graupel_mmr_mean']]
-
 #separate list for 4 d variables
-
-monc_var_list=[['time_series_2_60','time_series_2_600','time_series_20_600' ,'z','zn'],
-                ['q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
 
 monc_var_list =[['time_series_2_60','time_series_2_600','time_series_20_600' ,'z','zn','prefn','thref','thinit'],
               ['rho','rhon','theta_mean','w_wind_mean','u_wind_mean','v_wind_mean','total_cloud_fraction', 'liquid_cloud_fraction','ice_cloud_fraction',
@@ -54,8 +46,9 @@ monc_var_list =[['time_series_2_60','time_series_2_600','time_series_20_600' ,'z
               'graupel_mmr_mean'],
               ['q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
 
-ml2  =        ['liquid_mmr_mean','ice_mmr_mean','snow_mmr_mean','graupel_mmr_mean']
-monc_var_avg= ['q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass']
+
+ml2  =        ['liquid_mmr_mean','ice_mmr_mean','snow_mmr_mean','graupel_mmr_mean','model_twc']
+monc_var_avg= ['q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass','twc_tot']
 ncm = {}
 monc_data = {}
 print(monc_filename)
@@ -104,8 +97,11 @@ monc_data.pop('time_series_20_600')
 # monc_data['temp_mean'] = np.nanmean(T,axis=(1,2))
 # monc_data['th_mean'] = np.nanmean(th,axis=(1,2))
 # del(p,T,th)
-
+monc_data[m]['model_iwc']= (monc_data[m]['ice_mmr_mean']+monc_data[m]['graupel_mmr_mean']+monc_data[m]['snow_mmr_mean'])*monc_data[m]['rho']
+monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
+monc_data[m]['model_twc'] = monc_data[m]['model_lwc'] +monc_data[m]['model_iwc']
 monc_data['twc_tot']=monc_data['q_ice_mass']+monc_data['q_snow_mass']+monc_data['q_graupel_mass']+monc_data['q_cloud_liquid_mass']
+monc_data['twc_tot']=monc_data['twc_tot']*monc_data[m]['rho']
 #calculate mean values
 var='q_ice_mass'
 twc_thresh = np.zeros([np.size(monc_data[zvar[var]],0)])
