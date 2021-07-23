@@ -1252,6 +1252,91 @@ def plot_twcProfiles( obs_data,twcvar,twcstr, thresholding, plots_out_dir,dates,
     print ('Finished plotting! :)')
     print ('')
 
+def plot_lwp(obs_data, plot_out_dir, dates,**args ):
+
+    numsp=1
+    if bool(args):
+        for n in range(0,len(args)):
+            if  list(args.keys())[n] == 'monc_data':
+                monc_data=args[list(args.keys())[n]]
+                numsp += len(monc_data)
+            elif list(args.keys())[n] == 'mlabel':
+                mlabel = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'moutstr':
+                moutstr= args[list(args.keys())[n]]
+            elif  list(args.keys())[n] == 'um_data':
+                um_data=args[list(args.keys())[n]]
+                numsp += len(um_data)
+            elif list(args.keys())[n] == 'label':
+                label = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'outstr':
+                outstr= args[list(args.keys())[n]]
+
+
+    print ('******')
+    print ('')
+    print ('Plotting  timeseries of lwp:')
+    print ('')
+
+    SMALL_SIZE = 12
+    MED_SIZE = 14
+    LARGE_SIZE = 16
+
+    plt.rc('font',size=MED_SIZE)
+    plt.rc('axes',titlesize=MED_SIZE)
+    plt.rc('axes',labelsize=MED_SIZE)
+    plt.rc('xtick',labelsize=MED_SIZE)
+    plt.rc('ytick',labelsize=MED_SIZE)
+    plt.rc('legend',fontsize=MED_SIZE)
+    plt.subplots_adjust(top = 0.95, bottom = 0.05, right = 0.95, left = 0.05,
+            hspace = 0.4, wspace = 0.13)
+
+    lcols=['mediumseagreen','steelblue','darkblue']
+    fcols=['mediumaquamarine','lightblue','blue']
+    lcolsmonc=['gold','darkgoldenrod','darkorange','orangered','firebrick']
+    fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
+    #################################################################
+    ## create figure and axes instances
+    #################################################################
+    ### -------------------------------
+    ### Build figure (timeseries)
+    ### -------------------------------
+    #from IPython import embed;
+    embed()
+    fig = plt.figure(figsize=(18,10 ))
+    #ax  = fig.add_axes([0.07,0.7,0.53,0.22])   # left, bottom, width, height
+    ax  = fig.add_axes([0.07,0.7,0.7,0.22])   # left, bottom, width, height
+    ax = plt.gca()
+    yB = [-10, 120]
+    plt.plot(obs_data['mday'], obs_data['lwp']/1e3, color = 'black', label = 'ice_station')#plt.ylabel('SW$_{net}$ [W m$^{-2}$]')
+    for m in range(0,len(um_data)):
+        plt.plot(um_data[m]['time'], um_data[m]['lwp'']-273.15, color = lcols[m], label = label[m])
+    for m in range(0,len(monc_data)):
+        plt.plot(monc_data[m][monc_data[m]['tvar']['LWP_mean']], monc_data[m]['LWP_mean']-273.15, color = lcolsmonc[m], label = mlabel[m])
+    plt.ylabel('LWP [g m$^2$]')
+
+    plt.legend(bbox_to_anchor=(-0.08, 0.77, 1., .102), loc=4, ncol=4)
+    ax.set_xlim([dates[0], dates[1]])
+    plt.grid(which='both')
+    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+
+    #plt.legend(bbox_to_anchor=(-0.08, 0.67, 1., .102), loc=4, ncol=3)
+    ax.set_xlim([datenum, edatenum])
+    plt.xlabel('Time [UTC]')
+
+    print ('******')
+    print ('')
+    print ('Finished plotting! :)')
+    print ('')
+
+    date=datenum2date(datenum)
+#    from IPython import embed; embed()
+    fileout = os.path.join(plot_out_dir,date.strftime('%Y%m%d') + '_lwp_ts.png')
+    plt.savefig(fileout)
+
+
 
 def interpCloudnet(obs_data):
     #interpolates missing times up to 1 hour
@@ -1919,10 +2004,9 @@ def main():
     # figure = plot_RadiosondesThetaE(data1, data2, data3, month_flag, missing_files, out_dir1, out_dir2, out_dir3, obs, doy, label1, label2, label3)
 
     # -------------------------------------------------------------
-    # plot LWP timeseries with missing files accounted for
+    # plot LWP timeseries
     # -------------------------------------------------------------
-    # if obs_switch == 'RADAR': lwp = []
-    # figure = plot_LWP(um_data, ifs_data, misc_data, ra2t_data, obs_data, obs, month_flag, missing_files, cn_um_out_dir, doy, obs_switch)#, lwp) #, lon, lat):
+    figure = plot_LWP(obs_data, plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr):
 
 
     # -------------------------------------------------------------
