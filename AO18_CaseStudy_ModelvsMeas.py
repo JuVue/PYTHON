@@ -1,7 +1,8 @@
 ### SCRIPT TO COMPARE MODEL TO MEASURMENTS
 from  __future__ import print_function
 import time
-import datetime
+import datetime as dtime
+
 import numpy as np
 #import pandas as pd
 from netCDF4 import Dataset
