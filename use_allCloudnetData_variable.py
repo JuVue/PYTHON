@@ -342,7 +342,7 @@ def plot_IWCTimeseries( obs_data, plots_out_dir, dates,**args): #, lon, lat):
                 monc_data=args[list(args.keys())[n]]
                 numsp += len(monc_data)
                 pmonc==True
-        elif list(args.keys())[n] == 'mlabel':
+            elif list(args.keys())[n] == 'mlabel':
                 mlabel = args[list(args.keys())[n]]
             elif list(args.keys())[n] == 'moutstr':
                 moutstr= args[list(args.keys())[n]]
@@ -2062,7 +2062,7 @@ def main():
     figure = plot_lwcProfiles(obs_data, lwcvar,lwcstr,thresholding, plots_out_dir,dates, um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     figure = plot_iwcProfiles(obs_data, twcvar,twcstr,thresholding, plots_out_dir,dates, um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     figure = plot_twcProfiles(obs_data, twcvar,twcstr,thresholding, plots_out_dir,dates, um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    
+
 
     # -------------------------------------------------------------
     # Cloudnet plot: Plot contour timeseries
