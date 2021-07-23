@@ -135,7 +135,7 @@ def plot_CvTimeseries(obs_data, plots_out_dir,dates,  **args):
         for m in range(0,len(monc_data)):
             plt.subplot(numsp,1,numsp-len(monc_data)+1+m)
             ax = plt.gca()
-            plt.contourf(monc_data[m][monc_data[m]['tvar']['total_cloud_fraction']]/60/60,
+            plt.contourf(monc_data[m][monc_data[m]['tvar']['total_cloud_fraction']],
                 np.squeeze(monc_data[m][monc_data[m]['zvar']['total_cloud_fraction']][:]),
                 np.transpose(monc_data[m]['total_cloud_fraction']),
                 np.arange(0,1.1,0.1),
@@ -147,12 +147,15 @@ def plot_CvTimeseries(obs_data, plots_out_dir,dates,  **args):
             plt.ylim(ylims)
             plt.yticks(yticks)
             ax.set_yticklabels(ytlabels)
+            ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+            ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+            ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
             #plt.xlim(monc_data['time2']/60/60])
-            xticks=np.arange(np.floor(monc_data[m]['time2'][0]/60/60),np.ceil(monc_data[m]['time2'][-1]/60/60)+1,2,dtype=int)
-            xlabs=[x*100 for x in xticks]
-            xlabs=["{0:-04d}".format(t) for t in xlabs]
-            plt.xticks(xticks)
-            ax.set_xticklabels(xlabs)
+            # xticks=np.arange(np.floor(monc_data[m]['time2'][0]/60/60),np.ceil(monc_data[m]['time2'][-1]/60/60)+1,2,dtype=int)
+            # xlabs=[x*100 for x in xticks]
+            # xlabs=["{0:-04d}".format(t) for t in xlabs]
+            # plt.xticks(xticks)
+            # ax.set_xticklabels(xlabs)
             plt.xlabel('Time (UTC)')
             nans = ax.get_ylim()
             ax2 = ax.twinx()
@@ -2010,7 +2013,7 @@ def main():
     # -------------------------------------------------------------
     # Cloudnet plot: Plot contour timeseries
     # -------------------------------------------------------------
-    # figure = plot_CvTimeseries(obs_data,plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_CvTimeseries(obs_data,plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     # figure = plot_LWCTimeseries(obs_data,  lwcvar,lwcstr, plots_out_dir, dates, um_data=um_data,label=label, outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     # figure = plot_TWCTimeseries( obs_data, twcvar,twcstr, plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     # figure = plot_IWCTimeseries(obs_data, plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
