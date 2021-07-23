@@ -37,6 +37,7 @@ def plot_CvTimeseries(obs_data, plots_out_dir,dates,  **args):
             if  list(args.keys())[n] == 'monc_data':
                 monc_data=args[list(args.keys())[n]]
                 numsp += len(monc_data)
+                pmonc = True
             elif list(args.keys())[n] == 'mlabel':
                 mlabel = args[list(args.keys())[n]]
             elif list(args.keys())[n] == 'moutstr':
@@ -44,6 +45,7 @@ def plot_CvTimeseries(obs_data, plots_out_dir,dates,  **args):
             elif  list(args.keys())[n] == 'um_data':
                 um_data=args[list(args.keys())[n]]
                 numsp += len(um_data)
+                pum = True
             elif list(args.keys())[n] == 'label':
                 label = args[list(args.keys())[n]]
             elif list(args.keys())[n] == 'outstr':
@@ -107,31 +109,32 @@ def plot_CvTimeseries(obs_data, plots_out_dir,dates,  **args):
     cb = plt.colorbar(img, cax = cbaxes, orientation = 'horizontal')
     plt.title('C$_{V}$')
     # plt.colorbar()
-    for m in range(0,len(um_data)):
-        plt.subplot(numsp,1,m+2)
-        ax = plt.gca()
-        plt.contourf(um_data[m]['time'], np.squeeze(um_data[m]['height'][0,:]), np.transpose(um_data[m]['model_Cv_filtered']),
-            np.arange(0,1.1,0.1),
-            cmap = newcmp,
-            zorder = 1)
-        # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
-        # plt.plot(data1['time_hrly'][::6], bldepth1[::6], 'k', linewidth = 1.0)
-        plt.ylabel('Z [km]')
-        plt.ylim(ylims)
-        plt.yticks(yticks)
-        ax.set_yticklabels(ytlabels)
-        plt.xlim([dates[0], dates[1]])
-        ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
-        ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
-        ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-        if m == numsp:
-            plt.xlabel('Date')
-        nans = ax.get_ylim()
-        ax2 = ax.twinx()
-        ax2.set_ylabel(label[m], rotation = 270, labelpad = 27)
-        ax2.set_yticks([])
+    if pum ==True:
+        for m in range(0,len(um_data)):
+            plt.subplot(numsp,1,m+2)
+            ax = plt.gca()
+            plt.contourf(um_data[m]['time'], np.squeeze(um_data[m]['height'][0,:]), np.transpose(um_data[m]['model_Cv_filtered']),
+                np.arange(0,1.1,0.1),
+                cmap = newcmp,
+                zorder = 1)
+            # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
+            # plt.plot(data1['time_hrly'][::6], bldepth1[::6], 'k', linewidth = 1.0)
+            plt.ylabel('Z [km]')
+            plt.ylim(ylims)
+            plt.yticks(yticks)
+            ax.set_yticklabels(ytlabels)
+            plt.xlim([dates[0], dates[1]])
+            ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+            ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+            ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+            if m == numsp:
+                plt.xlabel('Date')
+            nans = ax.get_ylim()
+            ax2 = ax.twinx()
+            ax2.set_ylabel(label[m], rotation = 270, labelpad = 27)
+            ax2.set_yticks([])
 
-    if bool(args):
+    if pmonc==True:
         for m in range(0,len(monc_data)):
             plt.subplot(numsp,1,numsp-len(monc_data)+1+m)
             ax = plt.gca()
@@ -163,10 +166,10 @@ def plot_CvTimeseries(obs_data, plots_out_dir,dates,  **args):
             ax2.set_yticks([])
 
     dstr=datenum2date(dates[1])
-    if bool(args):
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_CvTimeseries.png'
+    if pmonc==True:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + 'CvTimeseries.png'
     else:
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_CvTimeseries.png'
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + 'CvTimeseries.png'
     print(fileout)
     plt.savefig(fileout)
     plt.show()
@@ -301,11 +304,14 @@ def plot_LWCTimeseries(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): #,
             plt.ylim(ylims)
             plt.yticks(yticks)
             ax.set_yticklabels(ytlabels)
-            xticks=np.arange(np.floor(monc_data[m][lwc_tvar][0]/60/60),np.ceil(monc_data[m][lwc_tvar][-1]/60/60)+1,2,dtype=int)
-            xlabs=[x*100 for x in xticks]
-            xlabs=["{0:-04d}".format(t) for t in xlabs]
-            plt.xticks(xticks)
-            ax.set_xticklabels(xlabs)
+            ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+            ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+            ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+            # xticks=np.arange(np.floor(monc_data[m][lwc_tvar][0]/60/60),np.ceil(monc_data[m][lwc_tvar][-1]/60/60)+1,2,dtype=int)
+            # xlabs=[x*100 for x in xticks]
+            # xlabs=["{0:-04d}".format(t) for t in xlabs]
+            # plt.xticks(xticks)
+            # ax.set_xticklabels(xlabs)
             plt.xlabel('Time (UTC)')
             ax2 = ax.twinx()
             ax2.set_ylabel(mlabel[m], rotation = 270, labelpad = 27)
@@ -454,11 +460,14 @@ def plot_IWCTimeseries( obs_data, plots_out_dir, dates,**args): #, lon, lat):
             plt.ylim(ylims)
             plt.yticks(yticks)
             ax.set_yticklabels(ytlabels)
-            xticks=np.arange(np.floor(monc_data[m][iwc_tvar][0]/60/60),np.ceil(monc_data[m][iwc_tvar][-1]/60/60)+1,2,dtype=int)
-            xlabs=[x*100 for x in xticks]
-            xlabs=["{0:-04d}".format(t) for t in xlabs]
-            plt.xticks(xticks)
-            ax.set_xticklabels(xlabs)
+            ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+            ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+            ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+            # xticks=np.arange(np.floor(monc_data[m][iwc_tvar][0]/60/60),np.ceil(monc_data[m][iwc_tvar][-1]/60/60)+1,2,dtype=int)
+            # xlabs=[x*100 for x in xticks]
+            # xlabs=["{0:-04d}".format(t) for t in xlabs]
+            # plt.xticks(xticks)
+            # ax.set_xticklabels(xlabs)
             plt.xlabel('Time (UTC)')
             ax2 = ax.twinx()
             ax2.set_ylabel(mlabel[m], rotation = 270, labelpad = 27)
@@ -619,11 +628,14 @@ def plot_TWCTimeseries(obs_data,twcvar,twcstr,plots_out_dir, dates,  **args):
             plt.ylim(ylims)
             plt.yticks(yticks)
             ax.set_yticklabels(ytlabels)
-            xticks=np.arange(np.floor(monc_data[m][twc_tvar][0]/60/60),np.ceil(monc_data[m][twc_tvar][-1]/60/60)+1,2,dtype=int)
-            xlabs=[x*100 for x in xticks]
-            xlabs=["{0:-04d}".format(t) for t in xlabs]
-            plt.xticks(xticks)
-            ax.set_xticklabels(xlabs)
+            ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+            ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+            ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+            # xticks=np.arange(np.floor(monc_data[m][twc_tvar][0]/60/60),np.ceil(monc_data[m][twc_tvar][-1]/60/60)+1,2,dtype=int)
+            # xlabs=[x*100 for x in xticks]
+            # xlabs=["{0:-04d}".format(t) for t in xlabs]
+            # plt.xticks(xticks)
+            # ax.set_xticklabels(xlabs)
             plt.xlabel('Time (UTC)')
             ax2 = ax.twinx()
             ax2.set_ylabel(mlabel[m], rotation = 270, labelpad = 27)
@@ -1284,7 +1296,6 @@ def plot_lwp(obs_data, plot_out_dir, dates,**args ):
     SMALL_SIZE = 12
     MED_SIZE = 14
     LARGE_SIZE = 16
-    embed()
     plt.rc('font',size=MED_SIZE)
     plt.rc('axes',titlesize=MED_SIZE)
     plt.rc('axes',labelsize=MED_SIZE)
@@ -1335,6 +1346,11 @@ def plot_lwp(obs_data, plot_out_dir, dates,**args ):
 
     dstr=datenum2date(dates[0])
 #    from IPython import embed; embed()
+    dstr=datenum2date(dates[1])
+    if bool(args):
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_TWCTimeseries' + twcstr + '.png'
+    else:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_TWCTimeseries' + twcstr + '.png'
     fileout = os.path.join(plot_out_dir,dstr.strftime('%Y%m%d') + '_lwp_ts.png')
     plt.savefig(fileout)
 
