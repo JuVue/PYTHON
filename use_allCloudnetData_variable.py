@@ -2006,7 +2006,7 @@ def main():
     # -------------------------------------------------------------
     # plot LWP timeseries
     # -------------------------------------------------------------
-    figure = plot_LWP(obs_data, plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr):
+    figure = plot_LWP(obs_data, plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
 
     # -------------------------------------------------------------
