@@ -436,11 +436,10 @@ def main():
                 #'temperature','q','pressure','bl_depth','bl_type','qliq','qice','uwind','vwind','wwind',
                 #'cloud_fraction','radr_refl','rainfall_flux','snowfall_flux',]#
 
-    #### CASIM var_list1 only different for  qnice and qndrop,qice / qsnow
-    var_list2 = var_list1
 
     um_data = {}
     for m in range(0,len(out_dir)):
+        datenum = date2datenum(strdate)
         um_data[m]['time'] = datenum + (nc[m].variables['forecast_time'][:]/24.0)
         ### define height arrays explicitly
         um_data[m]['height'] = nc[m].variables['height'][:]
