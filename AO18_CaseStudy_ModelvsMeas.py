@@ -342,7 +342,7 @@ def main():
                 '6_control_20180913T0000Z_Wsub-1.5-1km/',
                 '7_20180913T0000Z_Wsub-1.5-1km_solAccum-100_inuc-0_iact-3/']
 
-    m_sub_dir = 'OUT_R0_24h'
+    um_sub_dir = 'OUT_R0'
     ### CHOOSE DATES TO PLOT
     DATE = 20180913
     strdate=str(DATE)
@@ -371,9 +371,8 @@ def main():
     nc={}
     embed()
     for m in range(0, len(out_dir)):
-        filename_um[m] = um_root_dir + out_dir[m] + strdate + '_oden_metum.nc'
-        print( 'Loading ' + m + 'th run diagnostics:')
-        nc[m] = Dataset(filename_um[m],'r')
+        filename_um = um_root_dir + out_dir[m] + um_sub_dir + strdate + '_oden_metum.nc'
+        nc[m] = Dataset(filename_um,'r')
     # -------------------------------------------------------------
     print ('')
     ##  for var in nc.variables: print (var)
