@@ -1302,18 +1302,17 @@ def plot_lwp(obs_data, plot_out_dir, dates,**args ):
     ### Build figure (timeseries)
     ### -------------------------------
     #from IPython import embed;
-    embed()
     fig = plt.figure(figsize=(18,10 ))
     #ax  = fig.add_axes([0.07,0.7,0.53,0.22])   # left, bottom, width, height
     ax  = fig.add_axes([0.07,0.7,0.7,0.22])   # left, bottom, width, height
     ax = plt.gca()
     yB = [-10, 120]
-    plt.plot(obs_data['mday'], obs_data['lwp']/1e3, color = 'black', label = 'ice_station')#plt.ylabel('SW$_{net}$ [W m$^{-2}$]')
+    plt.plot(obs_data['time'], obs_data['lwp']/1e3, color = 'black', label = 'ice_station')#plt.ylabel('SW$_{net}$ [W m$^{-2}$]')
     for m in range(0,len(um_data)):
-        plt.plot(um_data[m]['time'], um_data[m]['lwp']-273.15, color = lcols[m], label = label[m])
+        plt.plot(um_data[m]['time'], um_data[m]['lwp'], color = lcols[m], label = label[m])
     for m in range(0,len(monc_data)):
-        plt.plot(monc_data[m][monc_data[m]['tvar']['LWP_mean']], monc_data[m]['LWP_mean']-273.15, color = lcolsmonc[m], label = mlabel[m])
-    plt.ylabel('LWP [g m$^2$]')
+        plt.plot(monc_data[m][monc_data[m]['tvar']['LWP_mean']], monc_data[m]['LWP_mean'], color = lcolsmonc[m], label = mlabel[m])
+    plt.ylabel('LWP [kg m$^2$]')
 
     plt.legend(bbox_to_anchor=(-0.08, 0.77, 1., .102), loc=4, ncol=4)
     ax.set_xlim([dates[0], dates[1]])
@@ -1323,7 +1322,7 @@ def plot_lwp(obs_data, plot_out_dir, dates,**args ):
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
 
     #plt.legend(bbox_to_anchor=(-0.08, 0.67, 1., .102), loc=4, ncol=3)
-    ax.set_xlim([datenum, edatenum])
+    ax.set_xlim([dates[0], dates[1]])
     plt.xlabel('Time [UTC]')
 
     print ('******')
@@ -1331,9 +1330,9 @@ def plot_lwp(obs_data, plot_out_dir, dates,**args ):
     print ('Finished plotting! :)')
     print ('')
 
-    date=datenum2date(datenum)
+    dstr=datenum2date(dates[0])
 #    from IPython import embed; embed()
-    fileout = os.path.join(plot_out_dir,date.strftime('%Y%m%d') + '_lwp_ts.png')
+    fileout = os.path.join(plot_out_dir,dstr.strftime('%Y%m%d') + '_lwp_ts.png')
     plt.savefig(fileout)
 
 
