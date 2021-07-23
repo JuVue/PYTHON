@@ -439,6 +439,7 @@ def main():
 
     um_data = {}
     for m in range(0,len(out_dir)):
+        embed()
         datenum = date2datenum(dtime.datetime.strptime(strdate,'%Y%m%d'))
         um_data[m]['time'] = datenum + (nc[m].variables['forecast_time'][:]/24.0)
         ### define height arrays explicitly
