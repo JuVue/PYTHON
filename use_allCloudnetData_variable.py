@@ -1568,9 +1568,9 @@ def CaseStudySelection(obs_data,um_data,monc_data,dates):
         monc_vars=list(monc_data[m].keys())
         monc_vars.remove('tvar')
         monc_vars.remove('zvar')
-         mt1=monc_data[m]['time1']
-         mt2=monc_data[m]['time2']
-         mt3=monc_data[m]['time3']
+        mt1=monc_data[m]['time1']
+        mt2=monc_data[m]['time2']
+        mt3=monc_data[m]['time3']
 
         # mt1=monc_data[m]['time1']/60/60/24 + dates[0]
         # mt2=monc_data[m]['time2']/60/60/24 + dates[0]
