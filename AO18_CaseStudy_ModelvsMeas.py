@@ -147,7 +147,7 @@ def plot_lwp(obs_data, plot_out_dir, dates,**args ):
     embed()
     print ('******')
     print ('')
-    print ('Plotting  timeseries of surface variables:')
+    print ('Plotting  timeseries of lwp:')
     print ('')
 
     SMALL_SIZE = 12
@@ -180,12 +180,13 @@ def plot_lwp(obs_data, plot_out_dir, dates,**args ):
     ax  = fig.add_axes([0.07,0.7,0.7,0.22])   # left, bottom, width, height
     ax = plt.gca()
     yB = [-10, 120]
-    plt.plot(obs['hatpro']['mday'], obs['hatpro']['lwp'], color = 'black', label = 'ice_station')#plt.ylabel('SW$_{net}$ [W m$^{-2}$]')
+    plt.plot(obs_data['hatpro']['mday'], obs_data['hatpro']['lwp']/1e3, color = 'black', label = 'ice_station')#plt.ylabel('SW$_{net}$ [W m$^{-2}$]')
     for m in range(0,len(um_data)):
         plt.plot(um_data[m]['time'], um_data[m]['LWP']-273.15, color = lcols[m], label = label[m])
     for m in range(0,len(monc_data)):
-        plt.plot(monc_data[m]['time'], monc_data[m]['lwp']-273.15, color = lcolsmonc[m], label = mlabel[m])
+        plt.plot(monc_data[m][monc_data[m]['tvar']['LWP_mean']], monc_data[m]['LWP_mean']-273.15, color = lcolsmonc[m], label = mlabel[m])
     plt.ylabel('LWP [g m$^2$]')
+
     plt.legend(bbox_to_anchor=(-0.08, 0.77, 1., .102), loc=4, ncol=4)
     ax.set_xlim([dates[0], dates[1]])
     plt.grid(which='both')
