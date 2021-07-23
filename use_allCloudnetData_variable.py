@@ -1310,7 +1310,7 @@ def plot_lwp(obs_data, plot_out_dir, dates,**args ):
     yB = [-10, 120]
     plt.plot(obs_data['mday'], obs_data['lwp']/1e3, color = 'black', label = 'ice_station')#plt.ylabel('SW$_{net}$ [W m$^{-2}$]')
     for m in range(0,len(um_data)):
-        plt.plot(um_data[m]['time'], um_data[m]['lwp'']-273.15, color = lcols[m], label = label[m])
+        plt.plot(um_data[m]['time'], um_data[m]['lwp']-273.15, color = lcols[m], label = label[m])
     for m in range(0,len(monc_data)):
         plt.plot(monc_data[m][monc_data[m]['tvar']['LWP_mean']], monc_data[m]['LWP_mean']-273.15, color = lcolsmonc[m], label = mlabel[m])
     plt.ylabel('LWP [g m$^2$]')
