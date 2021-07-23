@@ -1307,7 +1307,7 @@ def plot_lwp(obs_data, plot_out_dir, dates,**args ):
     ax  = fig.add_axes([0.07,0.7,0.7,0.22])   # left, bottom, width, height
     ax = plt.gca()
     yB = [-10, 120]
-    plt.plot(obs_data['time'], obs_data['lwp'], color = 'black', label = 'ice_station')#plt.ylabel('SW$_{net}$ [W m$^{-2}$]')
+    plt.plot(obs_data['time'], obs_data['lwp'][:,0], color = 'black', label = 'ice_station')#plt.ylabel('SW$_{net}$ [W m$^{-2}$]')
     for m in range(0,len(um_data)):
         plt.plot(um_data[m]['time'], um_data[m]['model_lwp'], color = lcols[m], label = label[m])
     for m in range(0,len(monc_data)):
@@ -1538,7 +1538,6 @@ def CaseStudySelection(obs_data,um_data,monc_data,dates):
     obs_vars=list(obs_data.keys())
     time_ind = np.argwhere((obs_data['time']<dates[0]) | (obs_data['time']>dates[1]+1/60/24 ))
     tinit=len(obs_data['time'])
-    embed()
     for j in range(0,len(obs_vars)):
         tmp2=np.argwhere(np.array(obs_data[obs_vars[j]].shape) == tinit)
         if tmp2 == 0:
@@ -1916,6 +1915,12 @@ def main():
     ## -------------------------------------------------------------
     monc_data=removeSpinUp(monc_data,monc_spin)
 
+    ## -------------------------------------------------------------
+    ## convert monc time to datenum
+    ## -------------------------------------------------------------
+    monc_data[m]['time3']=dates[0] + monc_data[m]['time3']/60/60/24
+    monc_data[m]['time2']=dates[0] + monc_data[m]['time2']/60/60/24
+    monc_data[m]['time1']=dates[0] + monc_data[m]['time1']/60/60/24
     ## -------------------------------------------------------------
     ## shorten obs/model data to case study time period
     ## -------------------------------------------------------------
