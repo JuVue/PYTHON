@@ -169,7 +169,7 @@ def plot_CvTimeseries(obs_data, plots_out_dir,dates,  **args):
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_CvTimeseries.png'
     print(fileout)
     plt.savefig(fileout)
-    plt.close()
+    plt.show()
 
     print ('')
     print ('Finished plotting! :)')
