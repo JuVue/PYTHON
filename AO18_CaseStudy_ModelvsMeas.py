@@ -308,6 +308,58 @@ def plot_radiation(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3, daten
     fileout = os.path.join(plot_out_dir,date.strftime('%Y%m%d') + '_radiation_ts.png')
     plt.savefig(fileout)
 
+def removeSpinUp(monc_data,monc_spin):
+    print('')
+    print('remove MONC spinup time')
+    for m in range(0,len(monc_data)):
+        monc_var_list = list(monc_data[m].keys())
+        monc_var_list.remove('time1')
+        monc_var_list.remove('time2')
+        monc_var_list.remove('time3')
+        monc_var_list.remove('tvar')
+        monc_var_list.remove('zvar')
+
+        id1 = np.squeeze(np.argwhere(monc_data[m]['time1']<=monc_spin)) #1D data
+        id2 = np.squeeze(np.argwhere(monc_data[m]['time2']<=monc_spin))
+        id3 = np.squeeze(np.argwhere(monc_data[m]['time3']<=monc_spin))
+
+        for j in range(0,len(monc_var_list)):
+            if monc_data[m]['tvar'][monc_var_list[j]]=='time1':
+            #if any(np.array(monc_data[m][monc_var_list[j]].shape) == len(monc_data[m]['time1'])):
+                monc_data[m][monc_var_list[j]]=np.delete(monc_data[m][monc_var_list[j]],id1,0)
+            elif monc_data[m]['tvar'][monc_var_list[j]]=='time2':
+            #elif any(np.array(monc_data[m][monc_var_list[j]].shape) == len(monc_data[m]['time2'])):
+                tmp2=np.argwhere(np.array(monc_data[m][monc_var_list[j]].shape) == len(monc_data[m]['time2']))
+                if tmp2 == 0:
+                    monc_data[m][monc_var_list[j]]=np.delete(monc_data[m][monc_var_list[j]],id2,0)
+                elif tmp2 == 1:
+                    monc_data[m][monc_var_list[j]]=np.delete(monc_data[m][monc_var_list[j]],id2,1)
+                elif tmp2 == 2:
+                    monc_data[m][monc_var_list[j]]=np.delete(monc_data[m][monc_var_list[j]],id2,2)
+                elif tmp2 == 3:
+                    monc_data[m][monc_var_list[j]]=np.delete(monc_data[m][monc_var_list[j]],id2,3)
+            elif monc_data[m]['tvar'][monc_var_list[j]]=='time3':
+            #elif any(np.array(monc_data[m][monc_var_list[j]].shape) == len(monc_data[m]['time2'])):
+                tmp2=np.argwhere(np.array(monc_data[m][monc_var_list[j]].shape) == len(monc_data[m]['time3']))
+                if tmp2 == 0:
+                    monc_data[m][monc_var_list[j]]=np.delete(monc_data[m][monc_var_list[j]],id3,0)
+                elif tmp2 == 1:
+                    monc_data[m][monc_var_list[j]]=np.delete(monc_data[m][monc_var_list[j]],id3,1)
+                elif tmp2 == 2:
+                    monc_data[m][monc_var_list[j]]=np.delete(monc_data[m][monc_var_list[j]],id3,2)
+                elif tmp2 == 3:
+                    monc_data[m][monc_var_list[j]]=np.delete(monc_data[m][monc_var_list[j]],id3,3)
+        monc_data[m]['time1']=np.delete(monc_data[m]['time1'],id1,0)
+        monc_data[m]['time2']=np.delete(monc_data[m]['time2'],id2,0)
+        monc_data[m]['time3']=np.delete(monc_data[m]['time3'],id3,0)
+        monc_data[m]['time1']=monc_data[m]['time1']-monc_data[m]['time1'][0]
+        monc_data[m]['time2']=monc_data[m]['time2']-monc_data[m]['time2'][0]
+        monc_data[m]['time3']=monc_data[m]['time3']-monc_data[m]['time3'][0]
+
+    return monc_data
+    print('done')
+    print('*************')
+    print ('')
 
 
 def main():
@@ -342,7 +394,7 @@ def main():
                 '6_control_20180913T0000Z_Wsub-1.5-1km/',
                 '7_20180913T0000Z_Wsub-1.5-1km_solAccum-100_inuc-0_iact-3/']
 
-    um_sub_dir = 'OUT_R0'
+    um_sub_dir = 'OUT_R0/'
     ### CHOOSE DATES TO PLOT
     DATE = 20180913
     strdate=str(DATE)
@@ -369,7 +421,6 @@ def main():
     ### -------------------------------------------------------------------------
     filename_um=[]
     nc={}
-    embed()
     for m in range(0, len(out_dir)):
         filename_um = um_root_dir + out_dir[m] + um_sub_dir + strdate + '_oden_metum.nc'
         nc[m] = Dataset(filename_um,'r')
@@ -425,16 +476,45 @@ def main():
         print(monc_filename[m])
         ncm = Dataset(monc_filename[m],'r')
         monc_data[m]={}
+        zvar={}
+        tvar={}
         for c in range(0,len(monc_var_list)):
             for j in range(0,len(monc_var_list[c])):
-                monc_data[m][monc_var_list[c][j]] = ncm.variables[monc_var_list[c][j]][:]
+                var = monc_var_list[c][j]
+                zvar[var]=[]
+                tvar[var]=[]
+                monc_data[m][var] = ncm.variables[var][:]
+                ###getting right z and t dimensions
+                tmp=ncm.variables[var].dimensions
+                if "'z'" in str(tmp):
+                    zvar[var]='z'
+                elif "'zn'" in str(tmp):
+                    zvar[var]='zn'
+                else:
+                    zvar[var]=np.nan
+                if "'time_series_2_60'" in str(tmp):
+                    tvar[var]='time1'
+                elif "'time_series_2_600'" in str(tmp):
+                    tvar[var]='time2'
+                elif "'time_series_20_600'" in str(tmp):
+                    tvar[var]='time3'
+        monc_data[m]['zvar']=zvar
+        monc_data[m]['tvar']=tvar
 
-        monc_data[m]['time2']=monc_data[m]['time_series_20_600'] #2d data
+        monc_data[m]['time3']=monc_data[m]['time_series_20_600'] #2d data
+        monc_data[m]['time2']=monc_data[m]['time_series_2_600'] #2d data
         monc_data[m]['time1']=monc_data[m]['time_series_2_60'] #1d data
         monc_data[m].pop('time_series_2_60')
+        monc_data[m].pop('time_series_2_600')
         monc_data[m].pop('time_series_20_600')
 
     print (' Monc data Loaded!')
+
+#################################################################################################################################
+## -------------------------------------------------------------
+## remove spin up time from monc data
+## -------------------------------------------------------------
+monc_data=removeSpinUp(monc_data,monc_spin)
 
 # -------------------------------------------------------------
 # Load observations
