@@ -403,6 +403,8 @@ def main():
     edate = dtime.datetime.strptime('2018091313','%Y%m%d%H')
     dates = [date2datenum(sdate),date2datenum(edate)]
 
+    #---- MONC SPIN UP TIME
+    monc_spin = 6 *60 *60
 
     ### SET OUTPUT DIRECTORY FOR PLOTS
     plot_out_dir = '/nfs/a96/MOCCHA/working/jutta/plots/CaseStudies/ModelComparison/'
