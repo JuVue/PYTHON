@@ -168,7 +168,7 @@ def plot_lwp(obs_data, label, mlabel, plot_out_dir, dates,**args ):
     fcols=['mediumaquamarine','lightblue','blue']
     lcolsmonc=['gold','darkgoldenrod','darkorange','orangered','firebrick']
     fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
-
+    embed()
     #################################################################
     ## create figure and axes instances
     #################################################################
@@ -196,10 +196,6 @@ def plot_lwp(obs_data, label, mlabel, plot_out_dir, dates,**args ):
 
     #plt.legend(bbox_to_anchor=(-0.08, 0.67, 1., .102), loc=4, ncol=3)
     ax.set_xlim([datenum, edatenum])
-    plt.grid(which='both')
-    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
-    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
     plt.xlabel('Time [UTC]')
 
     print ('******')
