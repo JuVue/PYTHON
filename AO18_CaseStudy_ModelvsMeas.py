@@ -123,7 +123,7 @@ def plot_surfaceVariables(obs_data, label, mlabel, plot_out_dir, dates,**args ):
     plt.savefig(fileout)
 
 
-def plot_surfaceVariables(obs_data, label, mlabel, plot_out_dir, dates,**args ):
+def plot_lwp(obs_data, label, mlabel, plot_out_dir, dates,**args ):
 
     numsp=1
     if bool(args):
@@ -144,7 +144,7 @@ def plot_surfaceVariables(obs_data, label, mlabel, plot_out_dir, dates,**args ):
                 outstr= args[list(args.keys())[n]]
 
 
-
+    embed()
     print ('******')
     print ('')
     print ('Plotting  timeseries of surface variables:')
