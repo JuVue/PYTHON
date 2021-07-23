@@ -444,6 +444,7 @@ def main():
         um_data[m]['time'] = datenum + (nc[m].variables['forecast_time'][:]/24.0)
         ### define height arrays explicitly
         um_data[m]['height'] = nc[m].variables['height'][:]
+        for var in nc[m].variables: print(var)
 
         print ('Starting on t=0 RA2M data:')
         for j in range(0,len(var_list1)):
