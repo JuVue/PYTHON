@@ -369,6 +369,7 @@ def main():
     ### -------------------------------------------------------------------------
     filename_um=[]
     nc={}
+    embed()
     for m in range(0, len(out_dir)):
         filename_um[m] = um_root_dir + out_dir[m] + strdate + '_oden_metum.nc'
         print( 'Loading ' + m + 'th run diagnostics:')
