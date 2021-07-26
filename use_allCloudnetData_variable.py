@@ -804,8 +804,8 @@ def plot_lwcProfiles(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,dates, 
     ### define axis instance
     ax1 = plt.gca()
     ###define colors
-    lcols=['mediumseagreen','steelblue','darkblue']
-    fcols=['mediumaquamarine','lightblue','blue']
+    lcols=['mediumseagreen','lightseagreen','cadetblue','steelblue','darkblue']
+    fcols=['mediumaquamarine','lightcyan','lightblue','skyblue','blue']
     lcolsmonc=['gold','darkgoldenrod','darkorange','orangered','firebrick']
     fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
     #### ADIABATIC LWC
@@ -1222,8 +1222,8 @@ def plot_twcProfiles( obs_data,twcvar,twcstr, thresholding, plots_out_dir,dates,
     ### define axis instance
     ax1 = plt.gca()
     ###define colors
-    lcols=['mediumseagreen','steelblue','darkblue']
-    fcols=['mediumaquamarine','lightblue','blue']
+    lcols=['mediumseagreen','lightseagreen','cadetblue','steelblue','darkblue']
+    fcols=['mediumaquamarine','lightcyan','lightblue','skyblue','blue']
     lcolsmonc=['gold','darkgoldenrod','darkorange','orangered','firebrick']
     fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
     #### ADIABATIC LWC (where there are HATPRO LWP data available)
@@ -1334,8 +1334,8 @@ def plot_lwp(obs_data, plot_out_dir, dates,**args ):
     plt.subplots_adjust(top = 0.95, bottom = 0.05, right = 0.95, left = 0.05,
             hspace = 0.4, wspace = 0.13)
 
-    lcols=['mediumseagreen','steelblue','darkblue']
-    fcols=['mediumaquamarine','lightblue','blue']
+    lcols=['mediumseagreen','lightseagreen','cadetblue','steelblue','darkblue']
+    fcols=['mediumaquamarine','lightcyan','lightblue','skyblue','blue']
     lcolsmonc=['gold','darkgoldenrod','darkorange','orangered','firebrick']
     fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
     #################################################################
