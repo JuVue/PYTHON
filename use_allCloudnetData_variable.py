@@ -1009,7 +1009,7 @@ def plot_iwcProfiles(obs_data, twcvar,twcstr, thresholding,plots_out_dir,dates, 
     ### define axis instance
     ax1 = plt.gca()
     ###define colors
-    lcols=['lightseagreen','cadetblue','steelblue','darkblue']
+    lcols=['lightseagreen','steelblue','royalblue','darkblue']
     fcols=['lightcyan','lightblue','skyblue','blue']
     lcolsmonc=['gold','darkgoldenrod','darkorange','orangered','firebrick']
     fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
@@ -1221,7 +1221,7 @@ def plot_twcProfiles( obs_data,twcvar,twcstr, thresholding, plots_out_dir,dates,
     ### define axis instance
     ax1 = plt.gca()
     ###define colors
-    lcols=['lightseagreen','cadetblue','steelblue','darkblue']
+    lcols=['lightseagreen','steelblue','royalblue','darkblue']
     fcols=['lightcyan','lightblue','skyblue','blue']
     lcolsmonc=['gold','darkgoldenrod','darkorange','orangered','firebrick']
     fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
@@ -1333,8 +1333,8 @@ def plot_lwp(obs_data, plot_out_dir, dates,**args ):
     plt.subplots_adjust(top = 0.95, bottom = 0.05, right = 0.95, left = 0.05,
             hspace = 0.4, wspace = 0.13)
 
-    lcols=['mediumseagreen','lightseagreen','cadetblue','steelblue','darkblue']
-    fcols=['mediumaquamarine','lightcyan','lightblue','skyblue','blue']
+    lcols=['lightseagreen','steelblue','royalblue','darkblue']
+    fcols=['lightcyan','lightblue','skyblue','blue']
     lcolsmonc=['gold','darkgoldenrod','darkorange','orangered','firebrick']
     fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
     #################################################################
@@ -1698,9 +1698,9 @@ def main():
     #           '24_u-cc324_RA2T_CON/',
     #           '25_u-cc568_RA2M_CON/']
     out_dir = ['23_u-cc278_RA1M_CASIM/',
+               '30_u-cg179_RA1M_CASIM/',
                '26_u-cd847_RA1M_CASIM/',
-               '27_u-ce112_RA1M_CASIM/',
-               '30_u-cg179_RA1M_CASIM/']
+               '27_u-ce112_RA1M_CASIM/']
     #out_dir = ['23_u-cc278_RA1M_CASIM/']
     ### CHOOSE MONC RUNS
     # m_out_dir = ['5_control_20180913T0000Z_Wsub-1.5_Fletcher/',
