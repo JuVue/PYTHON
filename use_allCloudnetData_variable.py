@@ -759,9 +759,9 @@ def plot_lwcProfiles(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,dates, 
             twc_thresh_monc = np.zeros([np.size(monc_data[m]['model_twc'],1)])
             ### first look at values below 1 km
             ###     find Z indices <= 1km, then set twc_thresh values to 1e-6
-            monc_lt1km = np.where(monc_data[m][zvar][:]<=1e3)
+            monc_lt1km = np.where(monc_data[m][lwc_zvar][:]<=1e3)
             twc_thresh_monc[monc_lt1km] = 1e-6
-            monc_lt1km = np.where(monc_data[m][zvar][:]>=4e3)
+            monc_lt1km = np.where(monc_data[m][lwc_zvar][:]>=4e3)
             twc_thresh_monc[monc_lt1km] = 1e-7
             monc_intZs = np.where(twc_thresh_monc == 0.0)
 
@@ -770,7 +770,7 @@ def plot_lwcProfiles(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,dates, 
             y = [1e3, 4e3]
             f = interp1d(y, x)
             for m in range(0,len(monc_data)):
-                twc_thresh_monc[monc_intZs] = f(monc_data[m][zvar][monc_intZs].data)
+                twc_thresh_monc[monc_intZs] = f(monc_data[m][lwc_zvar][monc_intZs].data)
 
             for t in range(0,np.size(monc_data[m]['model_twc'],0)):
                 for k in range(0,np.size(monc_data[m]['model_twc'],1)):
@@ -827,18 +827,18 @@ def plot_lwcProfiles(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,dates, 
                 '--', color = lcols[m], linewidth = 0.5)
     if pmonc==True:
         for m in range(0,len(monc_data)):
-            ax1.fill_betweenx(monc_data[m][zvar],np.nanmean(monc_data[m]['model_lwc'],0)*1e3 - np.nanstd(monc_data[m]['model_lwc']*1e3,0),
+            ax1.fill_betweenx(monc_data[m][lwc_zvar],np.nanmean(monc_data[m]['model_lwc'],0)*1e3 - np.nanstd(monc_data[m]['model_lwc']*1e3,0),
                 np.nanmean(monc_data[m]['model_lwc'],0)*1e3 + np.nanstd(monc_data[m]['model_lwc'],0)*1e3, color = fcolsmonc[m], alpha = 0.05)
-            plt.plot(np.nanmean(monc_data[m]['model_lwc'],0)*1e3 - np.nanstd(monc_data[m]['model_lwc'],0)*1e3, monc_data[m][zvar],
+            plt.plot(np.nanmean(monc_data[m]['model_lwc'],0)*1e3 - np.nanstd(monc_data[m]['model_lwc'],0)*1e3, monc_data[m][lwc_zvar],
                 '--', color =lcolsmonc[m], linewidth = 0.5)
-            plt.plot(np.nanmean(monc_data[m]['model_lwc'],0)*1e3 + np.nanstd(monc_data[m]['model_lwc'],0)*1e3, monc_data[m][zvar],
+            plt.plot(np.nanmean(monc_data[m]['model_lwc'],0)*1e3 + np.nanstd(monc_data[m]['model_lwc'],0)*1e3, monc_data[m][lwc_zvar],
                 '--', color = lcolsmonc[m], linewidth = 0.5)
     if pum==True:
         for m in range(0,len(um_data)):
             plt.plot(np.nanmean(um_data[m]['model_lwc'],0)*1e3,np.nanmean(um_data[m]['height'],0), color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
     if pmonc==True:
         for m in range(0,len(monc_data)):
-            plt.plot(np.nanmean(monc_data[m]['model_lwc'],0)*1e3,monc_data[m][zvar], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+            plt.plot(np.nanmean(monc_data[m]['model_lwc'],0)*1e3,monc_data[m][lwc_zvar], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
 
     plt.xlabel('Liquid water content [g m$^{-3}$]')
     plt.ylabel('Z [km]')
@@ -965,9 +965,9 @@ def plot_iwcProfiles(obs_data, twcvar,twcstr, thresholding,plots_out_dir,dates, 
             twc_thresh_monc = np.zeros([np.size(monc_data[m]['model_twc'],1)])
             ### first look at values below 1 km
             ###     find Z indices <= 1km, then set twc_thresh values to 1e-6
-            monc_lt1km = np.where(monc_data[m][zvar][:]<=1e3)
+            monc_lt1km = np.where(monc_data[m][twc_zvar][:]<=1e3)
             twc_thresh_monc[monc_lt1km] = 1e-6
-            monc_lt1km = np.where(monc_data[m][zvar][:]>=4e3)
+            monc_lt1km = np.where(monc_data[m][twc_zvar][:]>=4e3)
             twc_thresh_monc[monc_lt1km] = 1e-7
             monc_intZs = np.where(twc_thresh_monc == 0.0)
 
@@ -976,7 +976,7 @@ def plot_iwcProfiles(obs_data, twcvar,twcstr, thresholding,plots_out_dir,dates, 
             y = [1e3, 4e3]
             f = interp1d(y, x)
             for m in range(0,len(monc_data)):
-                twc_thresh_monc[monc_intZs] = f(monc_data[m][zvar][monc_intZs].data)
+                twc_thresh_monc[monc_intZs] = f(monc_data[m][twc_zvar][monc_intZs].data)
 
             for t in range(0,np.size(monc_data[m]['model_twc'],0)):
                 for k in range(0,np.size(monc_data[m]['model_twc'],1)):
@@ -1034,17 +1034,17 @@ def plot_iwcProfiles(obs_data, twcvar,twcstr, thresholding,plots_out_dir,dates, 
                 '--', color = lcols[m], linewidth = 0.5)
     if pmonc==True:
         for m in range(0,len(monc_data)):
-            ax1.fill_betweenx(monc_data[m][zvar],np.nanmean(monc_data[m]['model_iwc'],0)*1e3 - np.nanstd(monc_data[m]['model_iwc']*1e3,0),
+            ax1.fill_betweenx(monc_data[m][twc_zvar],np.nanmean(monc_data[m]['model_iwc'],0)*1e3 - np.nanstd(monc_data[m]['model_iwc']*1e3,0),
                 np.nanmean(monc_data[m]['model_iwc'],0)*1e3 + np.nanstd(monc_data[m]['model_iwc'],0)*1e3, color = fcolsmonc[m], alpha = 0.05)
-            plt.plot(np.nanmean(monc_data[m]['model_iwc'],0)*1e3 - np.nanstd(monc_data[m]['model_iwc'],0)*1e3, monc_data[m][zvar],
+            plt.plot(np.nanmean(monc_data[m]['model_iwc'],0)*1e3 - np.nanstd(monc_data[m]['model_iwc'],0)*1e3, monc_data[m][twc_zvar],
                 '--', color =lcolsmonc[m], linewidth = 0.5)
-            plt.plot(np.nanmean(monc_data[m]['model_iwc'],0)*1e3 + np.nanstd(monc_data[m]['model_iwc'],0)*1e3, monc_data[m][zvar],
+            plt.plot(np.nanmean(monc_data[m]['model_iwc'],0)*1e3 + np.nanstd(monc_data[m]['model_iwc'],0)*1e3, monc_data[m][twc_zvar],
                 '--', color = lcolsmonc[m], linewidth = 0.5)
     for m in range(0,len(um_data)):
         plt.plot(np.nanmean(um_data[m]['model_iwc'],0)*1e3,np.nanmean(um_data[m]['height'],0), color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
     if pmonc==True:
         for m in range(0,len(monc_data)):
-            plt.plot(np.nanmean(monc_data[m]['model_iwc'],0)*1e3,monc_data[m][zvar], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+            plt.plot(np.nanmean(monc_data[m]['model_iwc'],0)*1e3,monc_data[m][twc_zvar], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
 
     plt.xlabel('Ice water content [g m$^{-3}$]')
     plt.ylabel('Z [km]')
