@@ -1378,10 +1378,10 @@ def plot_lwp(obs_data, plot_out_dir, dates,**args ):
 #    from IPython import embed; embed()
     dstr=datenum2date(dates[1])
     if pmonc==True:
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_TWCTimeseries' + twcstr + '.png'
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_LWP.png'
     else:
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_TWCTimeseries' + twcstr + '.png'
-    fileout = os.path.join(plot_out_dir,dstr.strftime('%Y%m%d') + '_lwp_ts.png')
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_LWP.png'
+    #fileout = os.path.join(plots_out_dir,dstr.strftime('%Y%m%d') + '_lwp_ts.png')
     plt.savefig(fileout)
 
 
