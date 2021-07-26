@@ -1293,7 +1293,7 @@ def plot_twcProfiles( obs_data,twcvar,twcstr, thresholding, plots_out_dir,dates,
     print ('Finished plotting! :)')
     print ('')
 
-def plot_lwp(obs_data, plot_out_dir, dates,**args ):
+def plot_lwp(obs_data, plots_out_dir, dates,**args ):
 
     numsp=1
     if bool(args):
