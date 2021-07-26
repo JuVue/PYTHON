@@ -344,7 +344,7 @@ def plot_IWCTimeseries( obs_data, plots_out_dir, dates,**args): #, lon, lat):
             if  list(args.keys())[n] == 'monc_data':
                 monc_data=args[list(args.keys())[n]]
                 numsp += len(monc_data)
-                pmonc==True
+                pmonc=True
             elif list(args.keys())[n] == 'mlabel':
                 mlabel = args[list(args.keys())[n]]
             elif list(args.keys())[n] == 'moutstr':
@@ -352,7 +352,7 @@ def plot_IWCTimeseries( obs_data, plots_out_dir, dates,**args): #, lon, lat):
             elif  list(args.keys())[n] == 'um_data':
                 um_data=args[list(args.keys())[n]]
                 numsp += len(um_data)
-                pum==True
+                pum=True
             elif list(args.keys())[n] == 'label':
                 label = args[list(args.keys())[n]]
             elif list(args.keys())[n] == 'outstr':
