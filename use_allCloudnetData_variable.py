@@ -1010,8 +1010,8 @@ def plot_iwcProfiles(obs_data, twcvar,twcstr, thresholding,plots_out_dir,dates, 
     ### define axis instance
     ax1 = plt.gca()
     ###define colors
-    lcols=['mediumseagreen','steelblue','darkblue']
-    fcols=['mediumaquamarine','lightblue','blue']
+    lcols=['mediumseagreen','lightseagreen','cadetblue','steelblue','darkblue']
+    fcols=['mediumaquamarine','lightcyan','lightblue','skyblue','blue']
     lcolsmonc=['gold','darkgoldenrod','darkorange','orangered','firebrick']
     fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
 
