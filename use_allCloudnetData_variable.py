@@ -804,8 +804,8 @@ def plot_lwcProfiles(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,dates, 
     ### define axis instance
     ax1 = plt.gca()
     ###define colors
-    lcols=['mediumseagreen','lightseagreen','cadetblue','steelblue','darkblue']
-    fcols=['mediumaquamarine','lightcyan','lightblue','skyblue','blue']
+    lcols=['lightseagreen','cadetblue','steelblue','darkblue']
+    fcols=['lightcyan','lightblue','skyblue','blue']
     lcolsmonc=['gold','darkgoldenrod','darkorange','orangered','firebrick']
     fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
     #### ADIABATIC LWC
@@ -1010,8 +1010,8 @@ def plot_iwcProfiles(obs_data, twcvar,twcstr, thresholding,plots_out_dir,dates, 
     ### define axis instance
     ax1 = plt.gca()
     ###define colors
-    lcols=['mediumseagreen','lightseagreen','cadetblue','steelblue','darkblue']
-    fcols=['mediumaquamarine','lightcyan','lightblue','skyblue','blue']
+    lcols=['lightseagreen','cadetblue','steelblue','darkblue']
+    fcols=['lightcyan','lightblue','skyblue','blue']
     lcolsmonc=['gold','darkgoldenrod','darkorange','orangered','firebrick']
     fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
 
@@ -1222,8 +1222,8 @@ def plot_twcProfiles( obs_data,twcvar,twcstr, thresholding, plots_out_dir,dates,
     ### define axis instance
     ax1 = plt.gca()
     ###define colors
-    lcols=['mediumseagreen','lightseagreen','cadetblue','steelblue','darkblue']
-    fcols=['mediumaquamarine','lightcyan','lightblue','skyblue','blue']
+    lcols=['lightseagreen','cadetblue','steelblue','darkblue']
+    fcols=['lightcyan','lightblue','skyblue','blue']
     lcolsmonc=['gold','darkgoldenrod','darkorange','orangered','firebrick']
     fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
     #### ADIABATIC LWC (where there are HATPRO LWP data available)
@@ -1763,7 +1763,7 @@ def main():
             mlabel.append('MONC Wsub0.5-1km')
             moutstr.append('Mwsub0.5-1km')
         elif m_out_dir[m][:2] == '20':
-            mlabel.append('MONC qinit2 800m thqvTend noice')
+            mlabel.append('MONC qinit2 800m \n thqvTend noice')
             moutstr.append('qin2-thqvTend-noice')
         else:
             label.append('undefined_label')
