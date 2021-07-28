@@ -25,7 +25,7 @@ from readMAT import readMatlabStruct
 #from pyFixes import py3_FixNPLoad
 
 
-def plot_surfaceVariables(obs_data, label, mlabel, plot_out_dir, dates,**args ):
+def plot_surfaceVariables(obs_data, plot_out_dir, dates,**args  ):
 
     numsp=1
     if bool(args):
@@ -33,6 +33,7 @@ def plot_surfaceVariables(obs_data, label, mlabel, plot_out_dir, dates,**args ):
             if  list(args.keys())[n] == 'monc_data':
                 monc_data=args[list(args.keys())[n]]
                 numsp += len(monc_data)
+                pmonc=True
             elif list(args.keys())[n] == 'mlabel':
                 mlabel = args[list(args.keys())[n]]
             elif list(args.keys())[n] == 'moutstr':
@@ -40,10 +41,12 @@ def plot_surfaceVariables(obs_data, label, mlabel, plot_out_dir, dates,**args ):
             elif  list(args.keys())[n] == 'um_data':
                 um_data=args[list(args.keys())[n]]
                 numsp += len(um_data)
+                pum=True
             elif list(args.keys())[n] == 'label':
                 label = args[list(args.keys())[n]]
             elif list(args.keys())[n] == 'outstr':
                 outstr= args[list(args.keys())[n]]
+
 
 
 
@@ -83,10 +86,12 @@ def plot_surfaceVariables(obs_data, label, mlabel, plot_out_dir, dates,**args ):
     ax = plt.gca()
     yB = [-10, 120]
     plt.plot(obs['metalley']['mday'], obs['metalley']['t'], color = 'black', label = 'ice_station')#plt.ylabel('SW$_{net}$ [W m$^{-2}$]')
-    for m in range(0,len(um_data)):
-        plt.plot(um_data[m]['time'], um_data[m]['air_temperature_at_1.5m']-273.15, color = lcols[m], label = label[m])
-    for m in range(0,len(monc_data)):
-        plt.plot(monc_data[m]['time'], monc_data[m]['air_temperature_at_1.5m']-273.15, color = lcolsmonc[m], label = mlabel[m])
+    if pum==True:
+        for m in range(0,len(um_data)):
+            plt.plot(um_data[m]['time'], um_data[m]['air_temperature_at_1.5m']-273.15, color = lcols[m], label = label[m])
+    if pmonc==True:
+        for m in range(0,len(monc_data)):
+            plt.plot(monc_data[m]['time'], monc_data[m]['air_temperature_at_1.5m']-273.15, color = lcolsmonc[m], label = mlabel[m])
     plt.ylabel('T [$^\circ$C]')
     plt.legend(bbox_to_anchor=(-0.08, 0.77, 1., .102), loc=4, ncol=4)
     ax.set_xlim([dates[0], dates[1]])
@@ -182,9 +187,9 @@ def plot_lwp(obs_data, plot_out_dir, dates,**args ):
     yB = [-10, 120]
     plt.plot(obs_data['hatpro']['mday'], obs_data['hatpro']['lwp']/1e3, color = 'black', label = 'ice_station')#plt.ylabel('SW$_{net}$ [W m$^{-2}$]')
     for m in range(0,len(um_data)):
-        plt.plot(um_data[m]['time'], um_data[m]['LWP']-273.15, color = lcols[m], label = label[m])
+        plt.plot(um_data[m]['time'], um_data[m]['LWP']-273.15,'^', color = lcols[m], label = label[m])
     for m in range(0,len(monc_data)):
-        plt.plot(monc_data[m][monc_data[m]['tvar']['LWP_mean']], monc_data[m]['LWP_mean']-273.15, color = lcolsmonc[m], label = mlabel[m])
+        plt.plot(monc_data[m][monc_data[m]['tvar']['LWP_mean']], monc_data[m]['LWP_mean']-273.15,'o', color = lcolsmonc[m], label = mlabel[m])
     plt.ylabel('LWP [g m$^2$]')
 
     plt.legend(bbox_to_anchor=(-0.08, 0.77, 1., .102), loc=4, ncol=4)
@@ -196,6 +201,103 @@ def plot_lwp(obs_data, plot_out_dir, dates,**args ):
 
     #plt.legend(bbox_to_anchor=(-0.08, 0.67, 1., .102), loc=4, ncol=3)
     ax.set_xlim([datenum, edatenum])
+    plt.xlabel('Time [UTC]')
+
+    print ('******')
+    print ('')
+    print ('Finished plotting! :)')
+    print ('')
+
+    date=datenum2date(datenum)
+#    from IPython import embed; embed()
+    fileout = os.path.join(plot_out_dir,date.strftime('%Y%m%d') + '_lwp_ts.png')
+    plt.savefig(fileout)
+
+
+def plot_BLDepth_SMLDepth(obs_data, plot_out_dir, dates,**args ):
+
+    numsp=1
+    if bool(args):
+        for n in range(0,len(args)):
+            if  list(args.keys())[n] == 'monc_data':
+                monc_data=args[list(args.keys())[n]]
+                numsp += len(monc_data)
+            elif list(args.keys())[n] == 'mlabel':
+                mlabel = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'moutstr':
+                moutstr= args[list(args.keys())[n]]
+            elif  list(args.keys())[n] == 'um_data':
+                um_data=args[list(args.keys())[n]]
+                numsp += len(um_data)
+            elif list(args.keys())[n] == 'label':
+                label = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'outstr':
+                outstr= args[list(args.keys())[n]]
+
+    print ('******')
+    print ('')
+    print ('Plotting  timeseries of BLDepth and SML:')
+    print ('')
+
+    SMALL_SIZE = 12
+    MED_SIZE = 14
+    LARGE_SIZE = 16
+
+    plt.rc('font',size=MED_SIZE)
+    plt.rc('axes',titlesize=MED_SIZE)
+    plt.rc('axes',labelsize=MED_SIZE)
+    plt.rc('xtick',labelsize=MED_SIZE)
+    plt.rc('ytick',labelsize=MED_SIZE)
+    plt.rc('legend',fontsize=MED_SIZE)
+    plt.subplots_adjust(top = 0.95, bottom = 0.05, right = 0.95, left = 0.05,
+            hspace = 0.4, wspace = 0.13)
+
+    lcols=['mediumseagreen','steelblue','darkblue']
+    fcols=['mediumaquamarine','lightblue','blue']
+    lcolsmonc=['gold','darkgoldenrod','darkorange','orangered','firebrick']
+    fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
+    embed()
+    #################################################################
+    ## create figure and axes instances
+    #################################################################
+    ### -------------------------------
+    ### Build figure (timeseries)
+    ### -------------------------------
+    #from IPython import embed; embed()
+    fig = plt.figure(figsize=(18,10 ))
+    ax  = fig.add_axes([0.07,0.7,0.7,0.22])   # left, bottom, width, height
+    ax = plt.gca()
+    yB = [-10, 120]
+    for m in range(0,len(um_data)):
+        plt.plot(um_data[m]['time'], um_data[m]['BLDepth'], color = lcols[m], label = label[m])
+    # for m in range(0,len(monc_data)):
+    #     plt.plot(monc_data[m][monc_data[m]['tvar']['LWP_mean']], monc_data[m]['LWP_mean']-273.15,'o', color = lcolsmonc[m], label = mlabel[m])
+    plt.ylabel('BL height [m]')
+    plt.legend(bbox_to_anchor=(-0.08, 0.77, 1., .102), loc=4, ncol=4)
+    ax.set_xlim([dates[0], dates[1]])
+    plt.grid(which='both')
+    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+    ax.set_xlim([datenum, edatenum])
+
+    ax  = fig.add_axes([0.07,0.4,0.7,0.22])   # left, bottom, width, height
+    ax = plt.gca()
+    yB = [-10, 120]
+    for m in range(0,len(um_data)):
+        plt.plot(um_data[m]['time'], um_data[m]['BLDepth'], color = lcols[m], label = label[m])
+    # for m in range(0,len(monc_data)):
+    #     plt.plot(monc_data[m][monc_data[m]['tvar']['LWP_mean']], monc_data[m]['LWP_mean']-273.15,'o', color = lcolsmonc[m], label = mlabel[m])
+    plt.ylabel('BL height [m]')
+    plt.legend(bbox_to_anchor=(-0.08, 0.77, 1., .102), loc=4, ncol=4)
+    ax.set_xlim([dates[0], dates[1]])
+    plt.grid(which='both')
+    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+    ax.set_xlim([datenum, edatenum])
+
+
     plt.xlabel('Time [UTC]')
 
     print ('******')
@@ -374,6 +476,7 @@ def main():
     obs_hatpro_dir='/nfs/a96/MOCCHA/working/jutta/final_data/HATPRO/';
     obs_albedo_dir='/nfs/a96/MOCCHA/working/data/'
     obs_rad_dir='/nfs/a96/MOCCHA/working/jutta/requests/Gillian/'
+    obs_dec_dir = '/nfs/a96/MOCCHA/working/jutta/requests/Sandeep/'
     monc_root_dir = '/nfs/a96/MOCCHA/working/gillian/MONC_CASES/MOCCHA/output/'
 
 
@@ -428,11 +531,10 @@ def main():
     #### LOAD IN SPECIFIC DIAGNOSTICS
     ### BASE UM RUNS (UM_RA2M/UM_RA2T)
 
-    embed()
     for var in nc[0].variables: print(var)
     var_list1 = ['u_10m','v_10m', 'air_temperature_at_1.5m','q_1.5m','rh_1.5m','visibility','dew_point_temperature_at_1.5m','LWP','IWP',
                 'surface_net_SW_radiation','surface_net_LW_radiation','surface_downwelling_LW_radiation','surface_downwelling_SW_radiation',
-                'sensible_heat_flux','latent_heat_flux']
+                'sensible_heat_flux','latent_heat_flux', 'bl_depth','bl_type']
                 #PLOT FROM CLOUDNET:
                 #'temperature','q','pressure','bl_depth','bl_type','qliq','qice','uwind','vwind','wwind',
                 #'cloud_fraction','radr_refl','rainfall_flux','snowfall_flux',]#
@@ -539,6 +641,12 @@ def main():
     obs['metalley'] = readMatlabStruct(obs_met_dir + filename)
     print(obs['metalley'].keys())
 
+    print ('Load decoupling height data from Jutta...')
+    filename = '2018091300-2018091314_smc_decoupling_sandeep_Scb_V3.mat'
+    obs['dec'] = readMatlabStruct(obs_dec_dir + filename)
+    print(obs['dec'].keys())
+
+
     print ('Load HATPRO data used by Cloudnet...')
     filename='HATPRO_LWP_IWV_30s_V3_userready.mat'
     obs['hatpro'] = readMatlabStruct(obs_hatpro_dir + filename)
@@ -644,8 +752,9 @@ def main():
     # -------------------------------------------------------------
     # Plot paper figures
     # -------------------------------------------------------------
-    #figure = plot_surfaceVariables(obs,plot_out_dir, dates,plot_out_dir, um_data=um_data,label=label,outsr=outsr, monc_data=monc_data,mlabel=mlabel,moutsr=moutsr)
+    figure = plot_surfaceVariables(obs,plot_out_dir, dates, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     figure = plot_lwp(obs,plot_out_dir, dates, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_BLDepth_SMLDepth(obs,plot_out_dir, dates, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_radiation(obs,plot_out_dir, dates,plot_out_dir, um_data=um_data,label=label,outsr=outsr, monc_data=monc_data,mlabel=mlabel,moutsr=moutsr)
     # figure = plot_paperFluxes(data1, data2, data3, month_flag, missing_files, out_dir1, out_dir2, out_dir3, obs, doy, label1, label2, label3)
     # figure = plot_paperRadiation(data1, data2, data3, out_dir1, out_dir2, out_dir3,datenum,label1,label2,label3,plot_out_dir)
