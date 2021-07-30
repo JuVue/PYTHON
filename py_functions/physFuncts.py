@@ -5,6 +5,8 @@ Functions to calculate physical properties
 """
 
 import numpy as np
+from IPython import embed
+
 # from __future__ import print_function
 
 def calcAirDensity(temperature, pressure):
@@ -249,7 +251,7 @@ def calcT(theta,pressure):
     Rd = 287.04   # dry air J kg^-1 K^-1
     p0 = 1e3   # hPa
 
-
+    embed()
     #converting to np array
     if not isinstance(pressure,np.ndarray):
         pressure= np.array(pressure)
