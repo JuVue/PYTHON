@@ -69,7 +69,7 @@ monc_var_avg= ['q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass'
 ncm = {}
 monc_data = {}
 print(monc_filename)
-ncm = Dataset(monc_filename,'r')
+ncm = Dataset(monc_filename[0],'r')
 monc_data={}
 zvar={}
 tvar={}
