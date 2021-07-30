@@ -26,9 +26,9 @@ from physFuncts import calcAirDensity, calcThetaE, calcThetaVL, calcT
 
 
 monc_root_dir = '/nfs/a96/MOCCHA/working/gillian/MONC_CASES/MOCCHA/output/'
-m_out_dir = '3_control_20180913T0000Z/'
+m_out_dir = '22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/'
 
-monc_filename= monc_root_dir + m_out_dir + 'moccha_casim_dg_72000.nc'
+monc_filename= monc_root_dir + m_out_dir + 'moccha_casim_dg_86400.nc'
 start = time.time()
 
   #################################################################
@@ -49,10 +49,14 @@ print ('')
 #               'graupel_mmr_mean'],
 #               ['q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
 
-monc_var_list =[['time_series_2_60','time_series_2_600','time_series_20_600']
-                [ ,'z','zn','prefn','thref','thinit','rho','rhon']
-                ['q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass','u','v','w','th','p']]
+# monc_var_list =[['time_series_2_60','time_series_2_600','time_series_20_600']
+#                 ['z','zn','prefn','thref','thinit','rho','rhon']
+#                 ['q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass','u','v','w','th','p']]
+#
 
+monc_var_list =[['time_series_2_60','time_series_2_600','time_series_20_600']
+                ['z','zn','prefn','thref','thinit','rho','rhon']
+                ['u','v','w','th','p']]
 
 ml2  =        ['liquid_mmr_mean','ice_mmr_mean','snow_mmr_mean','graupel_mmr_mean','model_twc']
 monc_var_avg= ['q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass','twc_tot']
