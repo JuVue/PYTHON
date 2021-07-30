@@ -54,9 +54,9 @@ print ('')
 #                 ['q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass','u','v','w','th','p']]
 #
 
-monc_var_list =[['time_series_30_600','time_series_30_60']
-                ['z','zn','prefn','thref','thinit','rho','rhon']
-                ['u','v','w','th','p']]
+monc_var_list =[['time_series_30_600','time_series_30_60'],
+                ['z','zn','prefn','thref','thinit','rho','rhon'],
+                ['th','p']]
 
 ml2  =        ['liquid_mmr_mean','ice_mmr_mean','snow_mmr_mean','graupel_mmr_mean','model_twc']
 monc_var_avg= ['q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass','twc_tot']
