@@ -89,9 +89,9 @@ for c in range(0,len(monc_var_list)):
         if monc_var_list[0][1] in str(tmp):
         #elif "'time_series_2_600'" in str(tmp):
             tvar[var]='time2'
-        if monc_var_list[0][2] in str(tmp):
-        #elif "'time_series_20_600'" in str(tmp):
-            tvar[var]='time3'
+        if len(monc_var_list[0])>2:
+            if monc_var_list[0][2] in str(tmp):
+                tvar[var]='time3'
 monc_data['zvar']=zvar
 monc_data['tvar']=tvar
 
