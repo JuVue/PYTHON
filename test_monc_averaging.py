@@ -103,11 +103,12 @@ if len(monc_var_list[0])>2:
     monc_data['time3']=monc_data[monc_var_list[0][2]] #2d data
     monc_data.pop(monc_var_list[0][2])
 
+print('Loading done')
 ## averaging 4D variables
 # x = 50m
 # y = 50m
 th = ncm.variables['th'][:]+ ncm.variables['thinit'][0,:]
-p = ncm.variables['p'][:]+ ncm.variables['pref'][0,:]
+p = ncm.variables['p'][:]+ ncm.variables['prefn'][0,:]
 #p=ncm.variables['prefn'][0,:]
 #p = np.array([[[p]*th.shape[2]]*th.shape[1]]*th.shape[0])
 T = calcT(th,p)
