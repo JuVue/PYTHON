@@ -259,8 +259,8 @@ def calcT(theta,pressure):
         theta= np.array(theta)
 
     #converting to hpa and K
-    pressure[np.argwhere(pressure>1100)] = pressure[np.argwhere(pressure>1100)]/100
-    theta[np.argwhere(theta<200)] = theta[np.argwhere(theta<200)]+273.15
+    pressure[pressure>1100] = pressure[pressure>1100]/100
+    theta[theta<200] = theta[theta<200]+273.15
 
     temperature = theta / np.power(p0 / pressure,Rd/cp)
     return temperature
