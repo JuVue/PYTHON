@@ -88,10 +88,8 @@ for c in range(0,len(monc_var_list)):
         else:
             zvar[var]=np.nan
         if monc_var_list[0][0] in str(tmp):
-        #if "'time_series_2_60'" in str(tmp):
             tvar[var]='time1'
-        if monc_var_list[0][1] in str(tmp):
-        #elif "'time_series_2_600'" in str(tmp):
+        elif monc_var_list[0][1] in str(tmp):
             tvar[var]='time2'
         if len(monc_var_list[0])>2:
             if monc_var_list[0][2] in str(tmp):
