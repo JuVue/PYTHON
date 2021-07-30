@@ -54,7 +54,7 @@ print ('')
 #                 ['q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass','u','v','w','th','p']]
 #
 
-monc_var_list =[['time_series_2_60','time_series_2_600','time_series_20_600']
+monc_var_list =[['time_series_30_600','time_series_30_60']
                 ['z','zn','prefn','thref','thinit','rho','rhon']
                 ['u','v','w','th','p']]
 
@@ -96,12 +96,12 @@ monc_data['zvar']=zvar
 monc_data['tvar']=tvar
 
 monc_data['time1']=monc_data[monc_var_list[0][0]] #1d data
-monc_data.pop(monc_var_list[0][0]])
+monc_data.pop(monc_var_list[0][0])
 monc_data['time2']=monc_data[monc_var_list[0][1]] #2d data
-monc_data.pop(monc_var_list[0][1]])
+monc_data.pop(monc_var_list[0][1])
 if len(monc_var_list[0])>2:
     monc_data['time3']=monc_data[monc_var_list[0][2]] #2d data
-    monc_data.pop(monc_var_list[0][2]])
+    monc_data.pop(monc_var_list[0][2])
 
 ## averaging 4D variables
 # x = 50m
