@@ -1,6 +1,4 @@
-### testing manual averaging of monc data
-
-
+### manual averaging of 4D monc data and save it to output for future use
 from  __future__ import print_function
 import time
 import datetime
@@ -12,6 +10,8 @@ import os
 
 from IPython import embed
 from scipy.interpolate import interp1d
+import matplotlib.cm as mpl_cm
+from matplotlib.colors import ListedColormap, LinearSegmentedColormap,LogNorm
 
 ## import python functions
 import sys
@@ -20,10 +20,13 @@ from time_functions import datenum2date, date2datenum, calcTime_Mat2DOY, calcTim
 from readMAT import readMatlabStruct
 from physFuncts import calcAirDensity, calcThetaE, calcThetaVL, calcT
 #from pyFixes import py3_FixNPLoad
+############################################################
+############################################################
+
+
 
 monc_root_dir = '/nfs/a96/MOCCHA/working/gillian/MONC_CASES/MOCCHA/output/'
 m_out_dir = '3_control_20180913T0000Z/'
-
 
 monc_filename= monc_root_dir + m_out_dir + 'moccha_casim_dg_72000.nc'
 start = time.time()
@@ -40,15 +43,21 @@ print ('')
 #               #['q_vapour','q_cloud_liquid_mass','q_rain_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
 #separate list for 4 d variables
 
-monc_var_list =[['time_series_2_60','time_series_2_600','time_series_20_600' ,'z','zn','prefn','thref','thinit'],
-              ['rho','rhon','theta_mean','w_wind_mean','u_wind_mean','v_wind_mean','total_cloud_fraction', 'liquid_cloud_fraction','ice_cloud_fraction',
-              'vapour_mmr_mean','liquid_mmr_mean','rain_mmr_mean','ice_mmr_mean','snow_mmr_mean',
-              'graupel_mmr_mean'],
-              ['q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
+# monc_var_list =[['time_series_2_60','time_series_2_600','time_series_20_600' ,'z','zn','prefn','thref','thinit'],
+#               ['rho','rhon','theta_mean','w_wind_mean','u_wind_mean','v_wind_mean','total_cloud_fraction', 'liquid_cloud_fraction','ice_cloud_fraction',
+#               'vapour_mmr_mean','liquid_mmr_mean','rain_mmr_mean','ice_mmr_mean','snow_mmr_mean',
+#               'graupel_mmr_mean'],
+#               ['q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
+
+monc_var_list =[['time_series_2_60','time_series_2_600','time_series_20_600']
+                [ ,'z','zn','prefn','thref','thinit','rho','rhon']
+                ['q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass','u','v','w','th','p']]
 
 
 ml2  =        ['liquid_mmr_mean','ice_mmr_mean','snow_mmr_mean','graupel_mmr_mean','model_twc']
 monc_var_avg= ['q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass','twc_tot']
+
+
 ncm = {}
 monc_data = {}
 print(monc_filename)
@@ -70,38 +79,110 @@ for c in range(0,len(monc_var_list)):
             zvar[var]='zn'
         else:
             zvar[var]=np.nan
-        if "'time_series_2_60'" in str(tmp):
+        if monc_var_list[0][0] in str(tmp):
+        #if "'time_series_2_60'" in str(tmp):
             tvar[var]='time1'
-        elif "'time_series_2_600'" in str(tmp):
+        if monc_var_list[0][1] in str(tmp):
+        #elif "'time_series_2_600'" in str(tmp):
             tvar[var]='time2'
-        elif "'time_series_20_600'" in str(tmp):
+        if monc_var_list[0][2] in str(tmp):
+        #elif "'time_series_20_600'" in str(tmp):
             tvar[var]='time3'
 monc_data['zvar']=zvar
 monc_data['tvar']=tvar
 
-monc_data['time3']=monc_data['time_series_20_600'] #2d data
-monc_data['time2']=monc_data['time_series_2_600'] #2d data
-monc_data['time1']=monc_data['time_series_2_60'] #1d data
-monc_data.pop('time_series_2_60')
-monc_data.pop('time_series_2_600')
-monc_data.pop('time_series_20_600')
+monc_data['time1']=monc_data[monc_var_list[0][0]] #1d data
+monc_data.pop(monc_var_list[0][0]])
+monc_data['time2']=monc_data[monc_var_list[0][1]] #2d data
+monc_data.pop(monc_var_list[0][1]])
+if len(monc_var_list[0])>2:
+    monc_data['time3']=monc_data[monc_var_list[0][2]] #2d data
+    monc_data.pop(monc_var_list[0][2]])
 
 ## averaging 4D variables
 # x = 50m
 # y = 50m
-# th = ncm.variables['th'][:]+ ncm.variables['thinit'][0,:]
-# p=ncm.variables['prefn'][0,:]
-# p = np.array([[[p]*th.shape[2]]*th.shape[1]]*th.shape[0])
-# T = calcT(th,p)
-# monc_data['p_mean'] = np.nanmean(p,axis=(1,2))
-# monc_data['temp_mean'] = np.nanmean(T,axis=(1,2))
-# monc_data['th_mean'] = np.nanmean(th,axis=(1,2))
-# del(p,T,th)
-monc_data[m]['model_iwc']= (monc_data[m]['ice_mmr_mean']+monc_data[m]['graupel_mmr_mean']+monc_data[m]['snow_mmr_mean'])*monc_data[m]['rho']
-monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
-monc_data[m]['model_twc'] = monc_data[m]['model_lwc'] +monc_data[m]['model_iwc']
+th = ncm.variables['th'][:]+ ncm.variables['thinit'][0,:]
+p = ncm.variables['p'][:]+ ncm.variables['pref'][0,:]
+#p=ncm.variables['prefn'][0,:]
+#p = np.array([[[p]*th.shape[2]]*th.shape[1]]*th.shape[0])
+T = calcT(th,p)
+rho=calcAirDensity(T,p)
+monc_data['p_mean'] = np.nanmean(p,axis=(1,2))
+monc_data['T_mean'] = np.nanmean(T,axis=(1,2))
+monc_data['th_mean'] = np.nanmean(th,axis=(1,2))
+monc_data['rho_mean'] = np.nanmean(th,axis=(1,2))
+del(p,T,th)
+
+###############
+##checking calculations
+viridis = mpl_cm.get_cmap('viridis', 256)
+newcolors = viridis(np.linspace(0, 1, 256))
+greyclr = np.array([0.1, 0.1, 0.1, 0.1])
+newcolors[:10, :] = greyclr
+newcmp = ListedColormap(newcolors)
+
+var = 'rho'
+fig=plt.figure(figsize=(6,9))
+plt.subplots_adjust(top = 0.92, bottom = 0.06, right = 0.92, left = 0.08,
+    hspace = 0.4, wspace = 0.2)
+plt.subplot(311)
+ax = plt.gca()
+img=plt.contourf(monc_data[tvar[var]],monc_data[zvar[var]],np.transpose(monc_data[var]),
+    cmap = newcmp)
+cbaxes = fig.add_axes([0.225, 0.96, 0.6, 0.015])
+cb = plt.colorbar(img, cax = cbaxes, orientation = 'horizontal')
+plt.title(var)
+
+plt.subplot(312)
+plt.contourf(monc_data[tvar[var]],monc_data[zvar[var]],np.transpose(monc_data[var +'_mean']),
+    cmap = newcmp)
+plt.title(var +'_mean')
+plt.subplot(313)
+plt.contourf(monc_data[tvar[var]],monc_data[zvar[var]],np.transpose(monc_data[var ]-monc_data[var +'_mean']),
+    cmap = newcmp)
+plt.title(var +'_diff')
+
+plots_out_dir='/nfs/a96/MOCCHA/working/jutta/plots/CaseStudies/ModelComparison/'
+fileout = plots_out_dir + var + '_comparison.png'
+plt.savefig(fileout)
+
+
+var = 'theta'
+fig=plt.figure(figsize=(6,9))
+plt.subplots_adjust(top = 0.92, bottom = 0.06, right = 0.92, left = 0.08,
+    hspace = 0.4, wspace = 0.2)
+plt.subplot(311)
+ax = plt.gca()
+img=plt.contourf(monc_data[tvar[var]],monc_data[zvar[var]],np.transpose(monc_data['th_mean']),
+    cmap = newcmp)
+cbaxes = fig.add_axes([0.225, 0.96, 0.6, 0.015])
+cb = plt.colorbar(img, cax = cbaxes, orientation = 'horizontal')
+plt.title('th_mean')
+
+plt.subplot(312)
+plt.contourf(monc_data[tvar[var]],monc_data[zvar[var]],np.transpose(monc_data[var +'_mean']),
+    cmap = newcmp)
+plt.title(var )
+plt.subplot(313)
+plt.contourf(monc_data[tvar[var]],monc_data[zvar[var]],np.transpose(monc_data['th_mean']-monc_data[var +'_mean']),
+    cmap = newcmp)
+plt.title(var +'_diff')
+
+plots_out_dir='/nfs/a96/MOCCHA/working/jutta/plots/CaseStudies/ModelComparison/'
+fileout = plots_out_dir + var + '_comparison.png'
+plt.savefig(fileout)
+
+embed()
+
+
+#only for checks
+monc_data['model_iwc']= (monc_data['ice_mmr_mean']+monc_data['graupel_mmr_mean']+monc_data['snow_mmr_mean'])*monc_data['rho']
+monc_data['model_lwc']= monc_data['liquid_mmr_mean']*monc_data['rho']
+monc_data['model_twc'] = monc_data['model_lwc'] +monc_data['model_iwc']
+
 monc_data['twc_tot']=monc_data['q_ice_mass']+monc_data['q_snow_mass']+monc_data['q_graupel_mass']+monc_data['q_cloud_liquid_mass']
-monc_data['twc_tot']=monc_data['twc_tot']*monc_data[m]['rho']
+monc_data['twc_tot']=monc_data['twc_tot']*monc_data['rho']
 #calculate mean values
 var='q_ice_mass'
 twc_thresh = np.zeros([np.size(monc_data[zvar[var]],0)])
@@ -135,8 +216,8 @@ for c in range(0,len(monc_var_avg)):
 end = time.time()
 print(end - start)
 print (' Monc data Loaded!')
-import matplotlib.cm as mpl_cm
-from matplotlib.colors import ListedColormap, LinearSegmentedColormap,LogNorm
+
+
 
 viridis = mpl_cm.get_cmap('viridis', 256)
 newcolors = viridis(np.linspace(0, 1, 256))
