@@ -33,8 +33,8 @@ def calcAirDensity(temperature, pressure):
         temperature= np.array(temperature)
 
     #converting to hpa and K
-    pressure[np.argwhere(pressure>1100)] = pressure[np.argwhere(pressure>1100)]/100
-    temperature[np.argwhere(temperature<200)] = temperature[np.argwhere(temperature<200)]+273.15
+    temperature[temperature<200] = temperature[temperature<200]+273.15
+    pressure[pressure>1100] = pressure[pressure>1100]/100
 
     rho = pressure / (R*temperature)
     # ### if temperature is 1D
@@ -251,7 +251,6 @@ def calcT(theta,pressure):
     Rd = 287.04   # dry air J kg^-1 K^-1
     p0 = 1e3   # hPa
 
-    embed()
     #converting to np array
     if not isinstance(pressure,np.ndarray):
         pressure= np.array(pressure)

@@ -130,7 +130,7 @@ newcolors = viridis(np.linspace(0, 1, 256))
 greyclr = np.array([0.1, 0.1, 0.1, 0.1])
 newcolors[:10, :] = greyclr
 newcmp = ListedColormap(newcolors)
-
+embed()
 var = 'rho'
 fig=plt.figure(figsize=(6,9))
 plt.subplots_adjust(top = 0.92, bottom = 0.06, right = 0.92, left = 0.08,
