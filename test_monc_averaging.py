@@ -194,8 +194,6 @@ fileout = plots_out_dir +'theta_comparison.png'
 plt.savefig(fileout)
 
 embed()
-
-
 #only for checks
 monc_data['model_iwc']= (monc_data['ice_mmr_mean']+monc_data['graupel_mmr_mean']+monc_data['snow_mmr_mean'])*monc_data['rho_mean']
 monc_data['model_lwc']= monc_data['liquid_mmr_mean']*monc_data['rho_mean']
