@@ -1715,7 +1715,7 @@ def main():
     #              '6_control_20180913T0000Z_Wsub-1.5-1km/',
     #              '8_control_20180913T0000Z_Wsub-1.0-1km/',
     #              '9_control_20180913T0000Z_Wsub-0.5-1km/']
-    m_out_dir =['22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim']
+    m_out_dir =['22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/']
             #'4_control_20180913T0000Z_Wsub-1.5/',
     #################################################################
     ## create labels for figure legends - done here so only needs to be done once!
@@ -1772,6 +1772,9 @@ def main():
         elif m_out_dir[m][:2] == '20':
             mlabel.append('MONC qinit2 800m \n thqvTend noice')
             moutstr.append('qin2-thqvTend-noice')
+        elif m_out_dir[m][:2] == '22':
+            mlabel.append('MONC qinit2 800m \n thForcing-0000-0600')
+            moutstr.append('qin2-thqvTend-noice')
         else:
             label.append('undefined_label')
             moutstr.append('')
@@ -1780,7 +1783,7 @@ def main():
     ### create monc filenames
     monc_filename=[]
     for m in range(0, len(m_out_dir)):
-        monc_filename.append(monc_root_dir + m_out_dir[m] + 'moccha_casim_dg_72000.nc')
+        monc_filename.append(monc_root_dir + m_out_dir[m] + 'moccha_casim_dg_86400.nc')
 
     ### -----------------------------------------------------------------
     ### CHOSEN RUN - CLOUDNET DATA
