@@ -59,12 +59,14 @@ print ('')
 #
 
 monc_var_list =[['time_series_30_600','time_series_30_60'],
-                ['z','zn','prefn','thref','thinit','rho','rhon'],
+                ['z','zn','prefn','thref','thinit','rho','rhon','theta_mean'],
                 ['th','p']]
 
-ml2  =        ['liquid_mmr_mean','ice_mmr_mean','snow_mmr_mean','graupel_mmr_mean','model_twc']
-monc_var_avg= ['q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass','twc_tot']
 
+#ml2  =        ['liquid_mmr_mean','ice_mmr_mean','snow_mmr_mean','graupel_mmr_mean','model_twc']
+#monc_var_avg= ['q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass','twc_tot']
+c=1
+j=7
 
 ncm = {}
 monc_data = {}
@@ -109,12 +111,17 @@ print('Loading done')
 ## averaging 4D variables
 # x = 50m
 # y = 50m
-th = ncm.variables['th'][:]+ ncm.variables['thinit'][0,:]
+
+##################################
+print('Calculating temperature and density')
+th = ncm.variables['th'][:]+ ncm.variables['thref'][0,:]
 p = ncm.variables['p'][:]+ ncm.variables['prefn'][0,:]
 #p=ncm.variables['prefn'][0,:]
 #p = np.array([[[p]*th.shape[2]]*th.shape[1]]*th.shape[0])
 T = calcT(th,p)
 rho=calcAirDensity(T,p)
+
+print('Calculating mean values:T,th,p,rho')
 monc_data['p_mean'] = np.nanmean(p,axis=(1,2))
 monc_data['T_mean'] = np.nanmean(T,axis=(1,2))
 monc_data['th_mean'] = np.nanmean(th,axis=(1,2))
@@ -128,7 +135,10 @@ newcolors = viridis(np.linspace(0, 1, 256))
 greyclr = np.array([0.1, 0.1, 0.1, 0.1])
 newcolors[:10, :] = greyclr
 newcmp = ListedColormap(newcolors)
-embed()
+
+
+###################
+#### plot air density
 var = 'rho'
 fig=plt.figure(figsize=(6,9))
 plt.subplots_adjust(top = 0.92, bottom = 0.06, right = 0.92, left = 0.08,
@@ -140,8 +150,6 @@ img=plt.contourf(monc_data[tvar[var]],monc_data[zvar[var]],np.transpose(monc_dat
 cbaxes = fig.add_axes([0.225, 0.96, 0.6, 0.015])
 cb = plt.colorbar(img, cax = cbaxes, orientation = 'horizontal')
 plt.title(var)
-plt.show()
-
 plt.subplot(312)
 plt.contourf(monc_data[tvar[var]],monc_data[zvar[var]],np.transpose(monc_data[var +'_mean']),
     cmap = newcmp)
@@ -151,34 +159,37 @@ plt.contourf(monc_data[tvar[var]],monc_data[zvar[var]],np.transpose(monc_data[va
     cmap = newcmp)
 plt.title(var +'_diff')
 
-plots_out_dir='/nfs/a96/MOCCHA/working/jutta/plots/CaseStudies/ModelComparison/'
+plots_out_dir='./'
 fileout = plots_out_dir + var + '_comparison.png'
 plt.savefig(fileout)
 
 
-var = 'theta'
+clevs=range(265,295,2)
+
 fig=plt.figure(figsize=(6,9))
 plt.subplots_adjust(top = 0.92, bottom = 0.06, right = 0.92, left = 0.08,
     hspace = 0.4, wspace = 0.2)
 plt.subplot(311)
 ax = plt.gca()
-img=plt.contourf(monc_data[tvar[var]],monc_data[zvar[var]],np.transpose(monc_data['th_mean']),
-    cmap = newcmp)
+img=plt.contourf(monc_data[tvar['theta_mean']],monc_data[zvar['theta_mean']],np.transpose(monc_data['th_mean']),
+    levels=clevs,cmap = newcmp)
 cbaxes = fig.add_axes([0.225, 0.96, 0.6, 0.015])
 cb = plt.colorbar(img, cax = cbaxes, orientation = 'horizontal')
-plt.title('th_mean')
-
+plt.title(' own th_mean calc')
 plt.subplot(312)
-plt.contourf(monc_data[tvar[var]],monc_data[zvar[var]],np.transpose(monc_data[var +'_mean']),
-    cmap = newcmp)
+plt.contourf(monc_data[tvar['theta_mean']],monc_data[zvar['theta_mean']],np.transpose(monc_data['theta_mean']),
+    levels=clevs,cmap = newcmp)
 plt.title(var )
-plt.subplot(313)
-plt.contourf(monc_data[tvar[var]],monc_data[zvar[var]],np.transpose(monc_data['th_mean']-monc_data[var +'_mean']),
-    cmap = newcmp)
-plt.title(var +'_diff')
 
-plots_out_dir='/nfs/a96/MOCCHA/working/jutta/plots/CaseStudies/ModelComparison/'
-fileout = plots_out_dir + var + '_comparison.png'
+clevels=np.arange(-1,1,0.1)
+plt.subplot(313)
+img2=plt.contourf(monc_data[tvar['theta_mean']],monc_data[zvar['theta_mean']],np.transpose(monc_data['th_mean']-monc_data['theta_mean']),
+    levels=clevels,cmap = newcmp)
+cbaxes = fig.add_axes([0.225, 0.35, 0.6, 0.015])
+cb = plt.colorbar(img2, cax = cbaxes, orientation = 'horizontal')
+plt.title(var +'_diff')
+plots_out_dir='./'
+fileout = plots_out_dir +'theta_comparison.png'
 plt.savefig(fileout)
 
 embed()
