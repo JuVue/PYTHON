@@ -140,6 +140,7 @@ img=plt.contourf(monc_data[tvar[var]],monc_data[zvar[var]],np.transpose(monc_dat
 cbaxes = fig.add_axes([0.225, 0.96, 0.6, 0.015])
 cb = plt.colorbar(img, cax = cbaxes, orientation = 'horizontal')
 plt.title(var)
+plt.show()
 
 plt.subplot(312)
 plt.contourf(monc_data[tvar[var]],monc_data[zvar[var]],np.transpose(monc_data[var +'_mean']),
