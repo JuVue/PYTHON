@@ -198,9 +198,13 @@ embed()
 monc_data['model_iwc']= (monc_data['ice_mmr_mean']+monc_data['graupel_mmr_mean']+monc_data['snow_mmr_mean'])*monc_data['rho_mean']
 monc_data['model_lwc']= monc_data['liquid_mmr_mean']*monc_data['rho_mean']
 monc_data['model_twc'] = monc_data['model_lwc'] +monc_data['model_iwc']
+tvar['model_twc']=tvar['ice_mmr_mean']
+zvar['model_twc']= zvar['ice_mmr_mean']
 
 monc_data['twc_tot']=monc_data['q_ice_mass']+monc_data['q_snow_mass']+monc_data['q_graupel_mass']+monc_data['q_cloud_liquid_mass']
 monc_data['twc_tot']=monc_data['twc_tot']*rho
+tvar['twc_tot']=tvar['q_ice_mass']
+zvar['twc_tot']= zvar['q_ice_mass']
 #calculate mean values
 var='q_ice_mass'
 twc_thresh = np.zeros([np.size(monc_data[zvar[var]],0)])
@@ -212,7 +216,8 @@ monc_intZs = np.where(twc_thresh == 0.0)
 x = [1e-6, 1e-7]
 y = [1e3, 4e3]
 f = interp1d(y, x)
-twc_thresh[monc_intZs] = f(monc_data[zvar[var]][monc_intZs])
+a=monc_data[zvar[var]][monc_intZs]
+twc_thresh[monc_intZs] = f(a.tolist())
 twc_thresh = np.squeeze(np.array([[[twc_thresh]*monc_data['twc_tot'].shape[2]]*monc_data['twc_tot'].shape[1]]))
 
 for c in range(0,len(monc_var_avg)):
@@ -226,7 +231,7 @@ for c in range(0,len(monc_var_avg)):
         #tt[twc<twc_thresh] = np.nan
         #monc_data[var +'_mean'][t,:] = np.nanmean(tt,axis=(0,1))
         monc_data[var][t,monc_data['twc_tot'][t,:]<twc_thresh] = np.nan
-        monc_data[var +'_mean'][t,:] = np.mean(monc_data[var][t,:],axis=(0,1))
+        monc_data[var +'_mean'][t,:] = np.nanmean(monc_data[var][t,:],axis=(0,1))
     monc_data[var +'_mean'][np.isnan(monc_data[var +'_mean'])]=0.0
     monc_data.pop(var)
 
