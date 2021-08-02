@@ -29,7 +29,7 @@ if machine=='LEEDS':
     monc_root_dir = '/nfs/a96/MOCCHA/working/gillian/MONC_CASES/MOCCHA/output/'
     m_out_dir = '22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/'
 elif machine=='JASMIN':
-    monc_root_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/MONC/'
+    monc_root_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/MONC/output/'
     m_out_dir = '22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/'
 
 monc_filename=glob.glob(monc_root_dir + m_out_dir +'*.nc')
