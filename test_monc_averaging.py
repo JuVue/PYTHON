@@ -59,14 +59,14 @@ print ('')
 #
 
 monc_var_list =[['time_series_30_600','time_series_30_60'],
-                ['z','zn','prefn','thref','thinit','rho','rhon','theta_mean'],
-                ['th','p']]
+                ['z','zn','prefn','thref','thinit','rho','rhon','theta_mean',
+                'liquid_mmr_mean','ice_mmr_mean','snow_mmr_mean','graupel_mmr_mean'],
+                ['th','p','q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
 
 
-#ml2  =        ['liquid_mmr_mean','ice_mmr_mean','snow_mmr_mean','graupel_mmr_mean','model_twc']
-#monc_var_avg= ['q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass','twc_tot']
-c=1
-j=7
+ml2  =        ['liquid_mmr_mean','ice_mmr_mean','snow_mmr_mean','graupel_mmr_mean','model_twc']
+monc_var_avg= ['q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass','twc_tot']
+
 
 ncm = {}
 monc_data = {}
@@ -125,9 +125,10 @@ print('Calculating mean values:T,th,p,rho')
 monc_data['p_mean'] = np.nanmean(p,axis=(1,2))
 monc_data['T_mean'] = np.nanmean(T,axis=(1,2))
 monc_data['th_mean'] = np.nanmean(th,axis=(1,2))
-monc_data['rho_mean'] = np.nanmean(th,axis=(1,2))
+monc_data['rho_mean'] = np.nanmean(rho,axis=(1,2))
 del(p,T,th)
 
+print('done')
 ###############
 ##checking calculations
 viridis = mpl_cm.get_cmap('viridis', 256)
@@ -196,12 +197,12 @@ embed()
 
 
 #only for checks
-monc_data['model_iwc']= (monc_data['ice_mmr_mean']+monc_data['graupel_mmr_mean']+monc_data['snow_mmr_mean'])*monc_data['rho']
-monc_data['model_lwc']= monc_data['liquid_mmr_mean']*monc_data['rho']
+monc_data['model_iwc']= (monc_data['ice_mmr_mean']+monc_data['graupel_mmr_mean']+monc_data['snow_mmr_mean'])*monc_data['rho_mean']
+monc_data['model_lwc']= monc_data['liquid_mmr_mean']*monc_data['rho_mean']
 monc_data['model_twc'] = monc_data['model_lwc'] +monc_data['model_iwc']
 
 monc_data['twc_tot']=monc_data['q_ice_mass']+monc_data['q_snow_mass']+monc_data['q_graupel_mass']+monc_data['q_cloud_liquid_mass']
-monc_data['twc_tot']=monc_data['twc_tot']*monc_data['rho']
+monc_data['twc_tot']=monc_data['twc_tot']*rho
 #calculate mean values
 var='q_ice_mass'
 twc_thresh = np.zeros([np.size(monc_data[zvar[var]],0)])
@@ -282,7 +283,7 @@ for c in range(0,len(monc_var_avg)):
         levels=clevs, norm = LogNorm(),
         cmap = newcmp)
     plt.title(var)
-    plots_out_dir='/nfs/a96/MOCCHA/working/jutta/plots/CaseStudies/ModelComparison/'
+    plots_out_dir='./'
     fileout = plots_out_dir + var + '_comparison.png'
     plt.savefig(fileout)
 
