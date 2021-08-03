@@ -1687,18 +1687,31 @@ def main():
     #---- MONC SPIN UP TIME
     monc_spin = 6 *60 *60
 
-    ### Set output directory for plots
-    plots_out_dir='/nfs/a96/MOCCHA/working/jutta/plots/CaseStudies/ModelComparison/'
-    if not os.path.exists(plots_out_dir):
-        os.makedirs(plots_out_dir)
+    machine = 'JASMIN'
 
     ### Choose observations vertical gridding used in Cloudnet processing (UM/IFS/RADAR)
     obs_switch = 'UM' #RADAR
-    #/nfs/a96/MOCCHA/working/gillian/UM/DATA
-    um_root_dir = '/nfs/a96/MOCCHA/working/gillian/UM/DATA/'
-    cn_obs_dir = '/nfs/a96/MOCCHA/working/jutta/CloudNet/Oden/output/Halo/measurements_V7/'
-    cn_um_dir = '/nfs/a96/MOCCHA/working/jutta/CloudNet/Oden/output/metum/V7/'
-    monc_root_dir = '/nfs/a96/MOCCHA/working/gillian/MONC_CASES/MOCCHA/output/'
+
+    if machine =='JASMIN':
+        plots_out_dir='/gws/nopw/j04/ncas_radar_vol1/jutta/PLOTS/CaseStudy/'
+        if not os.path.exists(plots_out_dir):
+        os.makedirs(plots_out_dir)
+
+        um_root_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/UM/DATA/'
+        cn_obs_dir = '//gws/nopw/j04/ncas_radar_vol1/gillian/Cloudnet/Observations/measurements_V7/'
+        cn_um_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/Cloudnet/UM/'
+        monc_root_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/MONC/output/'
+
+    elif machine =='LEEDS':
+        ### Set output directory for plots
+        plots_out_dir='/nfs/a96/MOCCHA/working/jutta/plots/CaseStudies/ModelComparison/'
+        if not os.path.exists(plots_out_dir):
+            os.makedirs(plots_out_dir)
+
+        um_root_dir = '/nfs/a96/MOCCHA/working/gillian/UM/DATA/'
+        cn_obs_dir = '/nfs/a96/MOCCHA/working/jutta/CloudNet/Oden/output/Halo/measurements_V7/'
+        cn_um_dir = '/nfs/a96/MOCCHA/working/jutta/CloudNet/Oden/output/metum/V7/'
+        monc_root_dir = '/nfs/a96/MOCCHA/working/gillian/MONC_CASES/MOCCHA/output/'
 
     ### -----------------------------------------------------------------
     ### CHOOSE UM RUNS - MODEL DATA
@@ -1783,14 +1796,15 @@ def main():
     ### create monc filenames
     monc_filename=[]
     for m in range(0, len(m_out_dir)):
-        monc_filename.append(monc_root_dir + m_out_dir[m] + 'moccha_casim_dg_86400.nc')
+        fname=glob.glob(monc_root_dir + m_out_dir[m] +'*.nc')
+        monc_filename.append(fname)
 
     ### -----------------------------------------------------------------
     ### CHOSEN RUN - CLOUDNET DATA
     cn_um_out_dir = ['cloud-fraction-metum-grid/2018/',
                      'lwc-scaled-metum-grid/2018/',
                      'iwc-Z-T-metum-grid/2018/']
-    cn_obs_out_dir = ['cloud-fraction-metum-grid/2018/qual70/',
+    cn_obs_out_dir = ['cloud-fraction-metum-grid/2018/',
                         'lwc-adiabatic-metum-grid/2018/',
                         'iwc-Z-T-metum-grid/2018/']
 
@@ -1946,11 +1960,12 @@ def main():
     print ('')
     ###1d variables, 2d variables (time,height), 3d variables (time,x,y), 4d variables(time,x,y,z)
     monc_var_list =[['time_series_30_600','time_series_30_60','z', 'zn','LWP_mean','IWP_mean','SWP_mean','TOT_IWP_mean','GWP_mean'],
-                    ['rho','theta_mean','total_cloud_fraction', 'liquid_cloud_fraction','ice_cloud_fraction',
-                    'vapour_mmr_mean','liquid_mmr_mean','rain_mmr_mean','ice_mmr_mean','snow_mmr_mean',
-                    'graupel_mmr_mean']]
+                    ['theta_mean','total_cloud_fraction', 'liquid_cloud_fraction','ice_cloud_fraction']
                 #    ['vwp','lwp','rwp','iwp','swp','gwp','tot_iwp'],
                 #    ['q_vapour','q_cloud_liquid_mass','q_rain_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
+    monc_var_3d_list =['T_mean','p_mean','q_vapour_mean','q_cloud_liquid_mass_mean',
+                        'q_rain_mass_mean','q_ice_mass_mean','q_snow_mass_mean','q_graupel_mass_mean',
+                        'twc_tot_mean','iwc_tot_mean','lwc_tot_mean']
 
     ncm = {}
     monc_data = {}
@@ -1974,12 +1989,24 @@ def main():
                     zvar[var]='zn'
                 else:
                     zvar[var]=np.nan
-                if "'time_series_2_60'" in str(tmp):
+                if "'time_series_30_600'" in str(tmp):
                     tvar[var]='time1'
-                elif "'time_series_2_600'" in str(tmp):
+                elif "'time_series_30_60'" in str(tmp):
                     tvar[var]='time2'
                 elif "'time_series_20_600'" in str(tmp):
                     tvar[var]='time3'
+
+    for c in range(0,len(monc_var_3d_list)):
+                var = monc_var_list[c][j]
+                zvar[var]=[]
+                tvar[var]=[]
+                monc_data[m][var] = ncm.variables[var][:]
+                ###getting right z and t dimensions
+                tmp=ncm.variables[var].dimensions
+
+
+
+
         monc_data[m]['zvar']=zvar
         monc_data[m]['tvar']=tvar
 
