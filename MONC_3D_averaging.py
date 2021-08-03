@@ -170,7 +170,6 @@ twc_thresh[monc_intZs] = f(a.tolist())
 twc_thresh = np.squeeze(np.array([[[twc_thresh]*monc_data['twc_tot'].shape[2]]*monc_data['twc_tot'].shape[1]]))
 
 print('averaging cloud variables')
-embed()
 for c in range(0,len(monc_var_avg)):
     var = monc_var_avg[c]
     #calculate mean values
