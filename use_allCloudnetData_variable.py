@@ -2142,7 +2142,7 @@ def main():
     monc_data = {}
     for m in range(0, len(m_out_dir)):
         print(monc_filename[m])
-        ncm = Dataset(monc_filename[m],'r')
+        ncm = Dataset(monc_filename[m][:],'r')
         monc_data[m]={}
         zvar={}
         tvar={}
