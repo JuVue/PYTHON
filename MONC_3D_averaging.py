@@ -22,6 +22,7 @@ from physFuncts import calcAirDensity, calcThetaE, calcThetaVL, calcT
 #from pyFixes import py3_FixNPLoad
 ############################################################
 ############################################################
+start = time.time()
 
 machine='JASMIN'
 #machine='LEEDS'
@@ -180,7 +181,6 @@ afile=open(fname,'wb')
 pickle.dump(monc_data,afile)
 afile.close()
 
-embed()
 afile = open(fname, "rb")
 output = pickle.load(afile)
 print(output)
