@@ -171,7 +171,7 @@ twc_thresh = np.squeeze(np.array([[[twc_thresh]*monc_data['twc_tot'].shape[2]]*m
 
 print('averaging cloud variables')
 embed()
-for c in range(0,5):#  len(monc_var_avg)):
+for c in range(0,len(monc_var_avg)):
     var = monc_var_avg[c]
     #calculate mean values
     monc_data[var +'_mean']=np.empty((np.size(monc_data[tvar[var]],0),np.size(monc_data[zvar[var]],0)))
@@ -184,13 +184,13 @@ for c in range(0,5):#  len(monc_var_avg)):
     monc_data[var +'_mean'][np.isnan(monc_data[var +'_mean'])]=0.0
     monc_data.pop(var)
 
+monc_data['zvar']={}
+monc_data['tvar']={}
 for var in zvar.keys():
-    if not var in monc_data.keys():
-        del zvar[var]
-        del tvar[var]
+    if var in monc_data.keys():
+        monc_data['zvar'][var]=zvar[var]
+        monc_data['tvar'][var]=tvar[var]
 
-monc_data['zvar']=zvar
-monc_data['tvar']=tvar
 
 
 end = time.time()
@@ -201,10 +201,10 @@ if not os.path.exists(glob.glob(monc_exp_dir + m_out_dir)):
 fname=(monc_exp_dir + m_out_dir +'3d_averages')
 
 np.save(fname +'.npy',monc_data)
-
-afile=open(fname,'wb')
-pickle.dump(monc_data,afile)
-afile.close()
+#
+# afile=open(fname,'wb')
+# pickle.dump(monc_data,afile)
+# afile.close()
 
 
 # ######################################################
