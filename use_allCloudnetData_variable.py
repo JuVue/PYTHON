@@ -1856,7 +1856,7 @@ def main():
     if machine =='JASMIN':
         plots_out_dir='/gws/nopw/j04/ncas_radar_vol1/jutta/PLOTS/CaseStudy/'
         if not os.path.exists(plots_out_dir):
-        os.makedirs(plots_out_dir)
+            os.makedirs(plots_out_dir)
 
         um_root_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/UM/DATA/'
         cn_obs_dir = '//gws/nopw/j04/ncas_radar_vol1/gillian/Cloudnet/Observations/measurements_V7/'
