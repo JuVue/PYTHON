@@ -12,7 +12,7 @@ from IPython import embed
 from scipy.interpolate import interp1d
 import matplotlib.cm as mpl_cm
 from matplotlib.colors import ListedColormap, LinearSegmentedColormap,LogNorm
-
+import pickle
 ## import python functions
 import sys
 sys.path.insert(1, './py_functions/')
@@ -86,8 +86,6 @@ for c in range(0,len(monc_var_list)):
         if len(monc_var_list[0])>2:
             if monc_var_list[0][2] in str(tmp):
                 tvar[var]='time3'
-monc_data['zvar']=zvar
-monc_data['tvar']=tvar
 
 monc_data['time1']=monc_data[monc_var_list[0][0]] #1d data
 monc_data.pop(monc_var_list[0][0])
@@ -120,6 +118,15 @@ monc_data['p_mean'] = np.nanmean(p,axis=(1,2))
 monc_data['T_mean'] = np.nanmean(T,axis=(1,2))
 monc_data['th_mean'] = np.nanmean(th,axis=(1,2))
 monc_data['rho_mean'] = np.nanmean(rho,axis=(1,2))
+
+zvar['p_mean'] = zvar['p']
+zvar['T_mean'] = zvar['p']
+zvar['th_mean'] = zvar['th']
+zvar['rho_mean'] = zvar['p']
+tvar['p_mean'] = tvar['p']
+tvar['T_mean'] = tvar['p']
+tvar['th_mean'] = tvar['th']
+tvar['rho_mean'] = tvar['p']
 del(p,T,th)
 
 
@@ -172,8 +179,18 @@ for c in range(0,5):#  len(monc_var_avg)):
     for t in range(0,np.size(monc_data[tvar[var]],0)):
         monc_data[var][t,monc_data['twc_tot'][t,:]<twc_thresh] = np.nan
         monc_data[var +'_mean'][t,:] = np.nanmean(monc_data[var][t,:],axis=(0,1))
+        zvar[var +'_mean']=zvar[var]
+        tvar[var +'_mean']=tvar[var]
     monc_data[var +'_mean'][np.isnan(monc_data[var +'_mean'])]=0.0
     monc_data.pop(var)
+
+for var in zvar.keys():
+    if not var in monc_data.keys():
+        del zvar[var]
+        del tvar[var]
+
+monc_data['zvar']=zvar
+monc_data['tvar']=tvar
 
 
 end = time.time()
@@ -181,15 +198,14 @@ print(end - start)
 print (' averaging complete!')
 if not os.path.exists(glob.glob(monc_exp_dir + m_out_dir)):
         os.mkdir(glob.glob(monc_exp_dir + m_out_dir))
-embed()
 fname=(monc_exp_dir + m_out_dir +'3d_averages')
+
+np.save(fname +'.npy',monc_data)
+
 afile=open(fname,'wb')
 pickle.dump(monc_data,afile)
 afile.close()
 
-afile = open(fname, "rb")
-output = pickle.load(afile)
-print(output)
 
 # ######################################################
 # ### plots to check averaging worked
