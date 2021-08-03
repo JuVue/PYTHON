@@ -174,8 +174,16 @@ print(end - start)
 print (' averaging complete!')
 if not os.path.exists(glob.glob(monc_exp_dir + m_out_dir)):
         os.mkdir(glob.glob(monc_exp_dir + m_out_dir))
-np.save(monc_exp_dir + m_out_dir +'3d_averages', monc_data)
+embed()
+fname=(monc_exp_dir + m_out_dir +'3d_averages')
+afile=open(fname,'wb')
+pickle.dump(monc_data,afile)
+afile.close()
 
+embed()
+afile = open(fname, "rb")
+output = pickle.load(afile)
+print(output)
 
 # ######################################################
 # ### plots to check averaging worked
