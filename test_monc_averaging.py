@@ -69,7 +69,7 @@ for c in range(0,len(monc_var_list)):
         tvar[var]=[]
         if c == len(monc_var_list):
             monc_data[var+'_mean'] = np.nanmean(ncm.variables[var][:],axis=(1,2))
-        else
+        else:
             monc_data[var] = ncm.variables[var][:]
         ###getting right z and t dimensions
         tmp=ncm.variables[var].dimensions
