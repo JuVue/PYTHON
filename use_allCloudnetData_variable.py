@@ -1963,7 +1963,7 @@ def main():
         monc_filename.append(fname)
     monc_3d_filename=[]
     for m in range(0, len(m_out_dir)):
-        fname=glob.glob(monc_avg_dir + m_out_dir[m] +'3d*')
+        fname=glob.glob(monc_avg_dir + m_out_dir[m] +'3d*npy')
         monc_3d_filename.append(fname)
 
     ### -----------------------------------------------------------------
