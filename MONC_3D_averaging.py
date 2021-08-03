@@ -141,8 +141,12 @@ monc_data['twc_tot']=monc_data['iwc_tot']+monc_data['lwc_tot']
 #monc_data['twc_tot']=monc_data['twc_tot']*rho
 tvar['twc_tot']=tvar['q_ice_mass']
 zvar['twc_tot']= zvar['q_ice_mass']
+tvar['iwc_tot']=tvar['q_ice_mass']
+zvar['iwc_tot']= zvar['q_ice_mass']
+tvar['lwc_tot']=tvar['q_ice_mass']
+zvar['lwc_tot']= zvar['q_ice_mass']
 
-print('averaging cloud variables')
+print('setting up thresholds')
 #calculate mean values
 var='q_ice_mass'
 twc_thresh = np.zeros([np.size(monc_data[zvar[var]],0)])
@@ -158,6 +162,7 @@ a=monc_data[zvar[var]][monc_intZs]
 twc_thresh[monc_intZs] = f(a.tolist())
 twc_thresh = np.squeeze(np.array([[[twc_thresh]*monc_data['twc_tot'].shape[2]]*monc_data['twc_tot'].shape[1]]))
 
+print('averaging cloud variables')
 for c in range(0,len(monc_var_avg)):
     var = monc_var_avg[c]
     #calculate mean values
