@@ -1393,6 +1393,167 @@ def plot_lwp(obs_data, plots_out_dir, dates,**args ):
     plt.savefig(fileout)
 
 
+def plot_monc_comparison(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): #, lon, lat):
+
+    numsp=1
+    if bool(args):
+        for n in range(0,len(args)):
+            if  list(args.keys())[n] == 'monc_data':
+                monc_data=args[list(args.keys())[n]]
+                numsp += len(monc_data)
+                pmonc=True
+            elif list(args.keys())[n] == 'mlabel':
+                mlabel = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'moutstr':
+                moutstr= args[list(args.keys())[n]]
+            elif  list(args.keys())[n] == 'um_data':
+                um_data=args[list(args.keys())[n]]
+                numsp += len(um_data)
+                pum=True
+            elif list(args.keys())[n] == 'label':
+                label = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'outstr':
+                outstr= args[list(args.keys())[n]]
+
+    ylims=[0,2.5]
+    yticks=np.arange(0,2.5e3,0.5e3)
+    ylims=[0,6]
+    yticks=np.arange(0,6e3,0.5e3)
+    ytlabels=yticks/1e3
+    ylims=[0,3]
+    yticks=np.arange(0,3e3,0.5e3)
+
+    SMALL_SIZE = 12
+    MED_SIZE = 14
+    LARGE_SIZE = 16
+
+    plt.rc('font',size=MED_SIZE)
+    plt.rc('axes',titlesize=MED_SIZE)
+    plt.rc('axes',labelsize=MED_SIZE)
+    plt.rc('xtick',labelsize=MED_SIZE)
+    plt.rc('ytick',labelsize=MED_SIZE)
+    plt.rc('legend',fontsize=MED_SIZE)
+
+    viridis = mpl_cm.get_cmap('viridis', 256) # nice colormap purple to yellow
+    newcolors = viridis(np.linspace(0, 1, 256)) #assgin new colormap with viridis colors
+    greyclr = np.array([0.1, 0.1, 0.1, 0.1])
+    newcolors[:1, :] = greyclr   # make first 20 colors greyclr
+    newcmp = ListedColormap(newcolors)
+
+    obs_data['lwc'][obs_data['lwc'] <= 0] = np.nan
+    obs_data['lwc_adiabatic'][obs_data['lwc_adiabatic'] <= 0] = np.nan
+    obs_data['lwc_adiabatic_inc_nolwp'][obs_data['lwc_adiabatic_inc_nolwp'] <= 0] = np.nan
+    if pum==True:
+        for m in range(0,len(um_data)):
+                um_data[m]['model_lwc'][um_data[m]['model_lwc'] <= 0.0] = np.nan
+
+    if pmonc==True:
+        for m in range(0,len(monc_data)):
+            monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
+            monc_data[m]['model_lwc'][monc_data[m]['model_lwc'] <= 0.0] = np.nan
+            monc_data[m]['man_lwc1']= monc_data[m]['q_cloud_liquid_mass_mean']*monc_data[m]['rho_mean']
+            monc_data[m]['man_lwc2']= monc_data[m]['lwc_tot_mean']
+            lwc_tvar=monc_data[m]['tvar']['liquid_mmr_mean']
+            lwc_zvar=monc_data[m]['zvar']['liquid_mmr_mean']
+    print ('******')
+    print ('')
+    print ('Plotting LWC timeseries for whole drift period:')
+    print ('')
+
+    cmax=0.3
+    clev=np.arange(0.0,0.45,0.05)
+
+    #####PlotLwc###############################################
+    yheight=3
+    fig = plt.figure(figsize=(9.5,yheight*numsp+1))
+    plt.subplots_adjust(top = 0.92, bottom = 0.06, right = 0.92, left = 0.08,
+            hspace = 0.4, wspace = 0.2)
+
+
+    plt.subplot(numsp,1,1)
+    ax = plt.gca()
+    img = plt.contourf(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(obs_data[lwcvar])*1e3,
+        levels=clev,cmap = newcmp)
+    nans = ax.get_ylim()
+    plt.ylabel('Z [km]')
+    plt.ylim(ylims)
+    plt.yticks(yticks)
+    ax.set_yticklabels(ytlabels)
+    plt.xlim([dates[0], dates[1]])
+    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+    #nans = ax.get_ylim()
+    ax2 = ax.twinx()
+    ax2.set_ylabel('Measurements \n (1 hour sampling)', rotation = 270, labelpad = 50)
+    ax2.set_yticks([])
+    #plt.title('Obs-' + obs_switch + 'grid')
+    cbaxes = fig.add_axes([0.225, 0.95, 0.6, 0.015])
+    cb = plt.colorbar(img, cax = cbaxes, orientation = 'horizontal')
+    plt.title('LWC [g m$^{-3}$]')
+
+    m=0
+    plt.subplot(numsp,1,numsp-len(monc_data)+1+m)
+    ax = plt.gca()
+    plt.contourf(monc_data[m][lwc_tvar]/60/60, np.squeeze(monc_data[m][lwc_zvar][:]), np.transpose(monc_data[m]['model_lwc'])*1e3,
+    levels=clev,cmap = newcmp)
+    plt.ylabel('Z [km]')
+    plt.ylim(ylims)
+    plt.yticks(yticks)
+    ax.set_yticklabels(ytlabels)
+    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+    plt.xlabel('Time (UTC)')
+    ax2 = ax.twinx()
+    ax2.set_ylabel(mlabel[m], rotation = 270, labelpad = 27)
+    ax2.set_yticks([])
+
+    plt.subplot(numsp,1,numsp-len(monc_data)+1+m)
+    ax = plt.gca()
+    plt.contourf(monc_data[m][lwc_tvar]/60/60, np.squeeze(monc_data[m][lwc_zvar][:]), np.transpose(monc_data[m]['man_lwc1'])*1e3,
+    levels=clev,cmap = newcmp)
+    plt.ylabel('Z [km]')
+    plt.ylim(ylims)
+    plt.yticks(yticks)
+    ax.set_yticklabels(ytlabels)
+    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+    plt.xlabel('Time (UTC)')
+    ax2 = ax.twinx()
+    ax2.set_ylabel('q_mean*rho', rotation = 270, labelpad = 27)
+    ax2.set_yticks([])
+
+    plt.subplot(numsp,1,numsp-len(monc_data)+1+m)
+    ax = plt.gca()
+    plt.contourf(monc_data[m][lwc_tvar]/60/60, np.squeeze(monc_data[m][lwc_zvar][:]), np.transpose(monc_data[m]['man_lwc2'])*1e3,
+    levels=clev,cmap = newcmp)
+    plt.ylabel('Z [km]')
+    plt.ylim(ylims)
+    plt.yticks(yticks)
+    ax.set_yticklabels(ytlabels)
+    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+    plt.xlabel('Time (UTC)')
+    ax2 = ax.twinx()
+    ax2.set_ylabel('lwc_tot_,mean', rotation = 270, labelpad = 27)
+    ax2.set_yticks([])
+    embed()
+    dstr=datenum2date(dates[1])
+    if pmonc == True:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_MONC_LWCTimeseries_comparison'+ lwcstr + '.png'
+    else:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_MONC_LWCTimeseries_comparison'+ lwcstr + '.png'
+    plt.savefig(fileout)
+    plt.close()
+
+    print ('')
+    print ('Finished plotting! :)')
+    print ('')
+    print ('******')
+
 
 def interpCloudnet(obs_data):
     #interpolates missing times up to 1 hour
@@ -1701,6 +1862,7 @@ def main():
         cn_obs_dir = '//gws/nopw/j04/ncas_radar_vol1/gillian/Cloudnet/Observations/measurements_V7/'
         cn_um_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/Cloudnet/UM/'
         monc_root_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/MONC/output/'
+        monc_avg_dir = '/gws/nopw/j04/ncas_radar_vol1/jutta/MONC/output/'
 
     elif machine =='LEEDS':
         ### Set output directory for plots
@@ -1798,6 +1960,10 @@ def main():
     for m in range(0, len(m_out_dir)):
         fname=glob.glob(monc_root_dir + m_out_dir[m] +'*.nc')
         monc_filename.append(fname)
+    monc_3d_filename=[]
+    for m in range(0, len(m_out_dir)):
+        fname=glob.glob(monc_avg_dir + m_out_dir[m] +'3d*.nc')
+        monc_3d_filename.append(fname)
 
     ### -----------------------------------------------------------------
     ### CHOSEN RUN - CLOUDNET DATA
@@ -1959,10 +2125,14 @@ def main():
     print ('Loading MONC data:')
     print ('')
     ###1d variables, 2d variables (time,height), 3d variables (time,x,y), 4d variables(time,x,y,z)
-    monc_var_list =[['time_series_30_600','time_series_30_60','z', 'zn','LWP_mean','IWP_mean','SWP_mean','TOT_IWP_mean','GWP_mean'],
-                    ['theta_mean','total_cloud_fraction', 'liquid_cloud_fraction','ice_cloud_fraction']
+    ### time1 = 'time_series_30_600',time2='time_series_30_60'
+    monc_var_list =[['time_series_30_600','time_series_30_60'],
+                    ['z', 'zn','LWP_mean','IWP_mean','SWP_mean','TOT_IWP_mean','GWP_mean'],
+                    ['theta_mean','total_cloud_fraction', 'liquid_cloud_fraction','ice_cloud_fraction']]
                 #    ['vwp','lwp','rwp','iwp','swp','gwp','tot_iwp'],
                 #    ['q_vapour','q_cloud_liquid_mass','q_rain_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
+
+
     monc_var_3d_list =['T_mean','p_mean','q_vapour_mean','q_cloud_liquid_mass_mean',
                         'q_rain_mass_mean','q_ice_mass_mean','q_snow_mass_mean','q_graupel_mass_mean',
                         'twc_tot_mean','iwc_tot_mean','lwc_tot_mean']
@@ -1989,35 +2159,38 @@ def main():
                     zvar[var]='zn'
                 else:
                     zvar[var]=np.nan
-                if "'time_series_30_600'" in str(tmp):
-                    tvar[var]='time1'
-                elif "'time_series_30_60'" in str(tmp):
-                    tvar[var]='time2'
-                elif "'time_series_20_600'" in str(tmp):
-                    tvar[var]='time3'
 
-    for c in range(0,len(monc_var_3d_list)):
-                var = monc_var_list[c][j]
-                zvar[var]=[]
-                tvar[var]=[]
-                monc_data[m][var] = ncm.variables[var][:]
-                ###getting right z and t dimensions
-                tmp=ncm.variables[var].dimensions
+                if monc_var_list[0][0] in str(tmp):
+                    tvar[var]='time1'        #time_series_30_600
+                elif monc_var_list[0][1] in str(tmp):
+                    tvar[var]='time2'        #time_series_30_60
+                if len(monc_var_list[0])>2:
+                    if monc_var_list[0][2] in str(tmp):
+                        tvar[var]='time3'
 
+    #loading 3d variables
+    for m in range(0, len(m_out_dir)):
+        print(monc_3d_filename[m])
+        afile = open(fname, "rb")
+        pyd = pickle.load(afile)
+        for c in range(0,len(monc_var_3d_list)):
+            var = monc_var_3d_list[c]
+            zvar[var]=pyd['zvar'][var]
+            tvar[var]=pyd['tvar'][var]
+            monc_data[m][var] = pyd[var]
 
-
-
-        monc_data[m]['zvar']=zvar
-        monc_data[m]['tvar']=tvar
-
-        monc_data[m]['time3']=monc_data[m]['time_series_20_600'] #2d data
-        monc_data[m]['time2']=monc_data[m]['time_series_2_600'] #2d data
-        monc_data[m]['time1']=monc_data[m]['time_series_2_60'] #1d data
-        monc_data[m].pop('time_series_2_60')
-        monc_data[m].pop('time_series_2_600')
-        monc_data[m].pop('time_series_20_600')
+    monc_data[m]['zvar']=zvar
+    monc_data[m]['tvar']=tvar
+    monc_data[m]['time1']=monc_data[m][monc_var_list[0][0]] #1d data
+    monc_dat[m]['time2']=monc_data[m][monc_var_list[0][1]] #2d data
+    monc_data[m].pop(monc_var_list[0][0])
+    monc_data[m].pop(monc_var_list[0][1])
+    if len(monc_var_list[0])>2:
+        monc_data[m]['time3']=monc_dat[m][monc_var_list[0][2]] #2d data
+        monc_data[m].pop(monc_var_list[0][2])
 
     print (' Monc data Loaded!')
+
     ##################################################################################################################################
     ## -------------------------------------------------------------
     ## remove spin up time from monc data
@@ -2027,9 +2200,13 @@ def main():
     ## -------------------------------------------------------------
     ## convert monc time to datenum
     ## -------------------------------------------------------------
-    monc_data[m]['time3']=dates[0] + monc_data[m]['time3']/60/60/24
-    monc_data[m]['time2']=dates[0] + monc_data[m]['time2']/60/60/24
-    monc_data[m]['time1']=dates[0] + monc_data[m]['time1']/60/60/24
+    for m in range(0,len(monc_data)):
+        monc_data[m]['time2']=dates[0] + monc_data[m]['time2']/60/60/24
+        monc_data[m]['time1']=dates[0] + monc_data[m]['time1']/60/60/24
+        if 'time3' in dict.keys():
+            monc_data[m]['time3']=dates[0] + monc_data[m]['time3']/60/60/24
+
+
     ## -------------------------------------------------------------
     ## shorten obs/model data to case study time period
     ## -------------------------------------------------------------
@@ -2096,18 +2273,19 @@ def main():
     # Cloudnet plot: Plot Cv statistics from drift period
     # -------------------------------------------------------------
     #figure = plot_CvProfiles(um_data, ifs_data, misc_data, ra2t_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs, obs_switch)
-    figure = plot_lwcProfiles(obs_data, lwcvar,lwcstr,thresholding, plots_out_dir,dates, um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    figure = plot_iwcProfiles(obs_data, twcvar,twcstr,thresholding, plots_out_dir,dates, um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    figure = plot_twcProfiles(obs_data, twcvar,twcstr,thresholding, plots_out_dir,dates, um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    # figure = plot_lwcProfiles(obs_data, lwcvar,lwcstr,thresholding, plots_out_dir,dates, um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    # figure = plot_iwcProfiles(obs_data, twcvar,twcstr,thresholding, plots_out_dir,dates, um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    # figure = plot_twcProfiles(obs_data, twcvar,twcstr,thresholding, plots_out_dir,dates, um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
 
     # -------------------------------------------------------------
     # Cloudnet plot: Plot contour timeseries
     # -------------------------------------------------------------
-    figure = plot_CvTimeseries(obs_data,plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    figure = plot_LWCTimeseries(obs_data,  lwcvar,lwcstr, plots_out_dir, dates, um_data=um_data,label=label, outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    figure = plot_TWCTimeseries( obs_data, twcvar,twcstr, plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    figure = plot_IWCTimeseries(obs_data, plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    # figure = plot_CvTimeseries(obs_data,plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    # figure = plot_LWCTimeseries(obs_data,  lwcvar,lwcstr, plots_out_dir, dates, um_data=um_data,label=label, outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    # figure = plot_TWCTimeseries( obs_data, twcvar,twcstr, plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    # figure = plot_IWCTimeseries(obs_data, plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_monc_comparison(obs_data,  lwcvar,lwcstr, plots_out_dir, dates, um_data=um_data,label=label, outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
 
     # -------------------------------------------------------------
