@@ -48,7 +48,7 @@ monc_var_list =[['time_series_30_600','time_series_30_60'],
                 ['z','zn','prefn','thref','th','p','q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass'],
                 ['u','v','w','q_vapour']]
 
-monc_var_avg= ['q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass','twc_tot']
+monc_var_avg= ['q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass','twc_tot','iwc_tot','lwc_tot']
 
 # ml2  =        ['liquid_mmr_mean','ice_mmr_mean','snow_mmr_mean','graupel_mmr_mean','model_twc']
 
@@ -132,9 +132,12 @@ print('calculating twc')
 #monc_data['model_twc'] = monc_data['model_lwc'] +monc_data['model_iwc']
 #tvar['model_twc']=tvar['ice_mmr_mean']
 #zvar['model_twc']= zvar['ice_mmr_mean']
-
-monc_data['twc_tot']=monc_data['q_ice_mass']+monc_data['q_snow_mass']+monc_data['q_graupel_mass']+monc_data['q_cloud_liquid_mass']
-monc_data['twc_tot']=monc_data['twc_tot']*rho
+monc_data['iwc_tot']=monc_data['q_ice_mass']+monc_data['q_snow_mass']+monc_data['q_graupel_mass']
+monc_data['iwc_tot']=monc_data['iwc_tot']*rho
+monc_data['lwc_tot']=monc_data['q_cloud_liquid_mass']*rho
+monc_data['twc_tot']=monc_data['iwc_tot']+monc_data['lwc_tot']
+#monc_data['twc_tot']=monc_data['q_ice_mass']+monc_data['q_snow_mass']+monc_data['q_graupel_mass']+monc_data['q_cloud_liquid_mass']
+#monc_data['twc_tot']=monc_data['twc_tot']*rho
 tvar['twc_tot']=tvar['q_ice_mass']
 zvar['twc_tot']= zvar['q_ice_mass']
 
