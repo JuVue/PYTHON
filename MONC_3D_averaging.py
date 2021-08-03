@@ -171,7 +171,7 @@ print(end - start)
 print (' averaging complete!')
 if not os.path.exists(glob.glob(monc_exp_dir + m_out_dir)):
         os.mkdir(glob.glob(monc_exp_dir + m_out_dir))
-np.save(glob.glob(monc_exp_dir + m_out_dir +'3d_averages'), monc_data)
+np.save(monc_exp_dir + m_out_dir +'3d_averages', monc_data)
 
 
 # ######################################################
