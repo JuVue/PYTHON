@@ -47,7 +47,7 @@ print ('')
 monc_var_list =[['time_series_30_600','time_series_30_60'],
                 ['z','zn','prefn','thref','thinit','rho',
                 'th','p','q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass'],
-                ['u','v','w','q']]
+                ['u','v','w','q_vapour']]
 
 monc_var_avg= ['q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass','twc_tot']
 
