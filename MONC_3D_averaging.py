@@ -49,7 +49,7 @@ monc_var_list =[['time_series_30_600','time_series_30_60'],
                 ['z','zn','prefn','thref','th','p','q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass'],
                 ['u','v','w','q_vapour']]
 
-monc_var_avg= ['q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass','twc_tot','iwc_tot','lwc_tot']
+monc_var_avg= ['q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass','iwc_tot','lwc_tot','twc_tot'] #always have twc_toto at the end!
 
 # ml2  =        ['liquid_mmr_mean','ice_mmr_mean','snow_mmr_mean','graupel_mmr_mean','model_twc']
 
@@ -164,7 +164,7 @@ twc_thresh = np.squeeze(np.array([[[twc_thresh]*monc_data['twc_tot'].shape[2]]*m
 
 print('averaging cloud variables')
 embed()
-for c in range(0,len(monc_var_avg)):
+for c in range(0,5):#  len(monc_var_avg)):
     var = monc_var_avg[c]
     #calculate mean values
     monc_data[var +'_mean']=np.empty((np.size(monc_data[tvar[var]],0),np.size(monc_data[zvar[var]],0)))
