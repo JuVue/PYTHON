@@ -1963,7 +1963,7 @@ def main():
         monc_filename.append(fname)
     monc_3d_filename=[]
     for m in range(0, len(m_out_dir)):
-        fname=glob.glob(monc_avg_dir + m_out_dir[m] +'3d*.nc')
+        fname=glob.glob(monc_avg_dir + m_out_dir[m] +'3d*.npy')
         monc_3d_filename.append(fname)
 
     ### -----------------------------------------------------------------
@@ -2143,7 +2143,7 @@ def main():
     monc_data = {}
     for m in range(0, len(m_out_dir)):
         print(monc_filename[m])
-        ncm = Dataset(monc_filename[m][:],'r')
+        ncm = Dataset(monc_filename[m][0],'r')
         monc_data[m]={}
         zvar={}
         tvar={}
@@ -2173,7 +2173,7 @@ def main():
     #loading 3d variables
     for m in range(0, len(m_out_dir)):
         print(monc_3d_filename[m])
-        afile = open(fname, "rb")
+        afile = open(monc_3d_filename[m], "rb")
         pyd = pickle.load(afile)
         for c in range(0,len(monc_var_3d_list)):
             var = monc_var_3d_list[c]
