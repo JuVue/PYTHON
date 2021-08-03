@@ -45,8 +45,7 @@ print ('')
 #                 'liquid_mmr_mean','ice_mmr_mean','snow_mmr_mean','graupel_mmr_mean'],
 #                 ['u','v','w','q','th','p','q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
 monc_var_list =[['time_series_30_600','time_series_30_60'],
-                ['z','zn','prefn','thref','thinit','rho',
-                'th','p','q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass'],
+                ['z','zn','prefn','thref','th','p','q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass'],
                 ['u','v','w','q_vapour']]
 
 monc_var_avg= ['q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass','twc_tot']
@@ -67,7 +66,7 @@ for c in range(0,len(monc_var_list)):
         var = monc_var_list[c][j]
         zvar[var]=[]
         tvar[var]=[]
-        if c == len(monc_var_list):
+        if c == len(monc_var_list)-1:
             monc_data[var+'_mean'] = np.nanmean(ncm.variables[var][:],axis=(1,2))
         else:
             monc_data[var] = ncm.variables[var][:]
@@ -106,8 +105,12 @@ print('Loading done')
 print('Calculating temperature and density')
 th = ncm.variables['th'][:]+ ncm.variables['thref'][0,:]
 p = ncm.variables['p'][:]+ ncm.variables['prefn'][0,:]
-#p=ncm.variables['prefn'][0,:]
-#p = np.array([[[p]*th.shape[2]]*th.shape[1]]*th.shape[0])
+
+monc_data.pop('th')
+monc_data.pop('thref')
+monc_data.pop('p')
+monc_data.pop('prefn')
+
 T = calcT(th,p)
 rho=calcAirDensity(T,p)
 
@@ -117,6 +120,8 @@ monc_data['T_mean'] = np.nanmean(T,axis=(1,2))
 monc_data['th_mean'] = np.nanmean(th,axis=(1,2))
 monc_data['rho_mean'] = np.nanmean(rho,axis=(1,2))
 del(p,T,th)
+
+
 
 print('done')
 ###############
@@ -164,10 +169,9 @@ for c in range(0,len(monc_var_avg)):
 end = time.time()
 print(end - start)
 print (' averaging complete!')
-embed()
 if not os.path.exists(glob.glob(monc_exp_dir + m_out_dir)):
         os.mkdir(glob.glob(monc_exp_dir + m_out_dir))
-np.save(glob.glob(monc_exp_dir + m_out_dir +'3d_averages.nc'), monc_data)
+np.save(glob.glob(monc_exp_dir + m_out_dir +'3d_averages'), monc_data)
 
 
 # ######################################################
