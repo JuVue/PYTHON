@@ -1971,7 +1971,7 @@ def main():
     cn_um_out_dir = ['cloud-fraction-metum-grid/2018/',
                      'lwc-scaled-metum-grid/2018/',
                      'iwc-Z-T-metum-grid/2018/']
-    cn_obs_out_dir = ['cloud-fraction-metum-grid/2018/',
+    cn_obs_out_dir = ['cloud-fraction-metum-grid/2018/qual70/',
                         'lwc-adiabatic-metum-grid/2018/',
                         'iwc-Z-T-metum-grid/2018/']
 
