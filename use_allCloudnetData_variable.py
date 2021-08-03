@@ -2174,8 +2174,8 @@ def main():
     #loading 3d variables
     for m in range(0, len(m_out_dir)):
         print(monc_3d_filename[m][0])
-        afile = open(monc_3d_filename[m][0], "rb")
-        pyd = pickle.load(afile)
+        #afile = open(monc_3d_filename[m][0], "rb")
+        pyd = np.load(monc_3d_filename[m][0],allow_pickle=True).item()   #pickle.load(afile)
         for c in range(0,len(monc_var_3d_list)):
             var = monc_var_3d_list[c]
             zvar[var]=pyd['zvar'][var]
