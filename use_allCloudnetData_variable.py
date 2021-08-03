@@ -2170,6 +2170,7 @@ def main():
                     if monc_var_list[0][2] in str(tmp):
                         tvar[var]='time3'
 
+    embed()
     #loading 3d variables
     for m in range(0, len(m_out_dir)):
         print(monc_3d_filename[m])
