@@ -191,7 +191,7 @@ for var in zvar.keys():
         monc_data['tvar'][var]=tvar[var]
 
 
-
+embed()
 end = time.time()
 print(end - start)
 print (' averaging complete!')
