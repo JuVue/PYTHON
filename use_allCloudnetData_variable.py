@@ -1793,7 +1793,6 @@ def CaseStudySelection(obs_data,um_data,monc_data,dates):
         monc_vars.remove('zvar')
         mt1=monc_data[m]['time1']
         mt2=monc_data[m]['time2']
-        mt3=monc_data[m]['time3']
 
         # mt1=monc_data[m]['time1']/60/60/24 + dates[0]
         # mt2=monc_data[m]['time2']/60/60/24 + dates[0]
@@ -1802,8 +1801,10 @@ def CaseStudySelection(obs_data,um_data,monc_data,dates):
         t1init=len(mt1)
         time2_ind = np.argwhere((mt2>dates[1] ))
         t2init=len(mt2)
-        time3_ind = np.argwhere((mt3>dates[1] ))
-        t3init=len(mt3)
+        if 'time3' in monc_data:
+            mt3=monc_data[m]['time3']
+            time3_ind = np.argwhere((mt3>dates[1] ))
+            t3init=len(mt3)
         for j in range(0,len(monc_vars)):
             if any(np.array(monc_data[m][monc_vars[j]].shape) == t1init):
                 monc_data[m][monc_vars[j]]=np.delete(monc_data[m][monc_vars[j]],time1_ind,0)
