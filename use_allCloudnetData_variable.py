@@ -203,12 +203,12 @@ def plot_LWCTimeseries(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): #,
             elif list(args.keys())[n] == 'outstr':
                 outstr= args[list(args.keys())[n]]
 
-    ylims=[0,2.5]
-    yticks=np.arange(0,2.5e3,0.5e3)
-    ylims=[0,6]
-    yticks=np.arange(0,6e3,0.5e3)
-    ytlabels=yticks/1e3
-    
+    # ylims=[0,2.5]
+    # yticks=np.arange(0,2.5e3,0.5e3)
+    # ylims=[0,6]
+    # yticks=np.arange(0,6e3,0.5e3)
+    # ytlabels=yticks/1e3
+
     ylims=[0,3]
     yticks=np.arange(0,3e3,0.5e3)
     ytlabels=yticks/1e3
@@ -364,13 +364,14 @@ def plot_IWCTimeseries( obs_data, plots_out_dir, dates,**args): #, lon, lat):
             elif list(args.keys())[n] == 'outstr':
                 outstr= args[list(args.keys())[n]]
 
-    ylims=[0,2.5]
-    yticks=np.arange(0,2.5e3,0.5e3)
-    ylims=[0,6]
-    yticks=np.arange(0,6e3,0.5e3)
-    ytlabels=yticks/1e3
+    # ylims=[0,2.5]
+    # yticks=np.arange(0,2.5e3,0.5e3)
+    # ylims=[0,6]
+    # yticks=np.arange(0,6e3,0.5e3)
+    # ytlabels=yticks/1e3
     ylims=[0,3]
     yticks=np.arange(0,3e3,0.5e3)
+    ytlabels=yticks/1e3
 
     obs_data['iwc'][obs_data['iwc'] <= 0.0] = np.nan
     if pum ==True:
@@ -528,11 +529,12 @@ def plot_TWCTimeseries(obs_data,twcvar,twcstr,plots_out_dir, dates,  **args):
             elif list(args.keys())[n] == 'outstr':
                 outstr= args[list(args.keys())[n]]
 
-    ylims=[0,6]
-    yticks=np.arange(0,6e3,1e3)
-    ytlabels=yticks/1e3
+    # ylims=[0,6]
+    # yticks=np.arange(0,6e3,1e3)
+    # ytlabels=yticks/1e3
     ylims=[0,3]
     yticks=np.arange(0,3e3,0.5e3)
+    ytlabels=yticks/1e3
 
     print ('******')
     print ('')
@@ -703,6 +705,11 @@ def plot_lwcProfiles(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,dates, 
             elif list(args.keys())[n] == 'outstr':
                 outstr= args[list(args.keys())[n]]
 
+    ylims=[0,3]
+    yticks=np.arange(0,3e3,0.5e3)
+    ytlabels=yticks/1e3
+
+
     print ('******')
     print ('')
     print ('Plotting LWC mean profiles:' + lwcvar)
@@ -865,10 +872,10 @@ def plot_lwcProfiles(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,dates, 
     # plt.ylim([0,5e3])
     # plt.yticks(np.arange(0,5.01e3,0.5e3))
     # ax1.set_yticklabels([0,' ',1,' ',2,' ',3,' ',4,' ',5])
-    plt.ylim([0,2500])
-    plt.yticks(np.arange(0,2.51e3,0.5e3))
+    plt.ylim(ylims)
+    plt.yticks(yticks)
     ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
-    ax1.set_yticklabels(np.arange(0,2.51,0.5))
+    ax1.set_yticklabels(ytlabels)
     plt.xlim([0,0.4])
     plt.xticks(np.arange(0,0.45,0.05))
     #ax1.set_xticklabels([0,' ',0.015,' ',0.03,' ',0.045,' ',0.06])
@@ -918,6 +925,9 @@ def plot_iwcProfiles(obs_data, twcvar,twcstr, thresholding,plots_out_dir,dates, 
             elif list(args.keys())[n] == 'outstr':
                 outstr= args[list(args.keys())[n]]
 
+    ylims=[0,3]
+    yticks=np.arange(0,3e3,0.5e3)
+    ytlabels=yticks/1e3
 
     print ('******')
     print ('')
@@ -1075,10 +1085,10 @@ def plot_iwcProfiles(obs_data, twcvar,twcstr, thresholding,plots_out_dir,dates, 
     # plt.ylim([0,5e3])
     # plt.yticks(np.arange(0,5.01e3,0.5e3))
     # ax1.set_yticklabels([0,' ',1,' ',2,' ',3,' ',4,' ',5])
-    plt.ylim([0,2500])
-    plt.yticks(np.arange(0,2.51e3,0.5e3))
+    plt.ylim(ylims)
+    plt.yticks(yticks)
     ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
-    ax1.set_yticklabels(np.arange(0,2.51,0.5))
+    ax1.set_yticklabels(ytlabels)
     plt.xlim([0,0.05])
     plt.xticks(np.arange(0,0.051,0.015))
     #ax1.set_xticklabels([0,' ',0.015,' ',0.03,' ',0.045,' ',0.06])
@@ -1128,6 +1138,10 @@ def plot_twcProfiles( obs_data,twcvar,twcstr, thresholding, plots_out_dir,dates,
                 label = args[list(args.keys())[n]]
             elif list(args.keys())[n] == 'outstr':
                 outstr= args[list(args.keys())[n]]
+
+    ylims=[0,3]
+    yticks=np.arange(0,3e3,0.5e3)
+    ytlabels=yticks/1e3
 
 
     print ('******')
@@ -1290,11 +1304,11 @@ def plot_twcProfiles( obs_data,twcvar,twcstr, thresholding, plots_out_dir,dates,
     # plt.ylim([0,5e3])
     # plt.yticks(np.arange(0,5.01e3,0.5e3))
     # ax1.set_yticklabels([0,' ',1,' ',2,' ',3,' ',4,' ',5])
-    plt.ylim([0,3000])
-    plt.yticks(np.arange(0,2.51e3,0.5e3))
+    plt.ylim(ylims)
+    plt.yticks(yticks)
 #    plt.yticks(np.arange(0,6.01e3,0.5e3))
     ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
-    ax1.set_yticklabels(np.arange(0,2.51,0.5))
+    ax1.set_yticklabels(ytlabels)
     plt.xlim([0,0.45])
     plt.xticks(np.arange(0,0.41,0.05))
     #ax1.set_xticklabels([0,' ',0.015,' ',0.03,' ',0.045,' ',0.06])
