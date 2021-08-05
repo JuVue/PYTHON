@@ -1703,6 +1703,7 @@ def removeSpinUp(monc_data,monc_spin):
         monc_var_list = list(monc_data[m].keys())
         monc_var_list.remove('time1')
         monc_var_list.remove('time2')
+        if
         monc_var_list.remove('time3')
         monc_var_list.remove('tvar')
         monc_var_list.remove('zvar')
@@ -2135,7 +2136,7 @@ def main():
 
 
     monc_var_3d_list =['T_mean','p_mean','q_vapour_mean','q_cloud_liquid_mass_mean',
-                        'q_rain_mass_mean','q_ice_mass_mean','q_snow_mass_mean','q_graupel_mass_mean',
+                        'q_ice_mass_mean','q_snow_mass_mean','q_graupel_mass_mean',
                         'twc_tot_mean','iwc_tot_mean','lwc_tot_mean']
 
     embed()
@@ -2175,6 +2176,8 @@ def main():
         print(monc_3d_filename[m][0])
         #afile = open(monc_3d_filename[m][0], "rb")
         pyd = np.load(monc_3d_filename[m][0],allow_pickle=True).item()   #pickle.load(afile)
+        pyd['zvar']['q_vapour_mean']=['zn']
+        pyd['tvar']['q_vapour_mean']=['time1']
         for c in range(0,len(monc_var_3d_list)):
             var = monc_var_3d_list[c]
             zvar[var]=pyd['zvar'][var]
@@ -2184,7 +2187,7 @@ def main():
     monc_data[m]['zvar']=zvar
     monc_data[m]['tvar']=tvar
     monc_data[m]['time1']=monc_data[m][monc_var_list[0][0]] #1d data
-    monc_dat[m]['time2']=monc_data[m][monc_var_list[0][1]] #2d data
+    monc_data[m]['time2']=monc_data[m][monc_var_list[0][1]] #2d data
     monc_data[m].pop(monc_var_list[0][0])
     monc_data[m].pop(monc_var_list[0][1])
     if len(monc_var_list[0])>2:
