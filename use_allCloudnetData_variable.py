@@ -1450,10 +1450,11 @@ def plot_monc_comparison(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): 
 
     if pmonc==True:
         for m in range(0,len(monc_data)):
-            monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
+            monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']
             monc_data[m]['model_lwc'][monc_data[m]['model_lwc'] <= 0.0] = np.nan
-            monc_data[m]['man_lwc1']= monc_data[m]['q_cloud_liquid_mass_mean']*monc_data[m]['rho_mean']
-            monc_data[m]['man_lwc2']= monc_data[m]['lwc_tot_mean']
+            monc_data[m]['man_lwc1']= monc_data[m]['q_cloud_liquid_mass_mean']
+            monc_data[m]['man_lwc2']= monc_data[m]['q_cloud_liquid_mass_mean']*monc_data[m]['rho_mean']
+            monc_data[m]['man_lwc3']= monc_data[m]['lwc_tot_mean']
             lwc_tvar=monc_data[m]['tvar']['liquid_mmr_mean']
             lwc_zvar=monc_data[m]['zvar']['liquid_mmr_mean']
     print ('******')
@@ -1471,7 +1472,7 @@ def plot_monc_comparison(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): 
             hspace = 0.4, wspace = 0.2)
 
 
-    plt.subplot(numsp,1,1)
+    plt.subplot(5,1,1)
     ax = plt.gca()
     img = plt.contourf(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(obs_data[lwcvar])*1e3,
         levels=clev,cmap = newcmp)
@@ -1493,8 +1494,7 @@ def plot_monc_comparison(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): 
     cb = plt.colorbar(img, cax = cbaxes, orientation = 'horizontal')
     plt.title('LWC [g m$^{-3}$]')
 
-    m=0
-    plt.subplot(numsp,1,numsp-len(monc_data)+1+m)
+    plt.subplot(5,1,2)
     ax = plt.gca()
     plt.contourf(monc_data[m][lwc_tvar]/60/60, np.squeeze(monc_data[m][lwc_zvar][:]), np.transpose(monc_data[m]['model_lwc'])*1e3,
     levels=clev,cmap = newcmp)
@@ -1507,10 +1507,10 @@ def plot_monc_comparison(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): 
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
     plt.xlabel('Time (UTC)')
     ax2 = ax.twinx()
-    ax2.set_ylabel(mlabel[m], rotation = 270, labelpad = 27)
+    ax2.set_ylabel('model_lwc', rotation = 270, labelpad = 27)
     ax2.set_yticks([])
 
-    plt.subplot(numsp,1,numsp-len(monc_data)+1+m)
+    plt.subplot(5,1,3)
     ax = plt.gca()
     plt.contourf(monc_data[m][lwc_tvar]/60/60, np.squeeze(monc_data[m][lwc_zvar][:]), np.transpose(monc_data[m]['man_lwc1'])*1e3,
     levels=clev,cmap = newcmp)
@@ -1523,10 +1523,26 @@ def plot_monc_comparison(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): 
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
     plt.xlabel('Time (UTC)')
     ax2 = ax.twinx()
-    ax2.set_ylabel('q_mean*rho', rotation = 270, labelpad = 27)
+    ax2.set_ylabel('q_liquid_mean', rotation = 270, labelpad = 27)
     ax2.set_yticks([])
 
-    plt.subplot(numsp,1,numsp-len(monc_data)+1+m)
+    plt.subplot(5,1,4)
+    ax = plt.gca()
+    plt.contourf(monc_data[m][lwc_tvar]/60/60, np.squeeze(monc_data[m][lwc_zvar][:]), np.transpose(monc_data[m]['man_lwc1'])*1e3,
+    levels=clev,cmap = newcmp)
+    plt.ylabel('Z [km]')
+    plt.ylim(ylims)
+    plt.yticks(yticks)
+    ax.set_yticklabels(ytlabels)
+    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+    plt.xlabel('Time (UTC)')
+    ax2 = ax.twinx()
+    ax2.set_ylabel('q_liquid_mean*rho_mean', rotation = 270, labelpad = 27)
+    ax2.set_yticks([])
+
+    plt.subplot(5,1,5)
     ax = plt.gca()
     plt.contourf(monc_data[m][lwc_tvar]/60/60, np.squeeze(monc_data[m][lwc_zvar][:]), np.transpose(monc_data[m]['man_lwc2'])*1e3,
     levels=clev,cmap = newcmp)
@@ -1539,7 +1555,7 @@ def plot_monc_comparison(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): 
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
     plt.xlabel('Time (UTC)')
     ax2 = ax.twinx()
-    ax2.set_ylabel('lwc_tot_,mean', rotation = 270, labelpad = 27)
+    ax2.set_ylabel('lwc_tot_mean', rotation = 270, labelpad = 27)
     ax2.set_yticks([])
     embed()
     dstr=datenum2date(dates[1])
