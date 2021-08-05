@@ -1436,7 +1436,7 @@ def plot_monc_comparison(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): 
     plt.rc('legend',fontsize=MED_SIZE)
 
     viridis = mpl_cm.get_cmap('viridis', 256) # nice colormap purple to yellow
-    newcolors = viridis(np.linspace(0, 1, 256)) #assgin new colormap with viridis colors
+    newcolors = viridis(np.lFinspace(0, 1, 256)) #assgin new colormap with viridis colors
     greyclr = np.array([0.1, 0.1, 0.1, 0.1])
     newcolors[:1, :] = greyclr   # make first 20 colors greyclr
     newcmp = ListedColormap(newcolors)
@@ -2135,7 +2135,8 @@ def main():
     ### time1 = 'time_series_30_600',time2='time_series_30_60'
     monc_var_list =[['time_series_30_600','time_series_30_60'],
                     ['z', 'zn','LWP_mean','IWP_mean','SWP_mean','TOT_IWP_mean','GWP_mean'],
-                    ['theta_mean','total_cloud_fraction', 'liquid_cloud_fraction','ice_cloud_fraction']]
+                    ['theta_mean','total_cloud_fraction', 'liquid_cloud_fraction','ice_cloud_fraction'],
+                    ['liquid_mmr_mean','ice_mmr_mean','graupel_mmr_mean','snow_mmr_mean']
                 #    ['vwp','lwp','rwp','iwp','swp','gwp','tot_iwp'],
                 #    ['q_vapour','q_cloud_liquid_mass','q_rain_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
 
