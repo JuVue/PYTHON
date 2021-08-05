@@ -2157,10 +2157,13 @@ def main():
                 #    ['q_vapour','q_cloud_liquid_mass','q_rain_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
 
 
-    monc_var_3d_list =['T_mean','p_mean','q_vapour_mean','q_cloud_liquid_mass_mean',
+    monc_var_3d_list =['T_mean','p_mean','th_mean','rho_mean','q_vapour_mean','q_cloud_liquid_mass_mean',
                         'q_ice_mass_mean','q_snow_mass_mean','q_graupel_mass_mean',
                         'twc_tot_mean','iwc_tot_mean','lwc_tot_mean']
-
+                        #'z', 'zn', 'u_mean', 'v_mean', 'w_mean', 'q_vapour_mean',
+                        # 'time1', 'time2', 'p_mean', 'T_mean', 'th_mean', 'rho_mean',
+                        # 'q_cloud_liquid_mass_mean', 'q_ice_mass_mean', 'q_snow_mass_mean',
+                        # 'q_graupel_mass_mean', 'iwc_tot_mean', 'lwc_tot_mean', 'twc_tot_mean', 'zvar', 'tvar']
     ncm = {}
     monc_data = {}
     for m in range(0, len(m_out_dir)):
@@ -2269,7 +2272,6 @@ def main():
     for m in range(0, len(out_dir)):
         um_data[m]['model_lwp'][lwpind] = np.nan
 
-    embed()
 ###################################################################################################################
 ###################################################################################################################
 ################################################ FIGURES ##########################################################
@@ -2303,6 +2305,7 @@ def main():
     # figure = plot_iwcProfiles(obs_data, twcvar,twcstr,thresholding, plots_out_dir,dates, um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     # figure = plot_twcProfiles(obs_data, twcvar,twcstr,thresholding, plots_out_dir,dates, um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
+    embed()
 
     # -------------------------------------------------------------
     # Cloudnet plot: Plot contour timeseries
