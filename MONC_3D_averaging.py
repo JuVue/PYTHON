@@ -69,23 +69,25 @@ for c in range(0,len(monc_var_list)):
         tvar[var]=[]
         if c == len(monc_var_list)-1:
             monc_data[var+'_mean'] = np.nanmean(ncm.variables[var][:],axis=(1,2))
+            varstr=[var +'_mean']
         else:
             monc_data[var] = ncm.variables[var][:]
+            varstr=[var]
         ###getting right z and t dimensions
         tmp=ncm.variables[var].dimensions
         if "'z'" in str(tmp):
-            zvar[var]='z'
+            zvar[varstr]='z'
         elif "'zn'" in str(tmp):
-            zvar[var]='zn'
+            zvar[varstr]='zn'
         else:
-            zvar[var]=np.nan
+            zvar[varstr]=np.nan
         if monc_var_list[0][0] in str(tmp):
-            tvar[var]='time1'
+            tvar[varstr]='time1'
         elif monc_var_list[0][1] in str(tmp):
-            tvar[var]='time2'
+            tvar[varstr]='time2'
         if len(monc_var_list[0])>2:
             if monc_var_list[0][2] in str(tmp):
-                tvar[var]='time3'
+                tvar[varstr]='time3'
 
 monc_data['time1']=monc_data[monc_var_list[0][0]] #1d data
 monc_data.pop(monc_var_list[0][0])
