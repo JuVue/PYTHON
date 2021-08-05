@@ -1421,8 +1421,13 @@ def plot_monc_comparison(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): 
     ylims=[0,6]
     yticks=np.arange(0,6e3,0.5e3)
     ytlabels=yticks/1e3
+
+
     ylims=[0,3]
     yticks=np.arange(0,3e3,0.5e3)
+    ytlabels=yticks/1e3
+
+
 
     SMALL_SIZE = 12
     MED_SIZE = 14
