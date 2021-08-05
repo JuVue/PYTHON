@@ -1436,7 +1436,7 @@ def plot_monc_comparison(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): 
     plt.rc('legend',fontsize=MED_SIZE)
 
     viridis = mpl_cm.get_cmap('viridis', 256) # nice colormap purple to yellow
-    newcolors = viridis(np.lFinspace(0, 1, 256)) #assgin new colormap with viridis colors
+    newcolors = viridis(np.linspace(0, 1, 256)) #assgin new colormap with viridis colors
     greyclr = np.array([0.1, 0.1, 0.1, 0.1])
     newcolors[:1, :] = greyclr   # make first 20 colors greyclr
     newcmp = ListedColormap(newcolors)
