@@ -34,7 +34,7 @@ elif machine=='JASMIN':
     m_out_dir = '22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/'
     monc_exp_dir= '/gws/nopw/j04/ncas_radar_vol1/jutta/MONC/output/'
 tmp=glob.glob(monc_root_dir + m_out_dir +'*.nc')
-assert len(tmp)>1,'more than one file detected'
+assert len(tmp)==1,'more than one file detected'
 monc_filename=tmp[0]
 start = time.time()
 
@@ -82,7 +82,6 @@ for c in range(0,len(monc_var_list)):
         elif "'zn'" in str(tmp):
             zvar[varstr]='zn'
         else:
-            embed()
             zvar[varstr]=np.nan
         if monc_var_list[0][0] in str(tmp):
             tvar[varstr]='time1'
