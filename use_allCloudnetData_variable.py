@@ -1805,6 +1805,7 @@ def CaseStudySelection(obs_data,um_data,monc_data,dates):
             mt3=monc_data[m]['time3']
             time3_ind = np.argwhere((mt3>dates[1] ))
             t3init=len(mt3)
+        embed()
         for j in range(0,len(monc_vars)):
             if any(np.array(monc_data[m][monc_vars[j]].shape) == t1init):
                 monc_data[m][monc_vars[j]]=np.delete(monc_data[m][monc_vars[j]],time1_ind,0)
