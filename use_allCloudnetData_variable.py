@@ -1531,10 +1531,7 @@ def plot_monc_comparison(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): 
     ax2.set_yticks([])
     cbaxes = fig.add_axes([0.225, 0.25, 0.6, 0.015])
     cb = plt.colorbar(img, cax = cbaxes, orientation = 'horizontal')
-    plt.show()
 
-
-    embed()
     dstr=datenum2date(dates[1])
     if pmonc == True:
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_MONC_LWCTimeseries_comparison'+ lwcstr + '.png'
