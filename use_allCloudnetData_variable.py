@@ -1805,7 +1805,6 @@ def CaseStudySelection(obs_data,um_data,monc_data,dates):
             mt3=monc_data[m]['time3']
             time3_ind = np.argwhere((mt3>dates[1] ))
             t3init=len(mt3)
-        embed()
         for j in range(0,len(monc_vars)):
             if any(np.array(monc_data[m][monc_vars[j]].shape) == t1init):
                 monc_data[m][monc_vars[j]]=np.delete(monc_data[m][monc_vars[j]],time1_ind,0)
@@ -1819,16 +1818,17 @@ def CaseStudySelection(obs_data,um_data,monc_data,dates):
                     monc_data[m][monc_vars[j]]=np.delete(monc_data[m][monc_vars[j]],time2_ind,2)
                 elif tmp2 == 3:
                     monc_data[m][monc_vars[j]]=np.delete(monc_data[m][monc_vars[j]],time2_ind,3)
-            elif any(np.array(monc_data[m][monc_vars[j]].shape) == t3init):
-                tmp2=np.argwhere(np.array(monc_data[m][monc_vars[j]].shape) == t2init)
-                if tmp2 == 0:
-                    monc_data[m][monc_vars[j]]=np.delete(monc_data[m][monc_vars[j]],time3_ind,0)
-                elif tmp2 == 1:
-                    monc_data[m][monc_vars[j]]=np.delete(monc_data[m][monc_vars[j]],time3_ind,1)
-                elif tmp2 == 2:
-                    monc_data[m][monc_vars[j]]=np.delete(monc_data[m][monc_vars[j]],time3_ind,2)
-                elif tmp2 == 3:
-                    monc_data[m][monc_vars[j]]=np.delete(monc_data[m][monc_vars[j]],time3_ind,3)
+            elif 'time3' in monc_data:
+                if any(np.array(monc_data[m][monc_vars[j]].shape) == t3init):
+                    tmp2=np.argwhere(np.array(monc_data[m][monc_vars[j]].shape) == t2init)
+                    if tmp2 == 0:
+                        monc_data[m][monc_vars[j]]=np.delete(monc_data[m][monc_vars[j]],time3_ind,0)
+                    elif tmp2 == 1:
+                        monc_data[m][monc_vars[j]]=np.delete(monc_data[m][monc_vars[j]],time3_ind,1)
+                    elif tmp2 == 2:
+                        monc_data[m][monc_vars[j]]=np.delete(monc_data[m][monc_vars[j]],time3_ind,2)
+                    elif tmp2 == 3:
+                        monc_data[m][monc_vars[j]]=np.delete(monc_data[m][monc_vars[j]],time3_ind,3)
 
     return obs_data, um_data, monc_data
     print('done')
@@ -2144,7 +2144,6 @@ def main():
                         'q_ice_mass_mean','q_snow_mass_mean','q_graupel_mass_mean',
                         'twc_tot_mean','iwc_tot_mean','lwc_tot_mean']
 
-    embed()
     ncm = {}
     monc_data = {}
     for m in range(0, len(m_out_dir)):
