@@ -1703,8 +1703,8 @@ def removeSpinUp(monc_data,monc_spin):
         monc_var_list = list(monc_data[m].keys())
         monc_var_list.remove('time1')
         monc_var_list.remove('time2')
-        if
-        monc_var_list.remove('time3')
+        if 'time3' in monc_data:
+            monc_var_list.remove('time3')
         monc_var_list.remove('tvar')
         monc_var_list.remove('zvar')
 
