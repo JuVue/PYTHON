@@ -2211,7 +2211,7 @@ def main():
     for m in range(0,len(monc_data)):
         monc_data[m]['time2']=dates[0] + monc_data[m]['time2']/60/60/24
         monc_data[m]['time1']=dates[0] + monc_data[m]['time1']/60/60/24
-        if 'time3' in dict.keys():
+        if 'time3' in monc_data:
             monc_data[m]['time3']=dates[0] + monc_data[m]['time3']/60/60/24
 
 
