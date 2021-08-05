@@ -1710,7 +1710,8 @@ def removeSpinUp(monc_data,monc_spin):
 
         id1 = np.squeeze(np.argwhere(monc_data[m]['time1']<=monc_spin)) #1D data
         id2 = np.squeeze(np.argwhere(monc_data[m]['time2']<=monc_spin))
-        id3 = np.squeeze(np.argwhere(monc_data[m]['time3']<=monc_spin))
+        if 'time3' in monc_data:
+            id3 = np.squeeze(np.argwhere(monc_data[m]['time3']<=monc_spin))
 
         for j in range(0,len(monc_var_list)):
             if monc_data[m]['tvar'][monc_var_list[j]]=='time1':
@@ -1740,10 +1741,12 @@ def removeSpinUp(monc_data,monc_spin):
                     monc_data[m][monc_var_list[j]]=np.delete(monc_data[m][monc_var_list[j]],id3,3)
         monc_data[m]['time1']=np.delete(monc_data[m]['time1'],id1,0)
         monc_data[m]['time2']=np.delete(monc_data[m]['time2'],id2,0)
-        monc_data[m]['time3']=np.delete(monc_data[m]['time3'],id3,0)
+        if 'time3' in monc_data:
+            monc_data[m]['time3']=np.delete(monc_data[m]['time3'],id3,0)
         monc_data[m]['time1']=monc_data[m]['time1']-monc_data[m]['time1'][0]
         monc_data[m]['time2']=monc_data[m]['time2']-monc_data[m]['time2'][0]
-        monc_data[m]['time3']=monc_data[m]['time3']-monc_data[m]['time3'][0]
+        if 'time3' in monc_data:
+            monc_data[m]['time3']=monc_data[m]['time3']-monc_data[m]['time3'][0]
 
     return monc_data
     print('done')
