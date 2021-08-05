@@ -237,10 +237,13 @@ def plot_LWCTimeseries(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): #,
 
     if pmonc==True:
         for m in range(0,len(monc_data)):
-            monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
+            #monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
+            monc_data[m]['model_lwc']=monc_data[m]['lwc_tot_mean']
             monc_data[m]['model_lwc'][monc_data[m]['model_lwc'] <= 0.0] = np.nan
-            lwc_tvar=monc_data[m]['tvar']['liquid_mmr_mean']
-            lwc_zvar=monc_data[m]['zvar']['liquid_mmr_mean']
+            #lwc_tvar=monc_data[m]['tvar']['liquid_mmr_mean']
+            #lwc_zvar=monc_data[m]['zvar']['liquid_mmr_mean']
+            lwc_tvar=monc_data[m]['tvar']['lwc_tot_mean']
+            lwc_zvar=monc_data[m]['zvar']['lwc_tot_mean']
     print ('******')
     print ('')
     print ('Plotting LWC timeseries for whole drift period:')
@@ -374,10 +377,13 @@ def plot_IWCTimeseries( obs_data, plots_out_dir, dates,**args): #, lon, lat):
 
     if pmonc ==True :
         for m in range(0,len(monc_data)):
-            monc_data[m]['model_iwc']= (monc_data[m]['ice_mmr_mean']+monc_data[m]['graupel_mmr_mean']+monc_data[m]['snow_mmr_mean'])*monc_data[m]['rho']
+            #monc_data[m]['model_iwc']= (monc_data[m]['ice_mmr_mean']+monc_data[m]['graupel_mmr_mean']+monc_data[m]['snow_mmr_mean'])*monc_data[m]['rho']
+            monc_data[m]['model_iwc']= (monc_data[m]['iwc_tot_mean'])
             monc_data[m]['model_iwc'][monc_data[m]['model_iwc'] <= 0.0] = np.nan
-            iwc_tvar=monc_data[m]['tvar']['ice_mmr_mean']
-            iwc_zvar=monc_data[m]['zvar']['ice_mmr_mean']
+            #iwc_tvar=monc_data[m]['tvar']['ice_mmr_mean']
+            #iwc_zvar=monc_data[m]['zvar']['ice_mmr_mean']
+            iwc_tvar=monc_data[m]['tvar']['iwc_tot_mean']
+            iwc_zvar=monc_data[m]['zvar']['iwc_tot_mean']
 
     print ('******')
     print ('')
@@ -545,11 +551,12 @@ def plot_TWCTimeseries(obs_data,twcvar,twcstr,plots_out_dir, dates,  **args):
 
     if pmonc==True:
         for m in range(0,len(monc_data)):
-            monc_data[m]['model_iwc']= (monc_data[m]['ice_mmr_mean']+monc_data[m]['graupel_mmr_mean']+monc_data[m]['snow_mmr_mean'])*monc_data[m]['rho']
-            monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
-            monc_data[m]['model_twc'] = monc_data[m]['model_lwc'] +monc_data[m]['model_iwc']
-            twc_tvar=monc_data[m]['tvar']['liquid_mmr_mean']
-            twc_zvar=monc_data[m]['zvar']['liquid_mmr_mean']
+            #monc_data[m]['model_iwc']= (monc_data[m]['ice_mmr_mean']+monc_data[m]['graupel_mmr_mean']+monc_data[m]['snow_mmr_mean'])*monc_data[m]['rho']
+            #monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
+            #monc_data[m]['model_twc'] = monc_data[m]['model_lwc'] +monc_data[m]['model_iwc']
+            monc_data[m]['model_twc'] = monc_data[m]['twc_tot_mean']
+            twc_tvar=monc_data[m]['tvar']['twc_tot_mean']
+            twc_zvar=monc_data[m]['zvar']['twc_tot_mean']
 
     twc0 = np.transpose(obs_data[twcvar])*1e3
 
@@ -710,10 +717,13 @@ def plot_lwcProfiles(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,dates, 
             um_data[m]['model_twc'] = um_data[m]['model_lwc'] + um_data[m]['model_iwc_filtered']
     if pmonc==True:
         for m in range(0,len(monc_data)):
-            monc_data[m]['model_iwc']= (monc_data[m]['ice_mmr_mean']+monc_data[m]['graupel_mmr_mean']+monc_data[m]['snow_mmr_mean'])*monc_data[m]['rho']
-            monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
-            monc_data[m]['model_twc'] = monc_data[m]['model_lwc'] +monc_data[m]['model_iwc']
-            lwc_zvar=monc_data[m]['zvar']['liquid_mmr_mean']
+            #monc_data[m]['model_iwc']= (monc_data[m]['ice_mmr_mean']+monc_data[m]['graupel_mmr_mean']+monc_data[m]['snow_mmr_mean'])*monc_data[m]['rho']
+            #monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
+            #monc_data[m]['model_twc'] = monc_data[m]['model_lwc'] +monc_data[m]['model_iwc']
+            monc_data[m]['model_twc'] = monc_data[m]['twc_tot_mean']
+            monc_data[m]['model_lwc'] = monc_data[m]['lwc_tot_mean']
+            #lwc_zvar=monc_data[m]['zvar']['liquid_mmr_mean']
+            lwc_zvar=monc_data[m]['zvar']['lwc_tot_mean']
 
     if thresholding == True:
         if pum==True:
@@ -923,10 +933,14 @@ def plot_iwcProfiles(obs_data, twcvar,twcstr, thresholding,plots_out_dir,dates, 
             um_data[m]['model_twc'] = um_data[m]['model_lwc'] + um_data[m]['model_iwc_filtered']
     if pmonc==True:
         for m in range(0,len(monc_data)):
-            monc_data[m]['model_iwc']= (monc_data[m]['ice_mmr_mean']+monc_data[m]['graupel_mmr_mean']+monc_data[m]['snow_mmr_mean'])*monc_data[m]['rho']
-            monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
-            monc_data[m]['model_twc'] = monc_data[m]['model_lwc'] +monc_data[m]['model_iwc']
-            twc_zvar=monc_data[m]['zvar']['liquid_mmr_mean']
+            # monc_data[m]['model_iwc']= (monc_data[m]['ice_mmr_mean']+monc_data[m]['graupel_mmr_mean']+monc_data[m]['snow_mmr_mean'])*monc_data[m]['rho']
+            # monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
+            # monc_data[m]['model_twc'] = monc_data[m]['model_lwc'] +monc_data[m]['model_iwc']
+            # twc_zvar=monc_data[m]['zvar']['liquid_mmr_mean']
+            monc_data[m]['model_twc'] = monc_data[m]['twc_tot_mean']
+            monc_data[m]['model_iwc'] = monc_data[m]['iwc_tot_mean']
+            #lwc_zvar=monc_data[m]['zvar']['liquid_mmr_mean']
+            twc_zvar=monc_data[m]['zvar']['twc_tot_mean']
 
     if thresholding ==True:
         if pum==True:
@@ -1130,10 +1144,13 @@ def plot_twcProfiles( obs_data,twcvar,twcstr, thresholding, plots_out_dir,dates,
             um_data[m]['model_twc'] = um_data[m]['model_lwc'] + um_data[m]['model_iwc_filtered']
     if  pmonc==True:
         for m in range(0,len(monc_data)):
-            monc_data[m]['model_iwc']= (monc_data[m]['ice_mmr_mean']+monc_data[m]['graupel_mmr_mean']+monc_data[m]['snow_mmr_mean'])*monc_data[m]['rho']
-            monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
-            monc_data[m]['model_twc'] = monc_data[m]['model_lwc'] +monc_data[m]['model_iwc']
-            monc_data[m]['twc_height'] = monc_data[m][monc_data[m]['zvar']['ice_mmr_mean']]
+            # monc_data[m]['model_iwc']= (monc_data[m]['ice_mmr_mean']+monc_data[m]['graupel_mmr_mean']+monc_data[m]['snow_mmr_mean'])*monc_data[m]['rho']
+            # monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
+            # monc_data[m]['model_twc'] = monc_data[m]['model_lwc'] +monc_data[m]['model_iwc']
+            # monc_data[m]['twc_height'] = monc_data[m][monc_data[m]['zvar']['ice_mmr_mean']]
+            monc_data[m]['model_twc'] = monc_data[m]['twc_tot_mean']
+            monc_data[m]['twc_height'] = monc_data[m][monc_data[m]['zvar']['twc_tot_mean']]
+
     if thresholding == True:
         if pum==True:
             ####-------------------------------------------------------------------------
@@ -1468,7 +1485,7 @@ def plot_monc_comparison(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): 
     print ('')
 
     cmax=0.3
-    clev=np.arange(0.0,0.45,0.05)
+    clev=np.arange(-0.1,0.01,0.005)
 
     #####PlotLwc###############################################
     yheight=3
@@ -1477,31 +1494,10 @@ def plot_monc_comparison(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): 
             hspace = 0.4, wspace = 0.2)
 
 
-    plt.subplot(5,1,1)
+    plt.subplot(3,1,1)
     ax = plt.gca()
-    img = plt.contourf(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(obs_data[lwcvar])*1e3,
-        levels=clev,cmap = newcmp)
-    nans = ax.get_ylim()
-    plt.ylabel('Z [km]')
-    plt.ylim(ylims)
-    plt.yticks(yticks)
-    ax.set_yticklabels(ytlabels)
-    plt.xlim([dates[0], dates[1]])
-    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
-    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-    #nans = ax.get_ylim()
-    ax2 = ax.twinx()
-    ax2.set_ylabel('Measurements \n (1 hour sampling)', rotation = 270, labelpad = 50)
-    ax2.set_yticks([])
-    #plt.title('Obs-' + obs_switch + 'grid')
-    cbaxes = fig.add_axes([0.225, 0.95, 0.6, 0.015])
-    cb = plt.colorbar(img, cax = cbaxes, orientation = 'horizontal')
-    plt.title('LWC [g m$^{-3}$]')
-
-    plt.subplot(5,1,2)
-    ax = plt.gca()
-    plt.contourf(monc_data[m][lwc_tvar]/60/60, np.squeeze(monc_data[m][lwc_zvar][:]), np.transpose(monc_data[m]['model_lwc'])*1e3,
+    img=plt.contourf(monc_data[m][lwc_tvar]/60/60, np.squeeze(monc_data[m][lwc_zvar][:]),
+     np.transpose(monc_data[m]['model_lwc'])*1e3- np.transpose(monc_data[m]['man_lwc1'])*1e3,
     levels=clev,cmap = newcmp)
     plt.ylabel('Z [km]')
     plt.ylim(ylims)
@@ -1511,17 +1507,20 @@ def plot_monc_comparison(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): 
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
     plt.xlabel('Time (UTC)')
+    plt.title('liquid_mmr_mean - q_cloud_liquid_mass_mean')
     ax2 = ax.twinx()
     ax2.set_ylabel('model_lwc', rotation = 270, labelpad = 27)
     ax2.set_yticks([])
 
-    plt.subplot(5,1,3)
+    plt.subplot(3,1,2)
     ax = plt.gca()
-    plt.contourf(monc_data[m][lwc_tvar]/60/60, np.squeeze(monc_data[m][lwc_zvar][:]), np.transpose(monc_data[m]['man_lwc1'])*1e3,
+    plt.contourf(monc_data[m][lwc_tvar]/60/60, np.squeeze(monc_data[m][lwc_zvar][:]),
+     np.transpose(monc_data[m]['man_lwc2'])*1e3- np.transpose(monc_data[m]['man_lwc3'])*1e3,
     levels=clev,cmap = newcmp)
     plt.ylabel('Z [km]')
     plt.ylim(ylims)
     plt.yticks(yticks)
+    plt.title('q_cloud_liquid_mass_mean*rho_mean - lwc_tot_mean')
     ax.set_yticklabels(ytlabels)
     ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
@@ -1530,38 +1529,11 @@ def plot_monc_comparison(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): 
     ax2 = ax.twinx()
     ax2.set_ylabel('q_liquid_mean', rotation = 270, labelpad = 27)
     ax2.set_yticks([])
+    cbaxes = fig.add_axes([0.225, 0.25, 0.6, 0.015])
+    cb = plt.colorbar(img, cax = cbaxes, orientation = 'horizontal')
+    plt.show()
 
-    plt.subplot(5,1,4)
-    ax = plt.gca()
-    plt.contourf(monc_data[m][lwc_tvar]/60/60, np.squeeze(monc_data[m][lwc_zvar][:]), np.transpose(monc_data[m]['man_lwc1'])*1e3,
-    levels=clev,cmap = newcmp)
-    plt.ylabel('Z [km]')
-    plt.ylim(ylims)
-    plt.yticks(yticks)
-    ax.set_yticklabels(ytlabels)
-    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
-    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-    plt.xlabel('Time (UTC)')
-    ax2 = ax.twinx()
-    ax2.set_ylabel('q_liquid_mean*rho_mean', rotation = 270, labelpad = 27)
-    ax2.set_yticks([])
 
-    plt.subplot(5,1,5)
-    ax = plt.gca()
-    plt.contourf(monc_data[m][lwc_tvar]/60/60, np.squeeze(monc_data[m][lwc_zvar][:]), np.transpose(monc_data[m]['man_lwc2'])*1e3,
-    levels=clev,cmap = newcmp)
-    plt.ylabel('Z [km]')
-    plt.ylim(ylims)
-    plt.yticks(yticks)
-    ax.set_yticklabels(ytlabels)
-    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
-    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-    plt.xlabel('Time (UTC)')
-    ax2 = ax.twinx()
-    ax2.set_ylabel('lwc_tot_mean', rotation = 270, labelpad = 27)
-    ax2.set_yticks([])
     embed()
     dstr=datenum2date(dates[1])
     if pmonc == True:
@@ -2310,7 +2282,6 @@ def main():
     # figure = plot_iwcProfiles(obs_data, twcvar,twcstr,thresholding, plots_out_dir,dates, um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     # figure = plot_twcProfiles(obs_data, twcvar,twcstr,thresholding, plots_out_dir,dates, um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
-    embed()
 
     # -------------------------------------------------------------
     # Cloudnet plot: Plot contour timeseries
@@ -2319,7 +2290,7 @@ def main():
     # figure = plot_LWCTimeseries(obs_data,  lwcvar,lwcstr, plots_out_dir, dates, um_data=um_data,label=label, outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     # figure = plot_TWCTimeseries( obs_data, twcvar,twcstr, plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     # figure = plot_IWCTimeseries(obs_data, plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    figure = plot_monc_comparison(obs_data,  lwcvar,lwcstr, plots_out_dir, dates, um_data=um_data,label=label, outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    #figure = plot_monc_comparison(obs_data,  lwcvar,lwcstr, plots_out_dir, dates, um_data=um_data,label=label, outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
 
     # -------------------------------------------------------------
