@@ -1875,7 +1875,8 @@ def main():
         cn_obs_dir = '/gws/nopw/j04/ncas_radar_vol1/jutta/Cloudnet/Observations/measurements_V7/'
         cn_um_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/Cloudnet/UM/'
         monc_root_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/MONC/output/'
-        monc_avg_dir = '/gws/nopw/j04/ncas_radar_vol1/jutta/MONC/output/'
+        #monc_avg_dir = '/gws/nopw/j04/ncas_radar_vol1/jutta/MONC/output/'
+        monc_avg_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/MONC/output/'
 
     elif machine =='LEEDS':
         ### Set output directory for plots
