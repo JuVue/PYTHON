@@ -12,7 +12,9 @@ from IPython import embed
 from scipy.interpolate import interp1d
 import matplotlib.cm as mpl_cm
 from matplotlib.colors import ListedColormap, LinearSegmentedColormap,LogNorm
-import pickle
+
+from scipy.io import savemat
+
 ## import python functions
 import sys
 sys.path.insert(1, './py_functions/')
@@ -204,6 +206,7 @@ if not os.path.exists(glob.glob(monc_exp_dir + m_out_dir)):
 fname=(monc_exp_dir + m_out_dir +'3d_averages')
 
 np.save(fname +'.npy',monc_data)
+savemat(fname+'.mat', monc_data)
 #
 # afile=open(fname,'wb')
 # pickle.dump(monc_data,afile)
