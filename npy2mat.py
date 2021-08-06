@@ -12,6 +12,6 @@ monc_exp_dir= '/gws/nopw/j04/ncas_radar_vol1/jutta/MONC/output/'
 npzFiles = glob.glob(monc_exp_dir + m_out_dir + '*.npy')
 for f in npzFiles:
     fm = os.path.splitext(f)[0]+'.mat'
-    d = np.load(f)
+    d = np.load(f, allow_pickle=True).items()
     savemat(fm, d)
     print('generated ', fm, 'from', f)
