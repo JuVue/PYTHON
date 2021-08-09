@@ -2193,7 +2193,7 @@ def main():
                             zvar[var]=np.nan
                         if time_var_list[0] in str(tmp):
                             tvar[var]='time1'        #time_series_30_600
-                        elif time_var_list1] in str(tmp):
+                        elif time_var_list[1] in str(tmp):
                             tvar[var]='time2'        #time_series_30_60
                         if len(time_var_list)>2:
                             if time_var_list[2] in str(tmp):
