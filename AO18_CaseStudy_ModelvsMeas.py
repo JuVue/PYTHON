@@ -18,7 +18,7 @@ import os
 
 ### import python functions
 import sys
-sys.path.insert(1, '/nfs/a26/lecimb/jutta/GITHUB/PYTHON/py_functions/')
+sys.path.insert(1, './py_functions/')
 from time_functions import datenum2date, date2datenum, calcTime_Mat2DOY, calcTime_Date2DOY
 from readMAT import readMatlabStruct
 #from physFuncts import calcThetaE, calcThetaVL
