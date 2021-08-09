@@ -33,11 +33,12 @@ if machine=='LEEDS':
     m_out_dir = '22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/'
 elif machine=='JASMIN':
     monc_root_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/MONC/output/'
-    m_out_dir = '22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/'
+    #m_out_dir = '22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/'
+    m_out_dir = '23_20180913T0000Z_6hSpin-up_12h0600-0000thTend'
     monc_exp_dir= '/gws/nopw/j04/ncas_radar_vol1/jutta/MONC/output/'  # output directory for averaged data
 tmp=glob.glob(monc_root_dir + m_out_dir +'*.nc')
-assert len(tmp)==1,'more than one file detected'
-monc_filename=tmp[0]
+#assert len(tmp)==1,'more than one file detected'
+monc_filename=tmp
 start = time.time()
 
   #################################################################
@@ -58,159 +59,154 @@ monc_var_avg= ['q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass'
 # ml2  =        ['liquid_mmr_mean','ice_mmr_mean','snow_mmr_mean','graupel_mmr_mean','model_twc']
 
 
+for m in range(0,len(monc_filename))
+    ncm = {}
+    monc_data = {}
+    print(monc_filename[m])
+    ncm = Dataset(monc_filename[m],'r')
+    monc_data={}
+    zvar={}
+    tvar={}
+    for c in range(0,len(monc_var_list)):
+        for j in range(0,len(monc_var_list[c])):
+            var = monc_var_list[c][j]
+            zvar[var]=[]
+            tvar[var]=[]
+            if c == len(monc_var_list)-1:
+                monc_data[var+'_mean'] = np.nanmean(ncm.variables[var][:],axis=(1,2))
+                varstr=var +'_mean'
+            else:
+                monc_data[var] = ncm.variables[var][:]
+                varstr=var
+            ###getting right z and t dimensions
+            tmp=ncm.variables[var].dimensions
+            if "'z'" in str(tmp):
+                zvar[varstr]='z'
+            elif "'zn'" in str(tmp):
+                zvar[varstr]='zn'
+            else:
+                zvar[varstr]=np.nan
+            if monc_var_list[0][0] in str(tmp):
+                tvar[varstr]='time1'
+            elif monc_var_list[0][1] in str(tmp):
+                tvar[varstr]='time2'
+            if len(monc_var_list[0])>2:
+                if monc_var_list[0][2] in str(tmp):
+                    tvar[varstr]='time3'
 
-ncm = {}
-monc_data = {}
-print(monc_filename)
-ncm = Dataset(monc_filename,'r')
-monc_data={}
-zvar={}
-tvar={}
-for c in range(0,len(monc_var_list)):
-    for j in range(0,len(monc_var_list[c])):
-        var = monc_var_list[c][j]
-        zvar[var]=[]
-        tvar[var]=[]
-        if c == len(monc_var_list)-1:
-            monc_data[var+'_mean'] = np.nanmean(ncm.variables[var][:],axis=(1,2))
-            varstr=var +'_mean'
-        else:
-            monc_data[var] = ncm.variables[var][:]
-            varstr=var
-        ###getting right z and t dimensions
-        tmp=ncm.variables[var].dimensions
-        if "'z'" in str(tmp):
-            zvar[varstr]='z'
-        elif "'zn'" in str(tmp):
-            zvar[varstr]='zn'
-        else:
-            zvar[varstr]=np.nan
-        if monc_var_list[0][0] in str(tmp):
-            tvar[varstr]='time1'
-        elif monc_var_list[0][1] in str(tmp):
-            tvar[varstr]='time2'
-        if len(monc_var_list[0])>2:
-            if monc_var_list[0][2] in str(tmp):
-                tvar[varstr]='time3'
+    monc_data['time1']=monc_data[monc_var_list[0][0]] #1d data
+    monc_data.pop(monc_var_list[0][0])
+    monc_data['time2']=monc_data[monc_var_list[0][1]] #2d data
+    monc_data.pop(monc_var_list[0][1])
+    if len(monc_var_list[0])>2:
+        monc_data['time3']=monc_data[monc_var_list[0][2]] #2d data
+        monc_data.pop(monc_var_list[0][2])
 
-monc_data['time1']=monc_data[monc_var_list[0][0]] #1d data
-monc_data.pop(monc_var_list[0][0])
-monc_data['time2']=monc_data[monc_var_list[0][1]] #2d data
-monc_data.pop(monc_var_list[0][1])
-if len(monc_var_list[0])>2:
-    monc_data['time3']=monc_data[monc_var_list[0][2]] #2d data
-    monc_data.pop(monc_var_list[0][2])
+    print('Loading done')
+    ## averaging 4D variables
+    # x = 50m
+    # y = 50m
 
-print('Loading done')
-## averaging 4D variables
-# x = 50m
-# y = 50m
+    ##################################
+    print('Calculating temperature and density')
+    th = ncm.variables['th'][:]+ ncm.variables['thref'][0,:]
+    p = ncm.variables['p'][:]+ ncm.variables['prefn'][0,:]
 
-##################################
-print('Calculating temperature and density')
-th = ncm.variables['th'][:]+ ncm.variables['thref'][0,:]
-p = ncm.variables['p'][:]+ ncm.variables['prefn'][0,:]
+    monc_data.pop('th')
+    monc_data.pop('thref')
+    monc_data.pop('p')
+    monc_data.pop('prefn')
 
-monc_data.pop('th')
-monc_data.pop('thref')
-monc_data.pop('p')
-monc_data.pop('prefn')
+    T = calcT(th,p)
+    rho=calcAirDensity(T,p)
 
-T = calcT(th,p)
-rho=calcAirDensity(T,p)
+    print('Calculating mean values:T,th,p,rho')
+    monc_data['p_mean'] = np.nanmean(p,axis=(1,2))
+    monc_data['T_mean'] = np.nanmean(T,axis=(1,2))
+    monc_data['th_mean'] = np.nanmean(th,axis=(1,2))
+    monc_data['rho_mean'] = np.nanmean(rho,axis=(1,2))
 
-print('Calculating mean values:T,th,p,rho')
-monc_data['p_mean'] = np.nanmean(p,axis=(1,2))
-monc_data['T_mean'] = np.nanmean(T,axis=(1,2))
-monc_data['th_mean'] = np.nanmean(th,axis=(1,2))
-monc_data['rho_mean'] = np.nanmean(rho,axis=(1,2))
+    zvar['p_mean'] = zvar['p']
+    zvar['T_mean'] = zvar['p']
+    zvar['th_mean'] = zvar['th']
+    zvar['rho_mean'] = zvar['p']
+    tvar['p_mean'] = tvar['p']
+    tvar['T_mean'] = tvar['p']
+    tvar['th_mean'] = tvar['th']
+    tvar['rho_mean'] = tvar['p']
+    del(p,T,th)
+    print('done')
+    ###############
+    print('')
+    print('calculating twc')
+    #monc_data['model_iwc']= (monc_data['ice_mmr_mean']+monc_data['graupel_mmr_mean']+monc_data['snow_mmr_mean'])*monc_data['rho_mean']
+    #monc_data['model_lwc']= monc_data['liquid_mmr_mean']*monc_data['rho_mean']
+    #monc_data['model_twc'] = monc_data['model_lwc'] +monc_data['model_iwc']
+    #tvar['model_twc']=tvar['ice_mmr_mean']
+    #zvar['model_twc']= zvar['ice_mmr_mean']
+    monc_data['iwc_tot']=monc_data['q_ice_mass']+monc_data['q_snow_mass']+monc_data['q_graupel_mass']
+    monc_data['iwc_tot']=monc_data['iwc_tot']*rho
+    monc_data['lwc_tot']=monc_data['q_cloud_liquid_mass']*rho
+    monc_data['twc_tot']=monc_data['iwc_tot']+monc_data['lwc_tot']
+    #monc_data['twc_tot']=monc_data['q_ice_mass']+monc_data['q_snow_mass']+monc_data['q_graupel_mass']+monc_data['q_cloud_liquid_mass']
+    #monc_data['twc_tot']=monc_data['twc_tot']*rho
+    tvar['twc_tot']=tvar['q_ice_mass']
+    zvar['twc_tot']= zvar['q_ice_mass']
+    tvar['iwc_tot']=tvar['q_ice_mass']
+    zvar['iwc_tot']= zvar['q_ice_mass']
+    tvar['lwc_tot']=tvar['q_ice_mass']
+    zvar['lwc_tot']= zvar['q_ice_mass']
 
-zvar['p_mean'] = zvar['p']
-zvar['T_mean'] = zvar['p']
-zvar['th_mean'] = zvar['th']
-zvar['rho_mean'] = zvar['p']
-tvar['p_mean'] = tvar['p']
-tvar['T_mean'] = tvar['p']
-tvar['th_mean'] = tvar['th']
-tvar['rho_mean'] = tvar['p']
-del(p,T,th)
-
-
-
-print('done')
-###############
-print('')
-print('calculating twc')
-#monc_data['model_iwc']= (monc_data['ice_mmr_mean']+monc_data['graupel_mmr_mean']+monc_data['snow_mmr_mean'])*monc_data['rho_mean']
-#monc_data['model_lwc']= monc_data['liquid_mmr_mean']*monc_data['rho_mean']
-#monc_data['model_twc'] = monc_data['model_lwc'] +monc_data['model_iwc']
-#tvar['model_twc']=tvar['ice_mmr_mean']
-#zvar['model_twc']= zvar['ice_mmr_mean']
-monc_data['iwc_tot']=monc_data['q_ice_mass']+monc_data['q_snow_mass']+monc_data['q_graupel_mass']
-monc_data['iwc_tot']=monc_data['iwc_tot']*rho
-monc_data['lwc_tot']=monc_data['q_cloud_liquid_mass']*rho
-monc_data['twc_tot']=monc_data['iwc_tot']+monc_data['lwc_tot']
-#monc_data['twc_tot']=monc_data['q_ice_mass']+monc_data['q_snow_mass']+monc_data['q_graupel_mass']+monc_data['q_cloud_liquid_mass']
-#monc_data['twc_tot']=monc_data['twc_tot']*rho
-tvar['twc_tot']=tvar['q_ice_mass']
-zvar['twc_tot']= zvar['q_ice_mass']
-tvar['iwc_tot']=tvar['q_ice_mass']
-zvar['iwc_tot']= zvar['q_ice_mass']
-tvar['lwc_tot']=tvar['q_ice_mass']
-zvar['lwc_tot']= zvar['q_ice_mass']
-
-print('setting up thresholds')
-#calculate mean values
-var='q_ice_mass'
-twc_thresh = np.zeros([np.size(monc_data[zvar[var]],0)])
-monc_lt1km = np.where(monc_data[zvar[var]][:]<=1e3)
-twc_thresh[monc_lt1km] =  1e-6
-monc_lt1km = np.where(monc_data[zvar[var]][:]>=4e3)
-twc_thresh[monc_lt1km] = 1e-7
-monc_intZs = np.where(twc_thresh == 0.0)
-x = [1e-6, 1e-7]
-y = [1e3, 4e3]
-f = interp1d(y, x)
-a=monc_data[zvar[var]][monc_intZs]
-twc_thresh[monc_intZs] = f(a.tolist())
-twc_thresh = np.squeeze(np.array([[[twc_thresh]*monc_data['twc_tot'].shape[2]]*monc_data['twc_tot'].shape[1]]))
-
-print('averaging cloud variables')
-for c in range(0,len(monc_var_avg)):
-    var = monc_var_avg[c]
+    print('setting up thresholds')
     #calculate mean values
-    monc_data[var +'_mean']=np.empty((np.size(monc_data[tvar[var]],0),np.size(monc_data[zvar[var]],0)))
-    monc_data[var +'_mean'][:]=np.nan
-    for t in range(0,np.size(monc_data[tvar[var]],0)):
-        monc_data[var][t,monc_data['twc_tot'][t,:]<twc_thresh] = np.nan
-        monc_data[var +'_mean'][t,:] = np.nanmean(monc_data[var][t,:],axis=(0,1))
-        zvar[var +'_mean']=zvar[var]
-        tvar[var +'_mean']=tvar[var]
-    monc_data[var +'_mean'][np.isnan(monc_data[var +'_mean'])]=0.0
-    monc_data.pop(var)
+    var='q_ice_mass'
+    twc_thresh = np.zeros([np.size(monc_data[zvar[var]],0)])
+    monc_lt1km = np.where(monc_data[zvar[var]][:]<=1e3)
+    twc_thresh[monc_lt1km] =  1e-6
+    monc_lt1km = np.where(monc_data[zvar[var]][:]>=4e3)
+    twc_thresh[monc_lt1km] = 1e-7
+    monc_intZs = np.where(twc_thresh == 0.0)
+    x = [1e-6, 1e-7]
+    y = [1e3, 4e3]
+    f = interp1d(y, x)
+    a=monc_data[zvar[var]][monc_intZs]
+    twc_thresh[monc_intZs] = f(a.tolist())
+    twc_thresh = np.squeeze(np.array([[[twc_thresh]*monc_data['twc_tot'].shape[2]]*monc_data['twc_tot'].shape[1]]))
 
-monc_data['zvar']={}
-monc_data['tvar']={}
-for var in zvar.keys():
-    if var in monc_data.keys():
-        monc_data['zvar'][var]=zvar[var]
-        monc_data['tvar'][var]=tvar[var]
+    print('averaging cloud variables')
+    for c in range(0,len(monc_var_avg)):
+        var = monc_var_avg[c]
+        #calculate mean values
+        monc_data[var +'_mean']=np.empty((np.size(monc_data[tvar[var]],0),np.size(monc_data[zvar[var]],0)))
+        monc_data[var +'_mean'][:]=np.nan
+        for t in range(0,np.size(monc_data[tvar[var]],0)):
+            monc_data[var][t,monc_data['twc_tot'][t,:]<twc_thresh] = np.nan
+            monc_data[var +'_mean'][t,:] = np.nanmean(monc_data[var][t,:],axis=(0,1))
+            zvar[var +'_mean']=zvar[var]
+            tvar[var +'_mean']=tvar[var]
+        monc_data[var +'_mean'][np.isnan(monc_data[var +'_mean'])]=0.0
+        monc_data.pop(var)
 
+    monc_data['zvar']={}
+    monc_data['tvar']={}
+    for var in zvar.keys():
+        if var in monc_data.keys():
+            monc_data['zvar'][var]=zvar[var]
+            monc_data['tvar'][var]=tvar[var]
 
-embed()
-end = time.time()
-print(end - start)
-print (' averaging complete!')
-if not os.path.exists(glob.glob(monc_exp_dir + m_out_dir)):
-        os.mkdir(glob.glob(monc_exp_dir + m_out_dir))
-fname=(monc_exp_dir + m_out_dir +'3d_averages')
+    end = time.time()
+    print(end - start)
+    print (' averaging complete!')
+    if not os.path.exists(glob.glob(monc_exp_dir + m_out_dir)):
+            os.mkdir(glob.glob(monc_exp_dir + m_out_dir))
+    fname=(monc_exp_dir + m_out_dir +'3d_averages_f' +str(m))
 
-np.save(fname +'.npy',monc_data)
-savemat(fname+'.mat', monc_data)
-#
-# afile=open(fname,'wb')
-# pickle.dump(monc_data,afile)
-# afile.close()
+    np.save(fname +'.npy',monc_data)
+    savemat(fname+'.mat', monc_data)
+    #
+    # afile=open(fname,'wb')
+    # pickle.dump(monc_data,afile)
+    # afile.close()
 
 
 # ######################################################
