@@ -716,18 +716,20 @@ def main():
             #### 7th deck: temperature, surface temperature, RH, downwelling SW, downwelling LW
                     #### 7thDeck/ACAS_AO2018_WX_30min_v2_0.nc
     obs={}
-
+    print ('**************************')
     print ('Load ice station data from Jutta...')
     filename = 'AO2018_metalley_01min_v3.0.mat'
     obs['metalley'] = readMatlabStruct(obs_met_dir + filename)
     print(obs['metalley'].keys())
 
+    print ('**************************')
     print ('Load decoupling height data from Jutta...')
     filename = '2018091300-2018091314_smc_decoupling_sandeep_Scb_V3.mat'
     obs['dec'] = readMatlabStruct(obs_dec_dir + filename)
     print(obs['dec'].keys())
 
 
+    print ('**************************')
     print ('Load HATPRO data used by Cloudnet...')
     filename='HATPRO_LWP_IWV_30s_V3_userready.mat'
     obs['hatpro'] = readMatlabStruct(obs_hatpro_dir + filename)
@@ -741,19 +743,12 @@ def main():
     obs['hatpro']['rainflag'] = np.squeeze(obs['hatpro']['rainflag'])
 
     filename='HATPRO_T_corrected_inversionheights_thetaE_V1.mat'
-    tmp = readMatlabStruct(obs_hatpro_dir + filename)
-    print (tmp.keys())
-    embed
-    obs['hatpro']['iwv'] = np.squeeze(obs['hatpro']['iwv'])
-    obs['hatpro']['mday'] = np.squeeze(obs['hatpro']['mday'])
-    obs['hatpro']['lwp'] = np.squeeze(obs['hatpro']['lwp'])
-    obs['hatpro']['lwpflag'] = np.squeeze(obs['hatpro']['lwp_corflag'])
-    obs['hatpro']['iwvflag'] = np.squeeze(obs['hatpro']['iwv_corflag'])
-    obs['hatpro']['rainflag'] = np.squeeze(obs['hatpro']['rainflag'])
+    obs['hatpro_temp'] = readMatlabStruct(obs_hatpro_dir + filename)
+    print (obs['hatpro_temp'].keys())
 
     #print ('Load albedo estimates from Michael...')
     #obs['albedo'] = readMatlabStruct(obs_albedo_dir + 'MOCCHA_Albedo_estimates_Michael.mat')
-
+    print ('**************************')
     print ('Load cleaned and pre processed radiation data ..')
     obs['ship_rad']={}
     obs['ice_rad']={}
@@ -779,7 +774,8 @@ def main():
     print ('Load radiosonde data from Jutta...')
     obs['sondes'] = readMatlabStruct(obs_rs_dir + '/SondeData_h10int_V03.mat')
 
-    print ('Load observations inversion height data from Jutta...')
+    print ('**************************')
+    print ('Load RS observations inversion height data from Jutta...')
     obs['inversions'] = readMatlabStruct(obs_rs_dir + '/InversionHeights_RSh05int_final_V03.mat')
 
     #print ('Load foremast data from John...')
@@ -788,6 +784,7 @@ def main():
     #print ('Load 7th deck weather station data from John...')
     #obs['deck7th'] = Dataset(obs_root_dir + '7thDeck/ACAS_AO2018_WX_30min_v2_0.nc','r')
 
+    print ('**************************')
     print ('Load weather sensor data from John...')
     obs['pwd'] = readMatlabStruct(obs_acas_dir + 'ACAS_AO2018_PWD_30min_v1_0.mat')
 
