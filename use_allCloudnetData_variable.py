@@ -2198,7 +2198,7 @@ def main():
                         if len(time_var_list)>2:
                             if time_var_list[2] in str(tmp):
                                 tvar[var]='time3'
-                    else
+                    else:
                         monc_data[m][var] = np.append(monc_data[m][var],ncm.variables[var][:])
     embed()
     #loading 3d variables
@@ -2215,7 +2215,7 @@ def main():
                     zvar[var]=pyd['zvar'][var]
                     tvar[var]=pyd['tvar'][var]
                     monc_data[m][var] = pyd[var]
-                else
+                else:
                     monc_data[m][var] =np.addpend(monc_data[m][var],pyd[var])
 
 
