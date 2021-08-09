@@ -622,7 +622,6 @@ def main():
                         # 'time1', 'time2', 'p_mean', 'T_mean', 'th_mean', 'rho_mean',
                         # 'q_cloud_liquid_mass_mean', 'q_ice_mass_mean', 'q_snow_mass_mean',
                         # 'q_graupel_mass_mean', 'iwc_tot_mean', 'lwc_tot_mean', 'twc_tot_mean', 'zvar', 'tvar']
-    embed()
 
     ncm = {}
     monc_data = {}
@@ -841,7 +840,7 @@ def main():
             label.append('undefined_label')
             moutstr.append('')
 
-
+    embed()
     # -------------------------------------------------------------
     # Plot paper figures
     # -------------------------------------------------------------
