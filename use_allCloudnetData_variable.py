@@ -2211,7 +2211,7 @@ def main():
             #pyd['tvar']['q_vapour_mean']=['time1']
             for c in range(0,len(monc_var_3d_list)):
                 var = monc_var_3d_list[c]
-                if n == 0
+                if n == 0:
                     zvar[var]=pyd['zvar'][var]
                     tvar[var]=pyd['tvar'][var]
                     monc_data[m][var] = pyd[var]
