@@ -477,7 +477,7 @@ def main():
         plots_out_dir='/gws/nopw/j04/ncas_radar_vol1/jutta/PLOTS/CaseStudy/'
         if not os.path.exists(plots_out_dir):
             os.makedirs(plots_out_dir)
-        um_root_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/UM/DATA/'
+        um_root_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/UM/'
 
         obs_met_dir=  '/nfs/a96/MOCCHA/working/jutta/final_data/met_alley/concatenated/';
         obs_acas_dir= '/gws/nopw/j04/ncas_radar_vol1/jutta/OBS/ACAS/ACAS_AO2018_v2_May2019/';
