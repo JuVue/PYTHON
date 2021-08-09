@@ -175,7 +175,7 @@ for m in range(0,len(monc_filename)):
 
     print('averaging cloud variables')
     for c in range(0,len(monc_thresh_avg)):
-        var = monc_var_avg[c]
+        var = monc_thresh_avg[c]
         #calculate mean values
         monc_data[var +'_mean']=np.empty((np.size(monc_data[tvar[var]],0),np.size(monc_data[zvar[var]],0)))
         monc_data[var +'_mean'][:]=np.nan
