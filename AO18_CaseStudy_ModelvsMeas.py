@@ -601,7 +601,7 @@ def main():
     #                 'graupel_mmr_mean']]
                 #    ['vwp','lwp','rwp','iwp','swp','gwp','tot_iwp'],
                 #    ['q_vapour','q_cloud_liquid_mass','q_rain_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
-    monc_var_list =[['z', 'zn','LWP_mean','IWP_mean','SWP_mean','TOT_IWP_mean','GWP_mean'],
+    monc_var_list =[['z', 'zn','LWP_mean','IWP_mean','SWP_mean','TOT_IWP_mean','GWP_mean']]
                 #    ['theta_mean','total_cloud_fraction', 'liquid_cloud_fraction','ice_cloud_fraction'],
                 #    ['liquid_mmr_mean','ice_mmr_mean','graupel_mmr_mean','snow_mmr_mean']]
                 #    ['vwp','lwp','rwp','iwp','swp','gwp','tot_iwp'],
