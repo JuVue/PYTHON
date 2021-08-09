@@ -68,34 +68,34 @@ for m in range(0,len(monc_filename)):
     monc_var_list=time_var_list+monc_var_list
     embed()
     for c in range(0,len(monc_var_list)):
-            var = monc_var_list[c]
-            zvar[var]=[]
-            tvar[var]=[]
-            if c == len(monc_var_list)-1:
-                monc_data[var+'_mean'] = np.nanmean(ncm.variables[var][:],axis=(1,2))
-                varstr=var +'_mean'
-            else:
-                monc_data[var] = ncm.variables[var][:]
-                varstr=var
-            ###getting right z and t dimensions
-            tmp=ncm.variables[var].dimensions
-            if "'z'" in str(tmp):
-                zvar[varstr]='z'
-            elif "'zn'" in str(tmp):
-                zvar[varstr]='zn'
-            else:
-                zvar[varstr]=np.nan
-            if time_var_list[0] in str(tmp):
-                tvar[varstr]='time1'
-            elif time_var_list[1] in str(tmp):
-                tvar[varstr]='time2'
-            if len(time_var_list)>2:
-                if time_var_list[2] in str(tmp):
-                    tvar[varstr]='time3'
+        var = monc_var_list[c]
+        zvar[var]=[]
+        tvar[var]=[]
+        if c == len(monc_var_list)-1:
+            monc_data[var+'_mean'] = np.nanmean(ncm.variables[var][:],axis=(1,2))
+            varstr=var +'_mean'
+        else:
+            monc_data[var] = ncm.variables[var][:]
+            varstr=var
+        ###getting right z and t dimensions
+        tmp=ncm.variables[var].dimensions
+        if "'z'" in str(tmp):
+            zvar[varstr]='z'
+        elif "'zn'" in str(tmp):
+            zvar[varstr]='zn'
+        else:
+            zvar[varstr]=np.nan
+        if time_var_list[0] in str(tmp):
+            tvar[varstr]='time1'
+        elif time_var_list[1] in str(tmp):
+            tvar[varstr]='time2'
+        if len(time_var_list)>2:
+            if time_var_list[2] in str(tmp):
+                tvar[varstr]='time3'
 
     monc_data['time1']=monc_data[time_var_list[0]] #1d data
     monc_data.pop(time_var_list[0])
-    monc_data['time2']=time_data[time_var_list[1]] #2d data
+    monc_data['time2']=monc_data[time_var_list[1]] #2d data
     monc_data.pop(time_var_list[1])
     if len(time_var_list)>2:
         monc_data['time3']=monc_data[time_var_list[2]] #2d data
