@@ -64,9 +64,9 @@ for m in range(0,len(monc_filename)):
     time_var_list=[]
     for var in ncm.variables:
         if 'time' in str(var):
+            embed()
             time_var_list=np.append(var)
 
-    embed()
     monc_var_list=time_var_list+monc_var_list
     for c in range(0,len(monc_var_list)):
             var = monc_var_list[c]
