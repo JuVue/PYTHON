@@ -63,7 +63,7 @@ for m in range(0,len(monc_filename)):
     tvar={}
     time_var_list=[]
     for var in ncm.variables:
-        if 'time' in str(var)
+        if 'time' in str(var):
         time_var_list=np.append(var)
 
     embed()
