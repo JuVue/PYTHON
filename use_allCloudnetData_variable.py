@@ -1904,7 +1904,8 @@ def main():
     #              '6_control_20180913T0000Z_Wsub-1.5-1km/',
     #              '8_control_20180913T0000Z_Wsub-1.0-1km/',
     #              '9_control_20180913T0000Z_Wsub-0.5-1km/']
-    m_out_dir =['22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/']
+    #m_out_dir =['22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/',
+    m_out_dir =['23_20180913T0000Z_6hSpin-up_12h0600-0000thTend']
             #'4_control_20180913T0000Z_Wsub-1.5/',
     #################################################################
     ## create labels for figure legends - done here so only needs to be done once!
@@ -1964,6 +1965,9 @@ def main():
         elif m_out_dir[m][:2] == '22':
             mlabel.append('MONC qinit2 800m \n thForcing-0000-0600')
             moutstr.append('qin2-thqvTend-noice')
+        elif m_out_dir[m][:2] == '23':
+            mlabel.append('MONC thForcing-0600-0000')
+            moutstr.append('thForcing-0600-0000')
         else:
             label.append('undefined_label')
             moutstr.append('')
@@ -2140,8 +2144,7 @@ def main():
     print ('')
     ###1d variables, 2d variables (time,height), 3d variables (time,x,y), 4d variables(time,x,y,z)
     ### time1 = 'time_series_30_600',time2='time_series_30_60'
-    monc_var_list =[['time_series_30_600','time_series_30_60'],
-                    ['z', 'zn','LWP_mean','IWP_mean','SWP_mean','TOT_IWP_mean','GWP_mean'],
+    monc_var_list =[['z', 'zn','LWP_mean','IWP_mean','SWP_mean','TOT_IWP_mean','GWP_mean'],
                     ['theta_mean','total_cloud_fraction', 'liquid_cloud_fraction','ice_cloud_fraction'],
                     ['liquid_mmr_mean','ice_mmr_mean','graupel_mmr_mean','snow_mmr_mean']]
                 #    ['vwp','lwp','rwp','iwp','swp','gwp','tot_iwp'],
@@ -2158,56 +2161,73 @@ def main():
     ncm = {}
     monc_data = {}
     for m in range(0, len(m_out_dir)):
-        print(monc_filename[m])
-        ncm = Dataset(monc_filename[m][0],'r')
-        monc_data[m]={}
-        zvar={}
-        tvar={}
-        for c in range(0,len(monc_var_list)):
-            for j in range(0,len(monc_var_list[c])):
-                var = monc_var_list[c][j]
-                zvar[var]=[]
-                tvar[var]=[]
-                monc_data[m][var] = ncm.variables[var][:]
-                ###getting right z and t dimensions
-                tmp=ncm.variables[var].dimensions
-                if "'z'" in str(tmp):
-                    zvar[var]='z'
-                elif "'zn'" in str(tmp):
-                    zvar[var]='zn'
-                else:
-                    zvar[var]=np.nan
+        for n in range(0, len(monc_filename)):
+            print(monc_filename[m][n])
+            ncm = Dataset(monc_filename[m][n],'r')
+            if n == 0
+                monc_data[m]={}
+                zvar={}
+                tvar={}
 
-                if monc_var_list[0][0] in str(tmp):
-                    tvar[var]='time1'        #time_series_30_600
-                elif monc_var_list[0][1] in str(tmp):
-                    tvar[var]='time2'        #time_series_30_60
-                if len(monc_var_list[0])>2:
-                    if monc_var_list[0][2] in str(tmp):
-                        tvar[var]='time3'
-
+            full_var_list=[]
+            time_var_list=[]
+            for var in ncm.variables:
+                if 'time' in str(var):
+                    time_var_list=time_var_list+[var]
+            full_var_list=monc_var_list[0]
+            full_var_list[0]=time_var_list+monc_var_list[0]
+            for c in range(0,len(full_var_list)):
+                for j in range(0,len(full_var_list[c])):
+                    var = full_var_list[c][j]
+                    if n == 0:
+                        monc_data[m][var] = ncm.variables[var][:]
+                        zvar[var]=[]
+                        tvar[var]=[]
+                        ###getting right z and t dimensions
+                        tmp=ncm.variables[var].dimensions
+                        if "'z'" in str(tmp):
+                            zvar[var]='z'
+                        elif "'zn'" in str(tmp):
+                            zvar[var]='zn'
+                        else:
+                            zvar[var]=np.nan
+                        if time_var_list[0] in str(tmp):
+                            tvar[var]='time1'        #time_series_30_600
+                        elif time_var_list1] in str(tmp):
+                            tvar[var]='time2'        #time_series_30_60
+                        if len(time_var_list)>2:
+                            if time_var_list[2] in str(tmp):
+                                tvar[var]='time3'
+                    else
+                        monc_data[m][var] = np.append(monc_data[m][var],ncm.variables[var][:])
+    embed()
     #loading 3d variables
     for m in range(0, len(m_out_dir)):
-        print(monc_3d_filename[m][0])
-        #afile = open(monc_3d_filename[m][0], "rb")
-        pyd = np.load(monc_3d_filename[m][0],allow_pickle=True).item()   #pickle.load(afile)
-        pyd['zvar']['q_vapour_mean']=['zn']
-        pyd['tvar']['q_vapour_mean']=['time1']
-        for c in range(0,len(monc_var_3d_list)):
-            var = monc_var_3d_list[c]
-            zvar[var]=pyd['zvar'][var]
-            tvar[var]=pyd['tvar'][var]
-            monc_data[m][var] = pyd[var]
+        for n in range(0,len(monc_3d_filename)):
+            print(monc_3d_filename[m][n])
+            #afile = open(monc_3d_filename[m][0], "rb")
+            pyd = np.load(monc_3d_filename[m][n],allow_pickle=True).item()   #pickle.load(afile)
+            #pyd['zvar']['q_vapour_mean']=['zn']
+            #pyd['tvar']['q_vapour_mean']=['time1']
+            for c in range(0,len(monc_var_3d_list)):
+                var = monc_var_3d_list[c]
+                if n == 0
+                    zvar[var]=pyd['zvar'][var]
+                    tvar[var]=pyd['tvar'][var]
+                    monc_data[m][var] = pyd[var]
+                else
+                    monc_data[m][var] =np.addpend(monc_data[m][var],pyd[var])
+
 
     monc_data[m]['zvar']=zvar
     monc_data[m]['tvar']=tvar
-    monc_data[m]['time1']=monc_data[m][monc_var_list[0][0]] #1d data
-    monc_data[m]['time2']=monc_data[m][monc_var_list[0][1]] #2d data
-    monc_data[m].pop(monc_var_list[0][0])
-    monc_data[m].pop(monc_var_list[0][1])
-    if len(monc_var_list[0])>2:
-        monc_data[m]['time3']=monc_dat[m][monc_var_list[0][2]] #2d data
-        monc_data[m].pop(monc_var_list[0][2])
+    monc_data[m]['time1']=monc_data[m][time_var_list[0]] #1d data
+    monc_data[m]['time2']=monc_data[m][time_var_list[1]] #2d data
+    monc_data[m].pop(time_var_list[0])
+    monc_data[m].pop(time_var_list[1])
+    if len(time_var_list)>2:
+        monc_data[m]['time3']=monc_dat[m][time_var_list[2]] #2d data
+        monc_data[m].pop(time_var_list[2])
 
     print (' Monc data Loaded!')
 
