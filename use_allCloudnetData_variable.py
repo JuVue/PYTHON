@@ -1335,6 +1335,241 @@ def plot_twcProfiles( obs_data,twcvar,twcstr, thresholding, plots_out_dir,dates,
     print ('Finished plotting! :)')
     print ('')
 
+
+
+def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,dates,prof_time, **args): #, lon, lat):
+
+    obs_zorder = 1
+
+    if bool(args):
+        for n in range(0,len(args)):
+            if  list(args.keys())[n] == 'monc_data':
+                monc_data=args[list(args.keys())[n]]
+                obs_zorder += len(monc_data)
+                pmonc =True
+            elif list(args.keys())[n] == 'mlabel':
+                mlabel = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'moutstr':
+                moutstr= args[list(args.keys())[n]]
+            elif  list(args.keys())[n] == 'um_data':
+                um_data=args[list(args.keys())[n]]
+                obs_zorder += len(um_data)
+                pum =True
+            elif list(args.keys())[n] == 'label':
+                label = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'outstr':
+                outstr= args[list(args.keys())[n]]
+
+    ylims=[0,3]
+    yticks=np.arange(0,3e3,0.5e3)
+    ytlabels=yticks/1e3
+
+
+    print ('******')
+    print ('')
+    print ('Plotting LWC mean profiles:' + lwcvar)
+    print ('')
+
+    ###----------------------------------------------------------------
+    ###         Calculate total water content
+    ###----------------------------------------------------------------
+    obs_data['twc'] = obs_data['lwc'] + obs_data['iwc']
+    obs_data['twc_ad'] = obs_data['lwc_adiabatic'] + obs_data['iwc']
+    obs_data['twc_ad_nolwp'] = obs_data['lwc_adiabatic_inc_nolwp'] + obs_data['iwc']
+    if pum==True:
+        for m in range(0,len(um_data)):
+            um_data[m]['model_twc'] = um_data[m]['model_lwc'] + um_data[m]['model_iwc_filtered']
+    if pmonc==True:
+        for m in range(0,len(monc_data)):
+            #monc_data[m]['model_iwc']= (monc_data[m]['ice_mmr_mean']+monc_data[m]['graupel_mmr_mean']+monc_data[m]['snow_mmr_mean'])*monc_data[m]['rho']
+            #monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
+            #monc_data[m]['model_twc'] = monc_data[m]['model_lwc'] +monc_data[m]['model_iwc']
+            monc_data[m]['model_twc'] = monc_data[m]['twc_tot_mean']
+            monc_data[m]['model_lwc'] = monc_data[m]['lwc_tot_mean']
+            #lwc_zvar=monc_data[m]['zvar']['liquid_mmr_mean']
+            lwc_zvar=monc_data[m]['zvar']['lwc_tot_mean']
+            lwc_tvar=monc_data[m]['tvar']['lwc_tot_mean']
+
+    if thresholding == True:
+        if pum==True:
+
+            ####-------------------------------------------------------------------------
+            ### from Michael's paper:
+            ####    "we consider a grid point cloudy when cloud water exceeded
+            ####    0.001 (0.0001) g kg-1 below 1 km (above 4 km), with linear
+            ####    interpolation in between."
+            ####-------------------------------------------------------------------------
+            m=0 # use first um model run for height grid definition
+            twc_thresh_um = np.zeros([np.size(um_data[m]['model_twc'],1)])
+            ####-------------------------------------------------------------------------
+            ### first look at values below 1 km
+            ###     find Z indices <= 1km, then set twc_thresh values to 1e-6
+            um_lt1km = np.where(um_data[m]['height'][0,:]<=1e3)
+            twc_thresh_um[um_lt1km] = 1e-6
+            ####-------------------------------------------------------------------------
+            ### next look at values above 4 km
+            ###     find Z indices >= 4km, then set twc_thresh values to 1e-7
+            um_lt1km = np.where(um_data[m]['height'][0,:]>=4e3)
+            twc_thresh_um[um_lt1km] = 1e-7
+
+            ### find heights not yet assigned
+            um_intZs = np.where(twc_thresh_um == 0.0)
+
+            ### interpolate for twc_thresh_um
+            x = [1e-6, 1e-7]
+            y = [1e3, 4e3]
+            f = interp1d(y, x)
+            for m in range(0,len(um_data)):
+                twc_thresh_um[um_intZs] = f(um_data[m]['height'][0,um_intZs].data)
+
+            for t in range(0,np.size(um_data[m]['model_twc'],0)):
+                for k in range(0,np.size(um_data[m]['model_twc'],1)):
+                    if obs_data['twc'][t,k] < twc_thresh_um[k]:
+                        obs_data['twc'][t,k] = np.nan
+                        obs_data['lwc'][t,k] = np.nan
+                    if obs_data['twc_ad'][t,k] < twc_thresh_um[k]:
+                        obs_data['twc_ad'][t,k] = np.nan
+                        obs_data['lwc_adiabatic'][t,k] = np.nan
+                    if obs_data['twc_ad_nolwp'][t,k] < twc_thresh_um[k]:
+                        obs_data['twc_ad_nolwp'][t,k] = np.nan
+                        obs_data['lwc_adiabatic_inc_nolwp'][t,k] = np.nan
+                    for m in range(0,len(um_data)):
+                        if  um_data[m]['model_twc'][t,k] < twc_thresh_um[k]:
+                            um_data[m]['model_twc'][t,k] = np.nan
+                            um_data[m]['model_lwc'][t,k] = np.nan
+        if pmonc==True:
+            m=0 # use first um model run for height grid definition
+            twc_thresh_monc = np.zeros([np.size(monc_data[m]['model_twc'],1)])
+            ### first look at values below 1 km
+            ###     find Z indices <= 1km, then set twc_thresh values to 1e-6
+            monc_lt1km = np.where(monc_data[m][lwc_zvar][:]<=1e3)
+            twc_thresh_monc[monc_lt1km] = 1e-6
+            monc_lt1km = np.where(monc_data[m][lwc_zvar][:]>=4e3)
+            twc_thresh_monc[monc_lt1km] = 1e-7
+            monc_intZs = np.where(twc_thresh_monc == 0.0)
+
+            ### interpolate for twc_thresh_um
+            x = [1e-6, 1e-7]
+            y = [1e3, 4e3]
+            f = interp1d(y, x)
+            for m in range(0,len(monc_data)):
+                twc_thresh_monc[monc_intZs] = f(monc_data[m][lwc_zvar][monc_intZs].data)
+
+            for t in range(0,np.size(monc_data[m]['model_twc'],0)):
+                for k in range(0,np.size(monc_data[m]['model_twc'],1)):
+                    for m in range(0,len(monc_data)):
+                        if  monc_data[m]['model_twc'][t,k] < twc_thresh_monc[k]:
+                            monc_data[m]['model_twc'][t,k] = np.nan
+                            monc_data[m]['model_lwc'][t,k] = np.nan
+
+            # ### plot profile of threshold as sanity check
+            # plt.plot(twc_thresh_um, um_data[0]['height'][0,:])
+            # plt.plot(twc_thresh_monc, monc_data[0]['z'][:]); plt.show()
+            # print (twc_thresh_monc)
+
+    ###----------------------------------------------------------------
+    ###         Plot figure - Mean profiles
+    ###----------------------------------------------------------------
+
+    SMALL_SIZE = 12
+    MED_SIZE = 14
+    LARGE_SIZE = 16
+
+    plt.rc('font',size=MED_SIZE)
+    plt.rc('axes',titlesize=MED_SIZE)
+    plt.rc('axes',labelsize=MED_SIZE)
+    plt.rc('xtick',labelsize=MED_SIZE)
+    plt.rc('ytick',labelsize=MED_SIZE)
+    plt.rc('legend',fontsize=MED_SIZE)
+    plt.figure(figsize=(6,8.5))
+    # plt.subplots_adjust(top = 0.95, bottom = 0.12, right = 0.95, left = 0.15,
+    #         hspace = 0.4, wspace = 0.1)
+    ###define colors
+    lcols=['lightseagreen','steelblue','royalblue','darkblue']
+    fcols=['lightcyan','lightblue','skyblue','blue']
+    lcolsmonc=['gold','darkgoldenrod','darkorange','orangered','firebrick']
+    fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
+    ### define axis instance
+    ax1 = plt.gca()
+    embed()
+    ####LWC
+    for m in range(1,len(prof_times)):
+        plt.suplot(1,len(prof_times),m)
+        sstr=datenum2date(prof_time[m][0])
+        estr=datenum2date(prof_time[m][1])
+        plt.title(sstr.strftime("%HH") +'-' + sstr.strftime("%MM"))
+        obsid= np.argwhere((obs_data['time']>=prof_time[m][0]) & (obs_data['time']<prof_time[m][1]))
+        plt.plot(np.nanmean(obs_data[lwcvar][obsid,:],0)*1e3,np.nanmean(obs_data['height'],0), color = 'k', linewidth = 3, label = 'Obs_UMgrid'  + lwcstr, zorder = obs_zorder)
+        ax1.fill_betweenx(np.nanmean(obs_data['height'],0),np.nanmean(obs_data[lwcvar][obsid,:],0)*1e3 - np.nanstd(obs_data[lwcvar][obsid,:],0)*1e3,
+            np.nanmean(obs_data[lwcvar][obsid,:],0)*1e3 + np.nanstd(obs_data[lwcvar][obsid,:],0)*1e3, color = 'lightgrey', alpha = 0.5)
+        # plt.xlim([0,0.2])
+        plt.plot(np.nanmean(obs_data[lwcvar][obsid,:],0)*1e3 - np.nanstd(obs_data[lwcvar][obsid,:],0)*1e3, np.nanmean(obs_data['height'],0),
+            '--', color = 'k', linewidth = 0.5)
+        plt.plot(np.nanmean(obs_data[lwcvar][obsid,:],0)*1e3 + np.nanstd(obs_data[lwcvar][obsid,:],0)*1e3, np.nanmean(obs_data['height'],0),
+            '--', color = 'k', linewidth = 0.5)
+        if pum==True:
+            for m in range(0,len(um_data)):
+                id= np.argwhere((um_data[m]['time']>=prof_time[m][0]) & (um_data[m]['time']<prof_time[m][1]))
+                ax1.fill_betweenx(np.nanmean(um_data[m]['height'],0),np.nanmean(um_data[m]['model_lwc'][id,:],0)*1e3 - np.nanstd(um_data[m]['model_lwc'][id,:]*1e3,0),
+                    np.nanmean(um_data[m]['model_lwc'][id,:],0)*1e3 + np.nanstd(um_data[m]['model_lwc'][id,:],0)*1e3, color = fcols[m], alpha = 0.05)
+                plt.plot(np.nanmean(um_data[m]['model_lwc'][id,:],0)*1e3 - np.nanstd(um_data[m]['model_lwc'][id,:],0)*1e3, np.nanmean(um_data[m]['height'],0),
+                    '--', color =lcols[m], linewidth = 0.5)
+                plt.plot(np.nanmean(um_data[m]['model_lwc'][id,:],0)*1e3 + np.nanstd(um_data[m]['model_lwc'][id,:],0)*1e3, np.nanmean(um_data[m]['height'],0),
+                    '--', color = lcols[m], linewidth = 0.5)
+        if pmonc==True:
+            for m in range(0,len(monc_data)):
+                id= np.argwhere((monc_data[m][lwc_tvar]>=prof_time[m][0]) & (monc_data[m][lwc_tvar]<prof_time[m][1]))
+                ax1.fill_betweenx(monc_data[m][lwc_zvar][id,:],np.nanmean(monc_data[m]['model_lwc'][id,:],0)*1e3 - np.nanstd(monc_data[m]['model_lwc'][id,:]*1e3,0),
+                    np.nanmean(monc_data[m]['model_lwc'][id,:],0)*1e3 + np.nanstd(monc_data[m]['model_lwc'][id,:],0)*1e3, color = fcolsmonc[m], alpha = 0.05)
+                plt.plot(np.nanmean(monc_data[m]['model_lwc'][id,:],0)*1e3 - np.nanstd(monc_data[m]['model_lwc'][id,:],0)*1e3, monc_data[m][lwc_zvar],
+                    '--', color =lcolsmonc[m], linewidth = 0.5)
+                plt.plot(np.nanmean(monc_data[m]['model_lwc'][id,:],0)*1e3 + np.nanstd(monc_data[m]['model_lwc'][id,:],0)*1e3, monc_data[m][lwc_zvar],
+                    '--', color = lcolsmonc[m], linewidth = 0.5)
+        if pum==True:
+            for m in range(0,len(um_data)):
+                id= np.argwhere((um_data[m]['time']>=prof_time[m][0]) & (um_data[m]['time']<prof_time[m][1]))
+                plt.plot(np.nanmean(um_data[m]['model_lwc'][id,:],0)*1e3,np.nanmean(um_data[m]['height'],0), color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
+        if pmonc==True:
+            for m in range(0,len(monc_data)):
+                id= np.argwhere((monc_data[m][lwc_tvar]>=prof_time[m][0]) & (monc_data[m][lwc_tvar]<prof_time[m][1]))
+                plt.plot(np.nanmean(monc_data[m]['model_lwc'][id,:],0)*1e3,monc_data[m][lwc_zvar], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+
+    plt.xlabel('Liquid water content [g m$^{-3}$]')
+    plt.ylabel('Z [km]')
+    # plt.ylim([0,5e3])
+    # plt.yticks(np.arange(0,5.01e3,0.5e3))
+    # ax1.set_yticklabels([0,' ',1,' ',2,' ',3,' ',4,' ',5])
+    plt.ylim(ylims)
+    plt.yticks(yticks)
+    ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
+    ax1.set_yticklabels(ytlabels)
+    plt.xlim([0,0.4])
+    plt.xticks(np.arange(0,0.45,0.05))
+    #ax1.set_xticklabels([0,' ',0.015,' ',0.03,' ',0.045,' ',0.06])
+    ax1.xaxis.set_minor_locator(ticker.MultipleLocator(0.025))
+    plt.legend()
+    dstr=datenum2date(dates[1])
+    # plt.grid('on')
+    if thresholding == True:
+        if pmonc==True:
+            fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_LWC-MTThresh' + lwcstr + '.png'
+        else:
+            fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_LWC-MTThresh'+ lwcstr + '.png'
+    else:
+        if pmonc==True:
+            fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_LWC' + lwcstr + '.png'
+        else:
+            fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_LWC'+ lwcstr + '.png'
+
+    plt.savefig(fileout)
+
+    print ('')
+    print ('Finished plotting! :)')
+    print ('')
+    print ('******')
+
+
+
 def plot_lwp(obs_data, plots_out_dir, dates,**args ):
 
     numsp=1
@@ -1861,8 +2096,13 @@ def main():
     #---- MONC SPIN UP TIME
     monc_spin = 6 *60 *60
 
-    machine = 'JASMIN'
+    #---- SPLIT PROFILES IN TIME JUNKS
+    prof_times=[[dates[0], dates[0]+4/24],
+                [dates[0]+4/24, dates[0]+8/24],
+                [dates[0]+8/24, dates[0]+14/24]]
 
+    #which server
+    machine = 'JASMIN'
     ### Choose observations vertical gridding used in Cloudnet processing (UM/IFS/RADAR)
     obs_switch = 'UM' #RADAR
 
@@ -1904,7 +2144,7 @@ def main():
     #              '6_control_20180913T0000Z_Wsub-1.5-1km/',
     #              '8_control_20180913T0000Z_Wsub-1.0-1km/',
     #              '9_control_20180913T0000Z_Wsub-0.5-1km/']
-    m_out_dir =['22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/',
+    m_out_dir =['22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/']
     #m_out_dir =['23_20180913T0000Z_6hSpin-up_12h0600-0000thTend/']
             #'4_control_20180913T0000Z_Wsub-1.5/',
     #################################################################
@@ -2312,18 +2552,19 @@ def main():
     # Cloudnet plot: Plot Cv statistics from drift period
     # -------------------------------------------------------------
     #figure = plot_CvProfiles(um_data, ifs_data, misc_data, ra2t_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs, obs_switch)
-    figure = plot_lwcProfiles(obs_data, lwcvar,lwcstr,thresholding, plots_out_dir,dates, um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    figure = plot_iwcProfiles(obs_data, twcvar,twcstr,thresholding, plots_out_dir,dates, um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    figure = plot_twcProfiles(obs_data, twcvar,twcstr,thresholding, plots_out_dir,dates, um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    #figure = plot_lwcProfiles(obs_data, lwcvar,lwcstr,thresholding, plots_out_dir,dates,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    #figure = plot_iwcProfiles(obs_data, twcvar,twcstr,thresholding, plots_out_dir,dates, um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    #figure = plot_twcProfiles(obs_data, twcvar,twcstr,thresholding, plots_out_dir,dates,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_lwcProfiles_split(obs_data, lwcvar,lwcstr,thresholding, plots_out_dir,dates, prof_times,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
 
     # -------------------------------------------------------------
     # Cloudnet plot: Plot contour timeseries
     # -------------------------------------------------------------
     # figure = plot_CvTimeseries(obs_data,plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    figure = plot_LWCTimeseries(obs_data,  lwcvar,lwcstr, plots_out_dir, dates, um_data=um_data,label=label, outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    figure = plot_TWCTimeseries( obs_data, twcvar,twcstr, plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    figure = plot_IWCTimeseries(obs_data, plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    #figure = plot_LWCTimeseries(obs_data,  lwcvar,lwcstr, plots_out_dir, dates, um_data=um_data,label=label, outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    #figure = plot_TWCTimeseries( obs_data, twcvar,twcstr, plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    #figure = plot_IWCTimeseries(obs_data, plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_monc_comparison(obs_data,  lwcvar,lwcstr, plots_out_dir, dates, um_data=um_data,label=label, outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
 
