@@ -312,6 +312,112 @@ def plot_BLDepth_SMLDepth(obs_data, plot_out_dir, dates,**args ):
     plt.savefig(fileout)
 
 
+
+def plot_temp_prifles(obs, plot_out_dir, dates,**args  ):
+
+    numsp=1
+    if bool(args):
+        for n in range(0,len(args)):
+            if  list(args.keys())[n] == 'monc_data':
+                monc_data=args[list(args.keys())[n]]
+                numsp += len(monc_data)
+                pmonc=True
+            elif list(args.keys())[n] == 'mlabel':
+                mlabel = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'moutstr':
+                moutstr= args[list(args.keys())[n]]
+            elif  list(args.keys())[n] == 'um_data':
+                um_data=args[list(args.keys())[n]]
+                numsp += len(um_data)
+                pum=True
+            elif list(args.keys())[n] == 'label':
+                label = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'outstr':
+                outstr= args[list(args.keys())[n]]
+
+
+
+
+    print ('******')
+    print ('')
+    print ('Plotting  temparature profiles:')
+    print ('')
+
+    SMALL_SIZE = 12
+    MED_SIZE = 14
+    LARGE_SIZE = 16
+
+    plt.rc('font',size=MED_SIZE)
+    plt.rc('axes',titlesize=MED_SIZE)
+    plt.rc('axes',labelsize=MED_SIZE)
+    plt.rc('xtick',labelsize=MED_SIZE)
+    plt.rc('ytick',labelsize=MED_SIZE)
+    plt.rc('legend',fontsize=MED_SIZE)
+    plt.subplots_adjust(top = 0.95, bottom = 0.05, right = 0.95, left = 0.05,
+            hspace = 0.4, wspace = 0.13)
+
+    lcols=['mediumseagreen','steelblue','darkblue']
+    fcols=['mediumaquamarine','lightblue','blue']
+    lcolsmonc=['gold','darkgoldenrod','darkorange','orangered','firebrick']
+    fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
+
+    #################################################################
+    ## create figure and axes instances
+    #################################################################
+    ### -------------------------------
+    ### Build figure (timeseries)
+    ### -------------------------------
+    #from IPython import embed; embed()
+    fig = plt.figure(figsize=(18,10 ))
+    #ax  = fig.add_axes([0.07,0.7,0.53,0.22])   # left, bottom, width, height
+    ax  = fig.add_axes([0.07,0.7,0.7,0.22])   # left, bottom, width, height
+    ax = plt.gca()
+    yB = [-10, 120]
+    plt.plot(obs['metalley']['mday'], obs['metalley']['t'], color = 'black', label = 'ice_station')#plt.ylabel('SW$_{net}$ [W m$^{-2}$]')
+    if pum==True:
+        for m in range(0,len(um_data)):
+            plt.plot(um_data[m]['time'], um_data[m]['air_temperature_at_1.5m']-273.15, color = lcols[m], label = label[m])
+    if pmonc==True:
+        for m in range(0,len(monc_data)):
+            plt.plot(monc_data[m]['time'], monc_data[m]['air_temperature_at_1.5m']-273.15, color = lcolsmonc[m], label = mlabel[m])
+    plt.ylabel('T [$^\circ$C]')
+    plt.legend(bbox_to_anchor=(-0.08, 0.77, 1., .102), loc=4, ncol=4)
+    ax.set_xlim([dates[0], dates[1]])
+    plt.grid(which='both')
+    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+    plt.ylim([-10,0])
+
+    ax  = fig.add_axes([0.07,0.4,0.7,0.22])   # left, bottom, width, height
+    ax = plt.gca()
+    yB = [-10, 120]
+    plt.plot(data1['time'], data1['rh_1.5m'], color = 'darkblue', label = label1)
+    plt.plot(data3['time'], data3['rh_1.5m'], color = 'steelblue', label = label3[:-4])
+    plt.plot(data2['time'], data2['rh_1.5m'], color = 'mediumseagreen', label = label2)
+    plt.plot(obs['metalley']['mday'], obs['metalley']['rh'], color = 'black', label = 'Obs')#plt.ylabel('SW$_{net}$ [W m$^{-2}$]')
+    plt.ylabel('RH [%]')
+    #plt.legend(bbox_to_anchor=(-0.08, 0.67, 1., .102), loc=4, ncol=3)
+    ax.set_xlim([datenum, edatenum])
+    plt.grid(which='both')
+    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+    plt.ylim([80,110])
+    plt.xlabel('Time [UTC]')
+
+    print ('******')
+    print ('')
+    print ('Finished plotting! :)')
+    print ('')
+
+    date=datenum2date(datenum)
+#    from IPython import embed; embed()
+    fileout = os.path.join(plot_out_dir,date.strftime('%Y%m%d') + '_surfaceVariables_ts.png')
+    plt.savefig(fileout)
+
+
+
 def plot_radiation(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3, datenum,edatenum, label1, label2, label3,plot_out_dir):
 
     print ('******')
@@ -844,7 +950,7 @@ def main():
     figure = plot_surfaceVariables(obs,plot_out_dir, dates, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     figure = plot_lwp(obs,plot_out_dir, dates, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     figure = plot_BLDepth_SMLDepth(obs,plot_out_dir, dates, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-
+    figure = plot_temp_profiles(obs,plot_out_dir, dates, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
 
 
