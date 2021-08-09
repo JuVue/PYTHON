@@ -66,7 +66,6 @@ for m in range(0,len(monc_filename)):
         if 'time' in str(var):
             time_var_list=time_var_list+[var]
     monc_var_list=time_var_list+monc_var_list
-    embed()
     for c in range(0,len(monc_var_list)):
         var = monc_var_list[c]
         zvar[var]=[]
