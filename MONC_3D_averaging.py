@@ -34,7 +34,7 @@ if machine=='LEEDS':
 elif machine=='JASMIN':
     monc_root_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/MONC/output/'
     #m_out_dir = '22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/'
-    m_out_dir = '23_20180913T0000Z_6hSpin-up_12h0600-0000thTend'
+    m_out_dir = '23_20180913T0000Z_6hSpin-up_12h0600-0000thTend/'
     monc_exp_dir= '/gws/nopw/j04/ncas_radar_vol1/jutta/MONC/output/'  # output directory for averaged data
 tmp=glob.glob(monc_root_dir + m_out_dir +'*.nc')
 #assert len(tmp)==1,'more than one file detected'
@@ -45,20 +45,13 @@ start = time.time()
 print ('Loading MONC data:')
 print ('')
 ###1d variables, 2d variables (time,height), 3d variables (time,x,y), 4d variables(time,x,y,z)
+monc_var_list =['z','zn','prefn','thref','th','p','q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass',
+                'u','v','w','q_vapour']
 
-# monc_var_list =[['time_series_30_600','time_series_30_60'],
-#                 ['z','zn','prefn','thref','thinit','rho','rhon','theta_mean',
-#                 'liquid_mmr_mean','ice_mmr_mean','snow_mmr_mean','graupel_mmr_mean'],
-#                 ['u','v','w','q','th','p','q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
-monc_var_list =[['time_series_30_600','time_series_30_60'],
-                ['z','zn','prefn','thref','th','p','q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass'],
-                ['u','v','w','q_vapour']]
-
-monc_var_avg= ['q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass','iwc_tot','lwc_tot','twc_tot'] #always have twc_toto at the end!
+#only needed for plotting
+#monc_var_avg= ['q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass','iwc_tot','lwc_tot','twc_tot'] #always have twc_toto at the end!
 
 # ml2  =        ['liquid_mmr_mean','ice_mmr_mean','snow_mmr_mean','graupel_mmr_mean','model_twc']
-
-embed()
 
 for m in range(0,len(monc_filename)):
     ncm = {}
@@ -68,9 +61,15 @@ for m in range(0,len(monc_filename)):
     monc_data={}
     zvar={}
     tvar={}
+    time_var_list=[]
+    for var in ncm.variables:
+        if 'time' in str(var)
+        time_var_list=np.append(var)
+
+    embed()
+    monc_var_list=time_var_list+monc_var_list
     for c in range(0,len(monc_var_list)):
-        for j in range(0,len(monc_var_list[c])):
-            var = monc_var_list[c][j]
+            var = monc_var_list[c]
             zvar[var]=[]
             tvar[var]=[]
             if c == len(monc_var_list)-1:
@@ -87,21 +86,21 @@ for m in range(0,len(monc_filename)):
                 zvar[varstr]='zn'
             else:
                 zvar[varstr]=np.nan
-            if monc_var_list[0][0] in str(tmp):
+            if time_var_list[0] in str(tmp):
                 tvar[varstr]='time1'
-            elif monc_var_list[0][1] in str(tmp):
+            elif time_var_list[1] in str(tmp):
                 tvar[varstr]='time2'
-            if len(monc_var_list[0])>2:
-                if monc_var_list[0][2] in str(tmp):
+            if len(time_var_list)>2:
+                if time_var_list[2] in str(tmp):
                     tvar[varstr]='time3'
 
-    monc_data['time1']=monc_data[monc_var_list[0][0]] #1d data
-    monc_data.pop(monc_var_list[0][0])
-    monc_data['time2']=monc_data[monc_var_list[0][1]] #2d data
-    monc_data.pop(monc_var_list[0][1])
-    if len(monc_var_list[0])>2:
-        monc_data['time3']=monc_data[monc_var_list[0][2]] #2d data
-        monc_data.pop(monc_var_list[0][2])
+    monc_data['time1']=monc_data[time_var_list[0]] #1d data
+    monc_data.pop(time_var_list[0])
+    monc_data['time2']=time_data[time_var_list[1]] #2d data
+    monc_data.pop(time_var_list[1])
+    if len(time_var_list)>2:
+        monc_data['time3']=monc_data[time_var_list[2]] #2d data
+        monc_data.pop(time_var_list[2])
 
     print('Loading done')
     ## averaging 4D variables
