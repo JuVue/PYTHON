@@ -26,7 +26,7 @@ from readMAT import readMatlabStruct
 #from pyFixes import py3_FixNPLoad
 
 
-def plot_surfaceVariables(obs_data, plot_out_dir, dates,**args  ):
+def plot_surfaceVariables(obs, plot_out_dir, dates,**args  ):
 
     numsp=1
     if bool(args):
@@ -308,7 +308,7 @@ def plot_BLDepth_SMLDepth(obs_data, plot_out_dir, dates,**args ):
 
     date=datenum2date(datenum)
 #    from IPython import embed; embed()
-    fileout = os.path.join(plot_out_dir,date.strftime('%Y%m%d') + '_lwp_ts.png')
+    fileout = os.path.join(plot_out_dir,date.strftime('%Y%m%d') + '_BLdepth_ts.png')
     plt.savefig(fileout)
 
 
