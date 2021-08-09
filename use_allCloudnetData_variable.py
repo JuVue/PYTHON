@@ -2164,7 +2164,7 @@ def main():
         for n in range(0, len(monc_filename)):
             print(monc_filename[m][n])
             ncm = Dataset(monc_filename[m][n],'r')
-            if n == 0
+            if n == 0:
                 monc_data[m]={}
                 zvar={}
                 tvar={}
