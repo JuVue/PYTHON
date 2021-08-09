@@ -59,7 +59,7 @@ monc_var_avg= ['q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass'
 # ml2  =        ['liquid_mmr_mean','ice_mmr_mean','snow_mmr_mean','graupel_mmr_mean','model_twc']
 
 
-for m in range(0,len(monc_filename))
+for m in range(0,len(monc_filename)):
     ncm = {}
     monc_data = {}
     print(monc_filename[m])
