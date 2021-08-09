@@ -1367,7 +1367,7 @@ def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,d
 
     print ('******')
     print ('')
-    print ('Plotting LWC mean profiles:' + lwcvar)
+    print ('Plotting LWC mean profiles split times:' + lwcvar)
     print ('')
 
     ###----------------------------------------------------------------
@@ -1438,6 +1438,7 @@ def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,d
                             um_data[m]['model_twc'][t,k] = np.nan
                             um_data[m]['model_lwc'][t,k] = np.nan
         if pmonc==True:
+            embed()
             m=0 # use first um model run for height grid definition
             twc_thresh_monc = np.zeros([np.size(monc_data[m]['model_twc'],1)])
             ### first look at values below 1 km
@@ -1494,7 +1495,7 @@ def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,d
     embed()
     ####LWC
     for m in range(1,len(prof_times)):
-        plt.suplot(1,len(prof_times),m)
+        plt.subplot(1,len(prof_times),m)
         sstr=datenum2date(prof_time[m][0])
         estr=datenum2date(prof_time[m][1])
         plt.title(sstr.strftime("%HH") +'-' + sstr.strftime("%MM"))
@@ -2440,7 +2441,7 @@ def main():
                                 tvar[var]='time3'
                     else:
                         monc_data[m][var] = np.append(monc_data[m][var],ncm.variables[var][:])
-    embed()
+
     #loading 3d variables
     for m in range(0, len(m_out_dir)):
         for n in range(0,len(monc_3d_filename)):
@@ -2470,7 +2471,7 @@ def main():
         monc_data[m].pop(time_var_list[2])
 
     print (' Monc data Loaded!')
-
+    embed()
     ##################################################################################################################################
     ## -------------------------------------------------------------
     ## remove spin up time from monc data
