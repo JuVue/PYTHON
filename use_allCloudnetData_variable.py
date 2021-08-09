@@ -1905,7 +1905,7 @@ def main():
     #              '8_control_20180913T0000Z_Wsub-1.0-1km/',
     #              '9_control_20180913T0000Z_Wsub-0.5-1km/']
     #m_out_dir =['22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/',
-    m_out_dir =['23_20180913T0000Z_6hSpin-up_12h0600-0000thTend']
+    m_out_dir =['23_20180913T0000Z_6hSpin-up_12h0600-0000thTend/']
             #'4_control_20180913T0000Z_Wsub-1.5/',
     #################################################################
     ## create labels for figure legends - done here so only needs to be done once!
@@ -2163,6 +2163,7 @@ def main():
     monc_data = {}
     for m in range(0, len(m_out_dir)):
         for n in range(0, len(monc_filename)):
+            embed()
             print(monc_filename[m][n])
             ncm = Dataset(monc_filename[m][n],'r')
             if n == 0:
