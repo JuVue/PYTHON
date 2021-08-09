@@ -589,7 +589,13 @@ def main():
     ### create monc filenames
     monc_filename=[]
     for m in range(0, len(m_out_dir)):
-        monc_filename.append(monc_root_dir + m_out_dir[m] + 'moccha_casim_dg_72000.nc')
+        fname=glob.glob(monc_root_dir + m_out_dir[m] +'*.nc')
+        monc_filename.append(fname)
+    monc_3d_filename=[]
+    for m in range(0, len(m_out_dir)):
+        fname=glob.glob(monc_avg_dir + m_out_dir[m] +'3d*npy')
+        monc_3d_filename.append(fname)
+
     ### -----------------------------------------------------------------
     ###     READ IN MONC DATA
     print ('Loading MONC data:')
@@ -616,6 +622,7 @@ def main():
                         # 'q_cloud_liquid_mass_mean', 'q_ice_mass_mean', 'q_snow_mass_mean',
                         # 'q_graupel_mass_mean', 'iwc_tot_mean', 'lwc_tot_mean', 'twc_tot_mean', 'zvar', 'tvar']
     embed()
+
     ncm = {}
     monc_data = {}
     for m in range(0, len(m_out_dir)):
