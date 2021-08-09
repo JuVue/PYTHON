@@ -2416,7 +2416,7 @@ def main():
                 if 'time' in str(var):
                     time_var_list=time_var_list+[var]
             full_var_list=monc_var_list
-            full_var_list[0]=time_var_list+monc_var_list[0][2:]
+            full_var_list[0]=time_var_list+monc_var_list[0]
             for c in range(0,len(full_var_list)):
                 for j in range(0,len(full_var_list[c])):
                     var = full_var_list[c][j]
