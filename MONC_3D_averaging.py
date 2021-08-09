@@ -197,8 +197,8 @@ for m in range(0,len(monc_filename)):
     end = time.time()
     print(end - start)
     print (' averaging complete!')
-    if not os.path.exists(glob.glob(monc_exp_dir + m_out_dir)):
-            os.mkdir(glob.glob(monc_exp_dir + m_out_dir))
+    if not os.path.exists(monc_exp_dir + m_out_dir):
+            os.mkdir(monc_exp_dir + m_out_dir)
     fname=(monc_exp_dir + m_out_dir +'3d_averages_f' +str(m))
 
     np.save(fname +'.npy',monc_data)
