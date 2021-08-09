@@ -413,13 +413,15 @@ def removeSpinUp(monc_data,monc_spin):
         monc_var_list = list(monc_data[m].keys())
         monc_var_list.remove('time1')
         monc_var_list.remove('time2')
-        monc_var_list.remove('time3')
+        if 'time3' in monc_data:
+            monc_var_list.remove('time3')
         monc_var_list.remove('tvar')
         monc_var_list.remove('zvar')
 
         id1 = np.squeeze(np.argwhere(monc_data[m]['time1']<=monc_spin)) #1D data
         id2 = np.squeeze(np.argwhere(monc_data[m]['time2']<=monc_spin))
-        id3 = np.squeeze(np.argwhere(monc_data[m]['time3']<=monc_spin))
+        if 'time3' in monc_data:
+            id3 = np.squeeze(np.argwhere(monc_data[m]['time3']<=monc_spin))
 
         for j in range(0,len(monc_var_list)):
             if monc_data[m]['tvar'][monc_var_list[j]]=='time1':
@@ -449,16 +451,17 @@ def removeSpinUp(monc_data,monc_spin):
                     monc_data[m][monc_var_list[j]]=np.delete(monc_data[m][monc_var_list[j]],id3,3)
         monc_data[m]['time1']=np.delete(monc_data[m]['time1'],id1,0)
         monc_data[m]['time2']=np.delete(monc_data[m]['time2'],id2,0)
-        monc_data[m]['time3']=np.delete(monc_data[m]['time3'],id3,0)
+        if 'time3' in monc_data:
+            monc_data[m]['time3']=np.delete(monc_data[m]['time3'],id3,0)
         monc_data[m]['time1']=monc_data[m]['time1']-monc_data[m]['time1'][0]
         monc_data[m]['time2']=monc_data[m]['time2']-monc_data[m]['time2'][0]
-        monc_data[m]['time3']=monc_data[m]['time3']-monc_data[m]['time3'][0]
+        if 'time3' in monc_data:
+            monc_data[m]['time3']=monc_data[m]['time3']-monc_data[m]['time3'][0]
 
     return monc_data
     print('done')
     print('*************')
     print ('')
-
 
 def main():
 
@@ -468,16 +471,40 @@ def main():
     print ('Start: ' + time.strftime("%c"))
     print ('')
 
+    machine = 'JASMIN'
+
+    if machine =='JASMIN':
+        plots_out_dir='/gws/nopw/j04/ncas_radar_vol1/jutta/PLOTS/CaseStudy/'
+        if not os.path.exists(plots_out_dir):
+            os.makedirs(plots_out_dir)
+        um_root_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/UM/DATA/'
+
+        obs_met_dir=  '/nfs/a96/MOCCHA/working/jutta/final_data/met_alley/concatenated/';
+        obs_acas_dir= '/gws/nopw/j04/ncas_radar_vol1/jutta/OBS/ACAS/ACAS_AO2018_v2_May2019/';
+        obs_rs_dir=   '/gws/nopw/j04/ncas_radar_vol1/jutta/OBS/radiosondes/';
+        obs_hatpro_dir='/gws/nopw/j04/ncas_radar_vol1/jutta/OBS/HATPRO/';
+        obs_albedo_dir='/nfs/a96/MOCCHA/working/data/'
+        obs_rad_dir='/gws/nopw/j04/ncas_radar_vol1/jutta/OBS/radiation/'
+        obs_dec_dir = '/gws/nopw/j04/ncas_radar_vol1/jutta/OBS/HATPRO/'
+        monc_root_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/MONC/output/'
+        #monc_avg_dir = '/gws/nopw/j04/ncas_radar_vol1/jutta/MONC/output/'
+        monc_avg_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/MONC/output/'
+        ### SET OUTPUT DIRECTORY FOR PLOTS
+        plot_out_dir = '/gws/nopw/j04/ncas_radar_vol1/jutta/PLOTS/CaseStudy/'
+
+    elif machine =='LEEDS':
     ### INPUT FOLDERS
-    um_root_dir = '/nfs/a96/MOCCHA/working/gillian/UM/DATA/'
-    obs_met_dir=  '/nfs/a96/MOCCHA/working/jutta/final_data/met_alley/concatenated/';
-    obs_acas_dir= '/nfs/a96/MOCCHA/data/ACAS/ACAS_AO2018_v2_May2019/';
-    obs_rs_dir=   '/nfs/a96/MOCCHA/working/jutta/final_data/radiosondes/V3/';
-    obs_hatpro_dir='/nfs/a96/MOCCHA/working/jutta/final_data/HATPRO/';
-    obs_albedo_dir='/nfs/a96/MOCCHA/working/data/'
-    obs_rad_dir='/nfs/a96/MOCCHA/working/jutta/requests/Gillian/'
-    obs_dec_dir = '/nfs/a96/MOCCHA/working/jutta/requests/Sandeep/'
-    monc_root_dir = '/nfs/a96/MOCCHA/working/gillian/MONC_CASES/MOCCHA/output/'
+        um_root_dir = '/nfs/a96/MOCCHA/working/gillian/UM/DATA/'
+        obs_met_dir=  '/nfs/a96/MOCCHA/working/jutta/final_data/met_alley/concatenated/';
+        obs_acas_dir= '/nfs/a96/MOCCHA/data/ACAS/ACAS_AO2018_v2_May2019/';
+        obs_rs_dir=   '/nfs/a96/MOCCHA/working/jutta/final_data/radiosondes/V3/';
+        obs_hatpro_dir='/nfs/a96/MOCCHA/working/jutta/final_data/HATPRO/';
+        obs_albedo_dir='/nfs/a96/MOCCHA/working/data/'
+        obs_rad_dir='/nfs/a96/MOCCHA/working/jutta/requests/Gillian/'
+        obs_dec_dir = '/nfs/a96/MOCCHA/working/jutta/requests/Sandeep/'
+        monc_root_dir = '/nfs/a96/MOCCHA/working/gillian/MONC_CASES/MOCCHA/output/'
+        ### SET OUTPUT DIRECTORY FOR PLOTS
+        plot_out_dir = '/nfs/a96/MOCCHA/working/jutta/plots/CaseStudies/ModelComparison/'
 
 
     # ### CHOSEN RUN
@@ -486,12 +513,15 @@ def main():
     # out_dir3 = '24_u-cc324_RA2T_CON/'
 
     out_dir = ['23_u-cc278_RA1M_CASIM/',
+               '30_u-cg179_RA1M_CASIM/',
               '26_u-cd847_RA1M_CASIM/',
               '27_u-ce112_RA1M_CASIM/']
     ### CHOOSE MONC RUNS
-    m_out_dir = ['5_control_20180913T0000Z_Wsub-1.5_Fletcher/',
-                '6_control_20180913T0000Z_Wsub-1.5-1km/',
-                '7_20180913T0000Z_Wsub-1.5-1km_solAccum-100_inuc-0_iact-3/']
+    m_out_dir =['22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/']
+
+    # m_out_dir = ['5_control_20180913T0000Z_Wsub-1.5_Fletcher/',
+    #             '6_control_20180913T0000Z_Wsub-1.5-1km/',
+    #             '7_20180913T0000Z_Wsub-1.5-1km_solAccum-100_inuc-0_iact-3/']
 
     um_sub_dir = 'OUT_R0/'
     ### CHOOSE DATES TO PLOT
@@ -505,8 +535,6 @@ def main():
     #---- MONC SPIN UP TIME
     monc_spin = 6 *60 *60
 
-    ### SET OUTPUT DIRECTORY FOR PLOTS
-    plot_out_dir = '/nfs/a96/MOCCHA/working/jutta/plots/CaseStudies/ModelComparison/'
 
     if not os.path.exists(plot_out_dir):
         os.mkdir(plot_out_dir)
@@ -534,7 +562,7 @@ def main():
     for var in nc[0].variables: print(var)
     var_list1 = ['u_10m','v_10m', 'air_temperature_at_1.5m','q_1.5m','rh_1.5m','visibility','dew_point_temperature_at_1.5m','LWP','IWP',
                 'surface_net_SW_radiation','surface_net_LW_radiation','surface_downwelling_LW_radiation','surface_downwelling_SW_radiation',
-                'sensible_heat_flux','latent_heat_flux', 'bl_depth','bl_type']
+                'sensible_heat_flux','latent_heat_flux', 'bl_depth','bl_type','temperature']
                 #PLOT FROM CLOUDNET:
                 #'temperature','q','pressure','bl_depth','bl_type','qliq','qice','uwind','vwind','wwind',
                 #'cloud_fraction','radr_refl','rainfall_flux','snowfall_flux',]#
@@ -567,50 +595,96 @@ def main():
     print ('Loading MONC data:')
     print ('')
     ###1d variables, 2d variables (time,height), 3d variables (time,x,y), 4d variables(time,x,y,z)
-    monc_var_list =[['time_series_2_60','time_series_20_600' ,'time_series_2_600','z','rho', 'LWP_mean','IWP_mean','SWP_mean','TOT_IWP_mean','GWP_mean'],
-                    ['theta_mean','total_cloud_fraction', 'liquid_cloud_fraction','ice_cloud_fraction',
-                    'vapour_mmr_mean','liquid_mmr_mean','rain_mmr_mean','ice_mmr_mean','snow_mmr_mean',
-                    'graupel_mmr_mean']]
+    # monc_var_list =[['time_series_2_60','time_series_20_600' ,'time_series_2_600','z','rho', 'LWP_mean','IWP_mean','SWP_mean','TOT_IWP_mean','GWP_mean'],
+    #                 ['theta_mean','total_cloud_fraction', 'liquid_cloud_fraction','ice_cloud_fraction',
+    #                 'vapour_mmr_mean','liquid_mmr_mean','rain_mmr_mean','ice_mmr_mean','snow_mmr_mean',
+    #                 'graupel_mmr_mean']]
                 #    ['vwp','lwp','rwp','iwp','swp','gwp','tot_iwp'],
                 #    ['q_vapour','q_cloud_liquid_mass','q_rain_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
+    monc_var_list =[['z', 'zn','LWP_mean','IWP_mean','SWP_mean','TOT_IWP_mean','GWP_mean'],
+                #    ['theta_mean','total_cloud_fraction', 'liquid_cloud_fraction','ice_cloud_fraction'],
+                #    ['liquid_mmr_mean','ice_mmr_mean','graupel_mmr_mean','snow_mmr_mean']]
+                #    ['vwp','lwp','rwp','iwp','swp','gwp','tot_iwp'],
+                #    ['q_vapour','q_cloud_liquid_mass','q_rain_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
+
+
+    monc_var_3d_list =['T_mean','p_mean','th_mean','rho_mean','q_vapour_mean','q_cloud_liquid_mass_mean',
+                        'q_ice_mass_mean','q_snow_mass_mean','q_graupel_mass_mean',
+                        'twc_tot_mean','iwc_tot_mean','lwc_tot_mean']
+                        #'z', 'zn', 'u_mean', 'v_mean', 'w_mean', 'q_vapour_mean',
+                        # 'time1', 'time2', 'p_mean', 'T_mean', 'th_mean', 'rho_mean',
+                        # 'q_cloud_liquid_mass_mean', 'q_ice_mass_mean', 'q_snow_mass_mean',
+                        # 'q_graupel_mass_mean', 'iwc_tot_mean', 'lwc_tot_mean', 'twc_tot_mean', 'zvar', 'tvar']
 
     ncm = {}
     monc_data = {}
     for m in range(0, len(m_out_dir)):
-        print(monc_filename[m])
-        ncm = Dataset(monc_filename[m],'r')
-        monc_data[m]={}
-        zvar={}
-        tvar={}
-        for c in range(0,len(monc_var_list)):
-            for j in range(0,len(monc_var_list[c])):
-                var = monc_var_list[c][j]
-                zvar[var]=[]
-                tvar[var]=[]
-                monc_data[m][var] = ncm.variables[var][:]
-                ###getting right z and t dimensions
-                tmp=ncm.variables[var].dimensions
-                if "'z'" in str(tmp):
-                    zvar[var]='z'
-                elif "'zn'" in str(tmp):
-                    zvar[var]='zn'
-                else:
-                    zvar[var]=np.nan
-                if "'time_series_2_60'" in str(tmp):
-                    tvar[var]='time1'
-                elif "'time_series_2_600'" in str(tmp):
-                    tvar[var]='time2'
-                elif "'time_series_20_600'" in str(tmp):
-                    tvar[var]='time3'
-        monc_data[m]['zvar']=zvar
-        monc_data[m]['tvar']=tvar
+        for n in range(0, len(monc_filename[m])):
+            print(monc_filename[m][n])
+            ncm = Dataset(monc_filename[m][n],'r')
+            if n == 0:
+                monc_data[m]={}
+                zvar={}
+                tvar={}
 
-        monc_data[m]['time3']=monc_data[m]['time_series_20_600'] #2d data
-        monc_data[m]['time2']=monc_data[m]['time_series_2_600'] #2d data
-        monc_data[m]['time1']=monc_data[m]['time_series_2_60'] #1d data
-        monc_data[m].pop('time_series_2_60')
-        monc_data[m].pop('time_series_2_600')
-        monc_data[m].pop('time_series_20_600')
+            full_var_list=[]
+            time_var_list=[]
+            for var in ncm.variables:
+                if 'time' in str(var):
+                    time_var_list=time_var_list+[var]
+            full_var_list=monc_var_list
+            full_var_list[0]=time_var_list+monc_var_list[0][2:]
+            for c in range(0,len(full_var_list)):
+                for j in range(0,len(full_var_list[c])):
+                    var = full_var_list[c][j]
+                    if n == 0:
+                        monc_data[m][var] = ncm.variables[var][:]
+                        zvar[var]=[]
+                        tvar[var]=[]
+                        ###getting right z and t dimensions
+                        tmp=ncm.variables[var].dimensions
+                        if "'z'" in str(tmp):
+                            zvar[var]='z'
+                        elif "'zn'" in str(tmp):
+                            zvar[var]='zn'
+                        else:
+                            zvar[var]=np.nan
+                        if time_var_list[0] in str(tmp):
+                            tvar[var]='time1'        #time_series_30_600
+                        elif time_var_list[1] in str(tmp):
+                            tvar[var]='time2'        #time_series_30_60
+                        if len(time_var_list)>2:
+                            if time_var_list[2] in str(tmp):
+                                tvar[var]='time3'
+                    else:
+                        monc_data[m][var] = np.append(monc_data[m][var],ncm.variables[var][:])
+    #loading 3d variables
+    for m in range(0, len(m_out_dir)):
+        for n in range(0,len(monc_3d_filename)):
+            print(monc_3d_filename[m][n])
+            #afile = open(monc_3d_filename[m][0], "rb")
+            pyd = np.load(monc_3d_filename[m][n],allow_pickle=True).item()   #pickle.load(afile)
+            #pyd['zvar']['q_vapour_mean']=['zn']
+            #pyd['tvar']['q_vapour_mean']=['time1']
+            for c in range(0,len(monc_var_3d_list)):
+                var = monc_var_3d_list[c]
+                if n == 0:
+                    zvar[var]=pyd['zvar'][var]
+                    tvar[var]=pyd['tvar'][var]
+                    monc_data[m][var] = pyd[var]
+                else:
+                    monc_data[m][var] =np.addpend(monc_data[m][var],pyd[var])
+
+
+    monc_data[m]['zvar']=zvar
+    monc_data[m]['tvar']=tvar
+    monc_data[m]['time1']=monc_data[m][time_var_list[0]] #1d data
+    monc_data[m]['time2']=monc_data[m][time_var_list[1]] #2d data
+    monc_data[m].pop(time_var_list[0])
+    monc_data[m].pop(time_var_list[1])
+    if len(time_var_list)>2:
+        monc_data[m]['time3']=monc_dat[m][time_var_list[2]] #2d data
+        monc_data[m].pop(time_var_list[2])
 
     print (' Monc data Loaded!')
 
@@ -652,6 +726,17 @@ def main():
     obs['hatpro'] = readMatlabStruct(obs_hatpro_dir + filename)
     print (obs['hatpro'].keys())
 
+    obs['hatpro']['iwv'] = np.squeeze(obs['hatpro']['iwv'])
+    obs['hatpro']['mday'] = np.squeeze(obs['hatpro']['mday'])
+    obs['hatpro']['lwp'] = np.squeeze(obs['hatpro']['lwp'])
+    obs['hatpro']['lwpflag'] = np.squeeze(obs['hatpro']['lwp_corflag'])
+    obs['hatpro']['iwvflag'] = np.squeeze(obs['hatpro']['iwv_corflag'])
+    obs['hatpro']['rainflag'] = np.squeeze(obs['hatpro']['rainflag'])
+
+    filename='HATPRO_T_corrected_inversionheights_thetaE_V1.mat'
+    tmp = readMatlabStruct(obs_hatpro_dir + filename)
+    print (tmp.keys())
+    embed
     obs['hatpro']['iwv'] = np.squeeze(obs['hatpro']['iwv'])
     obs['hatpro']['mday'] = np.squeeze(obs['hatpro']['mday'])
     obs['hatpro']['lwp'] = np.squeeze(obs['hatpro']['lwp'])
@@ -755,6 +840,10 @@ def main():
     figure = plot_surfaceVariables(obs,plot_out_dir, dates, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     figure = plot_lwp(obs,plot_out_dir, dates, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     figure = plot_BLDepth_SMLDepth(obs,plot_out_dir, dates, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+
+
+
+
     #figure = plot_radiation(obs,plot_out_dir, dates,plot_out_dir, um_data=um_data,label=label,outsr=outsr, monc_data=monc_data,mlabel=mlabel,moutsr=moutsr)
     # figure = plot_paperFluxes(data1, data2, data3, month_flag, missing_files, out_dir1, out_dir2, out_dir3, obs, doy, label1, label2, label3)
     # figure = plot_paperRadiation(data1, data2, data3, out_dir1, out_dir2, out_dir3,datenum,label1,label2,label3,plot_out_dir)
