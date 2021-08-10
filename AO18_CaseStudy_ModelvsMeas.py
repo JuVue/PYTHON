@@ -393,6 +393,7 @@ def plot_Tprofiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, la
                     '--', color =lcols[m], linewidth = 0.5)
                 plt.plot(np.nanmean(um_data[m]['temperature'][id,:],0) + np.nanstd(um_data[m]['temperature'][id,:],0),um_data[m]['height'],
                     '--', color = lcols[m], linewidth = 0.5)
+        embed()
         if pmonc==True:
             for m in range(0,len(monc_data)):
                 tvar=monc_data[m]['tvar']['T_mean']
