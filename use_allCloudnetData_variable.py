@@ -1625,8 +1625,8 @@ def plot_iwcProfiles_split(obs_data,twcvar,twcstr, thresholding, plots_out_dir,d
             monc_data[m]['model_lwc'] = monc_data[m]['lwc_tot_mean']
             monc_data[m]['model_iwc'] = monc_data[m]['iwc_tot_mean']
             #lwc_zvar=monc_data[m]['zvar']['liquid_mmr_mean']
-            iwc_zvar=monc_data[m]['zvar']['iwc_tot_mean']
-            iwc_tvar=monc_data[m]['tvar']['iwc_tot_mean']
+            twc_zvar=monc_data[m]['zvar']['iwc_tot_mean']
+            twc_tvar=monc_data[m]['tvar']['iwc_tot_mean']
 
     if thresholding ==True:
         if pum==True:
