@@ -312,7 +312,7 @@ def plot_BLDepth_SMLDepth(obs_data, plot_out_dir, dates,**args ):
 
 
 
-def plot_TProfiles_split(obs_data, plots_out_dir,dates,prof_time, **args): #, lon, lat):
+def plot_Tprofiles_split(obs_data, plots_out_dir,dates,prof_time, **args): #, lon, lat):
     embed()
     obs_zorder = 1
 
