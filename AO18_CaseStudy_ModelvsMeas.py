@@ -12,6 +12,8 @@ from netCDF4 import Dataset
 #import iris
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
+import matplotlib.ticker as ticker
+
 #import matplotlib.cm as mpl_cm
 import os
 import glob
