@@ -1360,8 +1360,8 @@ def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,d
             elif list(args.keys())[n] == 'outstr':
                 outstr= args[list(args.keys())[n]]
 
-    ylims=[0,3]
-    yticks=np.arange(0,3e3,0.5e3)
+    ylims=[0,2]
+    yticks=np.arange(0,2e3,0.5e3)
     ytlabels=yticks/1e3
 
 
@@ -1438,7 +1438,6 @@ def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,d
                             um_data[m]['model_twc'][t,k] = np.nan
                             um_data[m]['model_lwc'][t,k] = np.nan
         if pmonc==True:
-            embed()
             m=0 # use first um model run for height grid definition
             twc_thresh_monc = np.zeros([np.size(monc_data[m]['model_twc'],1)])
             ### first look at values below 1 km
@@ -1482,7 +1481,7 @@ def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,d
     plt.rc('xtick',labelsize=MED_SIZE)
     plt.rc('ytick',labelsize=MED_SIZE)
     plt.rc('legend',fontsize=MED_SIZE)
-    plt.figure(figsize=(7,10))
+    plt.figure(figsize=(7,15))
     # plt.subplots_adjust(top = 0.95, bottom = 0.12, right = 0.95, left = 0.15,
     #         hspace = 0.4, wspace = 0.1)
     ###define colors
@@ -2571,7 +2570,7 @@ def main():
     # -------------------------------------------------------------
     # plot LWP timeseries
     # -------------------------------------------------------------
-    figure = plot_lwp(obs_data, plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    #figure = plot_lwp(obs_data, plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
 
     # -------------------------------------------------------------
