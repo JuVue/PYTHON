@@ -393,7 +393,6 @@ def plot_Tprofiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, la
                     '--', color =lcols[m], linewidth = 0.5)
                 plt.plot(np.nanmean(um_data[m]['temperature'][id,:],0) + np.nanstd(um_data[m]['temperature'][id,:],0),um_data[m]['height'],
                     '--', color = lcols[m], linewidth = 0.5)
-        embed()
         if pmonc==True:
             for m in range(0,len(monc_data)):
                 tvar=monc_data[m]['tvar']['T_mean']
@@ -417,7 +416,7 @@ def plot_Tprofiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, la
             plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=4)
 
 
-        plt.xlabel('Ice water content [g m$^{-3}$]')
+        plt.xlabel('Temperture [K]')
         plt.ylabel('Z [km]')
         # plt.ylim([0,5e3])
         # plt.yticks(np.arange(0,5.01e3,0.5e3))
@@ -426,24 +425,24 @@ def plot_Tprofiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, la
         plt.yticks(yticks)
         ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
         ax1.set_yticklabels(ytlabels)
-        plt.xlim([0,0.05])
-        plt.xticks(np.arange(0,0.051,0.015))
+        # plt.xlim([0,0.05])
+        # plt.xticks(np.arange(0,0.051,0.015))
         #ax1.set_xticklabels([0,' ',0.015,' ',0.03,' ',0.045,' ',0.06])
-        ax1.xaxis.set_minor_locator(ticker.MultipleLocator(0.0075))
+        # ax1.xaxis.set_minor_locator(ticker.MultipleLocator(0.0075))
 
 
     dstr=datenum2date(dates[1])
     # plt.grid('on')
     if thresholding == True:
         if pmonc==True:
-            fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_IWC-MTThresh' + twcstr + '_split.png'
+            fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_Tprofile'  + '_split.png'
         else:
-            fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_IWC-MTThresh'+ twcstr + '_split.png'
+            fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_Tprofile'  + '_split.png'
     else:
         if pmonc==True:
-            fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_IWC' + twcstr + '_split.png'
+            fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_Tprofile'  + '_split.png'
         else:
-            fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_IWC'+ twcstr + '_split.png'
+            fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) +'_Tprofile'  + '_split.png'
 
     plt.savefig(fileout)
     print ('')
@@ -851,6 +850,16 @@ def main():
     ## -------------------------------------------------------------
     monc_data=removeSpinUp(monc_data,monc_spin)
 
+    ## -------------------------------------------------------------
+    ## convert monc time to datenum
+    ## -------------------------------------------------------------
+    for m in range(0,len(monc_data)):
+        monc_data[m]['time2']=dates[0] + monc_data[m]['time2']/60/60/24
+        monc_data[m]['time1']=dates[0] + monc_data[m]['time1']/60/60/24
+        if 'time3' in monc_data:
+            monc_data[m]['time3']=dates[0] + monc_data[m]['time3']/60/60/24
+
+
 # -------------------------------------------------------------
 # Load observations
 # -------------------------------------------------------------
@@ -962,6 +971,9 @@ def main():
         elif out_dir[m][:10] == '27_u-ce112':
             label.append('UM_CASIM-AP-PasProc')
             outstr.append('CASIM-AP-PasProc')
+        elif out_dir[m][:10] == '30_u-cg179':
+            label.append('UM_CASIM-100-PasProc')
+            outstr.append('CASIM100-PasProc')
         else:
             label.append('undefined_label')
             outstr.append('')
@@ -972,7 +984,7 @@ def main():
         if m_out_dir[m][:1] == '3':
             mlabel.append('MONC nosub')
             moutstr.append('Mnowsub')
-        if m_out_dir[m][:1] == '4':
+        elif m_out_dir[m][:1] == '4':
             mlabel.append('MONC Wsub1.5')
             moutstr.append('Mwsub')
         elif m_out_dir[m][:1] == '5':
@@ -980,13 +992,30 @@ def main():
             moutstr.append('Mwsubfle')
         elif m_out_dir[m][:1] == '6':
             mlabel.append('MONC Wsub1.5-1km')
-            moutstr.append('Mwsub1km')
+            moutstr.append('Mwsub1.5-1km')
         elif m_out_dir[m][:1] == '7':
             mlabel.append('MONC Wsub1.5-1km \n solACC-100')
             moutstr.append('Mwsub1kmsolACC100')
+        elif m_out_dir[m][:1] == '8':
+            mlabel.append('MONC Wsub1.0-1km')
+            moutstr.append('Mwsub1.0-1km')
+        elif m_out_dir[m][:1] == '9':
+            mlabel.append('MONC Wsub0.5-1km')
+            moutstr.append('Mwsub0.5-1km')
+        elif m_out_dir[m][:2] == '20':
+            mlabel.append('MONC qinit2 800m \n thqvTend noice')
+            moutstr.append('qin2-thqvTend-noice')
+        elif m_out_dir[m][:2] == '22':
+            mlabel.append('MONC qinit2 800m \n thForcing-0000-0600')
+            moutstr.append('qin2-thqvTend-noice')
+        elif m_out_dir[m][:2] == '23':
+            mlabel.append('MONC thForcing-0600-0000')
+            moutstr.append('thForcing-0600-0000')
         else:
             label.append('undefined_label')
             moutstr.append('')
+
+
 
     # -------------------------------------------------------------
     # Plot paper figures
