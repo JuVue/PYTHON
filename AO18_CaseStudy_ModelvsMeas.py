@@ -150,7 +150,6 @@ def plot_lwp(obs_data, plot_out_dir, dates,**args ):
                 outstr= args[list(args.keys())[n]]
 
 
-    embed()
     print ('******')
     print ('')
     print ('Plotting  timeseries of lwp:')
@@ -378,41 +377,41 @@ def plot_TProfiles_split(obs_data, plots_out_dir,dates,prof_time, **args): #, lo
         sstr=datenum2date(prof_time[pt][0])
         estr=datenum2date(prof_time[pt][1])
         plt.title(sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC')
-        obsid= np.squeeze(np.argwhere((obs_data['time']>=prof_time[pt][0]) & (obs_data['time']<prof_time[pt][1])))
-        plt.plot(np.nanmean(obs_data[''][obsid,:],0)*1e3,np.nanmean(obs_data['height'],0), color = 'k', linewidth = 3, label = 'Obs_UMgrid'  + twcstr, zorder = obs_zorder)
-        ax1.fill_betweenx(np.nanmean(obs_data['height'],0),np.nanmean(obs_data['iwc'][obsid,:],0)*1e3 - np.nanstd(obs_data['iwc'][obsid,:],0)*1e3,
-            np.nanmean(obs_data['iwc'][obsid,:],0)*1e3 + np.nanstd(obs_data['iwc'][obsid,:],0)*1e3, color = 'lightgrey', alpha = 0.5)
+        obsid= np.squeeze(np.argwhere((obs['hatpro_temp']['mday']>=prof_time[pt][0]) & (obs['hatpro_temp']['mday']<prof_time[pt][1])))
+        plt.plot(np.nanmean(obs['hatpro_temp']['temperature'][:,obsid],1),np.nanmean(obs['hatpro_temp']['Z'],0), color = 'k', linewidth = 3, label = 'HATPRO', zorder = obs_zorder)
+        ax1.fill_betweenx(np.nanmean(obs['hatpro_temp']['Z'],0),np.nanmean(obs['hatpro_temp']['temperature'][:,obsid],1) - np.nanstd(obs['hatpro_temp']['temperature'][:,obsid],1),
+            np.nanmean(obs['hatpro_temp']['temperature'][:,obsid],1) + np.nanstd(obs['hatpro_temp']['temperature'][:,obsid],1), color = 'lightgrey', alpha = 0.5)
         # plt.xlim([0,0.2])
-        plt.plot(np.nanmean(obs_data['iwc'][obsid,:],0)*1e3 - np.nanstd(obs_data['iwc'][obsid,:],0)*1e3, np.nanmean(obs_data['height'],0),
+        plt.plot(np.nanmean(obs['hatpro_temp']['temperature'][:,obsid],1) - np.nanstd(obs['hatpro_temp']['temperature'][:,obsid],1), np.nanmean(obs['hatpro_temp']['Z'],0),
             '--', color = 'k', linewidth = 0.5)
-        plt.plot(np.nanmean(obs_data['iwc'][obsid,:],0)*1e3 + np.nanstd(obs_data['iwc'][obsid,:],0)*1e3, np.nanmean(obs_data['height'],0),
+        plt.plot(np.nanmean(obs['hatpro_temp']['temperature'][:,obsid],1) + np.nanstd(obs['hatpro_temp']['temperature'][:,obsid],1), np.nanmean(obs['hatpro_temp']['Z'],0),
             '--', color = 'k', linewidth = 0.5)
         if pum==True:
             for m in range(0,len(um_data)):
                 id=  np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
-                ax1.fill_betweenx(np.nanmean(um_data[m]['height'],0),np.nanmean(um_data[m]['model_iwc'][id,:],0)*1e3 - np.nanstd(um_data[m]['model_iwc'][id,:]*1e3,0),
-                    np.nanmean(um_data[m]['model_iwc'][id,:],0)*1e3 + np.nanstd(um_data[m]['model_iwc'][id,:],0)*1e3, color = fcols[m], alpha = 0.05)
-                plt.plot(np.nanmean(um_data[m]['model_iwc'][id,:],0)*1e3 - np.nanstd(um_data[m]['model_iwc'][id,:],0)*1e3, np.nanmean(um_data[m]['height'],0),
+                ax1.fill_betweenx(np.nanmean(um_data[m]['height'],0),np.nanmean(um_data[m]['temperature'][id,:],0) - np.nanstd(um_data[m]['temperature'][id,:],0),
+                    np.nanmean(um_data[m]['temperature'][id,:],0) + np.nanstd(um_data[m]['temperature'][id,:],0), color = fcols[m], alpha = 0.05)
+                plt.plot(np.nanmean(um_data[m]['temperature'][id,:],0) - np.nanstd(um_data[m]['temperature'][id,:],0), np.nanmean(um_data[m]['height'],0),
                     '--', color =lcols[m], linewidth = 0.5)
-                plt.plot(np.nanmean(um_data[m]['model_iwc'][id,:],0)*1e3 + np.nanstd(um_data[m]['model_iwc'][id,:],0)*1e3, np.nanmean(um_data[m]['height'],0),
+                plt.plot(np.nanmean(um_data[m]['temperature'][id,:],0) + np.nanstd(um_data[m]['temperature'][id,:],0), np.nanmean(um_data[m]['height'],0),
                     '--', color = lcols[m], linewidth = 0.5)
         if pmonc==True:
             for m in range(0,len(monc_data)):
                 id= np.squeeze(np.argwhere((monc_data[m][twc_tvar]>=prof_time[pt][0]) & (monc_data[m][twc_tvar]<prof_time[pt][1])))
-                ax1.fill_betweenx(monc_data[m][twc_zvar],np.nanmean(monc_data[m]['model_iwc'][id,:],0)*1e3 - np.nanstd(monc_data[m]['model_iwc'][id,:]*1e3,0),
-                    np.nanmean(monc_data[m]['model_iwc'][id,:],0)*1e3 + np.nanstd(monc_data[m]['model_iwc'][id,:],0)*1e3, color = fcolsmonc[m], alpha = 0.05)
-                plt.plot(np.nanmean(monc_data[m]['model_iwc'][id,:],0)*1e3 - np.nanstd(monc_data[m]['model_iwc'][id,:],0)*1e3, monc_data[m][twc_zvar],
+                ax1.fill_betweenx(monc_data[m][twc_zvar],np.nanmean(monc_data[m]['T_mean'][id,:],0) - np.nanstd(monc_data[m]['T_mean'][id,:],0),
+                    np.nanmean(monc_data[m]['T_mean'][id,:],0) + np.nanstd(monc_data[m]['T_mean'][id,:],0), color = fcolsmonc[m], alpha = 0.05)
+                plt.plot(np.nanmean(monc_data[m]['T_mean'][id,:],0) - np.nanstd(monc_data[m]['T_mean'][id,:],0), monc_data[m][twc_zvar],
                     '--', color =lcolsmonc[m], linewidth = 0.5)
-                plt.plot(np.nanmean(monc_data[m]['model_iwc'][id,:],0)*1e3 + np.nanstd(monc_data[m]['model_iwc'][id,:],0)*1e3, monc_data[m][twc_zvar],
+                plt.plot(np.nanmean(monc_data[m]['T_mean'][id,:],0) + np.nanstd(monc_data[m]['T_mean'][id,:],0), monc_data[m][twc_zvar],
                     '--', color = lcolsmonc[m], linewidth = 0.5)
         if pum==True:
             for m in range(0,len(um_data)):
                 id= np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
-                plt.plot(np.nanmean(um_data[m]['model_iwc'][id,:],0)*1e3,np.nanmean(um_data[m]['height'],0), color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
+                plt.plot(np.nanmean(um_data[m]['temperature'][id,:],0),np.nanmean(um_data[m]['height'],0), color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
         if pmonc==True:
             for m in range(0,len(monc_data)):
                 id= np.squeeze(np.argwhere((monc_data[m][twc_tvar]>=prof_time[pt][0]) & (monc_data[m][twc_tvar]<prof_time[pt][1])))
-                plt.plot(np.nanmean(monc_data[m]['model_iwc'][id,:],0)*1e3,monc_data[m][twc_zvar], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+                plt.plot(np.nanmean(monc_data[m]['T_mean'][id,:],0),monc_data[m][twc_zvar], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
         if pt == 1:
             plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=4)
 
@@ -682,7 +681,7 @@ def main():
     monc_spin = 6 *60 *60
 
     #---- SPLIT PROFILES IN TIME JUNKS
-    prof_times=[[dates[0], dates[0]+4/24],
+    prof_time=[[dates[0], dates[0]+4/24],
                 [dates[0]+4/24, dates[0]+8/24],
                 [dates[0]+8/24, dates[0]+14/24]]
 
@@ -987,14 +986,13 @@ def main():
             label.append('undefined_label')
             moutstr.append('')
 
-    embed()
     # -------------------------------------------------------------
     # Plot paper figures
     # -------------------------------------------------------------
     #figure = plot_surfaceVariables(obs,plot_out_dir, dates, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_lwp(obs,plot_out_dir, dates, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_BLDepth_SMLDepth(obs,plot_out_dir, dates, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    figure = plot_Tprofiles_split(obs_data,out_dir,dates, prof_times,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_Tprofiles_split(obs_data,out_dir,dates, prof_time,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
 
     #figure = plot_radiation(obs,plot_out_dir, dates,plot_out_dir, um_data=um_data,label=label,outsr=outsr, monc_data=monc_data,mlabel=mlabel,moutsr=moutsr)
