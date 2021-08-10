@@ -1490,13 +1490,13 @@ def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,d
     fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
     ### define axis instance
     ####LWC
-    plt.figure(figsize=(18,6))
+    plt.figure(figsize=(18,7))
     for pt in range(0,len(prof_time)):
         plt.subplot(1,len(prof_time),pt+1)
         ax1 = plt.gca()
         sstr=datenum2date(prof_time[pt][0])
         estr=datenum2date(prof_time[pt][1])
-        plt.title(sstr.strftime("%H") +'-' + estr.strftime("%H"))
+        plt.title(sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC')
         obsid= np.squeeze(np.argwhere((obs_data['time']>=prof_time[pt][0]) & (obs_data['time']<prof_time[pt][1])))
         plt.plot(np.nanmean(obs_data[lwcvar][obsid,:],0)*1e3,np.nanmean(obs_data['height'],0), color = 'k', linewidth = 3, label = 'Obs_UMgrid'  + lwcstr, zorder = obs_zorder)
         ax1.fill_betweenx(np.nanmean(obs_data['height'],0),np.nanmean(obs_data[lwcvar][obsid,:],0)*1e3 - np.nanstd(obs_data[lwcvar][obsid,:],0)*1e3,
@@ -1546,7 +1546,9 @@ def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,d
         plt.xticks(np.arange(0,0.45,0.05))
         #ax1.set_xticklabels([0,' ',0.015,' ',0.03,' ',0.045,' ',0.06])
         ax1.xaxis.set_minor_locator(ticker.MultipleLocator(0.025))
-    plt.legend()
+
+        plt.legend(bbox_to_anchor=(0.225, 0.95, 0.6, 0.015, loc=4, ncol=4)
+
     dstr=datenum2date(dates[1])
     # plt.grid('on')
     if thresholding == True:
@@ -1561,7 +1563,6 @@ def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,d
             fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_LWC'+ lwcstr + '_split.png'
 
     plt.savefig(fileout)
-    plt.show()
     print ('')
     print ('Finished plotting! :)')
     print ('')
@@ -2469,7 +2470,6 @@ def main():
         monc_data[m].pop(time_var_list[2])
 
     print (' Monc data Loaded!')
-    embed()
     ##################################################################################################################################
     ## -------------------------------------------------------------
     ## remove spin up time from monc data
