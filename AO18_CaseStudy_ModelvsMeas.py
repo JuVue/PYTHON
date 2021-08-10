@@ -434,10 +434,10 @@ def plot_Tprofiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, la
 
     dstr=datenum2date(dates[1])
     # plt.grid('on')
-        if pmonc==True:
-            fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_Tprofile'  + '_split.png'
-        else:
-            fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) +'_Tprofile'  + '_split.png'
+    if pmonc==True:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_Tprofile'  + '_split.png'
+    else:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) +'_Tprofile'  + '_split.png'
 
     plt.savefig(fileout)
     print ('')
