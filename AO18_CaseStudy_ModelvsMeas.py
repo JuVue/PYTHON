@@ -432,7 +432,6 @@ def plot_Tprofiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, la
         #ax1.set_xticklabels([0,' ',0.015,' ',0.03,' ',0.045,' ',0.06])
         # ax1.xaxis.set_minor_locator(ticker.MultipleLocator(0.0075))
 
-
     dstr=datenum2date(dates[1])
     # plt.grid('on')
         if pmonc==True:
@@ -445,8 +444,8 @@ def plot_Tprofiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, la
     print ('Finished plotting! :)')
     print ('')
     print ('******')
-
-
+    plt.show()
+    embed()
 
 
 
