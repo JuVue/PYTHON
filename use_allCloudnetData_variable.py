@@ -1727,7 +1727,7 @@ def plot_iwcProfiles_split(obs_data,twcvar,twcstr, thresholding, plots_out_dir,d
         estr=datenum2date(prof_time[pt][1])
         plt.title(sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC')
         obsid= np.squeeze(np.argwhere((obs_data['time']>=prof_time[pt][0]) & (obs_data['time']<prof_time[pt][1])))
-        plt.plot(np.nanmean(obs_data['iwc'][obsid,:],0)*1e3,np.nanmean(obs_data['height'],0), color = 'k', linewidth = 3, label = 'Obs_UMgrid'  + lwcstr, zorder = obs_zorder)
+        plt.plot(np.nanmean(obs_data['iwc'][obsid,:],0)*1e3,np.nanmean(obs_data['height'],0), color = 'k', linewidth = 3, label = 'Obs_UMgrid'  + twcstr, zorder = obs_zorder)
         ax1.fill_betweenx(np.nanmean(obs_data['height'],0),np.nanmean(obs_data['iwc'][obsid,:],0)*1e3 - np.nanstd(obs_data['iwc'][obsid,:],0)*1e3,
             np.nanmean(obs_data['iwc'][obsid,:],0)*1e3 + np.nanstd(obs_data['iwc'][obsid,:],0)*1e3, color = 'lightgrey', alpha = 0.5)
         # plt.xlim([0,0.2])
@@ -1746,12 +1746,12 @@ def plot_iwcProfiles_split(obs_data,twcvar,twcstr, thresholding, plots_out_dir,d
                     '--', color = lcols[m], linewidth = 0.5)
         if pmonc==True:
             for m in range(0,len(monc_data)):
-                id= np.squeeze(np.argwhere((monc_data[m][lwc_tvar]>=prof_time[pt][0]) & (monc_data[m][lwc_tvar]<prof_time[pt][1])))
-                ax1.fill_betweenx(monc_data[m][lwc_zvar],np.nanmean(monc_data[m]['model_iwc'][id,:],0)*1e3 - np.nanstd(monc_data[m]['model_iwc'][id,:]*1e3,0),
+                id= np.squeeze(np.argwhere((monc_data[m][twc_tvar]>=prof_time[pt][0]) & (monc_data[m][twc_tvar]<prof_time[pt][1])))
+                ax1.fill_betweenx(monc_data[m][twc_zvar],np.nanmean(monc_data[m]['model_iwc'][id,:],0)*1e3 - np.nanstd(monc_data[m]['model_iwc'][id,:]*1e3,0),
                     np.nanmean(monc_data[m]['model_iwc'][id,:],0)*1e3 + np.nanstd(monc_data[m]['model_iwc'][id,:],0)*1e3, color = fcolsmonc[m], alpha = 0.05)
-                plt.plot(np.nanmean(monc_data[m]['model_iwc'][id,:],0)*1e3 - np.nanstd(monc_data[m]['model_iwc'][id,:],0)*1e3, monc_data[m][lwc_zvar],
+                plt.plot(np.nanmean(monc_data[m]['model_iwc'][id,:],0)*1e3 - np.nanstd(monc_data[m]['model_iwc'][id,:],0)*1e3, monc_data[m][twc_zvar],
                     '--', color =lcolsmonc[m], linewidth = 0.5)
-                plt.plot(np.nanmean(monc_data[m]['model_iwc'][id,:],0)*1e3 + np.nanstd(monc_data[m]['model_iwc'][id,:],0)*1e3, monc_data[m][lwc_zvar],
+                plt.plot(np.nanmean(monc_data[m]['model_iwc'][id,:],0)*1e3 + np.nanstd(monc_data[m]['model_iwc'][id,:],0)*1e3, monc_data[m][twc_zvar],
                     '--', color = lcolsmonc[m], linewidth = 0.5)
         if pum==True:
             for m in range(0,len(um_data)):
@@ -1759,8 +1759,8 @@ def plot_iwcProfiles_split(obs_data,twcvar,twcstr, thresholding, plots_out_dir,d
                 plt.plot(np.nanmean(um_data[m]['model_iwc'][id,:],0)*1e3,np.nanmean(um_data[m]['height'],0), color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
         if pmonc==True:
             for m in range(0,len(monc_data)):
-                id= np.squeeze(np.argwhere((monc_data[m][lwc_tvar]>=prof_time[pt][0]) & (monc_data[m][lwc_tvar]<prof_time[pt][1])))
-                plt.plot(np.nanmean(monc_data[m]['model_iwc'][id,:],0)*1e3,monc_data[m][lwc_zvar], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+                id= np.squeeze(np.argwhere((monc_data[m][twc_tvar]>=prof_time[pt][0]) & (monc_data[m][twc_tvar]<prof_time[pt][1])))
+                plt.plot(np.nanmean(monc_data[m]['model_iwc'][id,:],0)*1e3,monc_data[m][twc_zvar], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
         if pt == 1:
             plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=4)
 
@@ -1784,14 +1784,14 @@ def plot_iwcProfiles_split(obs_data,twcvar,twcstr, thresholding, plots_out_dir,d
     # plt.grid('on')
     if thresholding == True:
         if pmonc==True:
-            fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_IWC-MTThresh' + lwcstr + '_split.png'
+            fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_IWC-MTThresh' + twcstr + '_split.png'
         else:
-            fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_IWC-MTThresh'+ lwcstr + '_split.png'
+            fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_IWC-MTThresh'+ twcstr + '_split.png'
     else:
         if pmonc==True:
-            fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_IWC' + lwcstr + '_split.png'
+            fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_IWC' + twcstr + '_split.png'
         else:
-            fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_IWC'+ lwcstr + '_split.png'
+            fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_IWC'+ twcstr + '_split.png'
 
     plt.savefig(fileout)
     print ('')
