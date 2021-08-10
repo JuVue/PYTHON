@@ -1480,7 +1480,7 @@ def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,d
     plt.rc('axes',labelsize=MED_SIZE)
     plt.rc('xtick',labelsize=MED_SIZE)
     plt.rc('ytick',labelsize=MED_SIZE)
-    plt.rc('legend',fontsize=MED_SIZE)
+    plt.rc('legend',fontsize=SMALL_SIZE)
     # plt.subplots_adjust(top = 0.95, bottom = 0.12, right = 0.95, left = 0.15,
     #         hspace = 0.4, wspace = 0.1)
     ###define colors
@@ -1549,7 +1549,7 @@ def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,d
         #ax1.set_xticklabels([0,' ',0.015,' ',0.03,' ',0.045,' ',0.06])
         ax1.xaxis.set_minor_locator(ticker.MultipleLocator(0.025))
 
-        plt.legend(bbox_to_anchor=(0.1, 0.95, 0.8, 0.015), loc=4, ncol=4)
+    plt.legend(bbox_to_anchor=(0.1, 0.95, 0.8, 0.015), loc=4, ncol=4)
 
     dstr=datenum2date(dates[1])
     # plt.grid('on')
