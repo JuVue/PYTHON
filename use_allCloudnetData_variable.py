@@ -1481,7 +1481,6 @@ def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,d
     plt.rc('xtick',labelsize=MED_SIZE)
     plt.rc('ytick',labelsize=MED_SIZE)
     plt.rc('legend',fontsize=MED_SIZE)
-    plt.figure(figsize=(7,15))
     # plt.subplots_adjust(top = 0.95, bottom = 0.12, right = 0.95, left = 0.15,
     #         hspace = 0.4, wspace = 0.1)
     ###define colors
@@ -1491,6 +1490,7 @@ def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,d
     fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
     ### define axis instance
     ####LWC
+    plt.figure(figsize=(6,18))
     for pt in range(0,len(prof_time)):
         plt.subplot(1,len(prof_time),pt+1)
         ax1 = plt.gca()
@@ -1561,7 +1561,7 @@ def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,d
             fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_LWC'+ lwcstr + '_split.png'
 
     plt.savefig(fileout)
-
+    plt.show()
     print ('')
     print ('Finished plotting! :)')
     print ('')
