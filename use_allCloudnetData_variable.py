@@ -1490,7 +1490,7 @@ def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,d
     fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
     ### define axis instance
     ####LWC
-    plt.figure(figsize=(6,18))
+    plt.figure(figsize=(18,6))
     for pt in range(0,len(prof_time)):
         plt.subplot(1,len(prof_time),pt+1)
         ax1 = plt.gca()
