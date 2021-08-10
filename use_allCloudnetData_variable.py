@@ -1534,7 +1534,7 @@ def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,d
             for m in range(0,len(monc_data)):
                 id= np.squeeze(np.argwhere((monc_data[m][lwc_tvar]>=prof_time[pt][0]) & (monc_data[m][lwc_tvar]<prof_time[pt][1])))
                 plt.plot(np.nanmean(monc_data[m]['model_lwc'][id,:],0)*1e3,monc_data[m][lwc_zvar], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
-        if pt == 0:
+        if pt == 1:
             plt.legend(bbox_to_anchor=(0.1, 0.95), loc=9, ncol=4)
 
 
@@ -1567,6 +1567,7 @@ def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,d
             fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_LWC'+ lwcstr + '_split.png'
 
     plt.savefig(fileout)
+    embed()
     plt.show()
     print ('')
     print ('Finished plotting! :)')
