@@ -1491,7 +1491,7 @@ def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,d
     ### define axis instance
     ####LWC
     plt.figure(figsize=(18,7))
-    plt.subplots_adjust(top = 0.92, bottom = 0.06, right = 0.92, left = 0.08)
+    plt.subplots_adjust(top = 0.9, bottom = 0.1, right = 0.92, left = 0.08)
 
     for pt in range(0,len(prof_time)):
         plt.subplot(1,len(prof_time),pt+1)
@@ -1535,8 +1535,8 @@ def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,d
                 id= np.squeeze(np.argwhere((monc_data[m][lwc_tvar]>=prof_time[pt][0]) & (monc_data[m][lwc_tvar]<prof_time[pt][1])))
                 plt.plot(np.nanmean(monc_data[m]['model_lwc'][id,:],0)*1e3,monc_data[m][lwc_zvar], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
         if pt == 0
-            plt.legend(bbox_to_anchor=(0.1, 0.95, 0.8, 0.015), loc=4, ncol=4)
- 
+            plt.legend(bbox_to_anchor=(0.1, 0.95, 0.8, 0.015), loc=9, ncol=4)
+
 
         plt.xlabel('Liquid water content [g m$^{-3}$]')
         plt.ylabel('Z [km]')
