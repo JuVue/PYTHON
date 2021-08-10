@@ -1547,7 +1547,7 @@ def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,d
         #ax1.set_xticklabels([0,' ',0.015,' ',0.03,' ',0.045,' ',0.06])
         ax1.xaxis.set_minor_locator(ticker.MultipleLocator(0.025))
 
-        plt.legend(bbox_to_anchor=(0.225, 0.95, 0.6, 0.015, loc=4, ncol=4)
+        plt.legend(bbox_to_anchor=(0.225, 0.95, 0.6, 0.015), loc=4, ncol=4)
 
     dstr=datenum2date(dates[1])
     # plt.grid('on')
