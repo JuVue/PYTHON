@@ -1534,6 +1534,9 @@ def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,d
             for m in range(0,len(monc_data)):
                 id= np.squeeze(np.argwhere((monc_data[m][lwc_tvar]>=prof_time[pt][0]) & (monc_data[m][lwc_tvar]<prof_time[pt][1])))
                 plt.plot(np.nanmean(monc_data[m]['model_lwc'][id,:],0)*1e3,monc_data[m][lwc_zvar], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+        if pt == 0
+            plt.legend(bbox_to_anchor=(0.1, 0.95, 0.8, 0.015), loc=4, ncol=4)
+ 
 
         plt.xlabel('Liquid water content [g m$^{-3}$]')
         plt.ylabel('Z [km]')
@@ -1549,7 +1552,6 @@ def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,d
         #ax1.set_xticklabels([0,' ',0.015,' ',0.03,' ',0.045,' ',0.06])
         ax1.xaxis.set_minor_locator(ticker.MultipleLocator(0.025))
 
-    plt.legend(bbox_to_anchor=(0.1, 0.95, 0.8, 0.015), loc=4, ncol=4)
 
     dstr=datenum2date(dates[1])
     # plt.grid('on')
