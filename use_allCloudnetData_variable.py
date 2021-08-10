@@ -1491,6 +1491,8 @@ def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,d
     ### define axis instance
     ####LWC
     plt.figure(figsize=(18,7))
+    plt.subplots_adjust(top = 0.92, bottom = 0.06, right = 0.92, left = 0.08)
+
     for pt in range(0,len(prof_time)):
         plt.subplot(1,len(prof_time),pt+1)
         ax1 = plt.gca()
@@ -1547,7 +1549,7 @@ def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,d
         #ax1.set_xticklabels([0,' ',0.015,' ',0.03,' ',0.045,' ',0.06])
         ax1.xaxis.set_minor_locator(ticker.MultipleLocator(0.025))
 
-        plt.legend(bbox_to_anchor=(0.225, 0.95, 0.6, 0.015), loc=4, ncol=4)
+        plt.legend(bbox_to_anchor=(0.1, 0.95, 0.8, 0.015), loc=4, ncol=4)
 
     dstr=datenum2date(dates[1])
     # plt.grid('on')
@@ -1563,6 +1565,7 @@ def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,d
             fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_LWC'+ lwcstr + '_split.png'
 
     plt.savefig(fileout)
+    plt.show()
     print ('')
     print ('Finished plotting! :)')
     print ('')
