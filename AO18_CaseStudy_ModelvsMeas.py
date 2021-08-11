@@ -339,7 +339,7 @@ def plot_BLDepth_SMLDepth(obs_data, plot_out_dir, dates,**args ):
 
     date=datenum2date(dates[0])
 #    from IPython import embed; embed()
-    fileout = os.path.join(plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_BLdepth-SML.png.png')
+    fileout = os.path.join(plot_out_dir + dstr.strftime('%Y%m%d') + '_Obs' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_BLdepth-SML.png.png')
     plt.savefig(fileout)
 
 
