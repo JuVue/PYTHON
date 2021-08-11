@@ -748,7 +748,7 @@ def main():
         monc_data[m]['time3']=monc_dat[m][time_var_list[2]] #2d data
         monc_data[m].pop(time_var_list[2])
 
-        embed()
+    embed()
     #---- load UM Inversions
     print ('**************************')
     print ('Load MONC INVERSION DATA')
