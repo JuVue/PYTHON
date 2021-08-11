@@ -254,8 +254,8 @@ def plot_BLDepth_SMLDepth(obs_data, plot_out_dir, dates,**args ):
     plt.subplots_adjust(top = 0.95, bottom = 0.05, right = 0.95, left = 0.05,
             hspace = 0.4, wspace = 0.13)
 
-    lcols=['mediumseagreen','steelblue','darkblue']
-    fcols=['mediumaquamarine','lightblue','blue']
+    lcols=['lightseagreen','steelblue','royalblue','darkblue']
+    fcols=['lightcyan','lightblue','skyblue','blue']
     lcolsmonc=['gold','darkgoldenrod','darkorange','orangered','firebrick']
     fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
     #################################################################
@@ -473,7 +473,6 @@ def plot_T_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
     print ('Finished plotting! :)')
     print ('')
     print ('******')
-    plt.show()
 
 
 def removeSpinUp(monc_data,monc_spin):
