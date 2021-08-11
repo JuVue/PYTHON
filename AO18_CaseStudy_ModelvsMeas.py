@@ -824,9 +824,9 @@ def main():
     for var in obs['hatpro'].keys():
         obs['hatpro'][var]=np.squeeze(obs['hatpro'][var])
 
-
     filename='HATPRO_T_corrected_inversionheights_thetaE_V1.mat'
-    obs['hatpro_temp'] = readMatlabStruct(obs_hatpro_dir + filename)
+    tmp= readMatlabStruct(obs_hatpro_dir + filename)
+    obs['hatpro_temp'] = tmp['HTcompepot']
     print (obs['hatpro_temp'].keys())
     for var in obs['hatpro_temp'].keys():
         obs['hatpro_temp'][var]=np.squeeze(obs['hatpro_temp'][var])
