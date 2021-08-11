@@ -748,17 +748,6 @@ def main():
         monc_data[m]['time3']=monc_dat[m][time_var_list[2]] #2d data
         monc_data[m].pop(time_var_list[2])
 
-    #---- load UM Inversions
-    print ('**************************')
-    print ('Load MONC INVERSION DATA')
-    for m in range(0,len(m_out_dir)):
-        filename=glob.glob(inv_dir + m_out_dir[m][0:-1] + '*20m.mat')
-        tmp  = readMatlabStruct(filename[0])
-        monc_data[m]['inv'] = tmp['dec']
-        print (monc_data[m]['inv'].keys())
-        for var in monc_data[m]['inv'].keys():
-            monc_data[m]['inv'][var]=np.squeeze(monc_data[m]['inv'][var])
-
     print (' Monc data Loaded!')
 
     #################################################################################################################################
@@ -776,6 +765,22 @@ def main():
         if 'time3' in monc_data:
             monc_data[m]['time3']=dates[0] + monc_data[m]['time3']/60/60/24
 
+    embed()
+    #---- load MONC Inversions
+    print ('**************************')
+    print ('Load MONC INVERSION DATA')
+    for m in range(0,len(m_out_dir)):
+        filename=glob.glob(inv_dir + m_out_dir[m][0:-1] + '*20m.mat')
+        tmp  = readMatlabStruct(filename[0])
+        tmp = tmp['dec']
+        print (tmp.keys())
+        for var in tmp.keys():
+            c, ia, ib = intersect_mtlb(monc_data[m]['time1'],tmp['mday'])
+            tmp2=np.argwhere(np.array(tmp[var].shape) == len(tmp['mday']))
+            if tmp2 ==0:
+                monc_data[m]['inv'][var]=np.squeeze(tmp[var][ib,:])
+            elif tmp2 ==1:
+                monc_data[m]['inv'][var]=np.squeeze(tmp[var][:,ib])
 
 # -------------------------------------------------------------
 # Load observations
