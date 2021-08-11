@@ -766,7 +766,6 @@ def main():
         if 'time3' in monc_data:
             monc_data[m]['time3']=dates[0] + monc_data[m]['time3']/60/60/24
 
-    embed()
     #---- load MONC Inversions
     print ('**************************')
     print ('Load MONC INVERSION DATA')
@@ -775,12 +774,13 @@ def main():
         tmp  = readMatlabStruct(filename[0])
         tmp = tmp['dec']
         print (tmp.keys())
+        monc_data[m]['inv']={}
         for var in tmp.keys():
             c, ia, ib = intersect_mtlb(monc_data[m]['time1'],tmp['mday'])
         #    print(ia,ib)
-            tmp2=np.argwhere(np.array(tmp[var].shape) == len(tmp['mday']))
+            tmp2=np.argwhere(np.array(tmp[var].shape) == len(np.squeeze(tmp['mday'])))
             if tmp2 ==0:
-                if len(tmp[var])==1:
+                if np.squeeze(len(tmp[var]))==1:
                     monc_data[m]['inv'][var]=np.squeeze(tmp[var][ib])
                 else:
                     monc_data[m]['inv'][var]=np.squeeze(tmp[var][ib,:])
