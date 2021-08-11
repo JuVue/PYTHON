@@ -635,11 +635,11 @@ def main():
     print ('Load UM INVERSION DATA')
     for m in range(0,len(out_dir)):
         filename=glob.glob(inv_dir + out_dir[m][0:-1] + '*20m.mat')
-        um_data[m]['inv']  = readMatlabStruct(filename[0])
+        tmp  = readMatlabStruct(filename[0])
+        um_data[m]['inv'] = tmp['dec']
         print (um_data[m]['inv'].keys())
-        for struct in um_data[m]['inv'].keys():
-            for var in um_data[m]['inv'][struct].keys():
-                um_data[m]['inv'][struct][var]=np.squeeze(um_data[m]['inv'][struct][var])
+        for var in um_data[m]['inv'].keys():
+            um_data[m]['inv'][var]=np.squeeze(um_data[m]['inv'][var])
 
     ### -----------------------------------------------------------------
     ### create monc filenames
@@ -748,17 +748,16 @@ def main():
         monc_data[m]['time3']=monc_dat[m][time_var_list[2]] #2d data
         monc_data[m].pop(time_var_list[2])
 
-    embed()
     #---- load UM Inversions
     print ('**************************')
     print ('Load MONC INVERSION DATA')
     for m in range(0,len(m_out_dir)):
         filename=glob.glob(inv_dir + m_out_dir[m][0:-1] + '*20m.mat')
-        monc_data[m]['inv']  = readMatlabStruct(filename[0])
+        tmp  = readMatlabStruct(filename[0])
+        monc_data[m]['inv'] = tmp['dec']
         print (monc_data[m]['inv'].keys())
-        for struct in monc_data[m]['inv'].keys():
-            for var in monc_data[m]['inv'][struct].keys():
-                monc_data[m]['inv'][struct][var]=np.squeeze(monc_data[m]['inv'][struct][var])
+        for var in monc_data[m]['inv'].keys():
+            monc_data[m]['inv'][var]=np.squeeze(monc_data[m]['inv'][var])
 
     print (' Monc data Loaded!')
 
