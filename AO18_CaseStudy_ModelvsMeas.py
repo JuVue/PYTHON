@@ -777,10 +777,13 @@ def main():
         print (tmp.keys())
         for var in tmp.keys():
             c, ia, ib = intersect_mtlb(monc_data[m]['time1'],tmp['mday'])
-            print(ia,ib)
+        #    print(ia,ib)
             tmp2=np.argwhere(np.array(tmp[var].shape) == len(tmp['mday']))
             if tmp2 ==0:
-                monc_data[m]['inv'][var]=np.squeeze(tmp[var][ib,:])
+                if len(tmp[var])==1:
+                    monc_data[m]['inv'][var]=np.squeeze(tmp[var][ib])
+                else:
+                    monc_data[m]['inv'][var]=np.squeeze(tmp[var][ib,:])
             elif tmp2 ==1:
                 monc_data[m]['inv'][var]=np.squeeze(tmp[var][:,ib])
 
