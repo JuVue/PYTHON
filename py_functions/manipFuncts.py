@@ -24,3 +24,11 @@ def int2list(var):
     if np.issubdtype(type(var),np.integer):
         var=[var]
     return var
+
+def intersect_mtlb(a, b):
+    a1, ia = np.unique(a, return_index=True)
+    b1, ib = np.unique(b, return_index=True)
+    aux = np.concatenate((a1, b1))
+    aux.sort()
+    c = aux[:-1][aux[1:] == aux[:-1]]
+    return c, ia[np.isin(a1, c)], ib[np.isin(b1, c)]
