@@ -518,7 +518,6 @@ def main():
         if not os.path.exists(plots_out_dir):
             os.makedirs(plots_out_dir)
         um_root_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/UM/'
-
         obs_met_dir=  '/gws/nopw/j04/ncas_radar_vol1/jutta/DATA/OBS/';
         obs_acas_dir= '/gws/nopw/j04/ncas_radar_vol1/jutta/DATA/OBS/ACAS/ACAS_AO2018_v2_May2019/';
         obs_rs_dir=   '/gws/nopw/j04/ncas_radar_vol1/jutta/DATA/OBS/radiosondes/';
@@ -603,7 +602,6 @@ def main():
         nc[m] = Dataset(filename_um,'r')
     # -------------------------------------------------------------
     print ('')
-    ##  for var in nc.variables: print (var)
     #### LOAD IN SPECIFIC DIAGNOSTICS
     ### BASE UM RUNS (UM_RA2M/UM_RA2T)
 
@@ -614,7 +612,6 @@ def main():
                 #PLOT FROM CLOUDNET:
                 #'temperature','q','pressure','bl_depth','bl_type','qliq','qice','uwind','vwind','wwind',
                 #'cloud_fraction','radr_refl','rainfall_flux','snowfall_flux',]#
-
 
     um_data = {}
     for m in range(0,len(out_dir)):
@@ -633,6 +630,17 @@ def main():
                 um_data[m][var_list1[j]] = nc[m].variables[var_list1[j]][:]
         nc[m].close()
 
+    #---- load UM Inversions
+    print ('**************************')
+    print ('Load UM INVERSION DATA')
+    for m in range(0,len(out_dir)):
+        filename=glob.glob(inv_dir + out_dir[m][0:-1] + '*20m.mat')
+        um_data[m]['inv'] = readMatlabStruct(filename[0])
+        print (um_data[m]['inv'].keys())
+        for var in um_data[m]['inv'].keys():
+            obs['hatpro'][var]=np.squeeze(obs['hatpro'][var])
+
+    embed()
     ### -----------------------------------------------------------------
     ### create monc filenames
     monc_filename=[]
