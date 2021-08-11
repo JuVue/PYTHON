@@ -265,6 +265,7 @@ def plot_BLDepth_SMLDepth(obs_data, plot_out_dir, dates,**args ):
     ### Build figure (timeseries)
     ### -------------------------------
     #from IPython import embed; embed()
+    embed()
     fig = plt.figure(figsize=(18,10 ))
     ax  = fig.add_axes([0.07,0.7,0.7,0.22])   # left, bottom, width, height
     ax = plt.gca()
@@ -278,7 +279,7 @@ def plot_BLDepth_SMLDepth(obs_data, plot_out_dir, dates,**args ):
     # for m in range(0,len(monc_data)):
     #     plt.plot(monc_data[m][monc_data[m]['tvar']['LWP_mean']], monc_data[m]['LWP_mean']-273.15,'o', color = lcolsmonc[m], label = mlabel[m])
     plt.ylabel('Height [m]')
-    plt.legend(hp,label,bbox_to_anchor=(-0.08, 0.77, 1., .102), loc=4, ncol=4)
+    plt.legend(lines,label,bbox_to_anchor=(-0.08, 0.77, 1., .102), loc=4, ncol=4)
     ax.set_xlim([dates[0], dates[1]])
     plt.grid(which='both')
     ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
