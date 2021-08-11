@@ -26,6 +26,7 @@ def readMatlabStruct(filename):
     ### Extract out struct name
     ### ----------------------------------
     structname=[]
+    embed()
     for i in range(0,len(dat)):
         structname[i] = dat[i][0]
 
