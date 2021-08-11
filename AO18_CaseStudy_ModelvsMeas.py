@@ -114,7 +114,7 @@ def plot_surfaceVariables(obs, plot_out_dir, dates,**args  ):
     plt.plot(obs['metalley']['mday'], obs['metalley']['rh'], color = 'black', label = 'Obs')#plt.ylabel('SW$_{net}$ [W m$^{-2}$]')
     plt.ylabel('RH [%]')
     #plt.legend(bbox_to_anchor=(-0.08, 0.67, 1., .102), loc=4, ncol=3)
-    ax.set_xlim([dates[0], dates[1])
+    ax.set_xlim(dates[0], dates[1])
     plt.grid(which='both')
     ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
