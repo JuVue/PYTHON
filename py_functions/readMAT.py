@@ -68,7 +68,10 @@ def readMatlabStruct(filename):
             if a[name].dtype == 'object':
                 # print ('yes this is an object')
                 continue
-            b[name] = a[name].astype(float)
+            elif a[name].dtype == 'dict':
+                b[name] = a[name]
+            else:
+                b[name] = a[name].astype(float)
 
         dout
         print ('Finished! :)')
