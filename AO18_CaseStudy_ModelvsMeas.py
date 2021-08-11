@@ -639,7 +639,7 @@ def main():
         print (um_data[m]['inv'].keys())
         for struct in um_data[m]['inv'].keys():
             for var in um_data[m]['inv'][struct].keys():
-            um_data[m]['inv'][struct][var]=np.squeeze(um_data[m]['inv'][struct][var])
+                um_data[m]['inv'][struct][var]=np.squeeze(um_data[m]['inv'][struct][var])
 
     ### -----------------------------------------------------------------
     ### create monc filenames
@@ -758,7 +758,7 @@ def main():
         print (monc_data[m]['inv'].keys())
         for struct in monc_data[m]['inv'].keys():
             for var in monc_data[m]['inv'][struct].keys():
-            monc_data[m]['inv'][struct][var]=np.squeeze(monc_data[m]['inv'][struct][var])
+                monc_data[m]['inv'][struct][var]=np.squeeze(monc_data[m]['inv'][struct][var])
 
     print (' Monc data Loaded!')
 
