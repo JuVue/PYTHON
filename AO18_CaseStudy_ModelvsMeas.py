@@ -24,6 +24,7 @@ import sys
 sys.path.insert(1, './py_functions/')
 from time_functions import datenum2date, date2datenum, calcTime_Mat2DOY, calcTime_Date2DOY
 from readMAT import readMatlabStruct
+from manipFuncts import intersect_mtlb
 #from physFuncts import calcThetaE, calcThetaVL
 #from pyFixes import py3_FixNPLoad
 
@@ -776,6 +777,7 @@ def main():
         print (tmp.keys())
         for var in tmp.keys():
             c, ia, ib = intersect_mtlb(monc_data[m]['time1'],tmp['mday'])
+            print(ia,ib)
             tmp2=np.argwhere(np.array(tmp[var].shape) == len(tmp['mday']))
             if tmp2 ==0:
                 monc_data[m]['inv'][var]=np.squeeze(tmp[var][ib,:])
