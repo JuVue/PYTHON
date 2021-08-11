@@ -26,9 +26,8 @@ def readMatlabStruct(filename):
     ### Extract out struct name
     ### ----------------------------------
     structname=[]
-    embed()
     for i in range(0,len(dat)):
-        structname[i] = dat[i][0]
+        structname.append(dat[i][0])
 
     #### --------------------------------------------------------------------
     #### LOAD MATLAB FILE USING SCIPY
@@ -36,21 +35,20 @@ def readMatlabStruct(filename):
     print ('Reading in .mat file including struct...')
     dat = loadmat(filename)
     print ('')
-
+    dout={}
     #### --------------------------------------------------------------------
     #### USE STRUCT_NAME TO DEFINE INTERMEDIATE STRUCT ARRAY
     #### --------------------------------------------------------------------
-    print ('Dealing with intermediate data assignments...')
     for i in range(0,len(structname)):
-        struct[structname[i]] = dat[structname[i]]
+        print ('Dealing with intermediate data assignments...')
+        struct = dat[structname[i]]
 
-    print ('')
+        print ('')
 
-    #### --------------------------------------------------------------------
-    #### IDENTIFY DATA AS FIRST ENTRY IN INTERMEDIATE STRUCT
-    #### --------------------------------------------------------------------
-    for i in range(0,len(structname)):
-        a = struct[structname][0,0]
+        #### --------------------------------------------------------------------
+        #### IDENTIFY DATA AS FIRST ENTRY IN INTERMEDIATE STRUCT
+        #### --------------------------------------------------------------------
+        a = struct[0,0]
         print (a.dtype.names)
             #### data.dtype:
                 #### returns keys of dictionary (normal python dictionary access
@@ -70,10 +68,12 @@ def readMatlabStruct(filename):
             if a[name].dtype == 'object':
                 # print ('yes this is an object')
                 continue
-            b[structname[i]][name] = a[name].astype(float)
+            b[name] = a[name].astype(float)
 
+        dout
         print ('Finished! :)')
-        print ('Reading out ' + structname + ' struct within .mat file')
+        print ('Reading out ' + structname[i] + ' struct within .mat file')
         print ('')
-
-    return b     #### returns structured numpy array containing matlab struct
+        dout[structname[i]]={}
+        dout[structname[i]]=b
+    return dout     #### returns structured numpy array containing matlab struct
