@@ -215,106 +215,106 @@ def plot_lwp(obs_data, plot_out_dir, dates,**args ):
     fileout = os.path.join(plot_out_dir,date.strftime('%Y%m%d') + '_lwp_ts.png')
     plt.savefig(fileout)
 
+#
+# def plot_BLDepth_SMLDepth(obs_data, plot_out_dir, dates,**args ):
+#
+#     numsp=1
+#     if bool(args):
+#         for n in range(0,len(args)):
+#             if  list(args.keys())[n] == 'monc_data':
+#                 monc_data=args[list(args.keys())[n]]
+#                 numsp += len(monc_data)
+#             elif list(args.keys())[n] == 'mlabel':
+#                 mlabel = args[list(args.keys())[n]]
+#             elif list(args.keys())[n] == 'moutstr':
+#                 moutstr= args[list(args.keys())[n]]
+#             elif  list(args.keys())[n] == 'um_data':
+#                 um_data=args[list(args.keys())[n]]
+#                 numsp += len(um_data)
+#             elif list(args.keys())[n] == 'label':
+#                 label = args[list(args.keys())[n]]
+#             elif list(args.keys())[n] == 'outstr':
+#                 outstr= args[list(args.keys())[n]]
+#
+#     print ('******')
+#     print ('')
+#     print ('Plotting  timeseries of BLDepth and SML:')
+#     print ('')
+#
+#     SMALL_SIZE = 12
+#     MED_SIZE = 14
+#     LARGE_SIZE = 16
+#
+#     plt.rc('font',size=MED_SIZE)
+#     plt.rc('axes',titlesize=MED_SIZE)
+#     plt.rc('axes',labelsize=MED_SIZE)
+#     plt.rc('xtick',labelsize=MED_SIZE)
+#     plt.rc('ytick',labelsize=MED_SIZE)
+#     plt.rc('legend',fontsize=MED_SIZE)
+#     plt.subplots_adjust(top = 0.95, bottom = 0.05, right = 0.95, left = 0.05,
+#             hspace = 0.4, wspace = 0.13)
+#
+#     lcols=['mediumseagreen','steelblue','darkblue']
+#     fcols=['mediumaquamarine','lightblue','blue']
+#     lcolsmonc=['gold','darkgoldenrod','darkorange','orangered','firebrick']
+#     fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
+#     embed()
+#     #################################################################
+#     ## create figure and axes instances
+#     #################################################################
+#     ### -------------------------------
+#     ### Build figure (timeseries)
+#     ### -------------------------------
+#     #from IPython import embed; embed()
+#     fig = plt.figure(figsize=(18,10 ))
+#     ax  = fig.add_axes([0.07,0.7,0.7,0.22])   # left, bottom, width, height
+#     ax = plt.gca()
+#     yB = [-10, 120]
+#     for m in range(0,len(um_data)):
+#         plt.plot(um_data[m]['time'], um_data[m]['BLDepth'], color = lcols[m], label = label[m])
+#     # for m in range(0,len(monc_data)):
+#     #     plt.plot(monc_data[m][monc_data[m]['tvar']['LWP_mean']], monc_data[m]['LWP_mean']-273.15,'o', color = lcolsmonc[m], label = mlabel[m])
+#     plt.ylabel('BL height [m]')
+#     plt.legend(bbox_to_anchor=(-0.08, 0.77, 1., .102), loc=4, ncol=4)
+#     ax.set_xlim([dates[0], dates[1]])
+#     plt.grid(which='both')
+#     ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+#     ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+#     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+#     ax.set_xlim([datenum, edatenum])
+#
+#     ax  = fig.add_axes([0.07,0.4,0.7,0.22])   # left, bottom, width, height
+#     ax = plt.gca()
+#     yB = [-10, 120]
+#     for m in range(0,len(um_data)):
+#         plt.plot(um_data[m]['time'], um_data[m]['BLDepth'], color = lcols[m], label = label[m])
+#     # for m in range(0,len(monc_data)):
+#     #     plt.plot(monc_data[m][monc_data[m]['tvar']['LWP_mean']], monc_data[m]['LWP_mean']-273.15,'o', color = lcolsmonc[m], label = mlabel[m])
+#     plt.ylabel('BL height [m]')
+#     plt.legend(bbox_to_anchor=(-0.08, 0.77, 1., .102), loc=4, ncol=4)
+#     ax.set_xlim([dates[0], dates[1]])
+#     plt.grid(which='both')
+#     ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+#     ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+#     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+#     ax.set_xlim([datenum, edatenum])
+#
+#
+#     plt.xlabel('Time [UTC]')
+#
+#     print ('******')
+#     print ('')
+#     print ('Finished plotting! :)')
+#     print ('')
+#
+#     date=datenum2date(datenum)
+# #    from IPython import embed; embed()
+#     fileout = os.path.join(plot_out_dir,date.strftime('%Y%m%d') + '_BLdepth_ts.png')
+#     plt.savefig(fileout)
+#
 
-def plot_BLDepth_SMLDepth(obs_data, plot_out_dir, dates,**args ):
 
-    numsp=1
-    if bool(args):
-        for n in range(0,len(args)):
-            if  list(args.keys())[n] == 'monc_data':
-                monc_data=args[list(args.keys())[n]]
-                numsp += len(monc_data)
-            elif list(args.keys())[n] == 'mlabel':
-                mlabel = args[list(args.keys())[n]]
-            elif list(args.keys())[n] == 'moutstr':
-                moutstr= args[list(args.keys())[n]]
-            elif  list(args.keys())[n] == 'um_data':
-                um_data=args[list(args.keys())[n]]
-                numsp += len(um_data)
-            elif list(args.keys())[n] == 'label':
-                label = args[list(args.keys())[n]]
-            elif list(args.keys())[n] == 'outstr':
-                outstr= args[list(args.keys())[n]]
-
-    print ('******')
-    print ('')
-    print ('Plotting  timeseries of BLDepth and SML:')
-    print ('')
-
-    SMALL_SIZE = 12
-    MED_SIZE = 14
-    LARGE_SIZE = 16
-
-    plt.rc('font',size=MED_SIZE)
-    plt.rc('axes',titlesize=MED_SIZE)
-    plt.rc('axes',labelsize=MED_SIZE)
-    plt.rc('xtick',labelsize=MED_SIZE)
-    plt.rc('ytick',labelsize=MED_SIZE)
-    plt.rc('legend',fontsize=MED_SIZE)
-    plt.subplots_adjust(top = 0.95, bottom = 0.05, right = 0.95, left = 0.05,
-            hspace = 0.4, wspace = 0.13)
-
-    lcols=['mediumseagreen','steelblue','darkblue']
-    fcols=['mediumaquamarine','lightblue','blue']
-    lcolsmonc=['gold','darkgoldenrod','darkorange','orangered','firebrick']
-    fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
-    embed()
-    #################################################################
-    ## create figure and axes instances
-    #################################################################
-    ### -------------------------------
-    ### Build figure (timeseries)
-    ### -------------------------------
-    #from IPython import embed; embed()
-    fig = plt.figure(figsize=(18,10 ))
-    ax  = fig.add_axes([0.07,0.7,0.7,0.22])   # left, bottom, width, height
-    ax = plt.gca()
-    yB = [-10, 120]
-    for m in range(0,len(um_data)):
-        plt.plot(um_data[m]['time'], um_data[m]['BLDepth'], color = lcols[m], label = label[m])
-    # for m in range(0,len(monc_data)):
-    #     plt.plot(monc_data[m][monc_data[m]['tvar']['LWP_mean']], monc_data[m]['LWP_mean']-273.15,'o', color = lcolsmonc[m], label = mlabel[m])
-    plt.ylabel('BL height [m]')
-    plt.legend(bbox_to_anchor=(-0.08, 0.77, 1., .102), loc=4, ncol=4)
-    ax.set_xlim([dates[0], dates[1]])
-    plt.grid(which='both')
-    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
-    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-    ax.set_xlim([datenum, edatenum])
-
-    ax  = fig.add_axes([0.07,0.4,0.7,0.22])   # left, bottom, width, height
-    ax = plt.gca()
-    yB = [-10, 120]
-    for m in range(0,len(um_data)):
-        plt.plot(um_data[m]['time'], um_data[m]['BLDepth'], color = lcols[m], label = label[m])
-    # for m in range(0,len(monc_data)):
-    #     plt.plot(monc_data[m][monc_data[m]['tvar']['LWP_mean']], monc_data[m]['LWP_mean']-273.15,'o', color = lcolsmonc[m], label = mlabel[m])
-    plt.ylabel('BL height [m]')
-    plt.legend(bbox_to_anchor=(-0.08, 0.77, 1., .102), loc=4, ncol=4)
-    ax.set_xlim([dates[0], dates[1]])
-    plt.grid(which='both')
-    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
-    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-    ax.set_xlim([datenum, edatenum])
-
-
-    plt.xlabel('Time [UTC]')
-
-    print ('******')
-    print ('')
-    print ('Finished plotting! :)')
-    print ('')
-
-    date=datenum2date(datenum)
-#    from IPython import embed; embed()
-    fileout = os.path.join(plot_out_dir,date.strftime('%Y%m%d') + '_BLdepth_ts.png')
-    plt.savefig(fileout)
-
-
-
-def plot_Tprofiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, lat):
+def plot_T_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, lat):
     obs_zorder = 1
 
     if bool(args):
@@ -420,7 +420,7 @@ def plot_Tprofiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, la
 
         plt.xlabel('Temperture [K]')
         plt.ylabel('Z [km]')
-        # plt.ylim([0,5e3])
+        plt.xlim([260,271])
         # plt.yticks(np.arange(0,5.01e3,0.5e3))
         # ax1.set_yticklabels([0,' ',1,' ',2,' ',3,' ',4,' ',5])
         plt.ylim(ylims)
@@ -431,7 +431,6 @@ def plot_Tprofiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, la
         # plt.xticks(np.arange(0,0.051,0.015))
         #ax1.set_xticklabels([0,' ',0.015,' ',0.03,' ',0.045,' ',0.06])
         # ax1.xaxis.set_minor_locator(ticker.MultipleLocator(0.0075))
-    embed()
     dstr=datenum2date(dates[1])
     # plt.grid('on')
     if pmonc==True:
@@ -445,104 +444,7 @@ def plot_Tprofiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, la
     print ('')
     print ('******')
     plt.show()
-    embed()
 
-
-
-def plot_radiation(data1, data2, data3, obs, out_dir1, out_dir2, out_dir3, datenum,edatenum, label1, label2, label3,plot_out_dir):
-
-    print ('******')
-    print ('')
-    print ('Plotting  timeseries  of radiation terms:')
-    print ('')
-
-    SMALL_SIZE = 12
-    MED_SIZE = 14
-    LARGE_SIZE = 16
-
-    plt.rc('font',size=MED_SIZE)
-    plt.rc('axes',titlesize=MED_SIZE)
-    plt.rc('axes',labelsize=MED_SIZE)
-    plt.rc('xtick',labelsize=MED_SIZE)
-    plt.rc('ytick',labelsize=MED_SIZE)
-    plt.rc('legend',fontsize=MED_SIZE)
-
-    ### for reference in figures
-    zeros = np.zeros(len(data2['time']))
-    #################################################################
-    ## create figure and axes instances
-    #################################################################
-    ### -------------------------------
-    ### Build figure (timeseries)
-    ### -------------------------------
-    fig = plt.figure(figsize=(18,10))
-
-    ax  = fig.add_axes([0.07,0.7,0.7,0.22])   # left, bottom, width, height
-    obs['ice_rad']['netLW'] = obs['ice_rad']['LWdice'][:] - obs['ice_rad']['LWuice'][:]
-    obs['ice_rad']['netSW'] = obs['ice_rad']['SWdice'][:] - obs['ice_rad']['SWuice'][:]
-    ax = plt.gca()
-    # plt.plot([240.0,240.0],[yA[0],yA[-1]],'--', color='red')
-    plt.plot(data2['time'], zeros,'--', color='lightgrey')
-    plt.plot(obs['ice_rad']['time'], obs['ice_rad']['netLW'] + obs['ice_rad']['netSW'], color = 'black', label = 'Ice_station')
-    plt.plot(obs['ship_rad']['time'], obs['ship_rad']['LWnetship'] + obs['ship_rad']['SWnetship'], color = 'gray', label = 'Ship')
-    plt.plot(data1['time'], data1['surface_net_LW_radiation'] + data1['surface_net_SW_radiation'], color = 'darkblue', label = label1)
-    plt.plot(data3['time'], data3['surface_net_LW_radiation'] + data3['surface_net_SW_radiation'],  color = 'steelblue', label = label3[:-4])
-    plt.plot(data2['time'], data2['surface_net_LW_radiation'] + data2['surface_net_SW_radiation'], color = 'mediumseagreen', label = label2)
-    plt.ylabel('Rnet [W/m2]')
-    ax.set_xlim([datenum, edatenum])
-    plt.grid(which='both')
-    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
-    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-    #plt.legend(bbox_to_anchor=(-0.11, 0.1, 1., .102), loc=4, ncol=4)
-    plt.legend(loc=3, ncol=5,fontsize=SMALL_SIZE)
-    plt.ylim([-20,10])
-
-    ax  = fig.add_axes([0.07,0.4,0.7,0.22])   # left, bottom, width, height
-    ax = plt.gca()
-    # plt.plot([240.0,240.0],[yB[0],yB[-1]],'--', color='red')
-    plt.plot(data2['time'], zeros,'--', color='lightgrey')
-    plt.plot(obs['ice_rad']['time'],  obs['ice_rad']['netSW'], color = 'black', label = 'Ice_station')
-    plt.plot(obs['ship_rad']['time'],  obs['ship_rad']['SWnetship'], color = 'gray', label = 'Ship')
-    plt.plot(data1['time'], data1['surface_net_SW_radiation'], color = 'darkblue', label = label1)
-    plt.plot(data3['time'], data3['surface_net_SW_radiation'],  color = 'steelblue', label = label3[:-4])
-    plt.plot(data2['time'], data2['surface_net_SW_radiation'], color = 'mediumseagreen', label = label2[:-7])
-    plt.ylabel('SWnet [W/m2]')
-    ax.set_xlim([datenum, edatenum])
-    plt.grid(which='both')
-    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
-    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-    plt.ylim([0,20])
-
-    ax  = fig.add_axes([0.07,0.1,0.7,0.22])   # left, bottom, width, height
-    ax = plt.gca()
-    # plt.plot([240.0,240.0],[yC[0],yC[-1]],'--', color='red')
-    # plt.plot([240.0,240.0],[yA[0],yA[-1]],'--', color='red')
-    plt.plot(data2['time'], zeros,'--', color='lightgrey')
-    plt.plot(obs['ice_rad']['time'], obs['ice_rad']['netLW'], color = 'black', label = 'Ice_station')
-    plt.plot(obs['ship_rad']['time'], obs['ship_rad']['LWnetship'], color = 'gray', label = 'Ship')
-    plt.plot(data1['time'], data1['surface_net_LW_radiation'], color = 'darkblue', label = label1)
-    plt.plot(data3['time'], data3['surface_net_LW_radiation'],  color = 'steelblue', label = label3[:-4])
-    plt.plot(data2['time'], data2['surface_net_LW_radiation'], color = 'mediumseagreen', label = label2[:-7])
-    plt.ylabel('LWnet [W/m2]')
-    ax.set_xlim([datenum, edatenum])
-    plt.grid(which='both')
-    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
-    ax.xaxis.set_major_locator(mdates.HourLocator(interval=3))
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-    plt.ylim([-40,10])
-    plt.xlabel('Time [UTC]')
-
-    print ('******')
-    print ('')
-    print ('Finished plotting! :)')
-    print ('')
-
-    date=datenum2date(datenum)
-
-    fileout = os.path.join(plot_out_dir,date.strftime('%Y%m%d') + '_radiation_ts.png')
-    plt.savefig(fileout)
 
 def removeSpinUp(monc_data,monc_spin):
     print('')
@@ -617,13 +519,14 @@ def main():
             os.makedirs(plots_out_dir)
         um_root_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/UM/'
 
-        obs_met_dir=  '/gws/nopw/j04/ncas_radar_vol1/jutta/OBS/';
-        obs_acas_dir= '/gws/nopw/j04/ncas_radar_vol1/jutta/OBS/ACAS/ACAS_AO2018_v2_May2019/';
-        obs_rs_dir=   '/gws/nopw/j04/ncas_radar_vol1/jutta/OBS/radiosondes/';
-        obs_hatpro_dir='/gws/nopw/j04/ncas_radar_vol1/jutta/OBS/HATPRO/';
+        obs_met_dir=  '/gws/nopw/j04/ncas_radar_vol1/jutta/DATA/OBS/';
+        obs_acas_dir= '/gws/nopw/j04/ncas_radar_vol1/jutta/DATA/OBS/ACAS/ACAS_AO2018_v2_May2019/';
+        obs_rs_dir=   '/gws/nopw/j04/ncas_radar_vol1/jutta/DATA/OBS/radiosondes/';
+        obs_hatpro_dir='/gws/nopw/j04/ncas_radar_vol1/jutta/DATA/OBS/HATPRO/';
         obs_albedo_dir='/nfs/a96/MOCCHA/working/data/'
-        obs_rad_dir='/gws/nopw/j04/ncas_radar_vol1/jutta/OBS/radiation/'
-        obs_dec_dir = '/gws/nopw/j04/ncas_radar_vol1/jutta/OBS/HATPRO/'
+        obs_rad_dir='/gws/nopw/j04/ncas_radar_vol1/jutta/DATA/OBS/radiation/'
+        obs_dec_dir = '/gws/nopw/j04/ncas_radar_vol1/jutta/DATA/OBS/HATPRO/'
+        inv_dir = '/gws/nopw/j04/ncas_radar_vol1/jutta/DATA/Inversions/'
         monc_root_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/MONC/output/'
         #monc_avg_dir = '/gws/nopw/j04/ncas_radar_vol1/jutta/MONC/output/'
         monc_avg_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/MONC/output/'
@@ -888,19 +791,16 @@ def main():
     filename='HATPRO_LWP_IWV_30s_V3_userready.mat'
     obs['hatpro'] = readMatlabStruct(obs_hatpro_dir + filename)
     print (obs['hatpro'].keys())
+    for var in obs['hatpro'].keys():
+        obs['hatpro'][var]=np.squeeze(obs['hatpro'][var])
 
-    obs['hatpro']['iwv'] = np.squeeze(obs['hatpro']['iwv'])
-    obs['hatpro']['mday'] = np.squeeze(obs['hatpro']['mday'])
-    obs['hatpro']['lwp'] = np.squeeze(obs['hatpro']['lwp'])
-    obs['hatpro']['lwpflag'] = np.squeeze(obs['hatpro']['lwp_corflag'])
-    obs['hatpro']['iwvflag'] = np.squeeze(obs['hatpro']['iwv_corflag'])
-    obs['hatpro']['rainflag'] = np.squeeze(obs['hatpro']['rainflag'])
 
     filename='HATPRO_T_corrected_inversionheights_thetaE_V1.mat'
     obs['hatpro_temp'] = readMatlabStruct(obs_hatpro_dir + filename)
     print (obs['hatpro_temp'].keys())
     for var in obs['hatpro_temp'].keys():
         obs['hatpro_temp'][var]=np.squeeze(obs['hatpro_temp'][var])
+
     #print ('Load albedo estimates from Michael...')
     #obs['albedo'] = readMatlabStruct(obs_albedo_dir + 'MOCCHA_Albedo_estimates_Michael.mat')
     print ('**************************')
