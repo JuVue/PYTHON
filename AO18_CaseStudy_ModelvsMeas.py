@@ -114,7 +114,7 @@ def plot_surfaceVariables(obs, plot_out_dir, dates,**args  ):
     plt.plot(obs['metalley']['mday'], obs['metalley']['rh'], color = 'black', label = 'Obs')#plt.ylabel('SW$_{net}$ [W m$^{-2}$]')
     plt.ylabel('RH [%]')
     #plt.legend(bbox_to_anchor=(-0.08, 0.67, 1., .102), loc=4, ncol=3)
-    ax.set_xlim([datenum, edatenum])
+    ax.set_xlim([dates[0], dates[1])
     plt.grid(which='both')
     ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
@@ -127,7 +127,7 @@ def plot_surfaceVariables(obs, plot_out_dir, dates,**args  ):
     print ('Finished plotting! :)')
     print ('')
 
-    date=datenum2date(datenum)
+    date=datenum2date(dates[0])
 #    from IPython import embed; embed()
     fileout = os.path.join(plot_out_dir,date.strftime('%Y%m%d') + '_surfaceVariables_ts.png')
     plt.savefig(fileout)
@@ -265,31 +265,71 @@ def plot_BLDepth_SMLDepth(obs_data, plot_out_dir, dates,**args ):
     ### Build figure (timeseries)
     ### -------------------------------
     #from IPython import embed; embed()
-    embed()
-    fig = plt.figure(figsize=(18,10 ))
-    ax  = fig.add_axes([0.07,0.7,0.7,0.22])   # left, bottom, width, height
-    ax = plt.gca()
+    fig = plt.figure(figsize=(10,12 ))
+    ax  = fig.add_axes([0.1,0.7,0.8,0.2])   # left, bottom, width, height
     yB = [-10, 120]
     lines=[]
+    ax.fill_between(np.squeeze(obs_data['dec']['mday']),np.squeeze(obs_data['dec']['cbase_sandeep']),np.squeeze(obs_data['dec']['ct']), color = 'skyblue', alpha = 0.3)
+    lines +=plt.plot(obs_data['hatpro_temp']['mday'], obs_data['hatpro_temp']['invbase'], color = 'k', label = 'OBS inv')
+    lines +=plt.plot(obs_data['hatpro_temp']['mday'], obs_data['hatpro_temp']['decbase'],'-', color = 'gray', label = 'OBS sml')
+    #legend1=plt.legend(loc='best')
     for m in range(0,len(um_data)):
-        plt.plot(um_data[m]['time'], um_data[m]['bl_depth'], 'o',color = lcols[m], label = 'model bl')
+        #plt.plot(um_data[m]['time'], um_data[m]['bl_depth'], 'o',color = lcols[m], label = 'model bl')
         lines +=plt.plot(um_data[m]['inv']['mday'], um_data[m]['inv']['invbase'], color = lcols[m], label = 'invbase')
-        plt.plot(um_data[m]['inv']['mday'], um_data[m]['inv']['sfmlbase'],'--', color = lcols[m], label = 'sml')
-        if m ==0: plt.legend(loc='best')
-    # for m in range(0,len(monc_data)):
-    #     plt.plot(monc_data[m][monc_data[m]['tvar']['LWP_mean']], monc_data[m]['LWP_mean']-273.15,'o', color = lcolsmonc[m], label = mlabel[m])
+    for m in range(0,len(monc_data)):
+        lines +=plt.plot(monc_data[m]['inv']['mday'], monc_data[m]['inv']['invbase'], color = lcolsmonc[m], label = 'invbase')
     plt.ylabel('Height [m]')
-    plt.legend(lines,label,bbox_to_anchor=(-0.08, 0.77, 1., .102), loc=4, ncol=4)
+    llabels= ['Obs inv','OBS sml']
+    llabels+=label
+    llabels+=mlabel
+    fig.legend(lines,llabels, bbox_to_anchor=(0.1, 0.93, 0.8, .05),loc=3, ncol=4)
+    #plt.gca().add_artist(legend1)
     ax.set_xlim([dates[0], dates[1]])
     plt.grid(which='both')
     ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-    ax.set_xlim([datenum, edatenum])
-    plt.show()
+    plt.title('Main inversion')
+    ax  = fig.add_axes([0.1,0.4,0.8,0.2])   # left, bottom, width, height
+    ax = plt.gca()
+    yB = [-10, 120]
+    lines=[]
+    ax.fill_between(np.squeeze(obs_data['dec']['mday']),np.squeeze(obs_data['dec']['cbase_sandeep']),np.squeeze(obs_data['dec']['ct']), color = 'skyblue', alpha = 0.3)
+    lines+=plt.plot(obs_data['hatpro_temp']['mday'], obs_data['hatpro_temp']['invbase'], color = 'k', label = 'inv')
+    lines+= plt.plot(obs_data['hatpro_temp']['mday'], obs_data['hatpro_temp']['decbase'],'-', color = 'gray', label = 'sml')
+    #legend1=plt.legend(loc='best')
+    for m in range(0,len(um_data)):
+        #plt.plot(um_data[m]['time'], um_data[m]['bl_depth'], 'o',color = lcols[m], label = 'model bl')
+        lines+=plt.plot(um_data[m]['inv']['mday'], um_data[m]['inv']['decbase'],'-', color = lcols[m], label = 'sml')
+        #if m ==0: legend1=plt.legend(loc='best')
+    for m in range(0,len(monc_data)):
+        lines+=plt.plot(monc_data[m]['inv']['mday'], monc_data[m]['inv']['decbase'],'-', color = lcolsmonc[m], label = 'sml')
+    plt.ylabel('Height [m]')
+    ax.set_xlim([dates[0], dates[1]])
+    plt.grid(which='both')
+    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+    plt.title('sml height')
+    #ax.set_xlim([datenum, edatenum])
 
-
-
+    ax  = fig.add_axes([0.1,0.1,0.8,0.2])   # left, bottom, width, height
+    ax = plt.gca()
+    yB = [-10, 120]
+    lines=[]
+    ax.fill_between(np.squeeze(obs_data['dec']['mday']),np.squeeze(obs_data['dec']['cbase_sandeep']),np.squeeze(obs_data['dec']['ct']), color = 'skyblue', alpha = 0.3)
+    plt.plot(obs_data['hatpro_temp']['mday'], obs_data['hatpro_temp']['invbase'], color = 'k', label = 'inv')
+    lines+= plt.plot(obs_data['hatpro_temp']['mday'], obs_data['hatpro_temp']['decbase'],'-', color = 'gray', label = 'sml')
+    for m in range(0,len(um_data)):
+        lines+=plt.plot(um_data[m]['time'], um_data[m]['bl_depth'], '-',color = lcols[m], label = 'model bl')
+        #if m ==0: legend1=plt.legend(loc='best')
+    plt.ylabel('Height [m]')
+    ax.set_xlim([dates[0], dates[1]])
+    plt.grid(which='both')
+    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+    plt.title('Model BL height')
     plt.xlabel('Time [UTC]')
 
     print ('******')
@@ -297,9 +337,9 @@ def plot_BLDepth_SMLDepth(obs_data, plot_out_dir, dates,**args ):
     print ('Finished plotting! :)')
     print ('')
 
-    date=datenum2date(datenum)
+    date=datenum2date(dates[0])
 #    from IPython import embed; embed()
-    fileout = os.path.join(plot_out_dir,date.strftime('%Y%m%d') + '_BLdepth_ts.png')
+    fileout = os.path.join(plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_BLdepth-SML.png.png')
     plt.savefig(fileout)
 
 
@@ -546,7 +586,7 @@ def main():
                '30_u-cg179_RA1M_CASIM/',
               '26_u-cd847_RA1M_CASIM/',
               '27_u-ce112_RA1M_CASIM/']
-    out_dir = [  '30_u-cg179_RA1M_CASIM/' ]
+#    out_dir = [  '30_u-cg179_RA1M_CASIM/' ]
     ### CHOOSE MONC RUNS
     m_out_dir =['22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/']
 
@@ -803,6 +843,8 @@ def main():
     filename = '2018091300-2018091314_smc_decoupling_sandeep_Scb_V3.mat'
     obs['dec'] = readMatlabStruct(obs_dec_dir + filename)
     print(obs['dec'].keys())
+    for var in obs['dec'].keys():
+        obs['dec'][var]=np.squeeze(obs['dec'][var])
 
 
     print ('**************************')
@@ -815,7 +857,7 @@ def main():
 
     filename='HATPRO_T_corrected_inversionheights_thetaE_V1.mat'
     tmp= readMatlabStruct(obs_hatpro_dir + filename)
-    obs['hatpro_temp'] = tmp['HTcompepot']
+    obs['hatpro_temp'] = tmp['HTdecepot']
     print (obs['hatpro_temp'].keys())
     for var in obs['hatpro_temp'].keys():
         obs['hatpro_temp'][var]=np.squeeze(obs['hatpro_temp'][var])
