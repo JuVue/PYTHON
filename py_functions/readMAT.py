@@ -77,6 +77,9 @@ def readMatlabStruct(filename):
         print ('Finished! :)')
         print ('Reading out ' + structname[i] + ' struct within .mat file')
         print ('')
-        dout[structname[i]]={}
-        dout[structname[i]]=b
+        if  len(structname)>1:
+            dout[structname[i]]={}
+            dout[structname[i]]=b
+        else:
+            dout=b
     return dout     #### returns structured numpy array containing matlab struct
