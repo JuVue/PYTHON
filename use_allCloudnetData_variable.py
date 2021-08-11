@@ -1572,8 +1572,6 @@ def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,d
     print ('')
     print ('******')
 
-
-
 def plot_iwcProfiles_split(obs_data,twcvar,twcstr, thresholding, plots_out_dir,dates,prof_time, **args): #, lon, lat):
 
     obs_zorder = 1
@@ -2343,7 +2341,7 @@ def main():
             os.makedirs(plots_out_dir)
 
         um_root_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/UM/DATA/'
-        cn_obs_dir = '/gws/nopw/j04/ncas_radar_vol1/jutta/Cloudnet/Observations/measurements_V7/'
+        cn_obs_dir = '/gws/nopw/j04/ncas_radar_vol1/jutta/DATA/Cloudnet/Observations/measurements_V7/'
         cn_um_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/Cloudnet/UM/'
         monc_root_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/MONC/output/'
         #monc_avg_dir = '/gws/nopw/j04/ncas_radar_vol1/jutta/MONC/output/'
