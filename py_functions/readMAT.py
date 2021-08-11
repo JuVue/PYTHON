@@ -62,7 +62,6 @@ def readMatlabStruct(filename):
         # aa = a.astype(float)
         # b = {name:a[name].astype(float) for name in a.dtype.names}
         b = {}
-        embed()
         for name in a.dtype.names:
             # print (name)
             # print (a[name].dtype)
