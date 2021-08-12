@@ -2673,7 +2673,7 @@ def main():
                         else:
                             print('appending ' + var)
                             monc_data[m][var]=np.append(monc_data[m][var],ncm.variables[var][:],axis=0)
-
+        embed()
     #loading 3d variables
         for n in range(0,len(monc_3d_filename[m])):
             print(monc_3d_filename[m][n])
