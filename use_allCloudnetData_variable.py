@@ -230,7 +230,6 @@ def plot_LWCTimeseries(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): #,
     newcolors[:1, :] = greyclr   # make first 20 colors greyclr
     newcmp = ListedColormap(newcolors)
 
-    embed()
     obs_data['lwc'][obs_data['lwc'] <= 0] = np.nan
     obs_data['lwc_adiabatic'][obs_data['lwc_adiabatic'] <= 0] = np.nan
     obs_data['lwc_adiabatic_inc_nolwp'][obs_data['lwc_adiabatic_inc_nolwp'] <= 0] = np.nan
@@ -2809,97 +2808,6 @@ def main():
     # plot LWP timeseries
     # -------------------------------------------------------------
     #figure = plot_lwp(obs_data, plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-
-
-    # -------------------------------------------------------------
-    # Model plots
-    # -------------------------------------------------------------
-    # figure = plot_line_TSa(data1, data2, data3, month_flag, missing_files, out_dir1, out_dir2, out_dir3, obs, doy, label1, label2, label3)
-    # figure = plot_RadiosondesThetaE(data1, data2, data3, month_flag, missing_files, out_dir1, out_dir2, out_dir3, obs, doy, label1, label2, label3)
-
-
-    # -------------------------------------------------------------
-    # plot bivariate distributions
-    # -------------------------------------------------------------
-    #figure = plot_BiVAR(um_data, ifs_data, misc_data, ra2t_data, obs_data, obs, month_flag, missing_files, cn_um_out_dir, doy, obs_switch, data1, data2, data3, data4, nanind, wcind)
-
-    # -------------------------------------------------------------
-    # make obs comparison fig between um and ifs grids
-    # -------------------------------------------------------------
-    # figure = plot_ObsGridComparison(um_data, ifs_data, misc_data, ra2t_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy)
-
-    # -------------------------------------------------------------
-    # plot cloudnet split season figures with missing files accounted for
-    # -------------------------------------------------------------
-    # figure = plot_CvProfiles_SplitSeason(um_data, ifs_data, misc_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy)
-    # figure = plot_lwcProfiles_SplitSeason(um_data, ifs_data, misc_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs_switch)
-    # figure = plot_iwcProfiles_SplitSeason(um_data, ifs_data, misc_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs_switch)
-    # figure = plot_profiles_SplitSeason(um_data, ifs_data, misc_data, ra2t_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs_switch)
-
-    # -------------------------------------------------------------
-    # look closer at specific periods
-    # -------------------------------------------------------------
-    # figure = period_Selection(um_data, ifs_data, misc_data, ra2t_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs_switch, obs, data1, data2, data3, data4, nanind, wcind)
-
-    # -------------------------------------------------------------
-    # look closer at biases
-    # -------------------------------------------------------------
-    # figure = plot_BiasCorrelation(obs_data, um_data, misc_data, ifs_data, ra2t_data, doy, obs_switch)
-
-    # -------------------------------------------------------------
-    # cloud properties scaled by BL depth
-    # -------------------------------------------------------------
-    # -------------------------------------------------------------
-    # Identify inversions in model / radiosonde data
-    # -------------------------------------------------------------
-    #################################################################
-    ## load calculated model inversion heights
-    #################################################################
-    # print ('Load calculated model inversion heights (JV algorithm)...')
-    # data1['inversions'] = readMatlabStruct(obs_root_dir + 'radiosondes/UM_RA2M_inversion_results.mat')
-    # data2['inversions'] = readMatlabStruct(obs_root_dir + 'radiosondes/UM_CASIM-100_inversion_results.mat')
-    # data3['inversions'] = readMatlabStruct(obs_root_dir + 'radiosondes/ECMWF_IFS_inversion_results.mat')
-
-    # print ('Load calculated model inversion heights (GY algorithm)...')
-    # obs['inversions']['thetaE'] = np.load(um_root_dir[:-5] + 'obs_inversions_v2.npy').item()
-    # data1['inversions'] = np.load(um_root_dir[:-5] + 'um_ra2m_inversions_v2.npy').item()
-    # data2['inversions'] = np.load(um_root_dir[:-5] + 'um_casim-100_inversions_v2.npy').item()
-    # data3['inversions'] = np.load(um_root_dir[:-5] + 'ecmwf_ifs_inversions_v2.npy').item()
-
-    # -------------------------------------------------------------
-    ### use IFS named directory to allocate variable to plot
-    # -------------------------------------------------------------
-    # if cn_ifs_out_dir[0] == 'cloud-fraction-ecmwf-grid/2018/': var = 'Cv'
-    # if cn_ifs_out_dir[0] == 'lwc-scaled-ecmwf-grid/2018/': var = 'lwc'
-    # if cn_ifs_out_dir[0] == 'iwc-Z-T-ecmwf-grid/2018/': var = 'iwc'
-    # var = 'lwc'
-
-    # obs_data = interpCloudnet(obs_data, month_flag, missing_files, doy)
-    # figure = plot_scaledBL_thetaE(data1, data2, data3, um_data, ifs_data, misc_data, obs_data, month_flag, missing_files, out_dir1, out_dir2, out_dir3, obs, doy, label1, label2, label3, var)
-    # figure = plot_scaledBLCv_thetaE(data1, data2, data3, um_data, ifs_data, misc_data, obs_data, month_flag, missing_files, out_dir1, out_dir2, out_dir3, obs, doy, label1, label2, label3)
-    # figure = plot_scaledBLCv_JVInv(data1, data2, data3, um_data, ifs_data, misc_data, obs_data, month_flag, missing_files, out_dir1, out_dir2, out_dir3, obs, doy, label1, label2, label3)
-    # figure = plot_scaledBLlwc(data1, data2, data3, um_data, ifs_data, misc_data, obs_data, month_flag, missing_files, out_dir1, out_dir2, out_dir3, obs, doy, label1, label2, label3)
-
-
-    # -------------------------------------------------------------
-    # save out working data for debugging purposes
-    # -------------------------------------------------------------
-    ### model/measurement data
-    # np.save('working_data1', data1)
-    # np.save('working_data2', data2)
-    # np.save('working_data3', data3)
-    # np.save('working_data4', data4)
-    # np.save('working_dataObs', obs['inversions'])
-    #
-    # ### cloudnet
-    # np.save('working_um_data', um_data)
-    # np.save('working_ifs_data', ifs_data)
-    # if cn_misc_flag != -1: np.save('working_misc_data', misc_data)
-    # np.save('working_ra2t_data', ra2t_data)
-    # np.save('working_obsV6_data', obs_data)
-
-    # print (data1['height'][:])
-    # print (data1['height'][data1['height'] <= 1e3])
 
     # -------------------------------------------------------------
     # FIN.
