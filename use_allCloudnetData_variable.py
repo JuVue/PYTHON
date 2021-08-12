@@ -241,7 +241,7 @@ def plot_LWCTimeseries(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): #,
     if pmonc==True:
         for m in range(0,len(monc_data)):
             #monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
-            monc_data[m]['model_lwc']=monc_data[m]['lwc_tot_mean']
+            monc_data[m]['model_lwc']=monc_data[m]['lwc_tot_mean'].copy()
             monc_data[m]['model_lwc'][monc_data[m]['model_lwc'] <= 0.0] = np.nan
             #lwc_tvar=monc_data[m]['tvar']['liquid_mmr_mean']
             #lwc_zvar=monc_data[m]['zvar']['liquid_mmr_mean']
