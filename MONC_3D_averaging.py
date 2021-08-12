@@ -35,7 +35,7 @@ elif machine=='JASMIN':
     monc_root_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/MONC/output/'
     #m_out_dir = '22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/'
     m_out_dir = '23_20180913T0000Z_6hSpin-up_12h0600-0000thTend/'
-    monc_exp_dir= '/gws/nopw/j04/ncas_radar_vol1/jutta/DATA/MONC/output/'  # output directory for averaged data
+    monc_exp_dir= '/gws/nopw/j04/ncas_radar_vol1/jutta/MONC/output/'  # output directory for averaged data
 tmp=glob.glob(monc_root_dir + m_out_dir +'*.nc')
 #assert len(tmp)==1,'more than one file detected'
 monc_filename=tmp
