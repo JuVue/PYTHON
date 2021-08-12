@@ -255,7 +255,6 @@ def plot_LWCTimeseries(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): #,
 
     cmax=0.3
     clev=np.arange(0.0,0.45,0.05)
-    embed()
     #####PlotLwc###############################################
     yheight=3
     fig = plt.figure(figsize=(9.5,yheight*numsp+1))
@@ -306,7 +305,7 @@ def plot_LWCTimeseries(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): #,
             if m== numsp:
                 plt.xlabel('Date')
 
-
+    embed()
     if pmonc==True:
         for m in range(0,len(monc_data)):
             plt.subplot(numsp,1,numsp-len(monc_data)+1+m)
@@ -2703,10 +2702,10 @@ def main():
                 else:
                     monc_data[m][var] =np.append(monc_data[m][var],pyd[var],axis=0)
 
-        for v1 in monc_data[m]:
-            print(v1 + ':')
-            print(monc_data[m][v1].shape)
-
+        # for v1 in monc_data[m]:
+        #     print(v1 + ':')
+        #     print(monc_data[m][v1].shape)
+        #
 
         monc_data[m]['zvar']=zvar
         monc_data[m]['tvar']=tvar
