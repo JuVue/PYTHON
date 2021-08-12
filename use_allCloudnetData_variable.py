@@ -253,7 +253,7 @@ def plot_LWCTimeseries(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): #,
 
     cmax=0.3
     clev=np.arange(0.0,0.45,0.05)
-
+    embed()
     #####PlotLwc###############################################
     yheight=3
     fig = plt.figure(figsize=(9.5,yheight*numsp+1))
