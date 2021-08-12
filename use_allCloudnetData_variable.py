@@ -738,7 +738,7 @@ def plot_lwcProfiles(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,dates, 
             monc_data[m]['model_twc'] = monc_data[m]['twc_tot_mean']
             monc_data[m]['model_lwc'] = monc_data[m]['lwc_tot_mean']
             #lwc_zvar=monc_data[m]['zvar']['liquid_mmr_mean']
-            lwc_zvar+=[monc_data[m]['zvar']['lwc_tot_mean']
+            lwc_zvar+=[monc_data[m]['zvar']['lwc_tot_mean']]
 
     if thresholding == True:
         if pum==True:
