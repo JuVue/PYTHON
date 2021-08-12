@@ -718,13 +718,12 @@ def main():
                 monc_data[m]={}
                 zvar={}
                 tvar={}
-
             full_var_list=[]
             time_var_list=[]
             for var in ncm.variables:
                 if 'time' in str(var):
                     time_var_list=time_var_list+[var]
-            full_var_list=monc_var_list
+            full_var_list=monc_var_list.copy()
             full_var_list[0]=time_var_list+monc_var_list[0]
             for c in range(0,len(full_var_list)):
                 for j in range(0,len(full_var_list[c])):
@@ -749,10 +748,14 @@ def main():
                             if time_var_list[2] in str(tmp):
                                 tvar[var]='time3'
                     else:
-                        monc_data[m][var] = np.append(monc_data[m][var],ncm.variables[var][:])
+                        if var =='z': continue
+                        elif var =='zn': continue
+                        else:
+                            print('appending ' + var)
+                            monc_data[m][var]=np.append(monc_data[m][var],ncm.variables[var][:],axis=0)
     #loading 3d variables
     for m in range(0, len(m_out_dir)):
-        for n in range(0,len(monc_3d_filename)):
+        for n in range(0,len(monc_3d_filename[m])):
             print(monc_3d_filename[m][n])
             #afile = open(monc_3d_filename[m][0], "rb")
             pyd = np.load(monc_3d_filename[m][n],allow_pickle=True).item()   #pickle.load(afile)
