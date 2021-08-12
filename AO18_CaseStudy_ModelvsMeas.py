@@ -493,6 +493,7 @@ def removeSpinUp(monc_data,monc_spin):
             id3 = np.squeeze(np.argwhere(monc_data[m]['time3']<=monc_spin))
 
         for j in range(0,len(monc_var_list)):
+            print(monc_var_list[j])
             if monc_data[m]['tvar'][monc_var_list[j]]=='time1':
             #if any(np.array(monc_data[m][monc_var_list[j]].shape) == len(monc_data[m]['time1'])):
                 monc_data[m][monc_var_list[j]]=np.delete(monc_data[m][monc_var_list[j]],id1,0)
@@ -754,8 +755,8 @@ def main():
                         else:
                             print('appending ' + var)
                             monc_data[m][var]=np.append(monc_data[m][var],ncm.variables[var][:],axis=0)
-    #loading 3d variables
-    for m in range(0, len(m_out_dir)):
+
+        #add 3D variables
         for n in range(0,len(monc_3d_filename[m])):
             print(monc_3d_filename[m][n])
             #afile = open(monc_3d_filename[m][0], "rb")
@@ -772,15 +773,15 @@ def main():
                     monc_data[m][var] =np.append(monc_data[m][var],pyd[var])
 
 
-    monc_data[m]['zvar']=zvar
-    monc_data[m]['tvar']=tvar
-    monc_data[m]['time1']=monc_data[m][time_var_list[0]] #1d data
-    monc_data[m]['time2']=monc_data[m][time_var_list[1]] #2d data
-    monc_data[m].pop(time_var_list[0])
-    monc_data[m].pop(time_var_list[1])
-    if len(time_var_list)>2:
-        monc_data[m]['time3']=monc_dat[m][time_var_list[2]] #2d data
-        monc_data[m].pop(time_var_list[2])
+        monc_data[m]['zvar']=zvar
+        monc_data[m]['tvar']=tvar
+        monc_data[m]['time1']=monc_data[m][time_var_list[0]] #1d data
+        monc_data[m]['time2']=monc_data[m][time_var_list[1]] #2d data
+        monc_data[m].pop(time_var_list[0])
+        monc_data[m].pop(time_var_list[1])
+        if len(time_var_list)>2:
+            monc_data[m]['time3']=monc_dat[m][time_var_list[2]] #2d data
+            monc_data[m].pop(time_var_list[2])
 
     print (' Monc data Loaded!')
     embed()
