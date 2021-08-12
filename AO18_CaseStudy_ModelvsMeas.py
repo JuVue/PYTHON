@@ -770,7 +770,7 @@ def main():
                     tvar[var]=pyd['tvar'][var]
                     monc_data[m][var] = pyd[var]
                 else:
-                    monc_data[m][var] =np.append(monc_data[m][var],pyd[var])
+                    monc_data[m][var] =np.append(monc_data[m][var],pyd[var],axis=0)
 
 
         monc_data[m]['zvar']=zvar
@@ -784,7 +784,6 @@ def main():
             monc_data[m].pop(time_var_list[2])
 
     print (' Monc data Loaded!')
-    embed()
     #################################################################################################################################
     ## -------------------------------------------------------------
     ## remove spin up time from monc data
