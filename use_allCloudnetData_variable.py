@@ -246,8 +246,8 @@ def plot_LWCTimeseries(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): #,
             monc_data[m]['model_lwc'][monc_data[m]['model_lwc'] <= 0.0] = np.nan
             #lwc_tvar=monc_data[m]['tvar']['liquid_mmr_mean']
             #lwc_zvar=monc_data[m]['zvar']['liquid_mmr_mean']
-            lwc_tvar+=monc_data[m]['tvar']['lwc_tot_mean']
-            lwc_zvar+=monc_data[m]['zvar']['lwc_tot_mean']
+            lwc_tvar+=[monc_data[m]['tvar']['lwc_tot_mean']]
+            lwc_zvar+=[monc_data[m]['zvar']['lwc_tot_mean']]
     print ('******')
     print ('')
     print ('Plotting LWC timeseries for whole drift period:')
@@ -738,7 +738,7 @@ def plot_lwcProfiles(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,dates, 
             monc_data[m]['model_twc'] = monc_data[m]['twc_tot_mean']
             monc_data[m]['model_lwc'] = monc_data[m]['lwc_tot_mean']
             #lwc_zvar=monc_data[m]['zvar']['liquid_mmr_mean']
-            lwc_zvar+=monc_data[m]['zvar']['lwc_tot_mean']
+            lwc_zvar+=[monc_data[m]['zvar']['lwc_tot_mean']
 
     if thresholding == True:
         if pum==True:
@@ -1396,8 +1396,8 @@ def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,d
             monc_data[m]['model_twc'] = monc_data[m]['twc_tot_mean']
             monc_data[m]['model_lwc'] = monc_data[m]['lwc_tot_mean']
             #lwc_zvar=monc_data[m]['zvar']['liquid_mmr_mean']
-            lwc_zvar+=monc_data[m]['zvar']['lwc_tot_mean']
-            lwc_tvar+=monc_data[m]['tvar']['lwc_tot_mean']
+            lwc_zvar+=[monc_data[m]['zvar']['lwc_tot_mean']]
+            lwc_tvar+=[monc_data[m]['tvar']['lwc_tot_mean']]
 
     if thresholding == True:
         if pum==True:
@@ -1970,8 +1970,8 @@ def plot_monc_comparison(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): 
             monc_data[m]['man_lwc1']= monc_data[m]['q_cloud_liquid_mass_mean']
             monc_data[m]['man_lwc2']= monc_data[m]['q_cloud_liquid_mass_mean']*monc_data[m]['rho_mean']
             monc_data[m]['man_lwc3']= monc_data[m]['lwc_tot_mean']
-            lwc_tvar+=monc_data[m]['tvar']['liquid_mmr_mean']
-            lwc_zvar+=monc_data[m]['zvar']['liquid_mmr_mean']
+            lwc_tvar+=[monc_data[m]['tvar']['liquid_mmr_mean']]
+            lwc_zvar+=[monc_data[m]['zvar']['liquid_mmr_mean']]
     print ('******')
     print ('')
     print ('Plotting LWC timeseries for whole drift period:')
