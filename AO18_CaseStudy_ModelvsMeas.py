@@ -587,7 +587,8 @@ def main():
               '27_u-ce112_RA1M_CASIM/']
 #    out_dir = [  '30_u-cg179_RA1M_CASIM/' ]
     ### CHOOSE MONC RUNS
-    m_out_dir =['22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/']
+    m_out_dir =['22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/',
+                '23_20180913T0000Z_6hSpin-up_12h0600-0000thTend/']
 
     # m_out_dir = ['5_control_20180913T0000Z_Wsub-1.5_Fletcher/',
     #             '6_control_20180913T0000Z_Wsub-1.5-1km/',
@@ -980,11 +981,11 @@ def main():
     # -------------------------------------------------------------
     #figure = plot_surfaceVariables(obs,plot_out_dir, dates, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_lwp(obs,plot_out_dir, dates, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    #figure = plot_BLDepth_SMLDepth(obs,plot_out_dir, dates, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     figure = plot_T_profiles_split(obs,plots_out_dir,dates, prof_time,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     figure = plot_BLDepth_SMLDepth(obs,plot_out_dir, dates, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
-    embed()
+
+    ### example plot list from Gillians Script:
     #figure = plot_radiation(obs,plot_out_dir, dates,plot_out_dir, um_data=um_data,label=label,outsr=outsr, monc_data=monc_data,mlabel=mlabel,moutsr=moutsr)
     # figure = plot_paperFluxes(data1, data2, data3, month_flag, missing_files, out_dir1, out_dir2, out_dir3, obs, doy, label1, label2, label3)
     # figure = plot_paperRadiation(data1, data2, data3, out_dir1, out_dir2, out_dir3,datenum,label1,label2,label3,plot_out_dir)
@@ -1009,13 +1010,13 @@ def main():
 
 
 
-    # -------------------------------------------------------------
-    # save out working data for debugging purposes
-    # -------------------------------------------------------------
-    np.save('working_data1', data1)
-    np.save('working_data2', data2)
-    np.save('working_data3', data3)
-
+    # # -------------------------------------------------------------
+    # # save out working data for debugging purposes
+    # # -------------------------------------------------------------
+    # np.save('working_data1', data1)
+    # np.save('working_data2', data2)
+    # np.save('working_data3', data3)
+    #
     # -------------------------------------------------------------
     # FIN.
     # -------------------------------------------------------------
