@@ -239,6 +239,7 @@ def plot_LWCTimeseries(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): #,
 
     if pmonc==True:
         lwc_tvar=[]
+        lwc_zvar=[]
         for m in range(0,len(monc_data)):
             #monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
             monc_data[m]['model_lwc']=monc_data[m]['lwc_tot_mean'].copy()
@@ -381,6 +382,7 @@ def plot_IWCTimeseries( obs_data, plots_out_dir, dates,**args): #, lon, lat):
 
     if pmonc ==True :
         iwc_tvar=[]
+        iwc_zvar=[]
         for m in range(0,len(monc_data)):
             #monc_data[m]['model_iwc']= (monc_data[m]['ice_mmr_mean']+monc_data[m]['graupel_mmr_mean']+monc_data[m]['snow_mmr_mean'])*monc_data[m]['rho']
             monc_data[m]['model_iwc']= (monc_data[m]['iwc_tot_mean'])
@@ -557,6 +559,7 @@ def plot_TWCTimeseries(obs_data,twcvar,twcstr,plots_out_dir, dates,  **args):
 
     if pmonc==True:
         twc_tvar=[]
+        twc_zvar=[]
         for m in range(0,len(monc_data)):
             #monc_data[m]['model_iwc']= (monc_data[m]['ice_mmr_mean']+monc_data[m]['graupel_mmr_mean']+monc_data[m]['snow_mmr_mean'])*monc_data[m]['rho']
             #monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
@@ -2684,7 +2687,6 @@ def main():
                         else:
                             print('appending ' + var)
                             monc_data[m][var]=np.append(monc_data[m][var],ncm.variables[var][:],axis=0)
-        embed()
     #loading 3d variables
         for n in range(0,len(monc_3d_filename[m])):
             print(monc_3d_filename[m][n])
@@ -2717,7 +2719,6 @@ def main():
             monc_data[m].pop(time_var_list[2])
 
     print (' Monc data Loaded!')
-    embed()
     ##################################################################################################################################
     ## -------------------------------------------------------------
     ## remove spin up time from monc data
