@@ -564,8 +564,8 @@ def plot_TWCTimeseries(obs_data,twcvar,twcstr,plots_out_dir, dates,  **args):
             #monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
             #monc_data[m]['model_twc'] = monc_data[m]['model_lwc'] +monc_data[m]['model_iwc']
             monc_data[m]['model_twc'] = monc_data[m]['twc_tot_mean']
-            twc_tvar+=monc_data[m]['tvar']['twc_tot_mean']
-            twc_zvar+=monc_data[m]['zvar']['twc_tot_mean']
+            twc_tvar+=[monc_data[m]['tvar']['twc_tot_mean']]
+            twc_zvar+=[monc_data[m]['zvar']['twc_tot_mean']]
 
     twc0 = np.transpose(obs_data[twcvar])*1e3
 
@@ -959,7 +959,7 @@ def plot_iwcProfiles(obs_data, twcvar,twcstr, thresholding,plots_out_dir,dates, 
             monc_data[m]['model_twc'] = monc_data[m]['twc_tot_mean']
             monc_data[m]['model_iwc'] = monc_data[m]['iwc_tot_mean']
             #lwc_zvar=monc_data[m]['zvar']['liquid_mmr_mean']
-            twc_zvar+=monc_data[m]['zvar']['twc_tot_mean']
+            twc_zvar+=[monc_data[m]['zvar']['twc_tot_mean']]
 
     if thresholding ==True:
         if pum==True:
