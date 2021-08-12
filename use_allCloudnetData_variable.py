@@ -230,6 +230,7 @@ def plot_LWCTimeseries(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): #,
     newcolors[:1, :] = greyclr   # make first 20 colors greyclr
     newcmp = ListedColormap(newcolors)
 
+    embed()
     obs_data['lwc'][obs_data['lwc'] <= 0] = np.nan
     obs_data['lwc_adiabatic'][obs_data['lwc_adiabatic'] <= 0] = np.nan
     obs_data['lwc_adiabatic_inc_nolwp'][obs_data['lwc_adiabatic_inc_nolwp'] <= 0] = np.nan
@@ -2711,7 +2712,7 @@ def main():
     ## -------------------------------------------------------------
     ## remove spin up time from monc data
     ## -------------------------------------------------------------
-    #monc_data=removeSpinUp(monc_data,monc_spin)
+    monc_data=removeSpinUp(monc_data,monc_spin)
 
     ## -------------------------------------------------------------
     ## convert monc time to datenum
