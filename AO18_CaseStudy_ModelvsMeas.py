@@ -769,7 +769,7 @@ def main():
                     tvar[var]=pyd['tvar'][var]
                     monc_data[m][var] = pyd[var]
                 else:
-                    monc_data[m][var] =np.addend(monc_data[m][var],pyd[var])
+                    monc_data[m][var] =np.append(monc_data[m][var],pyd[var])
 
 
     monc_data[m]['zvar']=zvar
