@@ -339,7 +339,7 @@ def plot_BLDepth_SMLDepth(obs_data, plot_out_dir, dates,**args ):
 
     dstr=datenum2date(dates[0])
 #    from IPython import embed; embed()
-    fileout = os.path.join(plot_out_dir + dstr.strftime('%Y%m%d') + '_Obs' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_BLdepth-SML.png.png')
+    fileout = os.path.join(plot_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_BLdepth-SML.png')
     plt.savefig(fileout)
 
 
@@ -464,9 +464,9 @@ def plot_T_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
     dstr=datenum2date(dates[1])
     # plt.grid('on')
     if pmonc==True:
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_Tprofile'  + '_split.png'
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_Tprofile'  + '_split.png'
     else:
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) +'_Tprofile'  + '_split.png'
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) +'_Tprofile'  + '_split.png'
 
     plt.savefig(fileout)
     print ('')
