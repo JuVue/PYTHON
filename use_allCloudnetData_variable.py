@@ -305,7 +305,6 @@ def plot_LWCTimeseries(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): #,
             if m== numsp:
                 plt.xlabel('Date')
 
-    embed()
     if pmonc==True:
         for m in range(0,len(monc_data)):
             plt.subplot(numsp,1,numsp-len(monc_data)+1+m)
@@ -388,8 +387,8 @@ def plot_IWCTimeseries( obs_data, plots_out_dir, dates,**args): #, lon, lat):
             monc_data[m]['model_iwc'][monc_data[m]['model_iwc'] <= 0.0] = np.nan
             #iwc_tvar=monc_data[m]['tvar']['ice_mmr_mean']
             #iwc_zvar=monc_data[m]['zvar']['ice_mmr_mean']
-            iwc_tvar+=monc_data[m]['tvar']['iwc_tot_mean']
-            iwc_zvar+=monc_data[m]['zvar']['iwc_tot_mean']
+            iwc_tvar+=[monc_data[m]['tvar']['iwc_tot_mean']]
+            iwc_zvar+=[monc_data[m]['zvar']['iwc_tot_mean']]
 
     print ('******')
     print ('')
@@ -1634,8 +1633,8 @@ def plot_iwcProfiles_split(obs_data,twcvar,twcstr, thresholding, plots_out_dir,d
             monc_data[m]['model_lwc'] = monc_data[m]['lwc_tot_mean']
             monc_data[m]['model_iwc'] = monc_data[m]['iwc_tot_mean']
             #lwc_zvar=monc_data[m]['zvar']['liquid_mmr_mean']
-            twc_zvar+=monc_data[m]['zvar']['iwc_tot_mean']
-            twc_tvar+=monc_data[m]['tvar']['iwc_tot_mean']
+            twc_zvar+=[monc_data[m]['zvar']['iwc_tot_mean']]
+            twc_tvar+=[monc_data[m]['tvar']['iwc_tot_mean']]
 
     if thresholding ==True:
         if pum==True:
@@ -2799,11 +2798,11 @@ def main():
     # Cloudnet plot: Plot Cv statistics from drift period
     # -------------------------------------------------------------
     #figure = plot_CvProfiles(um_data, ifs_data, misc_data, ra2t_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs, obs_switch)
-    #figure = plot_lwcProfiles(obs_data, lwcvar,lwcstr,thresholding, plots_out_dir,dates,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    #figure = plot_iwcProfiles(obs_data, twcvar,twcstr,thresholding, plots_out_dir,dates, um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    #figure = plot_twcProfiles(obs_data, twcvar,twcstr,thresholding, plots_out_dir,dates,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    #figure = plot_lwcProfiles_split(obs_data, lwcvar,lwcstr,thresholding, plots_out_dir,dates, prof_times,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    #figure = plot_iwcProfiles_split(obs_data, twcvar,twcstr,thresholding, plots_out_dir,dates, prof_times,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_lwcProfiles(obs_data, lwcvar,lwcstr,thresholding, plots_out_dir,dates,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_iwcProfiles(obs_data, twcvar,twcstr,thresholding, plots_out_dir,dates, um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_twcProfiles(obs_data, twcvar,twcstr,thresholding, plots_out_dir,dates,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_lwcProfiles_split(obs_data, lwcvar,lwcstr,thresholding, plots_out_dir,dates, prof_times,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_iwcProfiles_split(obs_data, twcvar,twcstr,thresholding, plots_out_dir,dates, prof_times,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
 
     # -------------------------------------------------------------
