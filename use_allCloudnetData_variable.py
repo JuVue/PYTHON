@@ -1754,7 +1754,7 @@ def plot_iwcProfiles_split(obs_data,twcvar,twcstr, thresholding, plots_out_dir,d
                     '--', color = lcols[m], linewidth = 0.5)
         if pmonc==True:
             for m in range(0,len(monc_data)):
-                id= np.squeeze(np.argwhere((monc_data[m][twc_tvar]>=prof_time[pt][0]) & (monc_data[m][twc_tvar]<prof_time[pt][1])))
+                id= np.squeeze(np.argwhere((monc_data[m][twc_tvar[m]]>=prof_time[pt][0]) & (monc_data[m][twc_tvar[m]]<prof_time[pt][1])))
                 ax1.fill_betweenx(monc_data[m][twc_zvar[m]],np.nanmean(monc_data[m]['model_iwc'][id,:],0)*1e3 - np.nanstd(monc_data[m]['model_iwc'][id,:]*1e3,0),
                     np.nanmean(monc_data[m]['model_iwc'][id,:],0)*1e3 + np.nanstd(monc_data[m]['model_iwc'][id,:],0)*1e3, color = fcolsmonc[m], alpha = 0.05)
                 plt.plot(np.nanmean(monc_data[m]['model_iwc'][id,:],0)*1e3 - np.nanstd(monc_data[m]['model_iwc'][id,:],0)*1e3, monc_data[m][twc_zvar[m]],
@@ -1767,7 +1767,7 @@ def plot_iwcProfiles_split(obs_data,twcvar,twcstr, thresholding, plots_out_dir,d
                 plt.plot(np.nanmean(um_data[m]['model_iwc'][id,:],0)*1e3,np.nanmean(um_data[m]['height'],0), color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
         if pmonc==True:
             for m in range(0,len(monc_data)):
-                id= np.squeeze(np.argwhere((monc_data[m][twc_tvar]>=prof_time[pt][0]) & (monc_data[m][twc_tvar]<prof_time[pt][1])))
+                id= np.squeeze(np.argwhere((monc_data[m][twc_tvar[m]]>=prof_time[pt][0]) & (monc_data[m][twc_tvar[m]]<prof_time[pt][1])))
                 plt.plot(np.nanmean(monc_data[m]['model_iwc'][id,:],0)*1e3,monc_data[m][twc_zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
         if pt == 1:
             plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=4)
