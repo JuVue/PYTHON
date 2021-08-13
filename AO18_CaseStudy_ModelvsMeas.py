@@ -442,6 +442,7 @@ def plot_T_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
                 plt.plot(np.nanmean(um_data[m]['temperature'][id,:],0),um_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
         if pmonc==True:
             for m in range(0,len(monc_data)):
+                embed()
                 id= np.squeeze(np.argwhere((monc_data[m][tvar]>=prof_time[pt][0]) & (monc_data[m][tvar]<prof_time[pt][1])))
                 plt.plot(np.nanmean(monc_data[m]['T_mean'][id,:],0),monc_data[m][zvar], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
         if pt == 1:
