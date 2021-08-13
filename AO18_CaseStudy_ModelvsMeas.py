@@ -667,11 +667,12 @@ def main():
     print ('Load UM INVERSION DATA')
     for m in range(0,len(out_dir)):
         filename=glob.glob(inv_dir + out_dir[m][0:-1] + '*20m.mat')
-        tmp  = readMatlabStruct(filename[0])
-        um_data[m]['inv'] = tmp['dec']
-        print (um_data[m]['inv'].keys())
-        for var in um_data[m]['inv'].keys():
-            um_data[m]['inv'][var]=np.squeeze(um_data[m]['inv'][var])
+        if len(filename)>0:
+            tmp  = readMatlabStruct(filename[0])
+            um_data[m]['inv'] = tmp['dec']
+            print (um_data[m]['inv'].keys())
+            for var in um_data[m]['inv'].keys():
+                um_data[m]['inv'][var]=np.squeeze(um_data[m]['inv'][var])
 
     ### -----------------------------------------------------------------
     ### create monc filenames
@@ -804,21 +805,22 @@ def main():
     print ('Load MONC INVERSION DATA')
     for m in range(0,len(m_out_dir)):
         filename=glob.glob(inv_dir + m_out_dir[m][0:-1] + '*20m.mat')
-        tmp  = readMatlabStruct(filename[0])
-        tmp = tmp['dec']
-        print (tmp.keys())
-        monc_data[m]['inv']={}
-        for var in tmp.keys():
-            c, ia, ib = intersect_mtlb(monc_data[m]['time1'],tmp['mday'])
-        #    print(ia,ib)
-            tmp2=np.argwhere(np.array(tmp[var].shape) == len(np.squeeze(tmp['mday'])))
-            if tmp2 ==0:
-                if np.squeeze(len(tmp[var]))==1:
-                    monc_data[m]['inv'][var]=np.squeeze(tmp[var][ib])
-                else:
-                    monc_data[m]['inv'][var]=np.squeeze(tmp[var][ib,:])
-            elif tmp2 ==1:
-                monc_data[m]['inv'][var]=np.squeeze(tmp[var][:,ib])
+        if len(filename)>0:
+            tmp  = readMatlabStruct(filename[0])
+            tmp = tmp['dec']
+            print (tmp.keys())
+            monc_data[m]['inv']={}
+            for var in tmp.keys():
+                c, ia, ib = intersect_mtlb(monc_data[m]['time1'],tmp['mday'])
+            #    print(ia,ib)
+                tmp2=np.argwhere(np.array(tmp[var].shape) == len(np.squeeze(tmp['mday'])))
+                if tmp2 ==0:
+                    if np.squeeze(len(tmp[var]))==1:
+                        monc_data[m]['inv'][var]=np.squeeze(tmp[var][ib])
+                    else:
+                        monc_data[m]['inv'][var]=np.squeeze(tmp[var][ib,:])
+                elif tmp2 ==1:
+                    monc_data[m]['inv'][var]=np.squeeze(tmp[var][:,ib])
 
 # -------------------------------------------------------------
 # Load observations
