@@ -2445,10 +2445,10 @@ def main():
             moutstr.append('qin2-thqvTend-noice')
         elif m_out_dir[m][:2] == '22':
             mlabel.append('MONC qinit2 800m \n thForcing-0000-0600')
-            moutstr.append('qin2-thqvTend-noice')
+            moutstr.append('MONC-22')
         elif m_out_dir[m][:2] == '23':
             mlabel.append('MONC thForcing-0600-0000')
-            moutstr.append('thForcing-0600-0000')
+            moutstr.append('MONC-23')
         else:
             label.append('undefined_label')
             moutstr.append('')
