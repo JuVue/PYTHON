@@ -426,25 +426,27 @@ def plot_T_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
                 plt.plot(np.nanmean(um_data[m]['temperature'][id,:],0) + np.nanstd(um_data[m]['temperature'][id,:],0),um_data[m]['height'],
                     '--', color = lcols[m], linewidth = 0.5)
         if pmonc==True:
+            tvar=[]
+            zvar=[]
             for m in range(0,len(monc_data)):
-                tvar=monc_data[m]['tvar']['T_mean']
-                zvar=monc_data[m]['zvar']['T_mean']
-                id= np.squeeze(np.argwhere((monc_data[m][tvar]>=prof_time[pt][0]) & (monc_data[m][tvar]<prof_time[pt][1])))
-                ax1.fill_betweenx(monc_data[m][zvar],np.nanmean(monc_data[m]['T_mean'][id,:],0) - np.nanstd(monc_data[m]['T_mean'][id,:],0),
+                tvar+=[monc_data[m]['tvar']['T_mean']]
+                zvar+=[monc_data[m]['zvar']['T_mean']]
+                id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
+                ax1.fill_betweenx(monc_data[m][zvar[m]],np.nanmean(monc_data[m]['T_mean'][id,:],0) - np.nanstd(monc_data[m]['T_mean'][id,:],0),
                     np.nanmean(monc_data[m]['T_mean'][id,:],0) + np.nanstd(monc_data[m]['T_mean'][id,:],0), color = fcolsmonc[m], alpha = 0.05)
-                plt.plot(np.nanmean(monc_data[m]['T_mean'][id,:],0) - np.nanstd(monc_data[m]['T_mean'][id,:],0), monc_data[m][zvar],
+                plt.plot(np.nanmean(monc_data[m]['T_mean'][id,:],0) - np.nanstd(monc_data[m]['T_mean'][id,:],0), monc_data[m][zvar[m]],
                     '--', color =lcolsmonc[m], linewidth = 0.5)
-                plt.plot(np.nanmean(monc_data[m]['T_mean'][id,:],0) + np.nanstd(monc_data[m]['T_mean'][id,:],0), monc_data[m][zvar],
+                plt.plot(np.nanmean(monc_data[m]['T_mean'][id,:],0) + np.nanstd(monc_data[m]['T_mean'][id,:],0), monc_data[m][zvar[m]],
                     '--', color = lcolsmonc[m], linewidth = 0.5)
         if pum==True:
             for m in range(0,len(um_data)):
                 id= np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
                 plt.plot(np.nanmean(um_data[m]['temperature'][id,:],0),um_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
+        embed(0)
         if pmonc==True:
             for m in range(0,len(monc_data)):
-                embed()
-                id= np.squeeze(np.argwhere((monc_data[m][tvar]>=prof_time[pt][0]) & (monc_data[m][tvar]<prof_time[pt][1])))
-                plt.plot(np.nanmean(monc_data[m]['T_mean'][id,:],0),monc_data[m][zvar], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+                id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
+                plt.plot(np.nanmean(monc_data[m]['T_mean'][id,:],0),monc_data[m][zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
         if pt == 1:
             plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=4)
 
