@@ -61,6 +61,7 @@ def plot_basicTests( monc_data ):
     plt.figure()
     plt.plot(monc_data[0]['th_mean'][0,:],monc_data[0]['zn'],label = 'start')
     plt.plot(monc_data[0]['th_mean'][cp_id,:],monc_data[0]['zn'],label = 'checkpoint restart')
+    plt.plot(monc_data[0]['th_mean'][int(cp_id)+1,:],monc_data[0]['zn'],label = 'checkpoint restart+1')
     plt.plot(monc_data[0]['th_mean'][-1,:],monc_data[0]['zn'],label = 'end')
     plt.xlabel('$\Theta$ [K]')
     plt.ylabel('Z [m]')
@@ -71,6 +72,7 @@ def plot_basicTests( monc_data ):
     plt.pcolor(monc_data[0]['time2'],monc_data[0]['zn'],
         np.transpose(monc_data[0]['q_cloud_liquid_mass_mean'])*1e3)
     plt.plot([cp_ts,cp_ts],[0,2.5e3],'--',color='white',zorder=3)
+    plt.plot([monc_spin,monc_spin],[0,2.5e3],'--',color='white',zorder=3)
     plt.xlabel('Time [s]')
     plt.ylabel('Z [m]')
     plt.colorbar()
@@ -384,7 +386,7 @@ def main():
     print (monc_data[0]['time2'].shape)
     print (monc_data[0]['time2'])
 
-    figure = plot_basicTests( monc_data )
+    figure = plot_basicTests( monc_data, monc_spin )
 
     # -------------------------------------------------------------
     # FIN.
