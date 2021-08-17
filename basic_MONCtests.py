@@ -64,6 +64,7 @@ def plot_basicTests( monc_data ):
     plt.figure()
     plt.pcolor(monc_data[0]['time2'],monc_data[0]['zn'],
         np.transpose(monc_data[0]['q_cloud_liquid_mass_mean'])*1e3)
+    plt.plot([43200,43200],[0,2.5e3],'w--')
     plt.xlabel('Time [s]')
     plt.ylabel('Z [m]')
     plt.colorbar()
