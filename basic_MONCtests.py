@@ -365,6 +365,7 @@ def main():
     # print (monc_data.keys())
     print (monc_data[0].keys())
     print (monc_data[0]['time2'].shape)
+    print (monc_data[0]['time2'])
     figure = plot_basicTests( monc_data )
 
     # -------------------------------------------------------------
