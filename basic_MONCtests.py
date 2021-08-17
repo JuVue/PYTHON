@@ -30,7 +30,7 @@ from manipFuncts import int2list
 # from conversionFuncts import reGrid_Sondes
 
 
-def plot_basicTests( monc_data ):
+def plot_basicTests( monc_data, monc_spin ):
 
 
     print ('******')
