@@ -52,10 +52,10 @@ def plot_basicTests( monc_data ):
 
     plt.plot(monc_data[0]['th_mean'][0,:],monc_data[0]['zn'])
     plt.plot(monc_data[0]['th_mean'][-1,:],monc_data[0]['zn'])
-    plt.plot(monc_data[1]['th_mean'][0,:],monc_data[1]['zn'])
-    plt.plot(monc_data[1]['th_mean'][-1,:],monc_data[1]['zn'])
-    plt.plot(monc_data[2]['th_mean'][0,:],monc_data[2]['zn'])
-    plt.plot(monc_data[2]['th_mean'][-1,:],monc_data[2]['zn'])
+    # plt.plot(monc_data[1]['th_mean'][0,:],monc_data[1]['zn'])
+    # plt.plot(monc_data[1]['th_mean'][-1,:],monc_data[1]['zn'])
+    # plt.plot(monc_data[2]['th_mean'][0,:],monc_data[2]['zn'])
+    # plt.plot(monc_data[2]['th_mean'][-1,:],monc_data[2]['zn'])
 
     plt.show()
 
@@ -362,8 +362,9 @@ def main():
     # -------------------------------------------------------------
     # Plot some basic data to check monc run worked successfully
     # -------------------------------------------------------------
-    print (monc_data.keys())
+    # print (monc_data.keys())
     print (monc_data[0].keys())
+    print (monc_data[0]['time2'].shape)
     figure = plot_basicTests( monc_data )
 
     # -------------------------------------------------------------
