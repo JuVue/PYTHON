@@ -39,6 +39,15 @@ def plot_basicTests( monc_data, monc_spin ):
     print ('')
 
 
+    checkpoint = []
+
+    checkpoint = 12 # checkpoint restart at 12h
+
+    if checkpoint == 12:
+        cp_id = 47  ### 48th timestep
+        cp_ts = 43200.
+
+
     SMALL_SIZE = 12
     MED_SIZE = 14
     LARGE_SIZE = 16
@@ -50,20 +59,24 @@ def plot_basicTests( monc_data, monc_spin ):
     plt.rc('ytick',labelsize=MED_SIZE)
     plt.rc('legend',fontsize=MED_SIZE)
 
-    checkpoint = []
-
-    checkpoint = 12 # checkpoint restart at 12h
-
-    if checkpoint == 12:
-        cp_id = 47  ### 48th timestep
-        cp_ts = 43200.
-
     plt.figure()
     plt.plot(monc_data[0]['th_mean'][0,:],monc_data[0]['zn'],label = 'start')
     plt.plot(monc_data[0]['th_mean'][cp_id,:],monc_data[0]['zn'],label = 'checkpoint restart')
     plt.plot(monc_data[0]['th_mean'][int(cp_id)+1,:],monc_data[0]['zn'],label = 'checkpoint restart+1')
     plt.plot(monc_data[0]['th_mean'][-1,:],monc_data[0]['zn'],label = 'end')
     plt.xlabel('$\Theta$ [K]')
+    plt.ylabel('Z [m]')
+    plt.legend()
+    plt.show()
+
+    ### calculate change in theta (K/hr)
+    theta1 = (monc_data[0]['th_mean'][cp_id,:] - monc_data[0]['th_mean'][0,:]) / 12
+    theta2 = (monc_data[0]['th_mean'][-1,:] - monc_data[0]['th_mean'][int(cp_id)+1,:]) / 8
+
+    plt.figure()
+    plt.plot(theta1,monc_data[0]['zn'],label = '0-12h')
+    plt.plot(theta2,monc_data[0]['zn'],label = '12-20h')
+    plt.xlabel('$\Delta \Theta$ [K/hr]')
     plt.ylabel('Z [m]')
     plt.legend()
     plt.show()
@@ -77,6 +90,8 @@ def plot_basicTests( monc_data, monc_spin ):
     plt.ylabel('Z [m]')
     plt.colorbar()
     plt.show()
+
+
 
 
     print ('******')
