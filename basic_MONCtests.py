@@ -358,6 +358,7 @@ def main():
     # Plot some basic data to check monc run worked successfully
     # -------------------------------------------------------------
     print (monc_data.keys())
+    print (monc_data[0].keys())
     figure = plot_basicTests( monc_data )
 
     # -------------------------------------------------------------
