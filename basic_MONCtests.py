@@ -74,6 +74,7 @@ def plot_basicTests( monc_data, monc_spin ):
     theta2 = (monc_data[0]['th_mean'][-1,:] - monc_data[0]['th_mean'][int(cp_id)+1,:]) / 8
 
     plt.figure()
+    plt.plot([0,0],[0,2.5e3],'--',color='lightgrey')
     plt.plot(theta1,monc_data[0]['zn'],label = '0-12h')
     plt.plot(theta2,monc_data[0]['zn'],label = '12-20h')
     plt.xlabel('$\Delta \Theta$ [K/hr]')
