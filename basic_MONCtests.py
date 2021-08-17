@@ -73,7 +73,7 @@ def plot_basicTests( monc_data, monc_spin ):
     theta1 = ((monc_data[0]['th_mean'][cp_id,:] - monc_data[0]['th_mean'][0,:]) / 12) * 24
     theta2 = ((monc_data[0]['th_mean'][-1,:] - monc_data[0]['th_mean'][int(cp_id)+1,:]) / 8) * 24
     theta1a = ((monc_data[0]['th_mean'][23,:] - monc_data[0]['th_mean'][0,:]) / 6) * 24
-    theta1a = ((monc_data[0]['th_mean'][cp_id,:] - monc_data[0]['th_mean'][23,:]) / 6) * 24
+    theta1b = ((monc_data[0]['th_mean'][cp_id,:] - monc_data[0]['th_mean'][23,:]) / 6) * 24
 
     plt.figure()
     plt.plot([0,0],[0,2.5e3],'--',color='lightgrey')
