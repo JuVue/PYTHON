@@ -50,12 +50,11 @@ def plot_basicTests( monc_data ):
     plt.rc('ytick',labelsize=MED_SIZE)
     plt.rc('legend',fontsize=MED_SIZE)
 
-    plt.plot(monc_data[0]['th_mean'][0,:],monc_data[0]['zn'])
-    plt.plot(monc_data[0]['th_mean'][-1,:],monc_data[0]['zn'])
-    # plt.plot(monc_data[1]['th_mean'][0,:],monc_data[1]['zn'])
-    # plt.plot(monc_data[1]['th_mean'][-1,:],monc_data[1]['zn'])
-    # plt.plot(monc_data[2]['th_mean'][0,:],monc_data[2]['zn'])
-    # plt.plot(monc_data[2]['th_mean'][-1,:],monc_data[2]['zn'])
+    checkpoint = 47 ### checkpoint at 12h (48th timestep)
+
+    plt.plot(monc_data[0]['th_mean'][0,:],monc_data[0]['zn'],label = 'start')
+    plt.plot(monc_data[0]['th_mean'][47,:],monc_data[0]['zn'],,label = 'checkpoint restart')
+    plt.plot(monc_data[0]['th_mean'][-1,:],monc_data[0]['zn'],label = 'end')
 
     plt.show()
 
@@ -366,6 +365,7 @@ def main():
     print (monc_data[0].keys())
     print (monc_data[0]['time2'].shape)
     print (monc_data[0]['time2'])
+
     figure = plot_basicTests( monc_data )
 
     # -------------------------------------------------------------
