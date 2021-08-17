@@ -56,11 +56,16 @@ def plot_basicTests( monc_data ):
     plt.plot(monc_data[0]['th_mean'][0,:],monc_data[0]['zn'],label = 'start')
     plt.plot(monc_data[0]['th_mean'][47,:],monc_data[0]['zn'],label = 'checkpoint restart')
     plt.plot(monc_data[0]['th_mean'][-1,:],monc_data[0]['zn'],label = 'end')
+    plt.xlabel('$\Theta$ [K]')
+    plt.ylabel('Z [m]')
     plt.legend()
     plt.show()
 
     plt.figure()
-    plt.pcolor(monc_data[0]['time2'],monc_data[0]['zn'],monc_data[0]['q_cloud_liquid_mass_mean']*1e3)
+    plt.pcolor(monc_data[0]['time2'],monc_data[0]['zn'],
+        np.transpose(monc_data[0]['q_cloud_liquid_mass_mean'])*1e3)
+    plt.xlabel('Time [s]')
+    plt.ylabel('Z [m]')
     plt.colorbar()
     plt.show()
 
