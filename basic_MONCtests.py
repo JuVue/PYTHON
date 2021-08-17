@@ -53,7 +53,7 @@ def plot_basicTests( monc_data ):
     checkpoint = 47 ### checkpoint at 12h (48th timestep)
 
     plt.plot(monc_data[0]['th_mean'][0,:],monc_data[0]['zn'],label = 'start')
-    plt.plot(monc_data[0]['th_mean'][47,:],monc_data[0]['zn'],,label = 'checkpoint restart')
+    plt.plot(monc_data[0]['th_mean'][47,:],monc_data[0]['zn'],label = 'checkpoint restart')
     plt.plot(monc_data[0]['th_mean'][-1,:],monc_data[0]['zn'],label = 'end')
 
     plt.show()
