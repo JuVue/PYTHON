@@ -60,7 +60,7 @@ def plot_basicTests( monc_data ):
     plt.show()
 
     plt.figure()
-    plt.pcolor(monc_data[0]['time2'],monc_data[0]['q_cloud_liquid_mass_mean']*1e3)
+    plt.pcolor(monc_data[0]['time2'],monc_data[0]['zn'],monc_data[0]['q_cloud_liquid_mass_mean']*1e3)
     plt.colorbar()
     plt.show()
 
