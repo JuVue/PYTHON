@@ -50,7 +50,7 @@ def plot_basicTests( monc_data ):
     plt.rc('ytick',labelsize=MED_SIZE)
     plt.rc('legend',fontsize=MED_SIZE)
 
-    plt.plot(monc_data['th_mean'][0,:],monc_data['zn'])
+    plt.plot(monc_data[0]['th_mean'][0,:],monc_data[0]['zn'])
 
     plt.show()
 
