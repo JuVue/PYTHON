@@ -35,6 +35,28 @@ def plot_basicTests( monc_data ):
 
     print ('******')
     print ('')
+    print ('Plotting test figures to check MONC output:')
+    print ('')
+
+
+    SMALL_SIZE = 12
+    MED_SIZE = 14
+    LARGE_SIZE = 16
+
+    plt.rc('font',size=MED_SIZE)
+    plt.rc('axes',titlesize=MED_SIZE)
+    plt.rc('axes',labelsize=MED_SIZE)
+    plt.rc('xtick',labelsize=MED_SIZE)
+    plt.rc('ytick',labelsize=MED_SIZE)
+    plt.rc('legend',fontsize=MED_SIZE)
+
+    plt.plot(monc_data['th_mean'][0,:],monc_data['zn'])
+
+    plt.show()
+
+
+    print ('******')
+    print ('')
     print ('Finished plotting! :)')
     print ('')
 
