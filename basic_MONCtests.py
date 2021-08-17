@@ -51,6 +51,11 @@ def plot_basicTests( monc_data ):
     plt.rc('legend',fontsize=MED_SIZE)
 
     plt.plot(monc_data[0]['th_mean'][0,:],monc_data[0]['zn'])
+    plt.plot(monc_data[0]['th_mean'][-1,:],monc_data[0]['zn'])
+    plt.plot(monc_data[1]['th_mean'][0,:],monc_data[1]['zn'])
+    plt.plot(monc_data[1]['th_mean'][-1,:],monc_data[1]['zn'])
+    plt.plot(monc_data[2]['th_mean'][0,:],monc_data[2]['zn'])
+    plt.plot(monc_data[2]['th_mean'][-1,:],monc_data[2]['zn'])
 
     plt.show()
 
