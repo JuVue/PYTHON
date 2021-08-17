@@ -1,3 +1,4 @@
 list of updates for run23_testing:
 
 1. set up new script (using use_allCloudnetData_variable for guidance) for quick MONC output tests (need code that appends files together to do quick quality checks on output before comparing with UM/obs)
+2. test commit
