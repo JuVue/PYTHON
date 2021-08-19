@@ -59,7 +59,9 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel  ):
     plt.rc('ytick',labelsize=MED_SIZE)
     plt.rc('legend',fontsize=MED_SIZE)
 
-    plt.figure()
+    fig = plt.figure(figsize=(6,6))
+    plt.subplots_adjust(top = 0.9, bottom = 0.1, right = 0.9, left = 0.1,
+            hspace = 0.3, wspace = 0.1)
     plt.plot(monc_data[0]['th_mean'][0,:],monc_data[0]['zn'],label = 'start')
     plt.plot(monc_data[0]['th_mean'][cp_id,:],monc_data[0]['zn'],label = 'checkpoint restart')
     plt.plot(monc_data[0]['th_mean'][int(cp_id)+1,:],monc_data[0]['zn'],label = 'checkpoint restart+1')
