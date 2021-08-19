@@ -419,8 +419,8 @@ def main():
     # print (monc_data[0]['time2'].shape)
     # print (monc_data[0]['time2'])
 
-    print (moutstr)
-    print (moutstr.dtype)
+    print (moutstr[0])
+    print (moutstr[0].dtype)
 
     figure = plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel )
 
