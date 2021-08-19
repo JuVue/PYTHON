@@ -2389,7 +2389,9 @@ def main():
     #              '8_control_20180913T0000Z_Wsub-1.0-1km/',
     #              '9_control_20180913T0000Z_Wsub-0.5-1km/']
     m_out_dir =[#'22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/']
-               '23_20180913T0000Z_6hSpin-up_12h0600-0000thTend_20h1200-0600thTend/']
+               '23_20180913T0000Z_6hSpin-up_12h0600-0000thTend_20h1200-0600thTend/'
+               # '24_20180913T0000Z_12h0600-0000_20h1200-0600thTend_0.1Cooper/'
+               '25_20180913T0000Z_20h0600-0000thTend/'
             #'4_control_20180913T0000Z_Wsub-1.5/',
     #################################################################
     ## create labels for figure legends - done here so only needs to be done once!
@@ -2452,6 +2454,12 @@ def main():
         elif m_out_dir[m][:2] == '23':
             mlabel.append('MONC thForcing-0600-0000')
             moutstr.append('MONC-23')
+        elif m_out_dir[m][:2] == '24':
+            mlabel.append('MONC thForcing-12h0600-0000-20h1200-0600 0.1*Cooper')
+            moutstr.append('MONC-24')
+        elif m_out_dir[m][:2] == '25':
+            mlabel.append('MONC thForcing-20h0600-0000')
+            moutstr.append('MONC-25')
         else:
             label.append('undefined_label')
             moutstr.append('')
