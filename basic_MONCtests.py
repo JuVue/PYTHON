@@ -60,7 +60,7 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel  ):
     plt.rc('legend',fontsize=MED_SIZE)
 
     fig = plt.figure(figsize=(6,5))
-    plt.subplots_adjust(top = 0.9, bottom = 0.1, right = 0.9, left = 0.15,
+    plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.9, left = 0.15,
             hspace = 0.3, wspace = 0.1)
     plt.plot(monc_data[0]['th_mean'][0,:],monc_data[0]['zn'],label = 'start')
     plt.plot(monc_data[0]['th_mean'][cp_id,:],monc_data[0]['zn'],label = 'checkpoint restart')
@@ -79,7 +79,9 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel  ):
     theta1a = ((monc_data[0]['th_mean'][23,:] - monc_data[0]['th_mean'][0,:]) / 6) * 24
     theta1b = ((monc_data[0]['th_mean'][cp_id,:] - monc_data[0]['th_mean'][23,:]) / 6) * 24
 
-    plt.figure()
+    fig = plt.figure(figsize=(6,5))
+    plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.9, left = 0.15,
+            hspace = 0.3, wspace = 0.1)
     plt.plot([0,0],[0,2.5e3],'--',color='lightgrey')
     plt.plot(theta1a,monc_data[0]['zn'],label = '0-6h')
     plt.plot(theta1b,monc_data[0]['zn'],label = '6-12h')
@@ -92,7 +94,9 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel  ):
     plt.savefig(fileout)
     plt.close()
 
-    plt.figure()
+    fig = plt.figure(figsize=(6,5))
+    plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.9, left = 0.15,
+            hspace = 0.3, wspace = 0.1)
     plt.pcolor(monc_data[0]['time2'],monc_data[0]['zn'],
         np.transpose(monc_data[0]['q_cloud_liquid_mass_mean'])*1e3)
     plt.plot([cp_ts,cp_ts],[0,2.5e3],'--',color='white',zorder=3)
