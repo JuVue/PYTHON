@@ -67,7 +67,7 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel  ):
     plt.xlabel('$\Theta$ [K]')
     plt.ylabel('Z [m]')
     plt.legend()
-    fileout = plots_out_dir + moutstr + '_meanTH_' + mlabel + '.png'
+    fileout = plots_out_dir + moutstr[0] + '_meanTH_' + mlabel[0] + '.png'
     plt.savefig(fileout)
     plt.close()
 
