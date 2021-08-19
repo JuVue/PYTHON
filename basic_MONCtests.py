@@ -86,7 +86,7 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel  ):
     plt.xlabel('$\Delta \Theta$ [K/day]')
     plt.ylabel('Z [m]')
     plt.legend()
-    fileout = plots_out_dir + moutstr + '_thTendencies_' + mlabel + '.png'
+    fileout = plots_out_dir + str(moutstr[0]) + '_thTendencies_' + str(mlabel[0]) + '.png'
     plt.savefig(fileout)
     plt.close()
 
@@ -418,9 +418,6 @@ def main():
     # print (monc_data[0].keys())
     # print (monc_data[0]['time2'].shape)
     # print (monc_data[0]['time2'])
-
-    print (moutstr[0])
-    print (moutstr[0].dtype)
 
     figure = plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel )
 
