@@ -262,8 +262,14 @@ def main():
             mlabel.append('MONC qinit2 800m \n thForcing-0000-0600')
             moutstr.append('MONC-22')
         elif m_out_dir[m][:2] == '23':
-            mlabel.append('MONC thForcing-0600-0000')
+            mlabel.append('MONC thForcing-12h0600-0000-20h1200-0600')
             moutstr.append('MONC-23')
+        elif m_out_dir[m][:2] == '24':
+            mlabel.append('MONC thForcing-12h0600-0000-20h1200-0600 0.1*Cooper')
+            moutstr.append('MONC-24')
+        elif m_out_dir[m][:2] == '25':
+            mlabel.append('MONC thForcing-20h0600-0000')
+            moutstr.append('MONC-25')
         else:
             label.append('undefined_label')
             moutstr.append('')
