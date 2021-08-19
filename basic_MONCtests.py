@@ -30,7 +30,7 @@ from manipFuncts import int2list
 # from conversionFuncts import reGrid_Sondes
 
 
-def plot_basicTests( monc_data, monc_spin ):
+def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel  ):
 
 
     print ('******')
@@ -67,7 +67,9 @@ def plot_basicTests( monc_data, monc_spin ):
     plt.xlabel('$\Theta$ [K]')
     plt.ylabel('Z [m]')
     plt.legend()
-    plt.show()
+    fileout = plots_out_dir + moutstr + '_meanTH_' + mlabel + '.png'
+    plt.savefig(fileout)
+    plt.close()
 
     ### calculate change in theta (K/hr)
     theta1 = ((monc_data[0]['th_mean'][cp_id,:] - monc_data[0]['th_mean'][0,:]) / 12) * 24
@@ -84,7 +86,9 @@ def plot_basicTests( monc_data, monc_spin ):
     plt.xlabel('$\Delta \Theta$ [K/day]')
     plt.ylabel('Z [m]')
     plt.legend()
-    plt.show()
+    fileout = plots_out_dir + moutstr + '_thTendencies_' + mlabel + '.png'
+    plt.savefig(fileout)
+    plt.close()
 
     plt.figure()
     plt.pcolor(monc_data[0]['time2'],monc_data[0]['zn'],
@@ -94,9 +98,9 @@ def plot_basicTests( monc_data, monc_spin ):
     plt.xlabel('Time [s]')
     plt.ylabel('Z [m]')
     plt.colorbar()
-    plt.show()
-
-
+    fileout = plots_out_dir + moutstr + '_LWCTimeseries_' + mlabel + '.png'
+    plt.savefig(fileout)
+    plt.close()
 
 
     print ('******')
@@ -196,7 +200,7 @@ def main():
     obs_switch = 'UM' #RADAR
 
     if machine =='JASMIN':
-        plots_out_dir='/gws/nopw/j04/ncas_radar_vol1/jutta/PLOTS/CaseStudy/'
+        plots_out_dir='/gws/nopw/j04/ncas_radar_vol1/gillian/PLOTS/CaseStudy/'
         if not os.path.exists(plots_out_dir):
             os.makedirs(plots_out_dir)
 
@@ -415,7 +419,7 @@ def main():
     print (monc_data[0]['time2'].shape)
     print (monc_data[0]['time2'])
 
-    figure = plot_basicTests( monc_data, monc_spin )
+    figure = plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel )
 
     # -------------------------------------------------------------
     # FIN.
