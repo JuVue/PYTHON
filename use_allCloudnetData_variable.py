@@ -1575,7 +1575,7 @@ def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,d
             fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_LWC'+ lwcstr + '_split.png'
 
     plt.show()
-    # plt.savefig(fileout)
+    plt.savefig(fileout)
     print ('')
     print ('Finished plotting! :)')
     print ('')
@@ -1803,7 +1803,7 @@ def plot_iwcProfiles_split(obs_data,twcvar,twcstr, thresholding, plots_out_dir,d
             fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_IWC'+ twcstr + '_split.png'
 
     plt.show()
-    # plt.savefig(fileout)
+    plt.savefig(fileout)
     print ('')
     print ('Finished plotting! :)')
     print ('')
@@ -2390,8 +2390,8 @@ def main():
     #              '9_control_20180913T0000Z_Wsub-0.5-1km/']
     m_out_dir =[#'22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/']
                '23_20180913T0000Z_6hSpin-up_12h0600-0000thTend_20h1200-0600thTend/',
-               # '24_20180913T0000Z_12h0600-0000_20h1200-0600thTend_0.1Cooper/',
-               '25_20180913T0000Z_20h0600-0000thTend/'
+               '24_20180913T0000Z_12h0600-0000_20h1200-0600thTend_0.1Cooper/',
+               # '25_20180913T0000Z_20h0600-0000thTend/'
             #'4_control_20180913T0000Z_Wsub-1.5/',
             ]
     #################################################################
