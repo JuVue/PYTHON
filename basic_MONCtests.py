@@ -98,7 +98,7 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel  ):
     plt.xlabel('Time [s]')
     plt.ylabel('Z [m]')
     plt.colorbar()
-    fileout = plots_out_dir + moutstr + '_LWCTimeseries_' + mlabel + '.png'
+    fileout = plots_out_dir + str(moutstr) + '_LWCTimeseries_' + str(mlabel) + '.png'
     plt.savefig(fileout)
     plt.close()
 
@@ -415,9 +415,12 @@ def main():
     # Plot some basic data to check monc run worked successfully
     # -------------------------------------------------------------
     # print (monc_data.keys())
-    print (monc_data[0].keys())
-    print (monc_data[0]['time2'].shape)
-    print (monc_data[0]['time2'])
+    # print (monc_data[0].keys())
+    # print (monc_data[0]['time2'].shape)
+    # print (monc_data[0]['time2'])
+
+    print (moutstr)
+    print (moutstr.dtype)
 
     figure = plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel )
 
