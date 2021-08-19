@@ -103,6 +103,7 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel  ):
     plt.plot([monc_spin,monc_spin],[0,2.5e3],'--',color='white',zorder=3)
     plt.xlabel('Time [s]')
     plt.ylabel('Z [m]')
+    plt.title('LWMR [g/kg]')
     plt.colorbar()
     fileout = plots_out_dir + moutstr[0] + '_LWCTimeseries_' + mlabel[0] + '.png'
     plt.savefig(fileout)
