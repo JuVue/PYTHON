@@ -1574,8 +1574,9 @@ def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,d
         else:
             fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_LWC'+ lwcstr + '_split.png'
 
-    plt.show()
     plt.savefig(fileout)
+    plt.close()
+    # plt.show()
     print ('')
     print ('Finished plotting! :)')
     print ('')
@@ -1802,8 +1803,9 @@ def plot_iwcProfiles_split(obs_data,twcvar,twcstr, thresholding, plots_out_dir,d
         else:
             fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_IWC'+ twcstr + '_split.png'
 
-    plt.show()
     plt.savefig(fileout)
+    plt.close()
+    # plt.show()
     print ('')
     print ('Finished plotting! :)')
     print ('')
