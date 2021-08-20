@@ -2339,7 +2339,7 @@ def main():
     moccha_missing_files = ['20180813_oden_','20180910_oden_']   ### cloud radar not working    #,'20180914_oden_'
 
     #---- MONC SPIN UP TIME
-    monc_spin = 6 *60 *60
+    monc_spin = 8 *60 *60
 
     #---- SPLIT PROFILES IN TIME JUNKS
     prof_times=[[dates[0], dates[0]+4/24],
