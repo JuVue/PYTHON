@@ -2394,7 +2394,8 @@ def main():
                '23_20180913T0000Z_6hSpin-up_12h0600-0000thTend_20h1200-0600thTend/',
                # '24_20180913T0000Z_12h0600-0000_20h1200-0600thTend_0.1Cooper/',
                # '25_20180913T0000Z_20h0600-0000thTend/'
-               '26_20180913T0000Z_6hSpinUp_12h0600-0000thTend_20h1200-0600thTend_6-20h0.1Cooper/'
+               '26A_20180913T0000Z_6hSpinUp_12h0600-0000thTend_20h1200-0600thTend_6-20h0.1Cooper/',
+               '26B_20180913T0000Z_6hSpinUp_12h0600-0000thTend_20h1200-0600thTend_6-20h0-Cooper/'
             #'4_control_20180913T0000Z_Wsub-1.5/',
             ]
     #################################################################
@@ -2469,7 +2470,7 @@ def main():
             moutstr.append('MONC-26A')
         elif m_out_dir[m][:3] == '26B':
             mlabel.append('MONC 6hSpinUp thForcing-0-12h0600-0000 6-20h-0*Cooper')
-            moutstr.append('MONC-26B')        
+            moutstr.append('MONC-26B')
         else:
             label.append('undefined_label')
             moutstr.append('')
