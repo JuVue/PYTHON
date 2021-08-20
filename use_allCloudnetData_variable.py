@@ -2390,7 +2390,7 @@ def main():
     #              '6_control_20180913T0000Z_Wsub-1.5-1km/',
     #              '8_control_20180913T0000Z_Wsub-1.0-1km/',
     #              '9_control_20180913T0000Z_Wsub-0.5-1km/']
-    m_out_dir =[#'22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/']
+    m_out_dir =[#'22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/',
                '23_20180913T0000Z_6hSpin-up_12h0600-0000thTend_20h1200-0600thTend/',
                # '24_20180913T0000Z_12h0600-0000_20h1200-0600thTend_0.1Cooper/',
                # '25_20180913T0000Z_20h0600-0000thTend/'
@@ -2479,7 +2479,7 @@ def main():
     ### create monc filenames
     monc_filename=[]
     for m in range(0, len(m_out_dir)):
-        fname=glob.glob(monc_root_dir + m_out_dir[m] +'*.nc')
+        fname=glob.glob(monc_root_dir + m_out_dir[m] +'*dg*.nc')
         monc_filename.append(fname)
 
     monc_3d_filename=[]
