@@ -47,7 +47,6 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel  ):
         cp_id = 47  ### 48th timestep
         cp_ts = 43200.
 
-
     SMALL_SIZE = 12
     MED_SIZE = 14
     LARGE_SIZE = 16
@@ -101,7 +100,7 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel  ):
     plt.pcolor(monc_data[0]['time2'],monc_data[0]['zn'],
         np.transpose(monc_data[0]['q_cloud_liquid_mass_mean'])*1e3)
     plt.plot([cp_ts,cp_ts],[0,2.5e3],'--',color='white',zorder=3)
-    plt.plot([monc_spin,monc_spin],[0,2.5e3],'--',color='white',zorder=3)
+    plt.plot([monc_spin,monc_spin],[0,2.5e3],'--',color='red',zorder=3)
     plt.xlabel('Time [s]')
     plt.ylabel('Z [m]')
     plt.title('LWMR [g/kg]')
@@ -116,7 +115,7 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel  ):
     plt.pcolor(monc_data[0]['time2'],monc_data[0]['zn'],
         np.transpose((monc_data[0]['q_ice_mass_mean']+monc_data[0]['q_snow_mass_mean']+monc_data[0]['q_graupel_mass_mean']))*1e3)
     plt.plot([cp_ts,cp_ts],[0,2.5e3],'--',color='white',zorder=3)
-    plt.plot([monc_spin,monc_spin],[0,2.5e3],'--',color='white',zorder=3)
+    plt.plot([monc_spin,monc_spin],[0,2.5e3],'--',color='red',zorder=3)
     plt.xlabel('Time [s]')
     plt.ylabel('Z [m]')
     plt.title('QISG_MR [g/kg]')
@@ -131,7 +130,8 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel  ):
     plt.pcolor(monc_data[0]['time2'],monc_data[0]['zn'],
         np.transpose(monc_data[0]['nisg_tot_mean'])/1e3)
     plt.plot([cp_ts,cp_ts],[0,2.5e3],'--',color='white',zorder=3)
-    plt.plot([monc_spin,monc_spin],[0,2.5e3],'--',color='white',zorder=3)
+    plt.plot([cp_ts,],[0,2.5e3],'--',color='red',zorder=3)
+    plt.plot([monc_spin,monc_spin],[0,2.5e3],'--',color='red',zorder=3)
     plt.xlabel('Time [s]')
     plt.ylabel('Z [m]')
     plt.title('N$_{isg}$ [/L]')
@@ -225,7 +225,7 @@ def main():
     moccha_missing_files = ['20180813_oden_','20180910_oden_']   ### cloud radar not working    #,'20180914_oden_'
 
     #---- MONC SPIN UP TIME
-    monc_spin = 6 *60 *60
+    monc_spin = 8 *60 *60
 
     #---- SPLIT PROFILES IN TIME JUNKS
     prof_times=[[dates[0], dates[0]+4/24],
