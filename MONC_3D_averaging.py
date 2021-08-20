@@ -36,7 +36,7 @@ elif machine=='JASMIN':
     #m_out_dir = '22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/'
     m_out_dir = '26_20180913T0000Z_6hSpinUp_12h0600-0000thTend_20h1200-0600thTend_6-20h0.1Cooper/'
     monc_exp_dir= '/gws/nopw/j04/ncas_radar_vol1/gillian/MONC/output/'  # output directory for averaged data
-tmp=glob.glob(monc_root_dir + m_out_dir +'*.nc')
+tmp=glob.glob(monc_root_dir + m_out_dir +'*_dg_*.nc')
 #assert len(tmp)==1,'more than one file detected'
 monc_filename=tmp
 start = time.time()
@@ -164,7 +164,7 @@ for m in range(0,len(monc_filename)):
     tvar['ndrop_tot']=tvar['q_ice_mass']
     zvar['ndrop_tot']= zvar['q_ice_mass']
     tvar['nisg_tot']=tvar['q_ice_mass']
-    zvar['nisg_tot']= zvar['q_ice_mass']        
+    zvar['nisg_tot']= zvar['q_ice_mass']
 
     print('setting up thresholds')
     #calculate mean values
