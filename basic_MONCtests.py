@@ -110,6 +110,36 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel  ):
     plt.savefig(fileout)
     plt.close()
 
+    fig = plt.figure(figsize=(6,5))
+    plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.9, left = 0.15,
+            hspace = 0.3, wspace = 0.1)
+    plt.pcolor(monc_data[0]['time2'],monc_data[0]['zn'],
+        np.transpose((monc_data[0]['q_ice_mass_mean']+monc_data[0]['q_snow_mass_mean']+monc_data[0]['q_graupel_mass_mean']))*1e3)
+    plt.plot([cp_ts,cp_ts],[0,2.5e3],'--',color='white',zorder=3)
+    plt.plot([monc_spin,monc_spin],[0,2.5e3],'--',color='white',zorder=3)
+    plt.xlabel('Time [s]')
+    plt.ylabel('Z [m]')
+    plt.title('QISG_MR [g/kg]')
+    plt.colorbar()
+    fileout = plots_out_dir + moutstr[0] + '_IWCTimeseries_' + mlabel[0] + '.png'
+    plt.savefig(fileout)
+    plt.close()
+
+    fig = plt.figure(figsize=(6,5))
+    plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.9, left = 0.15,
+            hspace = 0.3, wspace = 0.1)
+    plt.pcolor(monc_data[0]['time2'],monc_data[0]['zn'],
+        np.transpose(monc_data[0]['nisg_tot_mean'])/1e3)
+    plt.plot([cp_ts,cp_ts],[0,2.5e3],'--',color='white',zorder=3)
+    plt.plot([monc_spin,monc_spin],[0,2.5e3],'--',color='white',zorder=3)
+    plt.xlabel('Time [s]')
+    plt.ylabel('Z [m]')
+    plt.title('N$_{isg}$ [/L]')
+    plt.colorbar()
+    fileout = plots_out_dir + moutstr[0] + '_ICNCTimeseries_' + mlabel[0] + '.png'
+    plt.savefig(fileout)
+    plt.close()
+
 
     print ('******')
     print ('')
@@ -317,9 +347,10 @@ def main():
                 #    ['q_vapour','q_cloud_liquid_mass','q_rain_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
 
 
-    monc_var_3d_list =['T_mean','p_mean','th_mean','rho_mean','q_vapour_mean','q_cloud_liquid_mass_mean',
-                        'q_ice_mass_mean','q_snow_mass_mean','q_graupel_mass_mean',
-                        'twc_tot_mean','iwc_tot_mean','lwc_tot_mean']
+    monc_var_3d_list =['T_mean','p_mean','th_mean','rho_mean','q_vapour_mean',
+                        'q_cloud_liquid_mass_mean','q_ice_mass_mean','q_snow_mass_mean','q_graupel_mass_mean',
+                        'q_cloud_liquid_number_mean','q_ice_number_mean','q_snow_number_mean','q_graupel_number_mean',
+                        'twc_tot_mean','iwc_tot_mean','lwc_tot_mean','nisg_tot_mean','ndrop_tot_mean']
                         #'z', 'zn', 'u_mean', 'v_mean', 'w_mean', 'q_vapour_mean',
                         # 'time1', 'time2', 'p_mean', 'T_mean', 'th_mean', 'rho_mean',
                         # 'q_cloud_liquid_mass_mean', 'q_ice_mass_mean', 'q_snow_mass_mean',
