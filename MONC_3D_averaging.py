@@ -53,6 +53,7 @@ monc_var_list =['z','zn','prefn','thref','q_cloud_liquid_mass','q_rain_mass','q_
 monc_direct_avg=['u','v','w','q_vapour']
 #list of cloud variables to be averaged with threshold function
 monc_thresh_avg= ['q_cloud_liquid_mass','q_rain_mass','q_ice_mass','q_snow_mass','q_graupel_mass',
+                'q_cloud_liquid_number','q_rain_number','q_ice_number','q_snow_number','q_graupel_number',
                 'iwc_tot','lwc_tot','twc_tot'] #always have twc_tot at the end!
 
 # ml2  =        ['liquid_mmr_mean','ice_mmr_mean','snow_mmr_mean','graupel_mmr_mean','model_twc']
