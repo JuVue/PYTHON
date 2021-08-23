@@ -2654,35 +2654,35 @@ def main():
                     'cloud_fraction','radr_refl','qnliq','qnice','surface_downwelling_LW_radiation','surface_downwelling_SW_radiation', 'latent_heat_flux',
                     'toa_outgoing_longwave_flux','toa_incoming_shortwave_flux','toa_outgoing_shortwave_flux','seaice_albedo_agg']
 
-        if i == 0:
-            data_raw={}
-            time_raw={}
-
-        for m in range(0,len(out_dir)): #UM model data
-            if i == 0:
-                data_raw[m]={}
-                time_raw[m]={}
-                ### create time arrays for all model data
-                time_raw[m] = datenum + np.float64((nc1.variables['forecast_time'][:])/24.0)
-                ### loop over each Cloudnet class
-                for c in range(0,3):
-                    ### load in initial UM data
-                    for j in range(0,len(um_var_list[c])):
-                        if np.ndim(cn_nc1[m][c].variables[um_var_list[c][j]]) == 1:  # 1d timeseries only
-                            um_data[m][um_var_list[c][j]] = cn_nc1[m][c].variables[um_var_list[c][j]][:]
-                        else:                                   # 2d column um_data
-                            um_data[m][um_var_list[c][j]] = cn_nc1[m][c].variables[um_var_list[c][j]][:]
-            ### fill arrays with remaining data
-            else:
-                time_um[m] = np.append(time_um[m], datenum + np.float64((cn_nc1[m][0].variables['time'][:])/24.0))
-                ### loop over all Cloudnet classes
-                for c in range(0,3):
-                    ### append rest of UM data
-                    for j in range(0,len(um_var_list[c])):
-                        if np.ndim(cn_nc1[m][c].variables[um_var_list[c][j]]) == 1:
-                            um_data[m][um_var_list[c][j]] = np.append(um_data[m][um_var_list[c][j]],cn_nc1[m][c].variables[um_var_list[c][j]][:])
-                        else:
-                            um_data[m][um_var_list[c][j]] = np.append(um_data[m][um_var_list[c][j]],cn_nc1[m][c].variables[um_var_list[c][j]][:],0)
+        # if i == 0:
+        #     data_raw={}
+        #     time_raw={}
+        #
+        # for m in range(0,len(out_dir)): #UM model data
+        #     if i == 0:
+        #         data_raw[m]={}
+        #         time_raw[m]={}
+        #         ### create time arrays for all model data
+        #         time_raw[m] = datenum + np.float64((nc1.variables['forecast_time'][:])/24.0)
+        #         ### loop over each Cloudnet class
+        #         for c in range(0,3):
+        #             ### load in initial UM data
+        #             for j in range(0,len(um_var_list[c])):
+        #                 if np.ndim(cn_nc1[m][c].variables[um_var_list[c][j]]) == 1:  # 1d timeseries only
+        #                     um_data[m][um_var_list[c][j]] = cn_nc1[m][c].variables[um_var_list[c][j]][:]
+        #                 else:                                   # 2d column um_data
+        #                     um_data[m][um_var_list[c][j]] = cn_nc1[m][c].variables[um_var_list[c][j]][:]
+        #     ### fill arrays with remaining data
+        #     else:
+        #         time_um[m] = np.append(time_um[m], datenum + np.float64((cn_nc1[m][0].variables['time'][:])/24.0))
+        #         ### loop over all Cloudnet classes
+        #         for c in range(0,3):
+        #             ### append rest of UM data
+        #             for j in range(0,len(um_var_list[c])):
+        #                 if np.ndim(cn_nc1[m][c].variables[um_var_list[c][j]]) == 1:
+        #                     um_data[m][um_var_list[c][j]] = np.append(um_data[m][um_var_list[c][j]],cn_nc1[m][c].variables[um_var_list[c][j]][:])
+        #                 else:
+        #                     um_data[m][um_var_list[c][j]] = np.append(um_data[m][um_var_list[c][j]],cn_nc1[m][c].variables[um_var_list[c][j]][:],0)
 
 
     #################################################################
