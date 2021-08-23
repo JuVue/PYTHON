@@ -2049,7 +2049,7 @@ def interpCloudnet(obs_data):
     print ('*******')
     print ('Interpolate obs cloudnet field for continuous array:')
 
-    varlist = ['Cv', 'lwc', 'iwc']
+    varlist = ['Cv', 'lwc_adiabatic', 'lwc_adiabatic_inc_nolwp', 'lwc', 'iwc']
     for var in varlist:
         ### remove bad and flagged data
         obs_data[var][obs_data[var] < 0.0] = np.nan
@@ -2555,6 +2555,7 @@ def main():
             for c in range(0,3):
                 cn_nc1[m][c] = Dataset(cn_filename_um[m][c],'r')
             nc1[m] = {}
+            print (filename_um[m])
             nc1[m] = Dataset(filename_um[m],'r')
 
         ### --------------------------------------------------------------------
