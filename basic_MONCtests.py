@@ -110,14 +110,13 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel  ):
     plt.close()
 
     fig = plt.figure(figsize=(8,7))
-    plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.9, left = 0.15,
-            hspace = 0.3, wspace = 0.1)
+    plt.subplots_adjust(top = 0.93, bottom = 0.11, right = 0.93, left = 0.12,
+            hspace = 0.3, wspace = 0.2)
     plt.subplot(221)
     plt.pcolor(monc_data[0]['time2'],monc_data[0]['zn'],
         np.transpose((monc_data[0]['q_ice_mass_mean']+monc_data[0]['q_snow_mass_mean']+monc_data[0]['q_graupel_mass_mean']))*1e3)
     plt.plot([cp_ts,cp_ts],[0,2.5e3],'--',color='white',zorder=3)
     plt.plot([monc_spin,monc_spin],[0,2.5e3],'--',color='red',zorder=3)
-    plt.xlabel('Time [s]')
     plt.ylabel('Z [m]')
     plt.title('QISG_MR [g/kg]')
     plt.colorbar()
@@ -126,7 +125,6 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel  ):
         np.transpose(monc_data[0]['q_ice_mass_mean'])*1e3)
     plt.plot([cp_ts,cp_ts],[0,2.5e3],'--',color='white',zorder=3)
     plt.plot([monc_spin,monc_spin],[0,2.5e3],'--',color='red',zorder=3)
-    plt.xlabel('Time [s]')
     plt.ylabel('Z [m]')
     plt.title('QI_MR [g/kg]')
     plt.colorbar()
