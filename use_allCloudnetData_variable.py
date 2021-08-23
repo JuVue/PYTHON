@@ -1498,7 +1498,7 @@ def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,d
     fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
     ### define axis instance
     ####LWC
-    plt.figure(figsize=(18,8))
+    plt.figure(figsize=(14,8))
     plt.subplots_adjust(top = 0.8, bottom = 0.1, right = 0.92, left = 0.08)
 
     for pt in range(0,len(prof_time)):
@@ -1574,7 +1574,7 @@ def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,d
         else:
             fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_LWC'+ lwcstr + '_split.png'
 
-    plt.savefig(fileout)
+    plt.savefig(fileout, dpi=300)
     plt.close()
     # plt.show()
     print ('')
