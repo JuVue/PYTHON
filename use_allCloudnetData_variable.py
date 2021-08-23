@@ -2384,7 +2384,7 @@ def main():
                '26_u-cd847_RA1M_CASIM/',
                '27_u-ce112_RA1M_CASIM/']
 
-    out_dir = ['23_u-cc278_RA1M_CASIM/']
+    # out_dir = ['23_u-cc278_RA1M_CASIM/']
     ### CHOOSE MONC RUNS
     # m_out_dir = ['5_control_20180913T0000Z_Wsub-1.5_Fletcher/',
     #              '6_control_20180913T0000Z_Wsub-1.5-1km/',
