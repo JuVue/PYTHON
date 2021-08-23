@@ -2500,7 +2500,7 @@ def main():
                         'lwc-adiabatic-metum-grid/2018/',
                         'iwc-Z-T-metum-grid/2018/']
 
-    um_out_dir = ['OUT_R0/']
+    um_out_dir = 'OUT_R0/'
 
     # # -------------------------------------------------------------
     # # Load cloudnet data
