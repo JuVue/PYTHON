@@ -2417,7 +2417,8 @@ def main():
                # '25_20180913T0000Z_20h0600-0000thTend/'
                # '26A_20180913T0000Z_6hSpinUp_12h0600-0000thTend_20h1200-0600thTend_6-20h0.1Cooper/',
                # '26B_20180913T0000Z_6hSpinUp_12h0600-0000thTend_20h1200-0600thTend_6-20h0-Cooper/',
-               '27A_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24hCooper/'
+               '27A_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24hCooper/',
+               '27B_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.5Cooper/'
             #'4_control_20180913T0000Z_Wsub-1.5/',
             ]
     #################################################################
@@ -2496,6 +2497,9 @@ def main():
         elif m_out_dir[m][:3] == '27A':
             mlabel.append('MONC 8hSpin thForcing8-14h06-00 14-24h12-06 8-24hCooper')
             moutstr.append('MONC-27A')
+        elif m_out_dir[m][:3] == '27B':
+            mlabel.append('MONC 8hSpinUp thForcing8-14h0600-0000 14-24h1200-0600 8-24h0.5Cooper')
+            moutstr.append('MONC-27B')            
         else:
             label.append('undefined_label')
             moutstr.append('')
@@ -2864,7 +2868,7 @@ def main():
             um_data[m][varlist_um[c]][lwcind, :] = np.nan
     for c in range(2, 3):
         for m in range(0, len(out_dir)):
-            um_data[m][varlist_um[c]][iwcind, :] = np.nan            
+            um_data[m][varlist_um[c]][iwcind, :] = np.nan
 
     ## lwp only 1d
     for m in range(0, len(out_dir)):
