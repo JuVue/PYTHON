@@ -2473,7 +2473,7 @@ def main():
             mlabel.append('MONC 6hSpinUp thForcing-0-12h0600-0000 6-20h-0*Cooper')
             moutstr.append('MONC-26B')
         elif m_out_dir[m][:3] == '27A':
-            mlabel.append('MONC 8hSpinUp thForcing8-14h0600-0000 14-24h1200-0600 8-24hCooper')
+            mlabel.append('MONC 8hSpin thForcing8-14h06-00 14-24h12-06 8-24hCooper')
             moutstr.append('MONC-27A')
         else:
             label.append('undefined_label')
