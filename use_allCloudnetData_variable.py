@@ -2556,7 +2556,7 @@ def main():
                 cn_nc1[m][c] = Dataset(cn_filename_um[m][c],'r')
             nc1[m] = {}
             print (filename_um[m])
-            nc1[m] = Dataset(filename_um[m],'r')
+            nc1[m] = Dataset(filename_um[m][0],'r')
 
         ### --------------------------------------------------------------------
         ###     LOAD CLOUDNET DIAGS INTO DICTIONARY
