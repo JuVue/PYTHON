@@ -1499,7 +1499,7 @@ def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,d
     ### define axis instance
     ####LWC
     plt.figure(figsize=(14,7))
-    plt.subplots_adjust(top = 0.9, bottom = 0.1, right = 0.98, left = 0.08)
+    plt.subplots_adjust(top = 0.8, bottom = 0.1, right = 0.98, left = 0.08)
 
     for pt in range(0,len(prof_time)):
         plt.subplot(1,len(prof_time),pt+1)
@@ -1556,7 +1556,7 @@ def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,d
         ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
         ax1.set_yticklabels(ytlabels)
         plt.xlim([0,0.4])
-        plt.xticks(np.arange(0,0.45,0.05))
+        plt.xticks(np.arange(0,0.45,0.1))
         #ax1.set_xticklabels([0,' ',0.015,' ',0.03,' ',0.045,' ',0.06])
         ax1.xaxis.set_minor_locator(ticker.MultipleLocator(0.025))
 
@@ -1726,9 +1726,9 @@ def plot_iwcProfiles_split(obs_data,twcvar,twcstr, thresholding, plots_out_dir,d
     lcolsmonc=['gold','darkgoldenrod','darkorange','orangered','firebrick']
     fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
     ### define axis instance
-    ####LWC
-    plt.figure(figsize=(18,8))
-    plt.subplots_adjust(top = 0.8, bottom = 0.1, right = 0.92, left = 0.08)
+    ####IWC
+    plt.figure(figsize=(14,7))
+    plt.subplots_adjust(top = 0.8, bottom = 0.1, right = 0.98, left = 0.08)
 
     for pt in range(0,len(prof_time)):
         plt.subplot(1,len(prof_time),pt+1)
@@ -1803,7 +1803,7 @@ def plot_iwcProfiles_split(obs_data,twcvar,twcstr, thresholding, plots_out_dir,d
         else:
             fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_IWC'+ twcstr + '_split.png'
 
-    plt.savefig(fileout)
+    plt.savefig(fileout, dpi=300)
     plt.close()
     # plt.show()
     print ('')
