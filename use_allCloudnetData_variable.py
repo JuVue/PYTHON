@@ -2659,9 +2659,10 @@ def main():
                 #    ['q_vapour','q_cloud_liquid_mass','q_rain_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
 
 
-    monc_var_3d_list =['T_mean','p_mean','th_mean','rho_mean','q_vapour_mean','q_cloud_liquid_mass_mean',
-                        'q_ice_mass_mean','q_snow_mass_mean','q_graupel_mass_mean',
-                        'twc_tot_mean','iwc_tot_mean','lwc_tot_mean']
+    monc_var_3d_list =['T_mean','p_mean','th_mean','rho_mean','q_vapour_mean',
+                        'q_cloud_liquid_mass_mean','q_ice_mass_mean','q_snow_mass_mean','q_graupel_mass_mean',
+                        'q_cloud_liquid_number_mean','q_ice_number_mean','q_snow_number_mean','q_graupel_number_mean',
+                        'twc_tot_mean','iwc_tot_mean','nisg_tot_mean','ndrop_tot_mean','lwc_tot_mean']
                         #'z', 'zn', 'u_mean', 'v_mean', 'w_mean', 'q_vapour_mean',
                         # 'time1', 'time2', 'p_mean', 'T_mean', 'th_mean', 'rho_mean',
                         # 'q_cloud_liquid_mass_mean', 'q_ice_mass_mean', 'q_snow_mass_mean',
