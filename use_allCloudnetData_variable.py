@@ -1499,7 +1499,7 @@ def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,d
     ### define axis instance
     ####LWC
     plt.figure(figsize=(14,8))
-    plt.subplots_adjust(top = 0.8, bottom = 0.1, right = 0.92, left = 0.08)
+    plt.subplots_adjust(top = 0.9, bottom = 0.1, right = 0.98, left = 0.08)
 
     for pt in range(0,len(prof_time)):
         plt.subplot(1,len(prof_time),pt+1)
