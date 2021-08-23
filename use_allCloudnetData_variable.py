@@ -2859,9 +2859,12 @@ def main():
             um_data[m][varlist_um[c]][nanind, :] = np.nan
 
     ### remove missing water content obs timestep (only remove from water contents)
-    for c in range(1, 3):
+    for c in range(1, 2):
         for m in range(0, len(out_dir)):
-            um_data[m][varlist_um[c]][wcind, :] = np.nan
+            um_data[m][varlist_um[c]][lwcind, :] = np.nan
+    for c in range(2, 3):
+        for m in range(0, len(out_dir)):
+            um_data[m][varlist_um[c]][iwcind, :] = np.nan            
 
     ## lwp only 1d
     for m in range(0, len(out_dir)):
