@@ -2514,7 +2514,7 @@ def main():
         dstr=names[i][0:8]
         datenum = date2datenum(dtime.datetime.strptime(dstr,'%Y%m%d'))
         cn_filename_um=[]
-        filename_um=['']
+        filename_um=[]
         for m in range(0,len(out_dir)):
             cn_filename_um.append([cn_um_dir + out_dir[m] + cn_um_out_dir[0] + names[i] + cn_um_out_dir[0][-31:-6] + '.nc',
                         cn_um_dir + out_dir[m] + cn_um_out_dir[1] + names[i] + cn_um_out_dir[1][-27:-6] + '.nc',
