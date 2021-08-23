@@ -2331,7 +2331,7 @@ def CaseStudySelection(obs_data, um_data, monc_data, raw_data, dates):
                     elif tmp2 == 3:
                         monc_data[m][monc_vars[j]]=np.delete(monc_data[m][monc_vars[j]],time3_ind,3)
 
-    return obs_data, um_data, monc_data
+    return obs_data, um_data, monc_data, raw_data
     print('done')
     print('************')
 
