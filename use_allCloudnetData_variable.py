@@ -2391,10 +2391,10 @@ def main():
     #              '8_control_20180913T0000Z_Wsub-1.0-1km/',
     #              '9_control_20180913T0000Z_Wsub-0.5-1km/']
     m_out_dir =[#'22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/',
-               '23_20180913T0000Z_6hSpin-up_12h0600-0000thTend_20h1200-0600thTend/',
+               # '23_20180913T0000Z_6hSpin-up_12h0600-0000thTend_20h1200-0600thTend/',
                # '24_20180913T0000Z_12h0600-0000_20h1200-0600thTend_0.1Cooper/',
                # '25_20180913T0000Z_20h0600-0000thTend/'
-               '26A_20180913T0000Z_6hSpinUp_12h0600-0000thTend_20h1200-0600thTend_6-20h0.1Cooper/',
+               # '26A_20180913T0000Z_6hSpinUp_12h0600-0000thTend_20h1200-0600thTend_6-20h0.1Cooper/',
                # '26B_20180913T0000Z_6hSpinUp_12h0600-0000thTend_20h1200-0600thTend_6-20h0-Cooper/',
                '27A_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24hCooper/'
             #'4_control_20180913T0000Z_Wsub-1.5/',
