@@ -2534,7 +2534,7 @@ def main():
             cn_filename_um.append([cn_um_dir + out_dir[m] + cn_um_out_dir[0] + names[i] + cn_um_out_dir[0][-31:-6] + '.nc',
                         cn_um_dir + out_dir[m] + cn_um_out_dir[1] + names[i] + cn_um_out_dir[1][-27:-6] + '.nc',
                         cn_um_dir + out_dir[m] + cn_um_out_dir[2] + names[i] + cn_um_out_dir[2][-24:-6] + '.nc'])
-            filename_um = um_root_dir + out_dir[m] + um_out_dir + names[i] + 'metum.nc'
+            filename_um.append([um_root_dir + out_dir[m] + um_out_dir + names[i] + 'metum.nc'])
         cn_filename_obs = [cn_obs_dir + cn_obs_out_dir[0] + names[i] + cn_obs_out_dir[0][:-13] + '.nc',
                         cn_obs_dir + cn_obs_out_dir[1] + names[i] + cn_obs_out_dir[1][:-6] + '.nc',
                         cn_obs_dir + cn_obs_out_dir[2] + names[i] + cn_obs_out_dir[2][:-6] + '.nc']
@@ -2550,9 +2550,9 @@ def main():
         cn_nc1={}
         nc1 = {}
         for m in range(0,len(out_dir)): #UM model data
-            print(cn_filename_um[m][c])
             cn_nc1[m]={}
             for c in range(0,3):
+                print(cn_filename_um[m][c])
                 cn_nc1[m][c] = Dataset(cn_filename_um[m][c],'r')
             nc1[m] = {}
             print (filename_um[m])
