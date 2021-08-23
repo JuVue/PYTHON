@@ -109,9 +109,10 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel  ):
     plt.savefig(fileout)
     plt.close()
 
-    fig = plt.figure(figsize=(6,5))
+    fig = plt.figure(figsize=(8,7))
     plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.9, left = 0.15,
             hspace = 0.3, wspace = 0.1)
+    plt.subplot(221)
     plt.pcolor(monc_data[0]['time2'],monc_data[0]['zn'],
         np.transpose((monc_data[0]['q_ice_mass_mean']+monc_data[0]['q_snow_mass_mean']+monc_data[0]['q_graupel_mass_mean']))*1e3)
     plt.plot([cp_ts,cp_ts],[0,2.5e3],'--',color='white',zorder=3)
@@ -119,6 +120,33 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel  ):
     plt.xlabel('Time [s]')
     plt.ylabel('Z [m]')
     plt.title('QISG_MR [g/kg]')
+    plt.colorbar()
+    plt.subplot(222)
+    plt.pcolor(monc_data[0]['time2'],monc_data[0]['zn'],
+        np.transpose(monc_data[0]['q_ice_mass_mean'])*1e3)
+    plt.plot([cp_ts,cp_ts],[0,2.5e3],'--',color='white',zorder=3)
+    plt.plot([monc_spin,monc_spin],[0,2.5e3],'--',color='red',zorder=3)
+    plt.xlabel('Time [s]')
+    plt.ylabel('Z [m]')
+    plt.title('QI_MR [g/kg]')
+    plt.colorbar()
+    plt.subplot(223)
+    plt.pcolor(monc_data[0]['time2'],monc_data[0]['zn'],
+        np.transpose(monc_data[0]['q_snow_mass_mean'])*1e3)
+    plt.plot([cp_ts,cp_ts],[0,2.5e3],'--',color='white',zorder=3)
+    plt.plot([monc_spin,monc_spin],[0,2.5e3],'--',color='red',zorder=3)
+    plt.xlabel('Time [s]')
+    plt.ylabel('Z [m]')
+    plt.title('QS_MR [g/kg]')
+    plt.colorbar()
+    plt.subplot(224)
+    plt.pcolor(monc_data[0]['time2'],monc_data[0]['zn'],
+        np.transpose(monc_data[0]['q_graupel_mass_mean'])*1e3)
+    plt.plot([cp_ts,cp_ts],[0,2.5e3],'--',color='white',zorder=3)
+    plt.plot([monc_spin,monc_spin],[0,2.5e3],'--',color='red',zorder=3)
+    plt.xlabel('Time [s]')
+    plt.ylabel('Z [m]')
+    plt.title('QG_MR [g/kg]')
     plt.colorbar()
     fileout = plots_out_dir + moutstr[0] + '_IWCTimeseries_' + mlabel[0] + '.png'
     plt.savefig(fileout)
