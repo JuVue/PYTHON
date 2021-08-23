@@ -2500,6 +2500,7 @@ def main():
                         'lwc-adiabatic-metum-grid/2018/',
                         'iwc-Z-T-metum-grid/2018/']
 
+    um_out_dir = ['OUT_R0/']
 
     # # -------------------------------------------------------------
     # # Load cloudnet data
@@ -2513,13 +2514,18 @@ def main():
         dstr=names[i][0:8]
         datenum = date2datenum(dtime.datetime.strptime(dstr,'%Y%m%d'))
         cn_filename_um=[]
+        filename_um=[]
         for m in range(0,len(out_dir)):
             cn_filename_um.append([cn_um_dir + out_dir[m] + cn_um_out_dir[0] + names[i] + cn_um_out_dir[0][-31:-6] + '.nc',
                         cn_um_dir + out_dir[m] + cn_um_out_dir[1] + names[i] + cn_um_out_dir[1][-27:-6] + '.nc',
                         cn_um_dir + out_dir[m] + cn_um_out_dir[2] + names[i] + cn_um_out_dir[2][-24:-6] + '.nc'])
+            filename_um.append([um_root_dir + out_dir[m] + um_out_dir + names[i] + 'metum.nc'])
+                        # cn_um_dir + out_dir[m] + cn_um_out_dir[1] + names[i] + cn_um_out_dir[1][-27:-6] + '.nc',
+                        # cn_um_dir + out_dir[m] + cn_um_out_dir[2] + names[i] + cn_um_out_dir[2][-24:-6] + '.nc'])
         cn_filename_obs = [cn_obs_dir + cn_obs_out_dir[0] + names[i] + cn_obs_out_dir[0][:-13] + '.nc',
                         cn_obs_dir + cn_obs_out_dir[1] + names[i] + cn_obs_out_dir[1][:-6] + '.nc',
                         cn_obs_dir + cn_obs_out_dir[2] + names[i] + cn_obs_out_dir[2][:-6] + '.nc']
+    print (filename_um)
 
     ### --------------------------------------------------------------------
     ###     READ IN ALL CLOUDNET FILES: reinitialise diagnostic dictionaries
