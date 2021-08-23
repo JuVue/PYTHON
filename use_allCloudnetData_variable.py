@@ -2523,7 +2523,7 @@ def main():
         cn_filename_obs = [cn_obs_dir + cn_obs_out_dir[0] + names[i] + cn_obs_out_dir[0][:-13] + '.nc',
                         cn_obs_dir + cn_obs_out_dir[1] + names[i] + cn_obs_out_dir[1][:-6] + '.nc',
                         cn_obs_dir + cn_obs_out_dir[2] + names[i] + cn_obs_out_dir[2][:-6] + '.nc']
-    print (filename_um)
+        print (filename_um)
 
     ### --------------------------------------------------------------------
     ###     READ IN ALL CLOUDNET FILES: reinitialise diagnostic dictionaries
