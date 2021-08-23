@@ -2239,7 +2239,7 @@ def removeSpinUp(monc_data,monc_spin):
     print('*************')
     print ('')
 
-def CaseStudySelection(obs_data,um_data,monc_data,dates):
+def CaseStudySelection(obs_data, um_data, monc_data, raw_data, dates):
     print('')
     print('************')
     print('Shortening data to case study time frame:')
@@ -2272,6 +2272,21 @@ def CaseStudySelection(obs_data,um_data,monc_data,dates):
                 um_data[m][um_vars[j]]=np.delete(um_data[m][um_vars[j]],time_ind,2)
             elif tmp2 == 3:
                 um_data[m][um_vars[j]]=np.delete(um_data[m][um_vars[j]],time_ind,3)
+
+    for m in range(0,len(raw_data)):
+        raw_vars=list(raw_data[m].keys())
+        time_ind = np.argwhere((raw_data[m]['time']<dates[0]) | (raw_data[m]['time']>dates[1]+1/60/24 ))
+        tinit=len(raw_data[m]['time'])
+        for j in range(0,len(raw_vars)):
+            tmp2=np.argwhere(np.array(raw_data[m][raw_vars[j]].shape) == tinit)
+            if tmp2 == 0:
+                raw_data[m][raw_vars[j]]=np.delete(raw_data[m][raw_vars[j]],time_ind,0)
+            elif tmp2 == 1:
+                raw_data[m][raw_vars[j]]=np.delete(raw_data[m][raw_vars[j]],time_ind,1)
+            elif tmp2 == 2:
+                raw_data[m][raw_vars[j]]=np.delete(raw_data[m][raw_vars[j]],time_ind,2)
+            elif tmp2 == 3:
+                raw_data[m][raw_vars[j]]=np.delete(raw_data[m][raw_vars[j]],time_ind,3)
 
     for m in range(0,len(monc_data)):
         monc_vars=list(monc_data[m].keys())
@@ -2654,42 +2669,43 @@ def main():
                     'cloud_fraction','radr_refl','qnliq','qnice','surface_downwelling_LW_radiation','surface_downwelling_SW_radiation', 'latent_heat_flux',
                     'toa_outgoing_longwave_flux','toa_incoming_shortwave_flux','toa_outgoing_shortwave_flux','seaice_albedo_agg']
 
-        # if i == 0:
-        #     data_raw={}
-        #     time_raw={}
-        #
-        # for m in range(0,len(out_dir)): #UM model data
-        #     if i == 0:
-        #         data_raw[m]={}
-        #         time_raw[m]={}
-        #         ### create time arrays for all model data
-        #         time_raw[m] = datenum + np.float64((nc1.variables['forecast_time'][:])/24.0)
-        #         ### loop over each Cloudnet class
-        #         for c in range(0,3):
-        #             ### load in initial UM data
-        #             for j in range(0,len(um_var_list[c])):
-        #                 if np.ndim(cn_nc1[m][c].variables[um_var_list[c][j]]) == 1:  # 1d timeseries only
-        #                     um_data[m][um_var_list[c][j]] = cn_nc1[m][c].variables[um_var_list[c][j]][:]
-        #                 else:                                   # 2d column um_data
-        #                     um_data[m][um_var_list[c][j]] = cn_nc1[m][c].variables[um_var_list[c][j]][:]
-        #     ### fill arrays with remaining data
-        #     else:
-        #         time_um[m] = np.append(time_um[m], datenum + np.float64((cn_nc1[m][0].variables['time'][:])/24.0))
-        #         ### loop over all Cloudnet classes
-        #         for c in range(0,3):
-        #             ### append rest of UM data
-        #             for j in range(0,len(um_var_list[c])):
-        #                 if np.ndim(cn_nc1[m][c].variables[um_var_list[c][j]]) == 1:
-        #                     um_data[m][um_var_list[c][j]] = np.append(um_data[m][um_var_list[c][j]],cn_nc1[m][c].variables[um_var_list[c][j]][:])
-        #                 else:
-        #                     um_data[m][um_var_list[c][j]] = np.append(um_data[m][um_var_list[c][j]],cn_nc1[m][c].variables[um_var_list[c][j]][:],0)
+        if i == 0:
+            raw_data={}
+            time_raw={}
 
+        for m in range(0,len(out_dir)): #UM model data
+            if i == 0:
+                raw_data[m]={}
+                time_raw[m]={}
+                ### create time arrays for all model data
+                time_raw[m] = datenum + np.float64((nc1[m].variables['forecast_time'][:])/24.0)
+                ### load in initial UM data
+                for j in range(0,len(var_list)):
+                    if np.ndim(nc1[m].variables[var_list[j]]) == 1:  # 1d timeseries only
+                        raw_data[m][var_list[j]] = nc1[m].variables[var_list[j]][:]
+                    else:                                   # 2d column um_data
+                        raw_data[m][var_list[j]] = nc1[m].variables[var_list[j]][:]
+            ### fill arrays with remaining data
+            else:
+                time_raw[m] = np.append(time_raw[m], datenum + np.float64((nc1[m].variables['forecast_time'][:])/24.0))
+                ### append rest of UM data
+                for j in range(0,len(var_list)):
+                    if np.ndim(nc1[m].variables[var_list[j]]) == 1:
+                        raw_data[m][var_list[j]] = np.append(raw_data[m][var_list[j]],nc1[m].variables[var_list[j]][:])
+                    else:
+                        raw_data[m][var_list[j]] = np.append(raw_data[m][var_list[j]],nc1[m].variables[var_list[j]][:],0)
+
+        for m in range(0,len(out_dir)): nc1[m].close()
+
+        print ('UM raw model data loaded!')
+        print ('')
 
     #################################################################
     ## save time to dictionaries now we're not looping over all diags anymore
     #################################################################
     for m in range(0,len(out_dir)):
         um_data[m]['time'] = time_um[m]
+        raw_data[m]['time'] = time_raw[m]
     obs_data['time'] = time_obs
 
     #################################################################
@@ -2812,7 +2828,7 @@ def main():
     ## shorten obs/model data to case study time period
     ## -------------------------------------------------------------
 
-    obs_data,um_data,monc_data = CaseStudySelection(obs_data,um_data,monc_data,dates)
+    obs_data, um_data, monc_data, raw_data = CaseStudySelection(obs_data, um_data, monc_data, raw_data, dates)
 
 
     ## -------------------------------------------------------------
