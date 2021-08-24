@@ -30,7 +30,7 @@ from manipFuncts import int2list
 # from conversionFuncts import reGrid_Sondes
 
 
-def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel  ):
+def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel, m_out_dir  ):
 
 
     print ('******')
@@ -41,14 +41,13 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel  ):
 
     checkpoint = []
 
-    checkpoint = 14 # checkpoint restart at 12h
+    if m_out_dir[m][:2] == '26':
+        checkpoint = 12 # checkpoint restart at 12h
+    elif m_out_dir[m][:2] == '27':
+        checkpoint = 14 # checkpoint restart at 14h
 
-    if checkpoint == 12:
-        cp_id = 47  ### 48th timestep
-        cp_ts = 43200.
-    elif checkpoint == 14:
-        cp_id = 55  ### 48th timestep
-        cp_ts = 43200.
+    cp_id = int(checkpoint*4) - 1
+    cp_ts = np.float(checkpoint)*3600.
 
     SMALL_SIZE = 12
     MED_SIZE = 14
@@ -527,7 +526,7 @@ def main():
     # print (monc_data[0]['time2'].shape)
     # print (monc_data[0]['time2'])
 
-    figure = plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel )
+    figure = plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel, m_out_dir )
 
     # -------------------------------------------------------------
     # FIN.
