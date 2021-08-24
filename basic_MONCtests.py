@@ -272,9 +272,6 @@ def main():
     dates = [date2datenum(sdate),date2datenum(edate)]
     moccha_missing_files = ['20180813_oden_','20180910_oden_']   ### cloud radar not working    #,'20180914_oden_'
 
-    #---- MONC SPIN UP TIME
-    monc_spin = 8 *60 *60
-
     #---- SPLIT PROFILES IN TIME JUNKS
     prof_times=[[dates[0], dates[0]+4/24],
                 [dates[0]+4/24, dates[0]+8/24],
@@ -384,6 +381,12 @@ def main():
         else:
             label.append('undefined_label')
             moutstr.append('')
+
+    #---- MONC SPIN UP TIME
+    if m_out_dir[0][:2] == '26':
+        monc_spin = 6 *60 *60
+    elif m_out_dir[0][:2] == '27':
+        monc_spin = 8 *60 *60
 
     ### -----------------------------------------------------------------
     ### create monc filenames
