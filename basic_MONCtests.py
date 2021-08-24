@@ -41,10 +41,13 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel  ):
 
     checkpoint = []
 
-    checkpoint = 12 # checkpoint restart at 12h
+    checkpoint = 14 # checkpoint restart at 12h
 
     if checkpoint == 12:
         cp_id = 47  ### 48th timestep
+        cp_ts = 43200.
+    elif checkpoint == 14:
+        cp_id = 55  ### 48th timestep
         cp_ts = 43200.
 
     SMALL_SIZE = 12
