@@ -41,9 +41,9 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel, m_out
 
     checkpoint = []
 
-    if m_out_dir[m][:2] == '26':
+    if m_out_dir[0][:2] == '26':
         checkpoint = 12 # checkpoint restart at 12h
-    elif m_out_dir[m][:2] == '27':
+    elif m_out_dir[0][:2] == '27':
         checkpoint = 14 # checkpoint restart at 14h
 
     cp_id = int(checkpoint*4) - 1
