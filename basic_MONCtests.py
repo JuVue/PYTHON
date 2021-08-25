@@ -318,7 +318,8 @@ def main():
                # '26B_20180913T0000Z_6hSpinUp_12h0600-0000thTend_20h1200-0600thTend_6-20h0-Cooper/'
                # '27A_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24hCooper/',
                # '27B_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.5Cooper/',
-               '27C_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper/'
+               # '27C_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper/',
+               '27D_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_CASIM-100AccumSol'
                ]
             #'4_control_20180913T0000Z_Wsub-1.5/',
     #################################################################
@@ -378,6 +379,9 @@ def main():
         elif m_out_dir[m][:3] == '27C':
             mlabel.append('MONC 8hSpin thForcing8-14h06-00 14-24h12-06 8-24h0.1Cooper')
             moutstr.append('MONC-27C')
+        elif m_out_dir[m][:3] == '27C':
+            mlabel.append('MONC 8hSpin thForcing8-14h06-00 14-24h12-06 8-24h0.1Cooper CASIM-100AccumSol')
+            moutstr.append('MONC-27D')
         else:
             label.append('undefined_label')
             moutstr.append('')
