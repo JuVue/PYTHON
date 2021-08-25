@@ -2359,9 +2359,6 @@ def main():
     dates = [date2datenum(sdate),date2datenum(edate)]
     moccha_missing_files = ['20180813_oden_','20180910_oden_']   ### cloud radar not working    #,'20180914_oden_'
 
-    #---- MONC SPIN UP TIME
-    monc_spin = 8 *60 *60
-
     #---- SPLIT PROFILES IN TIME JUNKS
     prof_times=[[dates[0], dates[0]+4/24],
                 [dates[0]+4/24, dates[0]+8/24],
@@ -2419,7 +2416,8 @@ def main():
                # '26B_20180913T0000Z_6hSpinUp_12h0600-0000thTend_20h1200-0600thTend_6-20h0-Cooper/',
                '27A_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24hCooper/',
                '27B_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.5Cooper/',
-               '27C_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper/'
+               '27C_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper/',
+               '28A_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_AccumSolAero-CASIM-100-ARG/'
             #'4_control_20180913T0000Z_Wsub-1.5/',
             ]
     #################################################################
@@ -2496,17 +2494,28 @@ def main():
             mlabel.append('MONC 6hSpinUp thForcing-0-12h0600-0000 6-20h-0*Cooper')
             moutstr.append('MONC-26B')
         elif m_out_dir[m][:3] == '27A':
-            mlabel.append('MONC 8hSpin thForcing8-14h06-00 14-24h12-06 8-24hCooper')
+            mlabel.append('MONC_Cooper_FixedNd50')
             moutstr.append('MONC-27A')
         elif m_out_dir[m][:3] == '27B':
-            mlabel.append('MONC 8hSpin thForcing8-14h06-00 14-24h12-06 8-24h0.5Cooper')
+            mlabel.append('MONC_0.5Cooper_FixedNd50')
             moutstr.append('MONC-27B')
         elif m_out_dir[m][:3] == '27C':
-            mlabel.append('MONC 8hSpin thForcing8-14h06-00 14-24h12-06 8-24h0.1Cooper')
+            mlabel.append('MONC_0.1Cooper_FixedNd50')
             moutstr.append('MONC-27C')
+        elif m_out_dir[m][:3] == '28A':
+            mlabel.append('MONC_0.1Cooper_CASIM-100-ARG')
+            moutstr.append('MONC-28A')
         else:
             label.append('undefined_label')
             moutstr.append('')
+
+    #---- MONC SPIN UP TIME
+    if m_out_dir[0][:2] == '26':
+        monc_spin = 6 *60 *60
+    elif m_out_dir[0][:2] == '27':
+        monc_spin = 8 *60 *60
+    elif m_out_dir[0][:2] == '28':
+        monc_spin = 8 *60 *60
 
     ### -----------------------------------------------------------------
     ### create monc filenames
