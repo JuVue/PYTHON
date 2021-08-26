@@ -108,7 +108,7 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel, m_out
     plt.ylabel('Z [m]')
     plt.title('LWMR [g/kg]')
     plt.colorbar()
-    plt.subplot(121)
+    plt.subplot(122)
     plt.pcolor(monc_data[0]['time2'],monc_data[0]['zn'],
         np.transpose(monc_data[0]['ndrop_tot_mean'])/1e6)
     plt.plot([cp_ts,cp_ts],[0,2.5e3],'--',color='white',zorder=3)
