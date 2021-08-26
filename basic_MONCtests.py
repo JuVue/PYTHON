@@ -97,7 +97,7 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel, m_out
     # plt.close()
 
     fig = plt.figure(figsize=(9,4))
-    plt.subplots_adjust(top = 0.93, bottom = 0.11, right = 0.98, left = 0.12,
+    plt.subplots_adjust(top = 0.93, bottom = 0.14, right = 0.98, left = 0.12,
             hspace = 0.3, wspace = 0.26)
     plt.subplot(121)
     plt.pcolor(monc_data[0]['time2'],monc_data[0]['zn'],
