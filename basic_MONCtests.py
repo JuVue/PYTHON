@@ -96,9 +96,10 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel, m_out
     # plt.savefig(fileout)
     # plt.close()
 
-    fig = plt.figure(figsize=(6,5))
-    plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.9, left = 0.15,
-            hspace = 0.3, wspace = 0.1)
+    fig = plt.figure(figsize=(8,7))
+    plt.subplots_adjust(top = 0.93, bottom = 0.11, right = 0.98, left = 0.12,
+            hspace = 0.3, wspace = 0.26)
+    plt.subplot(121)
     plt.pcolor(monc_data[0]['time2'],monc_data[0]['zn'],
         np.transpose(monc_data[0]['q_cloud_liquid_mass_mean'])*1e3)
     plt.plot([cp_ts,cp_ts],[0,2.5e3],'--',color='white',zorder=3)
@@ -107,7 +108,16 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel, m_out
     plt.ylabel('Z [m]')
     plt.title('LWMR [g/kg]')
     plt.colorbar()
-    fileout = plots_out_dir + moutstr[0] + '_LWCTimeseries_' + mlabel[0] + '.png'
+    plt.subplot(121)
+    plt.pcolor(monc_data[0]['time2'],monc_data[0]['zn'],
+        np.transpose(monc_data[0]['ndrop_tot'])/1e6)
+    plt.plot([cp_ts,cp_ts],[0,2.5e3],'--',color='white',zorder=3)
+    plt.plot([monc_spin,monc_spin],[0,2.5e3],'--',color='red',zorder=3)
+    # plt.xlabel('Time [s]')
+    plt.ylabel('Z [m]')
+    plt.title('N$_{d}$ [/kg]')
+    plt.colorbar()
+    fileout = plots_out_dir + moutstr[0] + '_LWC-NdTimeseries_' + mlabel[0] + '.png'
     plt.savefig(fileout)
     plt.close()
 
