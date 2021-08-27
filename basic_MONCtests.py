@@ -332,7 +332,8 @@ def main():
                # '27C_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper/',
                # '28A_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_AccumSolAero-CASIM-100-ARG/',
                # '28B_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_AccumSolAero-CASIM-100-Twomey/',
-               '29A_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_AccumSolAero-CASIM-20-ARG/',
+               # '29A_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_AccumSolAero-CASIM-20-ARG/',
+               '29B_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_AccumSolAero-CASIM-20-allAct/',
                ]
             #'4_control_20180913T0000Z_Wsub-1.5/',
     #################################################################
@@ -401,6 +402,9 @@ def main():
         elif m_out_dir[m][:3] == '29A':
             mlabel.append('MONC_0.1Cooper_CASIM-20-ARG')
             moutstr.append('MONC-29A')
+        elif m_out_dir[m][:3] == '29B':
+            mlabel.append('MONC_0.1Cooper_CASIM-20-allAct')
+            moutstr.append('MONC-29B')
         else:
             label.append('undefined_label')
             moutstr.append('')
