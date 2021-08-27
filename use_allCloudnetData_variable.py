@@ -2398,9 +2398,10 @@ def main():
     #           '24_u-cc324_RA2T_CON/',
     #           '25_u-cc568_RA2M_CON/']
     out_dir = ['23_u-cc278_RA1M_CASIM/',
-               '30_u-cg179_RA1M_CASIM/',
-               '26_u-cd847_RA1M_CASIM/',
-               '27_u-ce112_RA1M_CASIM/']
+               # '30_u-cg179_RA1M_CASIM/',
+               # '26_u-cd847_RA1M_CASIM/',
+               # '27_u-ce112_RA1M_CASIM/',
+               ]
 
     # out_dir = ['23_u-cc278_RA1M_CASIM/']
     ### CHOOSE MONC RUNS
@@ -2414,7 +2415,7 @@ def main():
                # '25_20180913T0000Z_20h0600-0000thTend/'
                # '26A_20180913T0000Z_6hSpinUp_12h0600-0000thTend_20h1200-0600thTend_6-20h0.1Cooper/',
                # '26B_20180913T0000Z_6hSpinUp_12h0600-0000thTend_20h1200-0600thTend_6-20h0-Cooper/',
-               '27A_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24hCooper/',
+               # '27A_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24hCooper/',
                '27B_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.5Cooper/',
                '27C_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper/',
                # '28A_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_AccumSolAero-CASIM-100-ARG/',
