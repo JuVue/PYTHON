@@ -2518,11 +2518,12 @@ def main():
             moutstr.append('')
 
     #---- MONC SPIN UP TIME
-    if m_out_dir[0][:2] == '26':
+    spin6 = ['26']
+    spin8 = ['27','28','29']
+
+    if m_out_dir[0][:2] in spin6:
         monc_spin = 6 *60 *60
-    elif m_out_dir[0][:2] == '27':
-        monc_spin = 8 *60 *60
-    elif m_out_dir[0][:2] == '28':
+    elif m_out_dir[0][:2] in spin8:
         monc_spin = 8 *60 *60
 
     ### -----------------------------------------------------------------
