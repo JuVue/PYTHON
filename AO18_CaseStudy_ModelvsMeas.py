@@ -591,9 +591,10 @@ def main():
               '27_u-ce112_RA1M_CASIM/']
 #    out_dir = [  '30_u-cg179_RA1M_CASIM/' ]
     ### CHOOSE MONC RUNS
-    m_out_dir =['22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/']
-    #'23_20180913T0000Z_6hSpin-up_12h0600-0000thTend/']
-
+    m_out_dir =[#'22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/'
+                '27C_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper/',
+                ]
+    
     # m_out_dir = ['5_control_20180913T0000Z_Wsub-1.5_Fletcher/',
     #             '6_control_20180913T0000Z_Wsub-1.5-1km/',
     #             '7_20180913T0000Z_Wsub-1.5-1km_solAccum-100_inuc-0_iact-3/']
@@ -1008,7 +1009,7 @@ def main():
             moutstr.append('MONC-29A')
         elif m_out_dir[m][:3] == '29B':
             mlabel.append('MONC_0.1Cooper_CASIM-20-allAct')
-            moutstr.append('MONC-29B')            
+            moutstr.append('MONC-29B')
         else:
             label.append('undefined_label')
             moutstr.append('')
