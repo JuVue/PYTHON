@@ -976,6 +976,39 @@ def main():
         elif m_out_dir[m][:2] == '23':
             mlabel.append('MONC thForcing-0600-0000')
             moutstr.append('MONC-23')
+        elif m_out_dir[m][:2] == '24':
+            mlabel.append('MONC thForcing-12h0600-0000-20h1200-0600 0.1*Cooper')
+            moutstr.append('MONC-24')
+        elif m_out_dir[m][:2] == '25':
+            mlabel.append('MONC thForcing-20h0600-0000')
+            moutstr.append('MONC-25')
+        elif m_out_dir[m][:3] == '26A':
+            mlabel.append('MONC 6hSpinUp thForcing-0-12h0600-0000 6-20h-0.1*Cooper')
+            moutstr.append('MONC-26A')
+        elif m_out_dir[m][:3] == '26B':
+            mlabel.append('MONC 6hSpinUp thForcing-0-12h0600-0000 6-20h-0*Cooper')
+            moutstr.append('MONC-26B')
+        elif m_out_dir[m][:3] == '27A':
+            mlabel.append('MONC_Cooper_FixedNd50')
+            moutstr.append('MONC-27A')
+        elif m_out_dir[m][:3] == '27B':
+            mlabel.append('MONC_0.5Cooper_FixedNd50')
+            moutstr.append('MONC-27B')
+        elif m_out_dir[m][:3] == '27C':
+            mlabel.append('MONC_0.1Cooper_FixedNd50')
+            moutstr.append('MONC-27C')
+        elif m_out_dir[m][:3] == '28A':
+            mlabel.append('MONC_0.1Cooper_CASIM-100-ARG')
+            moutstr.append('MONC-28A')
+        elif m_out_dir[m][:3] == '28B':
+            mlabel.append('MONC_0.1Cooper_CASIM-100-Twomey')
+            moutstr.append('MONC-28B')
+        elif m_out_dir[m][:3] == '29A':
+            mlabel.append('MONC_0.1Cooper_CASIM-20-ARG')
+            moutstr.append('MONC-29A')
+        elif m_out_dir[m][:3] == '29B':
+            mlabel.append('MONC_0.1Cooper_CASIM-20-allAct')
+            moutstr.append('MONC-29B')            
         else:
             label.append('undefined_label')
             moutstr.append('')
