@@ -2416,9 +2416,10 @@ def main():
                # '26A_20180913T0000Z_6hSpinUp_12h0600-0000thTend_20h1200-0600thTend_6-20h0.1Cooper/',
                # '26B_20180913T0000Z_6hSpinUp_12h0600-0000thTend_20h1200-0600thTend_6-20h0-Cooper/',
                # '27A_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24hCooper/',
-               '27B_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.5Cooper/',
+               # '27B_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.5Cooper/',
                '27C_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper/',
                '27D_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd25/',
+               '27F_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd5/',
                # '28A_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_AccumSolAero-CASIM-100-ARG/',
                # '28B_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_AccumSolAero-CASIM-100-Twomey/'
                # '29A_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_AccumSolAero-CASIM-20-ARG/',
@@ -2510,6 +2511,9 @@ def main():
         elif m_out_dir[m][:3] == '27D':
             mlabel.append('MONC_0.1Cooper_FixedNd25')
             moutstr.append('MONC-27D')
+        elif m_out_dir[m][:3] == '27F':
+            mlabel.append('MONC_0.1Cooper_FixedNd5')
+            moutstr.append('MONC-27F')
         elif m_out_dir[m][:3] == '28A':
             mlabel.append('MONC_0.1Cooper_CASIM-100-ARG')
             moutstr.append('MONC-28A')
