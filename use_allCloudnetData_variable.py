@@ -2956,7 +2956,7 @@ def main():
         ###     LOAD RAW UM MODEL DATA INTO DICTIONARY
         ### --------------------------------------------------------------------
 
-        var_list = ['temperature','surface_net_SW_radiation','surface_net_LW_radiation','sensible_heat_flux',
+        var_list = ['height','temperature','surface_net_SW_radiation','surface_net_LW_radiation','sensible_heat_flux',
                     'air_temperature_at_1.5m', 'rainfall_flux','snowfall_flux','q','pressure','bl_depth','bl_type','qliq','uwind','vwind','wwind',
                     'cloud_fraction','radr_refl','qnliq','qnice','surface_downwelling_LW_radiation','surface_downwelling_SW_radiation', 'latent_heat_flux',
                     'toa_outgoing_longwave_flux','toa_incoming_shortwave_flux','toa_outgoing_shortwave_flux','seaice_albedo_agg']
