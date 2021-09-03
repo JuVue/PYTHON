@@ -2990,7 +2990,7 @@ def main():
         for m in range(0,len(out_dir)): nc1[m].close()
 
         print ('UM raw model data loaded!')
-        # print (raw_data[0].keys())
+        print (raw_data[0]['height'].shape())
         print ('')
 
     #################################################################
