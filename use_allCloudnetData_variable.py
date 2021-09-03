@@ -2989,7 +2989,7 @@ def main():
         for m in range(0,len(out_dir)): nc1[m].close()
 
         print ('UM raw model data loaded!')
-        print (raw_data[0].keys())
+        # print (raw_data[0].keys())
         print ('')
 
     #################################################################
@@ -3120,8 +3120,9 @@ def main():
     ## shorten obs/model data to case study time period
     ## -------------------------------------------------------------
 
+    print (raw_data[0].keys())
     obs_data, um_data, monc_data, raw_data = CaseStudySelection(obs_data, um_data, monc_data, raw_data, dates)
-
+    print (raw_data[0].keys())
 
     ## -------------------------------------------------------------
     ## maximise obs data available and build mask for available data
