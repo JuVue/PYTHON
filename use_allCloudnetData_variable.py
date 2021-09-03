@@ -3120,9 +3120,7 @@ def main():
     ## shorten obs/model data to case study time period
     ## -------------------------------------------------------------
 
-    print (raw_data[0].keys())
     obs_data, um_data, monc_data, raw_data = CaseStudySelection(obs_data, um_data, monc_data, raw_data, dates)
-    print (raw_data[0].keys())
 
     ## -------------------------------------------------------------
     ## maximise obs data available and build mask for available data
@@ -3155,6 +3153,8 @@ def main():
     ## lwp only 1d
     for m in range(0, len(out_dir)):
         um_data[m]['model_lwp'][lwpind] = np.nan
+
+    print (raw_data[0].keys())
 
 ###################################################################################################################
 ###################################################################################################################
