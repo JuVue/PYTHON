@@ -1377,6 +1377,7 @@ def plot_NdropProfiles_split(obs_data, lwcvar, lwcstr, thresholding, plots_out_d
     print ('')
     print ('Plotting Ndrop mean profiles split times:')
     print ('')
+    print (raw_data[0].keys())
 
     ###----------------------------------------------------------------
     ###         Calculate total water content
@@ -3154,7 +3155,6 @@ def main():
     for m in range(0, len(out_dir)):
         um_data[m]['model_lwp'][lwpind] = np.nan
 
-    print (raw_data[0].keys())
 
 ###################################################################################################################
 ###################################################################################################################
