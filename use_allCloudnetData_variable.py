@@ -1562,10 +1562,10 @@ def plot_NdropProfiles_split(obs_data, lwcvar, lwcstr, thresholding, plots_out_d
         plt.yticks(yticks)
         ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
         ax1.set_yticklabels(ytlabels)
-        plt.xlim([0,0.4])
-        plt.xticks(np.arange(0,0.45,0.1))
-        #ax1.set_xticklabels([0,' ',0.015,' ',0.03,' ',0.045,' ',0.06])
-        ax1.xaxis.set_minor_locator(ticker.MultipleLocator(0.025))
+        # plt.xlim([0,0.4])
+        # plt.xticks(np.arange(0,0.45,0.1))
+        # #ax1.set_xticklabels([0,' ',0.015,' ',0.03,' ',0.045,' ',0.06])
+        # ax1.xaxis.set_minor_locator(ticker.MultipleLocator(0.025))
 
 
     dstr=datenum2date(dates[1])
