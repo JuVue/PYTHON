@@ -5,3 +5,5 @@ list of updates for run23_testing:
 3. timeseries of cloud liquid mass mixing ratio, cloud ice mixing ratio, and total ice (ice+snow+graupel) number concentration
 4. mark 8h on quickplot timeseries - new spin up location
 5. update naming convention: number = spin up reference; letter = run config using given spin up. valid from run 26 onwards.
+6. include split comparison of mean cloud droplet number concentration
+6. include split comparison of mean ice number concentration. ice+snow+graupel for MONC.
