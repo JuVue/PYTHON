@@ -1520,7 +1520,7 @@ def plot_NdropProfiles_split(obs_data, lwcvar, lwcstr, thresholding, plots_out_d
         sstr=datenum2date(prof_time[pt][0])
         estr=datenum2date(prof_time[pt][1])
         plt.title(sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC')
-        # obsid= np.squeeze(np.argwhere((obs_data['time']>=prof_time[pt][0]) & (obs_data['time']<prof_time[pt][1])))
+        # obsid= np.squeeze(np.argwhere((raw_data['time']>=prof_time[pt][0]) & (raw_data['time']<prof_time[pt][1])))
         # plt.plot(np.nanmean(obs_data[lwcvar][obsid,:],0)*1e3,np.nanmean(obs_data['height'],0), color = 'k', linewidth = 3, label = 'Obs_UMgrid'  + lwcstr, zorder = obs_zorder)
         # ax1.fill_betweenx(np.nanmean(obs_data['height'],0),np.nanmean(obs_data[lwcvar][obsid,:],0)*1e3 - np.nanstd(obs_data[lwcvar][obsid,:],0)*1e3,
         #     np.nanmean(obs_data[lwcvar][obsid,:],0)*1e3 + np.nanstd(obs_data[lwcvar][obsid,:],0)*1e3, color = 'lightgrey', alpha = 0.5)
@@ -1528,24 +1528,24 @@ def plot_NdropProfiles_split(obs_data, lwcvar, lwcstr, thresholding, plots_out_d
         #     '--', color = 'k', linewidth = 0.5)
         # plt.plot(np.nanmean(obs_data[lwcvar][obsid,:],0)*1e3 + np.nanstd(obs_data[lwcvar][obsid,:],0)*1e3, np.nanmean(obs_data['height'],0),
         #     '--', color = 'k', linewidth = 0.5)
-        # if praw==True:
-        #     for m in range(0,len(raw_data)):
-        #         id=  np.squeeze(np.argwhere((raw_data[m]['time']>=prof_time[pt][0]) & (raw_data[m]['time']<prof_time[pt][1])))
-        #         ax1.fill_betweenx(np.nanmean(raw_data[m]['height'],0),np.nanmean(raw_data[m]['qnliq'][id,:],0)/1e6 - np.nanstd(raw_data[m]['qnliq'][id,:]/1e6,0),
-        #             np.nanmean(raw_data[m]['qnliq'][id,:],0)/1e6 + np.nanstd(raw_data[m]['qnliq'][id,:],0)/1e6, color = fcols[m], alpha = 0.05)
-        #         plt.plot(np.nanmean(raw_data[m]['qnliq'][id,:],0)/1e6 - np.nanstd(raw_data[m]['qnliq'][id,:],0)/1e6, np.nanmean(raw_data[m]['height'],0),
-        #             '--', color =lcols[m], linewidth = 0.5)
-        #         plt.plot(np.nanmean(raw_data[m]['qnliq'][id,:],0)/1e6 + np.nanstd(raw_data[m]['qnliq'][id,:],0)/1e6, np.nanmean(raw_data[m]['height'],0),
-        #             '--', color = lcols[m], linewidth = 0.5)
-        # if pmonc==True:
-        #     for m in range(0,len(monc_data)):
-        #         id= np.squeeze(np.argwhere((monc_data[m][lwc_tvar[m]]>=prof_time[pt][0]) & (monc_data[m][lwc_tvar[m]]<prof_time[pt][1])))
-        #         ax1.fill_betweenx(monc_data[m][lwc_zvar[m]],np.nanmean(monc_data[m]['model_lwc'][id,:],0)*1e3 - np.nanstd(monc_data[m]['model_lwc'][id,:]*1e3,0),
-        #             np.nanmean(monc_data[m]['model_lwc'][id,:],0)*1e3 + np.nanstd(monc_data[m]['model_lwc'][id,:],0)*1e3, color = fcolsmonc[m], alpha = 0.05)
-        #         plt.plot(np.nanmean(monc_data[m]['model_lwc'][id,:],0)*1e3 - np.nanstd(monc_data[m]['model_lwc'][id,:],0)*1e3, monc_data[m][lwc_zvar[m]],
-        #             '--', color =lcolsmonc[m], linewidth = 0.5)
-        #         plt.plot(np.nanmean(monc_data[m]['model_lwc'][id,:],0)*1e3 + np.nanstd(monc_data[m]['model_lwc'][id,:],0)*1e3, monc_data[m][lwc_zvar[m]],
-        #             '--', color = lcolsmonc[m], linewidth = 0.5)
+        if praw==True:
+            for m in range(0,len(raw_data)):
+                id=  np.squeeze(np.argwhere((raw_data[m]['time']>=prof_time[pt][0]) & (raw_data[m]['time']<prof_time[pt][1])))
+                ax1.fill_betweenx(np.nanmean(raw_data[m]['height'],0),np.nanmean(raw_data[m]['qnliq'][id,:],0)/1e6 - np.nanstd(raw_data[m]['qnliq'][id,:]/1e6,0),
+                    np.nanmean(raw_data[m]['qnliq'][id,:],0)/1e6 + np.nanstd(raw_data[m]['qnliq'][id,:],0)/1e6, color = fcols[m], alpha = 0.05)
+                plt.plot(np.nanmean(raw_data[m]['qnliq'][id,:],0)/1e6 - np.nanstd(raw_data[m]['qnliq'][id,:],0)/1e6, np.nanmean(raw_data[m]['height'],0),
+                    '--', color =lcols[m], linewidth = 0.5)
+                plt.plot(np.nanmean(raw_data[m]['qnliq'][id,:],0)/1e6 + np.nanstd(raw_data[m]['qnliq'][id,:],0)/1e6, np.nanmean(raw_data[m]['height'],0),
+                    '--', color = lcols[m], linewidth = 0.5)
+        if pmonc==True:
+            for m in range(0,len(monc_data)):
+                id= np.squeeze(np.argwhere((monc_data[m][ndrop_tvar[m]]>=prof_time[pt][0]) & (monc_data[m][ndrop_tvar[m]]<prof_time[pt][1])))
+                ax1.fill_betweenx(monc_data[m][ndrop_zvar[m]],np.nanmean(monc_data[m]['ndrop_tot_mean'][id,:],0)/1e6 - np.nanstd(monc_data[m]['ndrop_tot_mean'][id,:]/1e6,0),
+                    np.nanmean(monc_data[m]['ndrop_tot_mean'][id,:],0)/1e6 + np.nanstd(monc_data[m]['modelndrop_tot_mean_lwc'][id,:],0)/1e6, color = fcolsmonc[m], alpha = 0.05)
+                plt.plot(np.nanmean(monc_data[m]['ndrop_tot_mean'][id,:],0)/1e6 - np.nanstd(monc_data[m]['ndrop_tot_mean'][id,:],0)/1e6, monc_data[m][ndrop_zvar[m]],
+                    '--', color =lcolsmonc[m], linewidth = 0.5)
+                plt.plot(np.nanmean(monc_data[m]['ndrop_tot_mean'][id,:],0)/1e6 + np.nanstd(monc_data[m]['ndrop_tot_mean'][id,:],0)/1e6, monc_data[m][ndrop_zvar[m]],
+                    '--', color = lcolsmonc[m], linewidth = 0.5)
         if praw==True:
             for m in range(0,len(raw_data)):
                 id= np.squeeze(np.argwhere((raw_data[m]['time']>=prof_time[pt][0]) & (raw_data[m]['time']<prof_time[pt][1])))
