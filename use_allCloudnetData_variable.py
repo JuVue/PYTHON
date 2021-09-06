@@ -1453,9 +1453,8 @@ def plot_NdropProfiles_split(obs_data, lwcvar, lwcstr, thresholding, plots_out_d
                             um_data[m]['model_twc'][t,k] = np.nan
                             um_data[m]['model_lwc'][t,k] = np.nan
                             if praw == True:
-                                # print (raw_data[m].keys())
-                                raw_data[m]['qliq'][t,k] = np.nan       ## apply nan mask to qliq based on LWC
-                                raw_data[m]['qnliq'][t,k] = np.nan       ## apply nan mask to ndrop based on LWC
+                                # raw_data[m]['qliq'][t,k] = np.nan       ## apply nan mask to qliq based on LWC
+                                # raw_data[m]['qnliq'][t,k] = np.nan       ## apply nan mask to ndrop based on LWC
         if pmonc==True:
             m=0 # use first um model run for height grid definition
             twc_thresh_monc = np.zeros([np.size(monc_data[m]['model_twc'],1)])
@@ -1481,8 +1480,8 @@ def plot_NdropProfiles_split(obs_data, lwcvar, lwcstr, thresholding, plots_out_d
                             monc_data[m]['model_twc'][t,k] = np.nan
                             monc_data[m]['model_lwc'][t,k] = np.nan
                             monc_data[m]['model_lwc'][t,k] = np.nan
-                            monc_data[m]['ndrop_tot_mean'][t,k] = np.nan
-                            monc_data[m]['nisg_tot_mean'][t,k] = np.nan
+                            # monc_data[m]['ndrop_tot_mean'][t,k] = np.nan
+                            # monc_data[m]['nisg_tot_mean'][t,k] = np.nan
 
             # ### plot profile of threshold as sanity check
             # plt.plot(twc_thresh_um, um_data[0]['height'][0,:])
