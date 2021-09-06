@@ -1531,11 +1531,11 @@ def plot_NdropProfiles_split(obs_data, lwcvar, lwcstr, thresholding, plots_out_d
         if praw==True:
             for m in range(0,len(raw_data)):
                 id=  np.squeeze(np.argwhere((raw_data[m]['time']>=prof_time[pt][0]) & (raw_data[m]['time']<prof_time[pt][1])))
-                ax1.fill_betweenx(np.nanmean(raw_data[m]['height'],0),np.nanmean(raw_data[m]['qnliq'][id,:],0)/1e6 - np.nanstd(raw_data[m]['qnliq'][id,:]/1e6,0),
+                ax1.fill_betweenx(raw_data[m]['height'],np.nanmean(raw_data[m]['qnliq'][id,:],0)/1e6 - np.nanstd(raw_data[m]['qnliq'][id,:]/1e6,0),
                     np.nanmean(raw_data[m]['qnliq'][id,:],0)/1e6 + np.nanstd(raw_data[m]['qnliq'][id,:],0)/1e6, color = fcols[m], alpha = 0.05)
-                plt.plot(np.nanmean(raw_data[m]['qnliq'][id,:],0)/1e6 - np.nanstd(raw_data[m]['qnliq'][id,:],0)/1e6, np.nanmean(raw_data[m]['height'],0),
+                plt.plot(np.nanmean(raw_data[m]['qnliq'][id,:],0)/1e6 - np.nanstd(raw_data[m]['qnliq'][id,:],0)/1e6, raw_data[m]['height'],
                     '--', color =lcols[m], linewidth = 0.5)
-                plt.plot(np.nanmean(raw_data[m]['qnliq'][id,:],0)/1e6 + np.nanstd(raw_data[m]['qnliq'][id,:],0)/1e6, np.nanmean(raw_data[m]['height'],0),
+                plt.plot(np.nanmean(raw_data[m]['qnliq'][id,:],0)/1e6 + np.nanstd(raw_data[m]['qnliq'][id,:],0)/1e6, raw_data[m]['height'],
                     '--', color = lcols[m], linewidth = 0.5)
         if pmonc==True:
             for m in range(0,len(monc_data)):
