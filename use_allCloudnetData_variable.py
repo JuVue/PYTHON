@@ -2173,9 +2173,9 @@ def plot_NisgProfiles_split(obs_data, lwcvar, lwcstr, thresholding, plots_out_di
                         if um_data[m]['model_twc'][t,k] < twc_thresh_um[k]:
                             um_data[m]['model_twc'][t,k] = np.nan
                             um_data[m]['model_lwc'][t,k] = np.nan
-                            if praw == True:
-                                raw_data[m]['qice'][t,k] = np.nan       ## apply nan mask to qice based on TWC
-                                raw_data[m]['qnice'][t,k] = np.nan       ## apply nan mask to qnice based on TWC
+                            # if praw == True:
+                            #     raw_data[m]['qice'][t,k] = np.nan       ## apply nan mask to qice based on TWC
+                            #     raw_data[m]['qnice'][t,k] = np.nan       ## apply nan mask to qnice based on TWC
         if pmonc==True:
             m=0 # use first um model run for height grid definition
             twc_thresh_monc = np.zeros([np.size(monc_data[m]['model_twc'],1)])
@@ -2201,8 +2201,8 @@ def plot_NisgProfiles_split(obs_data, lwcvar, lwcstr, thresholding, plots_out_di
                             monc_data[m]['model_twc'][t,k] = np.nan
                             monc_data[m]['model_lwc'][t,k] = np.nan
                             monc_data[m]['model_lwc'][t,k] = np.nan
-                            monc_data[m]['ndrop_tot_mean'][t,k] = np.nan
-                            monc_data[m]['nisg_tot_mean'][t,k] = np.nan
+                            # monc_data[m]['ndrop_tot_mean'][t,k] = np.nan
+                            # monc_data[m]['nisg_tot_mean'][t,k] = np.nan
 
             # ### plot profile of threshold as sanity check
             # plt.plot(twc_thresh_um, um_data[0]['height'][0,:])
