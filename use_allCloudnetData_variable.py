@@ -1452,7 +1452,7 @@ def plot_NdropProfiles_split(obs_data, lwcvar, lwcstr, thresholding, plots_out_d
                         if um_data[m]['model_twc'][t,k] < twc_thresh_um[k]:
                             um_data[m]['model_twc'][t,k] = np.nan
                             um_data[m]['model_lwc'][t,k] = np.nan
-                            if praw == True:
+                            # if praw == True:
                                 # raw_data[m]['qliq'][t,k] = np.nan       ## apply nan mask to qliq based on LWC
                                 # raw_data[m]['qnliq'][t,k] = np.nan       ## apply nan mask to ndrop based on LWC
         if pmonc==True:
