@@ -2291,7 +2291,7 @@ def plot_NisgProfiles_split(obs_data, lwcvar, lwcstr, thresholding, plots_out_di
         ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
         ax1.set_yticklabels(ytlabels)
         plt.xlim([0,0.005])
-        plt.xticks(np.arange(0,0.001,0.006))
+        # plt.xticks(np.arange(0,0.001,0.006))
         # #ax1.set_xticklabels([0,' ',0.015,' ',0.03,' ',0.045,' ',0.06])
         # ax1.xaxis.set_minor_locator(ticker.MultipleLocator(0.025))
 
