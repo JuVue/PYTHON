@@ -1541,7 +1541,7 @@ def plot_NdropProfiles_split(obs_data, lwcvar, lwcstr, thresholding, plots_out_d
             for m in range(0,len(monc_data)):
                 id= np.squeeze(np.argwhere((monc_data[m][ndrop_tvar[m]]>=prof_time[pt][0]) & (monc_data[m][ndrop_tvar[m]]<prof_time[pt][1])))
                 ax1.fill_betweenx(monc_data[m][ndrop_zvar[m]],np.nanmean(monc_data[m]['ndrop_tot_mean'][id,:],0)/1e6 - np.nanstd(monc_data[m]['ndrop_tot_mean'][id,:]/1e6,0),
-                    np.nanmean(monc_data[m]['ndrop_tot_mean'][id,:],0)/1e6 + np.nanstd(monc_data[m]['modelndrop_tot_mean_lwc'][id,:],0)/1e6, color = fcolsmonc[m], alpha = 0.05)
+                    np.nanmean(monc_data[m]['ndrop_tot_mean'][id,:],0)/1e6 + np.nanstd(monc_data[m]['ndrop_tot_mean'][id,:],0)/1e6, color = fcolsmonc[m], alpha = 0.05)
                 plt.plot(np.nanmean(monc_data[m]['ndrop_tot_mean'][id,:],0)/1e6 - np.nanstd(monc_data[m]['ndrop_tot_mean'][id,:],0)/1e6, monc_data[m][ndrop_zvar[m]],
                     '--', color =lcolsmonc[m], linewidth = 0.5)
                 plt.plot(np.nanmean(monc_data[m]['ndrop_tot_mean'][id,:],0)/1e6 + np.nanstd(monc_data[m]['ndrop_tot_mean'][id,:],0)/1e6, monc_data[m][ndrop_zvar[m]],
