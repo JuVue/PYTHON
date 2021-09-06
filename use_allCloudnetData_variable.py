@@ -2125,6 +2125,8 @@ def plot_NisgProfiles_split(obs_data, lwcvar, lwcstr, thresholding, plots_out_di
             lwc_tvar+=[monc_data[m]['tvar']['lwc_tot_mean']]
             nisg_zvar+=[monc_data[m]['zvar']['nisg_tot_mean']]
             nisg_tvar+=[monc_data[m]['tvar']['nisg_tot_mean']]
+    if praw==True:
+        raw_data['qnice'][raw_data['qnice'] < 0] = 0.0
 
     if thresholding == True:
         if pum==True:
@@ -2173,9 +2175,9 @@ def plot_NisgProfiles_split(obs_data, lwcvar, lwcstr, thresholding, plots_out_di
                         if um_data[m]['model_twc'][t,k] < twc_thresh_um[k]:
                             um_data[m]['model_twc'][t,k] = np.nan
                             um_data[m]['model_lwc'][t,k] = np.nan
-                            # if praw == True:
-                            #     raw_data[m]['qice'][t,k] = np.nan       ## apply nan mask to qice based on TWC
-                            #     raw_data[m]['qnice'][t,k] = np.nan       ## apply nan mask to qnice based on TWC
+                            if praw == True:
+                                raw_data[m]['qice'][t,k] = np.nan       ## apply nan mask to qice based on TWC
+                                raw_data[m]['qnice'][t,k] = np.nan       ## apply nan mask to qnice based on TWC
         if pmonc==True:
             m=0 # use first um model run for height grid definition
             twc_thresh_monc = np.zeros([np.size(monc_data[m]['model_twc'],1)])
@@ -2201,8 +2203,7 @@ def plot_NisgProfiles_split(obs_data, lwcvar, lwcstr, thresholding, plots_out_di
                             monc_data[m]['model_twc'][t,k] = np.nan
                             monc_data[m]['model_lwc'][t,k] = np.nan
                             monc_data[m]['model_lwc'][t,k] = np.nan
-                            # monc_data[m]['ndrop_tot_mean'][t,k] = np.nan
-                            # monc_data[m]['nisg_tot_mean'][t,k] = np.nan
+                            monc_data[m]['nisg_tot_mean'][t,k] = np.nan
 
             # ### plot profile of threshold as sanity check
             # plt.plot(twc_thresh_um, um_data[0]['height'][0,:])
@@ -2900,9 +2901,9 @@ def main():
     #           '24_u-cc324_RA2T_CON/',
     #           '25_u-cc568_RA2M_CON/']
     out_dir = ['23_u-cc278_RA1M_CASIM/',
-               # '30_u-cg179_RA1M_CASIM/',
-               # '26_u-cd847_RA1M_CASIM/',
-               # '27_u-ce112_RA1M_CASIM/',
+               '30_u-cg179_RA1M_CASIM/',
+               '26_u-cd847_RA1M_CASIM/',
+               '27_u-ce112_RA1M_CASIM/',
                ]
 
     # out_dir = ['23_u-cc278_RA1M_CASIM/']
@@ -2919,10 +2920,10 @@ def main():
                # '26B_20180913T0000Z_6hSpinUp_12h0600-0000thTend_20h1200-0600thTend_6-20h0-Cooper/',
                # '27A_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24hCooper/',
                # '27B_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.5Cooper/',
-               '27C_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper/',
+               # '27C_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper/',
                '27D_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd25/',
                '27E_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd10/',
-               '27F_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd5/',
+               # '27F_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd5/',
                # '28A_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_AccumSolAero-CASIM-100-ARG/',
                # '28B_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_AccumSolAero-CASIM-100-Twomey/'
                # '29A_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_AccumSolAero-CASIM-20-ARG/',
@@ -3219,7 +3220,7 @@ def main():
         var_list = ['height','temperature','surface_net_SW_radiation','surface_net_LW_radiation','sensible_heat_flux',
                     'air_temperature_at_1.5m', 'rainfall_flux','snowfall_flux','q','pressure','bl_depth','bl_type','qliq','uwind','vwind','wwind',
                     'cloud_fraction','radr_refl','qnliq','qnice','surface_downwelling_LW_radiation','surface_downwelling_SW_radiation', 'latent_heat_flux',
-                    'toa_outgoing_longwave_flux','toa_incoming_shortwave_flux','toa_outgoing_shortwave_flux','seaice_albedo_agg','qsnow','qice']
+                    'toa_outgoing_longwave_flux','toa_incoming_shortwave_flux','toa_outgoing_shortwave_flux','seaice_albedo_agg','qsnow','qice','qicecrystals']
 
         if i == 0:
             raw_data={}
