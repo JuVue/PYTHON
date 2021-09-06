@@ -1400,6 +1400,8 @@ def plot_NdropProfiles_split(obs_data, lwcvar, lwcstr, thresholding, plots_out_d
             #lwc_zvar=monc_data[m]['zvar']['liquid_mmr_mean']
             lwc_zvar+=[monc_data[m]['zvar']['lwc_tot_mean']]
             lwc_tvar+=[monc_data[m]['tvar']['lwc_tot_mean']]
+            ndrop_zvar+=[monc_data[m]['zvar']['ndrop_tot_mean']]
+            ndrop_tvar+=[monc_data[m]['tvar']['ndrop_tot_mean']]
 
     if thresholding == True:
         if pum==True:
@@ -1477,6 +1479,8 @@ def plot_NdropProfiles_split(obs_data, lwcvar, lwcstr, thresholding, plots_out_d
                             monc_data[m]['model_twc'][t,k] = np.nan
                             monc_data[m]['model_lwc'][t,k] = np.nan
                             monc_data[m]['model_lwc'][t,k] = np.nan
+                            monc_data[m]['ndrop_tot_mean'][t,k] = np.nan
+                            monc_data[m]['nisg_tot_mean'][t,k] = np.nan
 
             # ### plot profile of threshold as sanity check
             # plt.plot(twc_thresh_um, um_data[0]['height'][0,:])
@@ -1545,10 +1549,10 @@ def plot_NdropProfiles_split(obs_data, lwcvar, lwcstr, thresholding, plots_out_d
             for m in range(0,len(raw_data)):
                 id= np.squeeze(np.argwhere((raw_data[m]['time']>=prof_time[pt][0]) & (raw_data[m]['time']<prof_time[pt][1])))
                 plt.plot(np.nanmean(raw_data[m]['qnliq'][id,:],0)/1e6,raw_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
-        # if pmonc==True:
-        #     for m in range(0,len(monc_data)):
-        #         id= np.squeeze(np.argwhere((monc_data[m][lwc_tvar[m]]>=prof_time[pt][0]) & (monc_data[m][lwc_tvar[m]]<prof_time[pt][1])))
-        #         plt.plot(np.nanmean(monc_data[m]['model_lwc'][id,:],0)*1e3,monc_data[m][lwc_zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+        if pmonc==True:
+            for m in range(0,len(monc_data)):
+                id= np.squeeze(np.argwhere((monc_data[m][ndrop_tvar[m]]>=prof_time[pt][0]) & (monc_data[m][ndrop_tvar[m]]<prof_time[pt][1])))
+                plt.plot(np.nanmean(monc_data[m]['ndrop_tot_mean'][id,:],0)/1e6,monc_data[m][ndrop_zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
         if pt == 1:
             plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=2)
 
