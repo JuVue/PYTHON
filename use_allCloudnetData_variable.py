@@ -2126,7 +2126,8 @@ def plot_NisgProfiles_split(obs_data, lwcvar, lwcstr, thresholding, plots_out_di
             nisg_zvar+=[monc_data[m]['zvar']['nisg_tot_mean']]
             nisg_tvar+=[monc_data[m]['tvar']['nisg_tot_mean']]
     if praw==True:
-        raw_data[m]['qnice'][raw_data[m]['qnice'] < 0] = 0.0
+        for m in range(0,len(raw_data)):
+            raw_data[m]['qnice'][raw_data[m]['qnice'] < 0] = 0.0
 
     if thresholding == True:
         if pum==True:
