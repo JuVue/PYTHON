@@ -1391,6 +1391,8 @@ def plot_NdropProfiles_split(obs_data, lwcvar, lwcstr, thresholding, plots_out_d
     if pmonc==True:
         lwc_zvar=[]
         lwc_tvar=[]
+        ndrop_zvar=[]
+        ndrop_tvar=[]
         for m in range(0,len(monc_data)):
             #monc_data[m]['model_iwc']= (monc_data[m]['ice_mmr_mean']+monc_data[m]['graupel_mmr_mean']+monc_data[m]['snow_mmr_mean'])*monc_data[m]['rho']
             #monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
