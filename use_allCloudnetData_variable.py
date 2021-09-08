@@ -2649,9 +2649,6 @@ def UM_SanityCheck(obs_data, lwcvar, lwcstr, plots_out_dir, dates, prof_time, **
 
     plt.subplot(121)
     ax1 = plt.gca()
-    sstr=datenum2date(prof_time[pt][0])
-    estr=datenum2date(prof_time[pt][1])
-    plt.title(sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC')
     # if praw==True:
     #     for m in range(0,len(raw_data)):
     #         id= np.squeeze(np.argwhere((raw_data[m]['time']>=prof_time[pt][0]) & (raw_data[m]['time']<prof_time[pt][1])))
