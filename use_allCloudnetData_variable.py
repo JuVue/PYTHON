@@ -2654,6 +2654,7 @@ def UM_SanityCheck(obs_data, lwcvar, lwcstr, plots_out_dir, dates, prof_time, **
 
     plt.subplot(121)
     ax1 = plt.gca()
+    plt.plot(np.nanmean(obs_data['iwc'],0)*1e3,np.nanmean(obs_data['height'],0), color = 'k', linewidth = 3, label = 'Obs_UMgrid'  + twcstr, zorder = obs_zorder)
     if praw==True:
         for m in range(0,len(raw_data)):
             plt.plot(np.nanmean(raw_data[m]['iwc'],0)*1e3,raw_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
@@ -2666,6 +2667,8 @@ def UM_SanityCheck(obs_data, lwcvar, lwcstr, plots_out_dir, dates, prof_time, **
     plt.yticks(yticks)
     ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
     ax1.set_yticklabels(ytlabels)
+    plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=2)
+
     # plt.xlim([0,0.005])
 
     dstr=datenum2date(dates[1])
@@ -3600,7 +3603,7 @@ def main():
     # -------------------------------------------------------------
     # UM Sanity Checks
     # -------------------------------------------------------------
-    figure = UM_SanityCheck(obs_data, lwcvar,lwcstr, plots_out_dir,dates, prof_times,um_data=um_data,raw_data=raw_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = UM_SanityCheck(obs_data, lwcvar, lwcstr, plots_out_dir,dates, prof_times,um_data=um_data,raw_data=raw_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
     # -------------------------------------------------------------
     # plot LWP timeseries
