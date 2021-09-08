@@ -701,7 +701,7 @@ def main():
     ### create monc filenames
     monc_filename=[]
     for m in range(0, len(m_out_dir)):
-        fname=glob.glob(monc_root_dir + m_out_dir[m] +'*.nc')
+        fname=glob.glob(monc_root_dir + m_out_dir[m] +'*dg*.nc')
         monc_filename.append(fname)
     monc_3d_filename=[]
     for m in range(0, len(m_out_dir)):
