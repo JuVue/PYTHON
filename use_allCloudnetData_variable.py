@@ -2583,8 +2583,20 @@ def UM_SanityCheck(obs_data, lwcvar, lwcstr, plots_out_dir, dates, prof_time, **
     print ('')
     # print (raw_data[0].keys())
 
+    ###----------------------------------------------------------------
+    ###         Data fixes
+    ###----------------------------------------------------------------
+
     for m in range(0,len(raw_data)):
         raw_data[m]['rho'] = calcAirDensity(raw_data[m]['temperature'].data, raw_data[m]['pressure'].data / 1e2)
+
+    if praw==True:
+        for m in range(0,len(raw_data)):
+            raw_data[m]['qnice'][raw_data[m]['qnice'] < 0] = 0.0
+            raw_data[m]['qice'][raw_data[m]['qice'] < 0] = 0.0
+            raw_data[m]['qsnow'][raw_data[m]['qsnow'] < 0] = 0.0
+            raw_data[m]['qicecrystals'][raw_data[m]['qicecrystals'] < 0] = 0.0
+
 
     ###----------------------------------------------------------------
     ###         Calculate total water content
@@ -2613,13 +2625,6 @@ def UM_SanityCheck(obs_data, lwcvar, lwcstr, plots_out_dir, dates, prof_time, **
             raw_data[m]['lwc'] = raw_data[m]['qliq'] * raw_data[m]['rho']
             raw_data[m]['iwc'] = raw_data[m]['qice'] * raw_data[m]['rho']
             raw_data[m]['twc'] = raw_data[m]['lwc'] + raw_data[m]['iwc']
-
-    ###----------------------------------------------------------------
-    ###         Data fixes
-    ###----------------------------------------------------------------
-    if praw==True:
-        for m in range(0,len(raw_data)):
-            raw_data[m]['qnice'][raw_data[m]['qnice'] < 0] = 0.0
 
     ###----------------------------------------------------------------
     ###         Plot figure - Mean profiles
