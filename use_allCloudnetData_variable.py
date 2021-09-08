@@ -2598,15 +2598,15 @@ def UM_SanityCheck(obs_data, lwcvar, lwcstr, plots_out_dir, dates, prof_time, **
     if pmonc==True:
         lwc_zvar=[]
         lwc_tvar=[]
-        nisg_zvar=[]
-        nisg_tvar=[]
+        iwc_zvar=[]
+        iwc_tvar=[]
         for m in range(0,len(monc_data)):
             monc_data[m]['model_twc'] = monc_data[m]['twc_tot_mean']
             monc_data[m]['model_lwc'] = monc_data[m]['lwc_tot_mean']
             lwc_zvar+=[monc_data[m]['zvar']['lwc_tot_mean']]
             lwc_tvar+=[monc_data[m]['tvar']['lwc_tot_mean']]
-            nisg_zvar+=[monc_data[m]['zvar']['nisg_tot_mean']]
-            nisg_tvar+=[monc_data[m]['tvar']['nisg_tot_mean']]
+            iwc_zvar+=[monc_data[m]['zvar']['iwc_tot_mean']]
+            iwc_tvar+=[monc_data[m]['tvar']['iwc_tot_mean']]
     if praw==True:
         for m in range(0,len(raw_data)):
             raw_data[m]['qt'] = raw_data[m]['qliq'] + raw_data[m]['qice']
@@ -2621,78 +2621,62 @@ def UM_SanityCheck(obs_data, lwcvar, lwcstr, plots_out_dir, dates, prof_time, **
         for m in range(0,len(raw_data)):
             raw_data[m]['qnice'][raw_data[m]['qnice'] < 0] = 0.0
 
-    # ###----------------------------------------------------------------
-    # ###         Plot figure - Mean profiles
-    # ###----------------------------------------------------------------
-    #
-    # SMALL_SIZE = 12
-    # MED_SIZE = 14
-    # LARGE_SIZE = 16
-    #
-    # plt.rc('font',size=MED_SIZE)
-    # plt.rc('axes',titlesize=MED_SIZE)
-    # plt.rc('axes',labelsize=MED_SIZE)
-    # plt.rc('xtick',labelsize=MED_SIZE)
-    # plt.rc('ytick',labelsize=MED_SIZE)
-    # plt.rc('legend',fontsize=SMALL_SIZE)
-    # # plt.subplots_adjust(top = 0.95, bottom = 0.12, right = 0.95, left = 0.15,
-    # #         hspace = 0.4, wspace = 0.1)
-    # ###define colors
-    # lcols=['lightseagreen','steelblue','royalblue','darkblue']
-    # fcols=['lightcyan','lightblue','skyblue','blue']
-    # lcolsmonc=['gold','darkgoldenrod','darkorange','orangered','firebrick']
-    # fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
-    # ### define axis instance
-    # ####LWC
-    # plt.figure(figsize=(14,7))
-    # plt.subplots_adjust(top = 0.8, bottom = 0.1, right = 0.98, left = 0.08)
-    #
-    # for pt in range(0,len(prof_time)):
-    #     plt.subplot(1,len(prof_time),pt+1)
-    #     ax1 = plt.gca()
-    #     sstr=datenum2date(prof_time[pt][0])
-    #     estr=datenum2date(prof_time[pt][1])
-    #     plt.title(sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC')
-    #     if praw==True:
-    #         for m in range(0,len(raw_data)):
-    #             id= np.squeeze(np.argwhere((raw_data[m]['time']>=prof_time[pt][0]) & (raw_data[m]['time']<prof_time[pt][1])))
-    #             plt.plot(np.nanmean(raw_data[m]['qnice'][id,:],0)/1e6,raw_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
-    #     if pmonc==True:
-    #         for m in range(0,len(monc_data)):
-    #             id= np.squeeze(np.argwhere((monc_data[m][nisg_tvar[m]]>=prof_time[pt][0]) & (monc_data[m][nisg_tvar[m]]<prof_time[pt][1])))
-    #             plt.plot(np.nanmean(monc_data[m]['nisg_tot_mean'][id,:],0)/1e6,monc_data[m][nisg_zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
-    #     if pt == 1:
-    #         plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=2)
-    #
-    #
-    #     plt.xlabel('N$_{isg}$ [L$^{-1}$]')
-    #     plt.ylabel('Z [km]')
-    #     plt.ylim(ylims)
-    #     plt.yticks(yticks)
-    #     ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
-    #     ax1.set_yticklabels(ytlabels)
-    #     plt.xlim([0,0.005])
-    #
-    # dstr=datenum2date(dates[1])
-    # # plt.grid('on')
-    # if thresholding == True:
-    #     if pmonc==True:
-    #         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_Nisg-MTThresh' + lwcstr + '_split.png'
-    #     else:
-    #         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_Nisg-MTThresh'+ lwcstr + '_split.png'
-    # else:
-    #     if pmonc==True:
-    #         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_Nisg' + lwcstr + '_split.png'
-    #     else:
-    #         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_Nisg'+ lwcstr + '_split.png'
-    #
-    # plt.savefig(fileout, dpi=300)
-    # plt.close()
-    # # plt.show()
-    # print ('')
-    # print ('Finished plotting! :)')
-    # print ('')
-    # print ('******')
+    ###----------------------------------------------------------------
+    ###         Plot figure - Mean profiles
+    ###----------------------------------------------------------------
+
+    SMALL_SIZE = 12
+    MED_SIZE = 14
+    LARGE_SIZE = 16
+
+    plt.rc('font',size=MED_SIZE)
+    plt.rc('axes',titlesize=MED_SIZE)
+    plt.rc('axes',labelsize=MED_SIZE)
+    plt.rc('xtick',labelsize=MED_SIZE)
+    plt.rc('ytick',labelsize=MED_SIZE)
+    plt.rc('legend',fontsize=SMALL_SIZE)
+    # plt.subplots_adjust(top = 0.95, bottom = 0.12, right = 0.95, left = 0.15,
+    #         hspace = 0.4, wspace = 0.1)
+    ###define colors
+    lcols=['lightseagreen','steelblue','royalblue','darkblue']
+    fcols=['lightcyan','lightblue','skyblue','blue']
+    lcolsmonc=['gold','darkgoldenrod','darkorange','orangered','firebrick']
+    fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
+    ### define axis instance
+    ####LWC
+    plt.figure(figsize=(14,7))
+    plt.subplots_adjust(top = 0.8, bottom = 0.1, right = 0.98, left = 0.08)
+
+    plt.subplot(121)
+    ax1 = plt.gca()
+    sstr=datenum2date(prof_time[pt][0])
+    estr=datenum2date(prof_time[pt][1])
+    plt.title(sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC')
+    # if praw==True:
+    #     for m in range(0,len(raw_data)):
+    #         id= np.squeeze(np.argwhere((raw_data[m]['time']>=prof_time[pt][0]) & (raw_data[m]['time']<prof_time[pt][1])))
+    #         plt.plot(np.nanmean(raw_data[m]['qnice'][id,:],0)/1e6,raw_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
+    if pmonc==True:
+        for m in range(0,len(monc_data)):
+            plt.plot(np.nanmean(monc_data[m]['iwc_tot_mean'],0)*1e6,monc_data[m][nisg_zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+
+    plt.xlabel('IWC [g m$^{-3}$]')
+    plt.ylabel('Z [km]')
+    plt.ylim(ylims)
+    plt.yticks(yticks)
+    ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
+    ax1.set_yticklabels(ytlabels)
+    plt.xlim([0,0.005])
+
+    dstr=datenum2date(dates[1])
+    fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Cloudnet-UMraw_' + '_'.join(outstr) + '_IWC.png'
+    plt.savefig(fileout, dpi=300)
+    plt.close()
+    # plt.show()
+    print ('')
+    print ('Finished plotting! :)')
+    print ('')
+    print ('******')
 
 def interpCloudnet(obs_data):
     #interpolates missing times up to 1 hour
@@ -3050,9 +3034,9 @@ def main():
     #           '24_u-cc324_RA2T_CON/',
     #           '25_u-cc568_RA2M_CON/']
     out_dir = ['23_u-cc278_RA1M_CASIM/',
-               '30_u-cg179_RA1M_CASIM/',
-               '26_u-cd847_RA1M_CASIM/',
-               '27_u-ce112_RA1M_CASIM/',
+               # '30_u-cg179_RA1M_CASIM/',
+               # '26_u-cd847_RA1M_CASIM/',
+               # '27_u-ce112_RA1M_CASIM/',
                ]
 
     # out_dir = ['23_u-cc278_RA1M_CASIM/']
