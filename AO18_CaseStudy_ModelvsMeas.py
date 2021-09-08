@@ -398,7 +398,7 @@ def plot_T_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
     lcolsmonc=['gold','darkgoldenrod','darkorange','orangered','firebrick']
     fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
     ### define axis instance
-    ####LWC
+    ####temperature using hatpro temperature profiles for observations
     plt.figure(figsize=(18,8))
     plt.subplots_adjust(top = 0.8, bottom = 0.1, right = 0.92, left = 0.08)
     for pt in range(0,len(prof_time)):
@@ -416,6 +416,18 @@ def plot_T_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
             '--', color = 'k', linewidth = 0.5)
         plt.plot(np.nanmean(obs['hatpro_temp']['temperature'][:,obsid],1) + np.nanstd(obs['hatpro_temp']['temperature'][:,obsid],1), obs['hatpro_temp']['Z'],
             '--', color = 'k', linewidth = 0.5)
+        # embed()
+        # #adding RS data
+        # obsid1= np.squeeze(np.argwhere((obs['hatpro_temp']['mday']>=prof_time[pt][0]) & (obs['hatpro_temp']['mday']<prof_time[pt][1])))
+        # plt.plot(np.nanmean(obs['hatpro_temp']['temperature'][:,obsid],1),obs['hatpro_temp']['Z'], color = 'k', linewidth = 3, label = 'HATPRO', zorder = obs_zorder)
+        # ax1.fill_betweenx(obs['hatpro_temp']['Z'],np.nanmean(obs['hatpro_temp']['temperature'][:,obsid],1) - np.nanstd(obs['hatpro_temp']['temperature'][:,obsid],1),
+        #     np.nanmean(obs['hatpro_temp']['temperature'][:,obsid],1) + np.nanstd(obs['hatpro_temp']['temperature'][:,obsid],1), color = 'lightgrey', alpha = 0.5)
+        # # plt.xlim([0,0.2])
+        # plt.plot(np.nanmean(obs['hatpro_temp']['temperature'][:,obsid],1) - np.nanstd(obs['hatpro_temp']['temperature'][:,obsid],1),obs['hatpro_temp']['Z'],
+        #     '--', color = 'k', linewidth = 0.5)
+        # plt.plot(np.nanmean(obs['hatpro_temp']['temperature'][:,obsid],1) + np.nanstd(obs['hatpro_temp']['temperature'][:,obsid],1), obs['hatpro_temp']['Z'],
+        #     '--', color = 'k', linewidth = 0.5)
+            
         if pum==True:
             for m in range(0,len(um_data)):
                 id=  np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
@@ -451,7 +463,7 @@ def plot_T_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
             plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=4)
 
 
-        plt.xlabel('Temperture [K]')
+        plt.xlabel('Temperature [K]')
         plt.ylabel('Z [km]')
         plt.xlim([260,271])
         # plt.yticks(np.arange(0,5.01e3,0.5e3))
@@ -471,7 +483,7 @@ def plot_T_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
     else:
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) +'_Tprofile'  + '_split.png'
 
-    plt.savefig(fileout)
+    plt.savefig(fileout,dpi=300)
     print ('')
     print ('Finished plotting! :)')
     print ('')
@@ -593,8 +605,9 @@ def main():
     ### CHOOSE MONC RUNS
     m_out_dir =[#'22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/'
                 '27C_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper/',
-                ]
-    
+                '27D_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24',
+                '27E_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24',
+                '27F_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24']
     # m_out_dir = ['5_control_20180913T0000Z_Wsub-1.5_Fletcher/',
     #             '6_control_20180913T0000Z_Wsub-1.5-1km/',
     #             '7_20180913T0000Z_Wsub-1.5-1km_solAccum-100_inuc-0_iact-3/']
@@ -611,7 +624,13 @@ def main():
     dates = [date2datenum(sdate),date2datenum(edate)]
 
     #---- MONC SPIN UP TIME
-    monc_spin = 6 *60 *60
+    spin6 = ['26']
+    spin8 = ['27','28','29']
+
+    if m_out_dir[0][:2] in spin6:
+        monc_spin = 6 *60 *60
+    elif m_out_dir[0][:2] in spin8:
+        monc_spin = 8 *60 *60
 
     #---- SPLIT PROFILES IN TIME JUNKS
     prof_time=[[dates[0], dates[0]+4/24],
