@@ -605,9 +605,9 @@ def main():
     ### CHOOSE MONC RUNS
     m_out_dir =[#'22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/'
                 '27C_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper/',
-                '27D_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24/',
-                '27E_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24/',
-                '27F_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24/']
+                '27D_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd25/',
+                '27E_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-240.1Cooper_FixedNd10/',
+                '27F_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-240.1Cooper_FixedNd5/']
     # m_out_dir = ['5_control_20180913T0000Z_Wsub-1.5_Fletcher/',
     #             '6_control_20180913T0000Z_Wsub-1.5-1km/',
     #             '7_20180913T0000Z_Wsub-1.5-1km_solAccum-100_inuc-0_iact-3/']
@@ -701,6 +701,7 @@ def main():
     ### create monc filenames
     monc_filename=[]
     for m in range(0, len(m_out_dir)):
+        print(m_out_dir[m])
         fname=glob.glob(monc_root_dir + m_out_dir[m] +'*dg*.nc')
         monc_filename.append(fname)
     monc_3d_filename=[]
