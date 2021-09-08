@@ -605,9 +605,9 @@ def main():
     ### CHOOSE MONC RUNS
     m_out_dir =[#'22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/'
                 '27C_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper/',
-                '27D_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24',
-                '27E_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24',
-                '27F_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24']
+                '27D_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24/',
+                '27E_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24/',
+                '27F_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24/']
     # m_out_dir = ['5_control_20180913T0000Z_Wsub-1.5_Fletcher/',
     #             '6_control_20180913T0000Z_Wsub-1.5-1km/',
     #             '7_20180913T0000Z_Wsub-1.5-1km_solAccum-100_inuc-0_iact-3/']
@@ -737,10 +737,12 @@ def main():
     ncm = {}
     monc_data = {}
     for m in range(0, len(m_out_dir)):
+        print(str(m))
         for n in range(0, len(monc_filename[m])):
-            print(monc_filename[m][n])
+            #print(monc_filename[m][n])
             ncm = Dataset(monc_filename[m][n],'r')
             if n == 0:
+                print('initialise monc_data' + str(m) )
                 monc_data[m]={}
                 zvar={}
                 tvar={}
@@ -796,7 +798,7 @@ def main():
                 else:
                     monc_data[m][var] =np.append(monc_data[m][var],pyd[var],axis=0)
 
-        embed()
+
         monc_data[m]['zvar']=zvar
         monc_data[m]['tvar']=tvar
         monc_data[m]['time1']=monc_data[m][time_var_list[0]] #1d data
