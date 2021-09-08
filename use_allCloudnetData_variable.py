@@ -1999,11 +1999,11 @@ def plot_iwcProfiles_split(obs_data,twcvar,twcstr, thresholding, plots_out_dir,d
         if pum==True:
             for m in range(0,len(um_data)):
                 id=  np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
-                ax1.fill_betweenx(np.nanmean(um_data[m]['height'],0),np.nanmean(um_data[m]['model_iwc'][id,:],0)*1e3 - np.nanstd(um_data[m]['model_iwc'][id,:]*1e3,0),
-                    np.nanmean(um_data[m]['model_iwc'][id,:],0)*1e3 + np.nanstd(um_data[m]['model_iwc'][id,:],0)*1e3, color = fcols[m], alpha = 0.05)
-                plt.plot(np.nanmean(um_data[m]['model_iwc'][id,:],0)*1e3 - np.nanstd(um_data[m]['model_iwc'][id,:],0)*1e3, np.nanmean(um_data[m]['height'],0),
+                ax1.fill_betweenx(np.nanmean(um_data[m]['height'],0),np.nanmean(um_data[m]['model_iwc_filtered'][id,:],0)*1e3 - np.nanstd(um_data[m]['model_iwc_filtered'][id,:]*1e3,0),
+                    np.nanmean(um_data[m]['model_iwc_filtered'][id,:],0)*1e3 + np.nanstd(um_data[m]['model_iwc_filtered'][id,:],0)*1e3, color = fcols[m], alpha = 0.05)
+                plt.plot(np.nanmean(um_data[m]['model_iwc_filtered'][id,:],0)*1e3 - np.nanstd(um_data[m]['model_iwc_filtered'][id,:],0)*1e3, np.nanmean(um_data[m]['height'],0),
                     '--', color =lcols[m], linewidth = 0.5)
-                plt.plot(np.nanmean(um_data[m]['model_iwc'][id,:],0)*1e3 + np.nanstd(um_data[m]['model_iwc'][id,:],0)*1e3, np.nanmean(um_data[m]['height'],0),
+                plt.plot(np.nanmean(um_data[m]['model_iwc_filtered'][id,:],0)*1e3 + np.nanstd(um_data[m]['model_iwc_filtered'][id,:],0)*1e3, np.nanmean(um_data[m]['height'],0),
                     '--', color = lcols[m], linewidth = 0.5)
         if pmonc==True:
             for m in range(0,len(monc_data)):
@@ -2017,7 +2017,7 @@ def plot_iwcProfiles_split(obs_data,twcvar,twcstr, thresholding, plots_out_dir,d
         if pum==True:
             for m in range(0,len(um_data)):
                 id= np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
-                plt.plot(np.nanmean(um_data[m]['model_iwc'][id,:],0)*1e3,np.nanmean(um_data[m]['height'],0), color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
+                plt.plot(np.nanmean(um_data[m]['model_iwc_filtered'][id,:],0)*1e3,np.nanmean(um_data[m]['height'],0), color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
         if pmonc==True:
             for m in range(0,len(monc_data)):
                 id= np.squeeze(np.argwhere((monc_data[m][twc_tvar[m]]>=prof_time[pt][0]) & (monc_data[m][twc_tvar[m]]<prof_time[pt][1])))
@@ -2657,7 +2657,10 @@ def UM_SanityCheck(obs_data, lwcvar, lwcstr, plots_out_dir, dates, prof_time, **
     plt.plot(np.nanmean(obs_data['iwc'],0)*1e3,np.nanmean(obs_data['height'],0), color = 'k', linewidth = 3, label = 'Obs_UMgrid', zorder = obs_zorder)
     if praw==True:
         for m in range(0,len(raw_data)):
-            plt.plot(np.nanmean(raw_data[m]['iwc'],0)*1e3,raw_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
+            plt.plot(np.nanmean(raw_data[m]['iwc'],0)*1e3,raw_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m] + '_Raw', zorder = 1)
+    if pum==True:
+        for m in range(0,len(um_data)):
+            plt.plot(np.nanmean(um_data[m]['model_iwc_filtered'],0)*1e3,np.nanmean(um_data[m]['height'],0), color = lcols[m], linewidth = 3, label = label[m] + '_Cloudnet', zorder = 1)
     if pmonc==True:
         for m in range(0,len(monc_data)):
             plt.plot(np.nanmean(monc_data[m]['iwc_tot_mean'],0)*1e3,monc_data[m][iwc_zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
@@ -3587,7 +3590,7 @@ def main():
     # figure = plot_NdropProfiles_split(obs_data, lwcvar,lwcstr,thresholding, plots_out_dir,dates, prof_times,um_data=um_data,raw_data=raw_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     # figure = plot_lwcProfiles_split(obs_data, lwcvar,lwcstr,thresholding, plots_out_dir,dates, prof_times,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     # figure = plot_NisgProfiles_split(obs_data, lwcvar,lwcstr,thresholding, plots_out_dir,dates, prof_times,um_data=um_data,raw_data=raw_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    # figure = plot_iwcProfiles_split(obs_data, twcvar,twcstr,thresholding, plots_out_dir,dates, prof_times,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_iwcProfiles_split(obs_data, twcvar,twcstr,thresholding, plots_out_dir,dates, prof_times,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
 
     # -------------------------------------------------------------
