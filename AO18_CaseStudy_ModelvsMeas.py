@@ -427,7 +427,7 @@ def plot_T_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
         #     '--', color = 'k', linewidth = 0.5)
         # plt.plot(np.nanmean(obs['hatpro_temp']['temperature'][:,obsid],1) + np.nanstd(obs['hatpro_temp']['temperature'][:,obsid],1), obs['hatpro_temp']['Z'],
         #     '--', color = 'k', linewidth = 0.5)
-            
+
         if pum==True:
             for m in range(0,len(um_data)):
                 id=  np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
@@ -562,7 +562,7 @@ def main():
         plots_out_dir='/gws/nopw/j04/ncas_radar_vol1/jutta/PLOTS/CaseStudy/'
         if not os.path.exists(plots_out_dir):
             os.makedirs(plots_out_dir)
-        um_root_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/UM/'
+        um_root_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/UM/DATA/'
         obs_met_dir=  '/gws/nopw/j04/ncas_radar_vol1/jutta/DATA/OBS/';
         obs_acas_dir= '/gws/nopw/j04/ncas_radar_vol1/jutta/DATA/OBS/ACAS/ACAS_AO2018_v2_May2019/';
         obs_rs_dir=   '/gws/nopw/j04/ncas_radar_vol1/jutta/DATA/OBS/radiosondes/';
