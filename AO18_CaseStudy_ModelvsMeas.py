@@ -454,7 +454,6 @@ def plot_T_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
             for m in range(0,len(um_data)):
                 id= np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
                 plt.plot(np.nanmean(um_data[m]['temperature'][id,:],0),um_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
-        embed()
         if pmonc==True:
             for m in range(0,len(monc_data)):
                 id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
@@ -488,7 +487,6 @@ def plot_T_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
     print ('Finished plotting! :)')
     print ('')
     print ('******')
-    plt.show()
 
 def removeSpinUp(monc_data,monc_spin):
     print('')
