@@ -591,9 +591,10 @@ def main():
               '27_u-ce112_RA1M_CASIM/']
 #    out_dir = [  '30_u-cg179_RA1M_CASIM/' ]
     ### CHOOSE MONC RUNS
-    m_out_dir =['22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/']
-    #'23_20180913T0000Z_6hSpin-up_12h0600-0000thTend/']
-
+    m_out_dir =[#'22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/'
+                '27C_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper/',
+                ]
+    
     # m_out_dir = ['5_control_20180913T0000Z_Wsub-1.5_Fletcher/',
     #             '6_control_20180913T0000Z_Wsub-1.5-1km/',
     #             '7_20180913T0000Z_Wsub-1.5-1km_solAccum-100_inuc-0_iact-3/']
@@ -976,6 +977,39 @@ def main():
         elif m_out_dir[m][:2] == '23':
             mlabel.append('MONC thForcing-0600-0000')
             moutstr.append('MONC-23')
+        elif m_out_dir[m][:2] == '24':
+            mlabel.append('MONC thForcing-12h0600-0000-20h1200-0600 0.1*Cooper')
+            moutstr.append('MONC-24')
+        elif m_out_dir[m][:2] == '25':
+            mlabel.append('MONC thForcing-20h0600-0000')
+            moutstr.append('MONC-25')
+        elif m_out_dir[m][:3] == '26A':
+            mlabel.append('MONC 6hSpinUp thForcing-0-12h0600-0000 6-20h-0.1*Cooper')
+            moutstr.append('MONC-26A')
+        elif m_out_dir[m][:3] == '26B':
+            mlabel.append('MONC 6hSpinUp thForcing-0-12h0600-0000 6-20h-0*Cooper')
+            moutstr.append('MONC-26B')
+        elif m_out_dir[m][:3] == '27A':
+            mlabel.append('MONC_Cooper_FixedNd50')
+            moutstr.append('MONC-27A')
+        elif m_out_dir[m][:3] == '27B':
+            mlabel.append('MONC_0.5Cooper_FixedNd50')
+            moutstr.append('MONC-27B')
+        elif m_out_dir[m][:3] == '27C':
+            mlabel.append('MONC_0.1Cooper_FixedNd50')
+            moutstr.append('MONC-27C')
+        elif m_out_dir[m][:3] == '28A':
+            mlabel.append('MONC_0.1Cooper_CASIM-100-ARG')
+            moutstr.append('MONC-28A')
+        elif m_out_dir[m][:3] == '28B':
+            mlabel.append('MONC_0.1Cooper_CASIM-100-Twomey')
+            moutstr.append('MONC-28B')
+        elif m_out_dir[m][:3] == '29A':
+            mlabel.append('MONC_0.1Cooper_CASIM-20-ARG')
+            moutstr.append('MONC-29A')
+        elif m_out_dir[m][:3] == '29B':
+            mlabel.append('MONC_0.1Cooper_CASIM-20-allAct')
+            moutstr.append('MONC-29B')
         else:
             label.append('undefined_label')
             moutstr.append('')

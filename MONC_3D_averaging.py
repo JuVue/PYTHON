@@ -34,9 +34,9 @@ if machine=='LEEDS':
 elif machine=='JASMIN':
     monc_root_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/MONC/output/'
     #m_out_dir = '22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/'
-    m_out_dir = '23_20180913T0000Z_6hSpin-up_12h0600-0000thTend/'
-    monc_exp_dir= '/gws/nopw/j04/ncas_radar_vol1/jutta/MONC/output/'  # output directory for averaged data
-tmp=glob.glob(monc_root_dir + m_out_dir +'*.nc')
+    m_out_dir = '27E_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd10/'
+    monc_exp_dir= '/gws/nopw/j04/ncas_radar_vol1/gillian/MONC/output/'  # output directory for averaged data
+tmp=glob.glob(monc_root_dir + m_out_dir +'*_dg_*.nc')
 #assert len(tmp)==1,'more than one file detected'
 monc_filename=tmp
 start = time.time()
@@ -45,13 +45,16 @@ start = time.time()
 print ('Loading MONC data:')
 print ('')
 ###1d variables, 2d variables (time,height), 3d variables (time,x,y), 4d variables(time,x,y,z)
-monc_var_list =['z','zn','prefn','thref','q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass',
+monc_var_list =['z','zn','prefn','thref','q_cloud_liquid_mass','q_rain_mass','q_ice_mass','q_snow_mass','q_graupel_mass',
+                'q_cloud_liquid_number','q_rain_number','q_ice_number','q_snow_number','q_graupel_number',
                 'th','p','u','v','w','q_vapour']
 
 #list of variables to be averaged at import
 monc_direct_avg=['u','v','w','q_vapour']
 #list of cloud variables to be averaged with threshold function
-monc_thresh_avg= ['q_cloud_liquid_mass','q_ice_mass','q_snow_mass','q_graupel_mass','iwc_tot','lwc_tot','twc_tot'] #always have twc_tot at the end!
+monc_thresh_avg= ['q_cloud_liquid_mass','q_rain_mass','q_ice_mass','q_snow_mass','q_graupel_mass',
+                'q_cloud_liquid_number','q_rain_number','q_ice_number','q_snow_number','q_graupel_number',
+                'iwc_tot','lwc_tot','nisg_tot','ndrop_tot','twc_tot'] #always have twc_tot at the end!
 
 # ml2  =        ['liquid_mmr_mean','ice_mmr_mean','snow_mmr_mean','graupel_mmr_mean','model_twc']
 
@@ -146,7 +149,10 @@ for m in range(0,len(monc_filename)):
     #zvar['model_twc']= zvar['ice_mmr_mean']
     monc_data['iwc_tot']=monc_data['q_ice_mass']+monc_data['q_snow_mass']+monc_data['q_graupel_mass']
     monc_data['iwc_tot']=monc_data['iwc_tot']*rho
+    monc_data['nisg_tot']=monc_data['q_ice_number']+monc_data['q_snow_number']+monc_data['q_graupel_number']
+    monc_data['nisg_tot']=monc_data['nisg_tot']*rho
     monc_data['lwc_tot']=monc_data['q_cloud_liquid_mass']*rho
+    monc_data['ndrop_tot']=monc_data['q_cloud_liquid_number']*rho
     monc_data['twc_tot']=monc_data['iwc_tot']+monc_data['lwc_tot']
     #monc_data['twc_tot']=monc_data['q_ice_mass']+monc_data['q_snow_mass']+monc_data['q_graupel_mass']+monc_data['q_cloud_liquid_mass']
     #monc_data['twc_tot']=monc_data['twc_tot']*rho
@@ -156,6 +162,10 @@ for m in range(0,len(monc_filename)):
     zvar['iwc_tot']= zvar['q_ice_mass']
     tvar['lwc_tot']=tvar['q_ice_mass']
     zvar['lwc_tot']= zvar['q_ice_mass']
+    tvar['ndrop_tot']=tvar['q_ice_mass']
+    zvar['ndrop_tot']= zvar['q_ice_mass']
+    tvar['nisg_tot']=tvar['q_ice_mass']
+    zvar['nisg_tot']= zvar['q_ice_mass']
 
     print('setting up thresholds')
     #calculate mean values
