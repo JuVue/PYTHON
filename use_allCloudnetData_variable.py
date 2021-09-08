@@ -2649,21 +2649,19 @@ def UM_SanityCheck(obs_data, lwcvar, lwcstr, plots_out_dir, dates, prof_time, **
 
     plt.subplot(121)
     ax1 = plt.gca()
-    # if praw==True:
-    #     for m in range(0,len(raw_data)):
-    #         id= np.squeeze(np.argwhere((raw_data[m]['time']>=prof_time[pt][0]) & (raw_data[m]['time']<prof_time[pt][1])))
-    #         plt.plot(np.nanmean(raw_data[m]['qnice'][id,:],0)/1e6,raw_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
+    if praw==True:
+        for m in range(0,len(raw_data)):
+            plt.plot(np.nanmean(raw_data[m]['iwc'],0)*1e3,raw_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
     if pmonc==True:
         for m in range(0,len(monc_data)):
             plt.plot(np.nanmean(monc_data[m]['iwc_tot_mean'],0)*1e3,monc_data[m][iwc_zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
-
     plt.xlabel('IWC [g m$^{-3}$]')
     plt.ylabel('Z [km]')
     plt.ylim(ylims)
     plt.yticks(yticks)
     ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
     ax1.set_yticklabels(ytlabels)
-    plt.xlim([0,0.005])
+    # plt.xlim([0,0.005])
 
     dstr=datenum2date(dates[1])
     fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Cloudnet-UMraw_' + '_'.join(outstr) + '_IWC.png'
