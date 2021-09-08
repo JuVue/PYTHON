@@ -606,8 +606,8 @@ def main():
     m_out_dir =[#'22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/'
                 '27C_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper/',
                 '27D_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd25/',
-                '27E_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-240.1Cooper_FixedNd10/',
-                '27F_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-240.1Cooper_FixedNd5/']
+                '27E_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd10/',
+                '27F_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd5/']
     # m_out_dir = ['5_control_20180913T0000Z_Wsub-1.5_Fletcher/',
     #             '6_control_20180913T0000Z_Wsub-1.5-1km/',
     #             '7_20180913T0000Z_Wsub-1.5-1km_solAccum-100_inuc-0_iact-3/']
@@ -734,7 +734,6 @@ def main():
                         # 'time1', 'time2', 'p_mean', 'T_mean', 'th_mean', 'rho_mean',
                         # 'q_cloud_liquid_mass_mean', 'q_ice_mass_mean', 'q_snow_mass_mean',
                         # 'q_graupel_mass_mean', 'iwc_tot_mean', 'lwc_tot_mean', 'twc_tot_mean', 'zvar', 'tvar']
-    embed()
     ncm = {}
     monc_data = {}
     for m in range(0, len(m_out_dir)):
