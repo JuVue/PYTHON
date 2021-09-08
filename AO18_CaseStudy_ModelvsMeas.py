@@ -796,7 +796,7 @@ def main():
                 else:
                     monc_data[m][var] =np.append(monc_data[m][var],pyd[var],axis=0)
 
-
+        embed()
         monc_data[m]['zvar']=zvar
         monc_data[m]['tvar']=tvar
         monc_data[m]['time1']=monc_data[m][time_var_list[0]] #1d data
