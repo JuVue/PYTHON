@@ -376,7 +376,7 @@ def plot_IWCTimeseries( obs_data, plots_out_dir, dates,**args): #, lon, lat):
     obs_data['iwc'][obs_data['iwc'] <= 0.0] = np.nan
     if pum ==True:
         for m in range(0,len(um_data)):
-            um_data[m]['model_iwc_filtered'][um_data[m]['model_iwc_filtered'] <= 0.0] = np.nan
+            um_data[m]['model_iwc'][um_data[m]['model_iwc'] <= 0.0] = np.nan
 
     if pmonc ==True :
         iwc_tvar=[]
@@ -451,7 +451,7 @@ def plot_IWCTimeseries( obs_data, plots_out_dir, dates,**args): #, lon, lat):
         for m in range(0,len(um_data)):
             plt.subplot(numsp,1,m+2)
             ax = plt.gca()
-            plt.contourf(um_data[m]['time'], np.squeeze(um_data[m]['height'][0,:]), np.transpose(um_data[m]['model_iwc_filtered'])*1e3,
+            plt.contourf(um_data[m]['time'], np.squeeze(um_data[m]['height'][0,:]), np.transpose(um_data[m]['model_iwc'])*1e3,
                 levels=clev,norm = LogNorm(),cmap = newcmp)
                 #cmap = newcmp)
             plt.ylabel('Z [km]')
@@ -553,7 +553,7 @@ def plot_TWCTimeseries(obs_data,twcvar,twcstr,plots_out_dir, dates,  **args):
     obs_data['twc_ad_nolwp'] = obs_data['lwc_adiabatic_inc_nolwp'] + obs_data['iwc']
     if pum==True:
         for m in range(0,len(um_data)):
-            um_data[m]['model_twc'] = um_data[m]['model_lwc'] + um_data[m]['model_iwc_filtered']
+            um_data[m]['model_twc'] = um_data[m]['model_lwc'] + um_data[m]['model_iwc']
 
     if pmonc==True:
         twc_tvar=[]
@@ -727,7 +727,7 @@ def plot_lwcProfiles(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,dates, 
     obs_data['twc_ad_nolwp'] = obs_data['lwc_adiabatic_inc_nolwp'] + obs_data['iwc']
     if pum==True:
         for m in range(0,len(um_data)):
-            um_data[m]['model_twc'] = um_data[m]['model_lwc'] + um_data[m]['model_iwc_filtered']
+            um_data[m]['model_twc'] = um_data[m]['model_lwc'] + um_data[m]['model_iwc']
     if pmonc==True:
         lwc_zvar=[]
         for m in range(0,len(monc_data)):
@@ -947,7 +947,7 @@ def plot_iwcProfiles(obs_data, twcvar,twcstr, thresholding,plots_out_dir,dates, 
     obs_data['twc_ad_nolwp'] = obs_data['lwc_adiabatic_inc_nolwp'] + obs_data['iwc']
     if pum==True:
         for m in range(0,len(um_data)):
-            um_data[m]['model_twc'] = um_data[m]['model_lwc'] + um_data[m]['model_iwc_filtered']
+            um_data[m]['model_twc'] = um_data[m]['model_lwc'] + um_data[m]['model_iwc']
     if pmonc==True:
         twc_zvar=[]
         for m in range(0,len(monc_data)):
@@ -999,7 +999,7 @@ def plot_iwcProfiles(obs_data, twcvar,twcstr, thresholding,plots_out_dir,dates, 
                     for m in range(0,len(um_data)):
                         if  um_data[m]['model_twc'][t,k] < twc_thresh_um[k]:
                             um_data[m]['model_twc'][t,k] = np.nan
-                            um_data[m]['model_iwc_filtered'][t,k] = np.nan
+                            um_data[m]['model_iwc'][t,k] = np.nan
         if pmonc==True:
             m=0 # use first um model run for height grid definition
             twc_thresh_monc = np.zeros([np.size(monc_data[m]['model_twc'],1)])
@@ -1163,7 +1163,7 @@ def plot_twcProfiles( obs_data,twcvar,twcstr, thresholding, plots_out_dir,dates,
     obs_data['twc_ad_nolwp'] = obs_data['lwc_adiabatic_inc_nolwp'] + obs_data['iwc']
     if pum==True:
         for m in range(0,len(um_data)):
-            um_data[m]['model_twc'] = um_data[m]['model_lwc'] + um_data[m]['model_iwc_filtered']
+            um_data[m]['model_twc'] = um_data[m]['model_lwc'] + um_data[m]['model_iwc']
     if  pmonc==True:
         for m in range(0,len(monc_data)):
             # monc_data[m]['model_iwc']= (monc_data[m]['ice_mmr_mean']+monc_data[m]['graupel_mmr_mean']+monc_data[m]['snow_mmr_mean'])*monc_data[m]['rho']
@@ -1218,7 +1218,7 @@ def plot_twcProfiles( obs_data,twcvar,twcstr, thresholding, plots_out_dir,dates,
                     for m in range(0,len(um_data)):
                         if  um_data[m]['model_twc'][t,k] < twc_thresh_um[k]:
                             um_data[m]['model_twc'][t,k] = np.nan
-                            um_data[m]['model_iwc_filtered'][t,k] = np.nan
+                            um_data[m]['model_iwc'][t,k] = np.nan
         if pmonc==True:
             m=0 # use first um model run for height grid definition
             twc_thresh_monc = np.zeros([np.size(monc_data[m]['model_twc'],1)])
@@ -1387,7 +1387,7 @@ def plot_NdropProfiles_split(obs_data, lwcvar, lwcstr, thresholding, plots_out_d
     obs_data['twc_ad_nolwp'] = obs_data['lwc_adiabatic_inc_nolwp'] + obs_data['iwc']
     if pum==True:
         for m in range(0,len(um_data)):
-            um_data[m]['model_twc'] = um_data[m]['model_lwc'] + um_data[m]['model_iwc_filtered']
+            um_data[m]['model_twc'] = um_data[m]['model_lwc'] + um_data[m]['model_iwc']
     if pmonc==True:
         lwc_zvar=[]
         lwc_tvar=[]
@@ -1635,7 +1635,7 @@ def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,d
     obs_data['twc_ad_nolwp'] = obs_data['lwc_adiabatic_inc_nolwp'] + obs_data['iwc']
     if pum==True:
         for m in range(0,len(um_data)):
-            um_data[m]['model_twc'] = um_data[m]['model_lwc'] + um_data[m]['model_iwc_filtered']
+            um_data[m]['model_twc'] = um_data[m]['model_lwc'] + um_data[m]['model_iwc']
     if pmonc==True:
         lwc_zvar=[]
         lwc_tvar=[]
@@ -1928,7 +1928,7 @@ def plot_iwcProfiles_split(obs_data,twcvar,twcstr, thresholding, plots_out_dir,d
                     for m in range(0,len(um_data)):
                         if  um_data[m]['model_twc'][t,k] < twc_thresh_um[k]:
                             um_data[m]['model_twc'][t,k] = np.nan
-                            um_data[m]['model_iwc_filtered'][t,k] = np.nan
+                            um_data[m]['model_iwc'][t,k] = np.nan
         if pmonc==True:
             m=0 # use first um model run for height grid definition
             twc_thresh_monc = np.zeros([np.size(monc_data[m]['model_twc'],1)])
@@ -2108,7 +2108,7 @@ def plot_NisgProfiles_split(obs_data, lwcvar, lwcstr, thresholding, plots_out_di
     obs_data['twc_ad_nolwp'] = obs_data['lwc_adiabatic_inc_nolwp'] + obs_data['iwc']
     if pum==True:
         for m in range(0,len(um_data)):
-            um_data[m]['model_twc'] = um_data[m]['model_lwc'] + um_data[m]['model_iwc_filtered']
+            um_data[m]['model_twc'] = um_data[m]['model_lwc'] + um_data[m]['model_iwc']
     if pmonc==True:
         lwc_zvar=[]
         lwc_tvar=[]

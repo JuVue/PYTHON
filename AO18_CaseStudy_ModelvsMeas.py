@@ -398,7 +398,7 @@ def plot_T_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
     lcolsmonc=['gold','darkgoldenrod','darkorange','orangered','firebrick']
     fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
     ### define axis instance
-    ####LWC
+    ####temperature using hatpro temperature profiles for observations
     plt.figure(figsize=(18,8))
     plt.subplots_adjust(top = 0.8, bottom = 0.1, right = 0.92, left = 0.08)
     for pt in range(0,len(prof_time)):
@@ -416,6 +416,18 @@ def plot_T_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
             '--', color = 'k', linewidth = 0.5)
         plt.plot(np.nanmean(obs['hatpro_temp']['temperature'][:,obsid],1) + np.nanstd(obs['hatpro_temp']['temperature'][:,obsid],1), obs['hatpro_temp']['Z'],
             '--', color = 'k', linewidth = 0.5)
+        embed()
+        #adding RS data
+        obsid1= np.squeeze(np.argwhere((obs['sondes']['mday']>=prof_time[pt][0]) & (obs['sondes']['mday']<prof_time[pt][1])))
+        plt.plot(np.nanmean(obs['sondes']['temperature'][:,obsid],1),obs['sondes']['Z'], color = 'grey', linewidth = 3, label = 'RS', zorder = obs_zorder)
+        ax1.fill_betweenx(obs['sondes']['Z'],np.nanmean(obs['sondes']['temperature'][:,obsid],1) - np.nanstd(obs['sondes']['temperature'][:,obsid],1),
+            np.nanmean(obs['sondes']['temperature'][:,obsid],1) + np.nanstd(obs['sondes']['temperature'][:,obsid],1), color = 'lightgrey', alpha = 0.5)
+        # plt.xlim([0,0.2])
+        plt.plot(np.nanmean(obs['sondes']['temperature'][:,obsid],1) - np.nanstd(obs['sondes']['temperature'][:,obsid],1),obs['sondes']['Z'],
+            '--', color = 'grey', linewidth = 0.5)
+        plt.plot(np.nanmean(obs['sondes']['temperature'][:,obsid],1) + np.nanstd(obs['sondes']['temperature'][:,obsid],1), obs['sondes']['Z'],
+            '--', color = 'grey', linewidth = 0.5)
+
         if pum==True:
             for m in range(0,len(um_data)):
                 id=  np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
@@ -442,7 +454,6 @@ def plot_T_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
             for m in range(0,len(um_data)):
                 id= np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
                 plt.plot(np.nanmean(um_data[m]['temperature'][id,:],0),um_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
-        embed()
         if pmonc==True:
             for m in range(0,len(monc_data)):
                 id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
@@ -451,7 +462,7 @@ def plot_T_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
             plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=4)
 
 
-        plt.xlabel('Temperture [K]')
+        plt.xlabel('Temperature [K]')
         plt.ylabel('Z [km]')
         plt.xlim([260,271])
         # plt.yticks(np.arange(0,5.01e3,0.5e3))
@@ -471,12 +482,11 @@ def plot_T_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
     else:
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) +'_Tprofile'  + '_split.png'
 
-    plt.savefig(fileout)
+    plt.savefig(fileout,dpi=300)
     print ('')
     print ('Finished plotting! :)')
     print ('')
     print ('******')
-
 
 def removeSpinUp(monc_data,monc_spin):
     print('')
@@ -550,7 +560,7 @@ def main():
         plots_out_dir='/gws/nopw/j04/ncas_radar_vol1/jutta/PLOTS/CaseStudy/'
         if not os.path.exists(plots_out_dir):
             os.makedirs(plots_out_dir)
-        um_root_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/UM/'
+        um_root_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/UM/DATA/'
         obs_met_dir=  '/gws/nopw/j04/ncas_radar_vol1/jutta/DATA/OBS/';
         obs_acas_dir= '/gws/nopw/j04/ncas_radar_vol1/jutta/DATA/OBS/ACAS/ACAS_AO2018_v2_May2019/';
         obs_rs_dir=   '/gws/nopw/j04/ncas_radar_vol1/jutta/DATA/OBS/radiosondes/';
@@ -593,8 +603,9 @@ def main():
     ### CHOOSE MONC RUNS
     m_out_dir =[#'22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/'
                 '27C_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper/',
-                ]
-    
+                '27D_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd25/',
+                '27E_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd10/',
+                '27F_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd5/']
     # m_out_dir = ['5_control_20180913T0000Z_Wsub-1.5_Fletcher/',
     #             '6_control_20180913T0000Z_Wsub-1.5-1km/',
     #             '7_20180913T0000Z_Wsub-1.5-1km_solAccum-100_inuc-0_iact-3/']
@@ -611,7 +622,13 @@ def main():
     dates = [date2datenum(sdate),date2datenum(edate)]
 
     #---- MONC SPIN UP TIME
-    monc_spin = 6 *60 *60
+    spin6 = ['26']
+    spin8 = ['27','28','29']
+
+    if m_out_dir[0][:2] in spin6:
+        monc_spin = 6 *60 *60
+    elif m_out_dir[0][:2] in spin8:
+        monc_spin = 8 *60 *60
 
     #---- SPLIT PROFILES IN TIME JUNKS
     prof_time=[[dates[0], dates[0]+4/24],
@@ -682,7 +699,8 @@ def main():
     ### create monc filenames
     monc_filename=[]
     for m in range(0, len(m_out_dir)):
-        fname=glob.glob(monc_root_dir + m_out_dir[m] +'*.nc')
+        print(m_out_dir[m])
+        fname=glob.glob(monc_root_dir + m_out_dir[m] +'*dg*.nc')
         monc_filename.append(fname)
     monc_3d_filename=[]
     for m in range(0, len(m_out_dir)):
@@ -714,14 +732,15 @@ def main():
                         # 'time1', 'time2', 'p_mean', 'T_mean', 'th_mean', 'rho_mean',
                         # 'q_cloud_liquid_mass_mean', 'q_ice_mass_mean', 'q_snow_mass_mean',
                         # 'q_graupel_mass_mean', 'iwc_tot_mean', 'lwc_tot_mean', 'twc_tot_mean', 'zvar', 'tvar']
-
     ncm = {}
     monc_data = {}
     for m in range(0, len(m_out_dir)):
+        print(str(m))
         for n in range(0, len(monc_filename[m])):
-            print(monc_filename[m][n])
+            #print(monc_filename[m][n])
             ncm = Dataset(monc_filename[m][n],'r')
             if n == 0:
+                print('initialise monc_data' + str(m) )
                 monc_data[m]={}
                 zvar={}
                 tvar={}
@@ -998,6 +1017,15 @@ def main():
         elif m_out_dir[m][:3] == '27C':
             mlabel.append('MONC_0.1Cooper_FixedNd50')
             moutstr.append('MONC-27C')
+        elif m_out_dir[m][:3] == '27D':
+            mlabel.append('MONC_0.1Cooper_FixedNd25')
+            moutstr.append('MONC-27D')
+        elif m_out_dir[m][:3] == '27E':
+            mlabel.append('MONC_0.1Cooper_FixedNd10')
+            moutstr.append('MONC-27E')
+        elif m_out_dir[m][:3] == '27F':
+            mlabel.append('MONC_0.1Cooper_FixedNd5')
+            moutstr.append('MONC-27F')
         elif m_out_dir[m][:3] == '28A':
             mlabel.append('MONC_0.1Cooper_CASIM-100-ARG')
             moutstr.append('MONC-28A')
@@ -1014,7 +1042,7 @@ def main():
             label.append('undefined_label')
             moutstr.append('')
 
-
+    embed()
     # -------------------------------------------------------------
     # Plot paper figures
     # -------------------------------------------------------------
