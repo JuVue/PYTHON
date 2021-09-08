@@ -2606,7 +2606,7 @@ def UM_SanityCheck(obs_data, lwcvar, lwcstr, plots_out_dir, dates, prof_time, **
     obs_data['twc_ad_nolwp'] = obs_data['lwc_adiabatic_inc_nolwp'] + obs_data['iwc']
     if pum==True:
         for m in range(0,len(um_data)):
-            um_data[m]['model_twc'] = um_data[m]['model_lwc'] + um_data[m]['model_iwc_filtered']
+            um_data[m]['model_twc'] = um_data[m]['model_lwc'] + um_data[m]['model_iwc']
     if pmonc==True:
         lwc_zvar=[]
         lwc_tvar=[]
