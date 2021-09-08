@@ -2655,7 +2655,7 @@ def UM_SanityCheck(obs_data, lwcvar, lwcstr, plots_out_dir, dates, prof_time, **
     #         plt.plot(np.nanmean(raw_data[m]['qnice'][id,:],0)/1e6,raw_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
     if pmonc==True:
         for m in range(0,len(monc_data)):
-            plt.plot(np.nanmean(monc_data[m]['iwc_tot_mean'],0)*1e6,monc_data[m][nisg_zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+            plt.plot(np.nanmean(monc_data[m]['iwc_tot_mean'],0)*1e3,monc_data[m][iwc_zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
 
     plt.xlabel('IWC [g m$^{-3}$]')
     plt.ylabel('Z [km]')
