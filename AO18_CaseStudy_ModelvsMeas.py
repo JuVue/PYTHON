@@ -416,17 +416,17 @@ def plot_T_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
             '--', color = 'k', linewidth = 0.5)
         plt.plot(np.nanmean(obs['hatpro_temp']['temperature'][:,obsid],1) + np.nanstd(obs['hatpro_temp']['temperature'][:,obsid],1), obs['hatpro_temp']['Z'],
             '--', color = 'k', linewidth = 0.5)
-        # embed()
-        # #adding RS data
-        # obsid1= np.squeeze(np.argwhere((obs['hatpro_temp']['mday']>=prof_time[pt][0]) & (obs['hatpro_temp']['mday']<prof_time[pt][1])))
-        # plt.plot(np.nanmean(obs['hatpro_temp']['temperature'][:,obsid],1),obs['hatpro_temp']['Z'], color = 'k', linewidth = 3, label = 'HATPRO', zorder = obs_zorder)
-        # ax1.fill_betweenx(obs['hatpro_temp']['Z'],np.nanmean(obs['hatpro_temp']['temperature'][:,obsid],1) - np.nanstd(obs['hatpro_temp']['temperature'][:,obsid],1),
-        #     np.nanmean(obs['hatpro_temp']['temperature'][:,obsid],1) + np.nanstd(obs['hatpro_temp']['temperature'][:,obsid],1), color = 'lightgrey', alpha = 0.5)
-        # # plt.xlim([0,0.2])
-        # plt.plot(np.nanmean(obs['hatpro_temp']['temperature'][:,obsid],1) - np.nanstd(obs['hatpro_temp']['temperature'][:,obsid],1),obs['hatpro_temp']['Z'],
-        #     '--', color = 'k', linewidth = 0.5)
-        # plt.plot(np.nanmean(obs['hatpro_temp']['temperature'][:,obsid],1) + np.nanstd(obs['hatpro_temp']['temperature'][:,obsid],1), obs['hatpro_temp']['Z'],
-        #     '--', color = 'k', linewidth = 0.5)
+        embed()
+        #adding RS data
+        obsid1= np.squeeze(np.argwhere((obs['sondes']['mday']>=prof_time[pt][0]) & (obs['sondes']['mday']<prof_time[pt][1])))
+        plt.plot(np.nanmean(obs['sondes']['temperature'][:,obsid],1),obs['sondes']['Z'], color = 'grey', linewidth = 3, label = 'RS', zorder = obs_zorder)
+        ax1.fill_betweenx(obs['sondes']['Z'],np.nanmean(obs['sondes']['temperature'][:,obsid],1) - np.nanstd(obs['sondes']['temperature'][:,obsid],1),
+            np.nanmean(obs['sondes']['temperature'][:,obsid],1) + np.nanstd(obs['sondes']['temperature'][:,obsid],1), color = 'lightgrey', alpha = 0.5)
+        # plt.xlim([0,0.2])
+        plt.plot(np.nanmean(obs['sondes']['temperature'][:,obsid],1) - np.nanstd(obs['sondes']['temperature'][:,obsid],1),obs['sondes']['Z'],
+            '--', color = 'grey', linewidth = 0.5)
+        plt.plot(np.nanmean(obs['sondes']['temperature'][:,obsid],1) + np.nanstd(obs['sondes']['temperature'][:,obsid],1), obs['sondes']['Z'],
+            '--', color = 'grey', linewidth = 0.5)
 
         if pum==True:
             for m in range(0,len(um_data)):
