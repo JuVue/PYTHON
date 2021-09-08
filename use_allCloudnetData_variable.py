@@ -2650,7 +2650,7 @@ def UM_SanityCheck(obs_data, lwcvar, lwcstr, plots_out_dir, dates, prof_time, **
     ### define axis instance
     ####LWC
     plt.figure(figsize=(14,7))
-    plt.subplots_adjust(top = 0.8, bottom = 0.1, right = 0.98, left = 0.08)
+    plt.subplots_adjust(top = 0.95, bottom = 0.1, right = 0.98, left = 0.08)
 
     plt.subplot(121)
     ax1 = plt.gca()
@@ -2670,7 +2670,7 @@ def UM_SanityCheck(obs_data, lwcvar, lwcstr, plots_out_dir, dates, prof_time, **
     plt.yticks(yticks)
     ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
     ax1.set_yticklabels(ytlabels)
-    plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=2)
+    plt.legend()
 
     plt.subplot(122)
     ax1 = plt.gca()
@@ -2678,15 +2678,15 @@ def UM_SanityCheck(obs_data, lwcvar, lwcstr, plots_out_dir, dates, prof_time, **
     if praw==True:
         for m in range(0,len(raw_data)):
             plt.plot(np.nanmean(raw_data[m]['qice'],0)*1e3,raw_data[m]['height'], color = lcols[m], linewidth = 3, label = 'Qice', zorder = 1)
-            plt.plot(np.nanmean(raw_data[m]['qsnow'],0)*1e3,raw_data[m]['height'], color = lcols[m], linewidth = 3, label = 'Qsnow', zorder = 1)
-            plt.plot(np.nanmean(raw_data[m]['qicecrystals'],0)*1e3,raw_data[m]['height'], color = lcols[m], linewidth = 3, label = 'Qicecrystals', zorder = 1)
+            plt.plot(np.nanmean(raw_data[m]['qsnow'],0)*1e3,raw_data[m]['height'], '--', color = lcols[m], linewidth = 3, label = 'Qsnow', zorder = 1)
+            plt.plot(np.nanmean(raw_data[m]['qicecrystals'],0)*1e3,raw_data[m]['height'], '-.', color = lcols[m], linewidth = 3, label = 'Qicecrystals', zorder = 1)
     plt.xlabel('Q$_{ice/snow/icecrystals}$ [g m$^{-3}$]')
     plt.ylabel('Z [km]')
     plt.ylim(ylims)
     plt.yticks(yticks)
     ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
     ax1.set_yticklabels(ytlabels)
-    plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=2)
+    plt.legend()
 
     # plt.xlim([0,0.005])
 
