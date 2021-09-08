@@ -2586,35 +2586,41 @@ def UM_SanityCheck(obs_data, lwcvar, lwcstr, plots_out_dir, dates, prof_time, **
     for m in range(0,len(raw_data)):
         raw_data[m]['rho'] = calcAirDensity(raw_data[m]['temperature'].data, raw_data[m]['pressure'].data / 1e2)
 
-    # ###----------------------------------------------------------------
-    # ###         Calculate total water content
-    # ###----------------------------------------------------------------
-    # obs_data['twc'] = obs_data['lwc'] + obs_data['iwc']
-    # obs_data['twc_ad'] = obs_data['lwc_adiabatic'] + obs_data['iwc']
-    # obs_data['twc_ad_nolwp'] = obs_data['lwc_adiabatic_inc_nolwp'] + obs_data['iwc']
-    # if pum==True:
-    #     for m in range(0,len(um_data)):
-    #         um_data[m]['model_twc'] = um_data[m]['model_lwc'] + um_data[m]['model_iwc_filtered']
-    # if pmonc==True:
-    #     lwc_zvar=[]
-    #     lwc_tvar=[]
-    #     nisg_zvar=[]
-    #     nisg_tvar=[]
-    #     for m in range(0,len(monc_data)):
-    #         #monc_data[m]['model_iwc']= (monc_data[m]['ice_mmr_mean']+monc_data[m]['graupel_mmr_mean']+monc_data[m]['snow_mmr_mean'])*monc_data[m]['rho']
-    #         #monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
-    #         #monc_data[m]['model_twc'] = monc_data[m]['model_lwc'] +monc_data[m]['model_iwc']
-    #         monc_data[m]['model_twc'] = monc_data[m]['twc_tot_mean']
-    #         monc_data[m]['model_lwc'] = monc_data[m]['lwc_tot_mean']
-    #         #lwc_zvar=monc_data[m]['zvar']['liquid_mmr_mean']
-    #         lwc_zvar+=[monc_data[m]['zvar']['lwc_tot_mean']]
-    #         lwc_tvar+=[monc_data[m]['tvar']['lwc_tot_mean']]
-    #         nisg_zvar+=[monc_data[m]['zvar']['nisg_tot_mean']]
-    #         nisg_tvar+=[monc_data[m]['tvar']['nisg_tot_mean']]
-    # if praw==True:
-    #     for m in range(0,len(raw_data)):
-    #         raw_data[m]['qnice'][raw_data[m]['qnice'] < 0] = 0.0
-    #
+    ###----------------------------------------------------------------
+    ###         Calculate total water content
+    ###----------------------------------------------------------------
+    obs_data['twc'] = obs_data['lwc'] + obs_data['iwc']
+    obs_data['twc_ad'] = obs_data['lwc_adiabatic'] + obs_data['iwc']
+    obs_data['twc_ad_nolwp'] = obs_data['lwc_adiabatic_inc_nolwp'] + obs_data['iwc']
+    if pum==True:
+        for m in range(0,len(um_data)):
+            um_data[m]['model_twc'] = um_data[m]['model_lwc'] + um_data[m]['model_iwc_filtered']
+    if pmonc==True:
+        lwc_zvar=[]
+        lwc_tvar=[]
+        nisg_zvar=[]
+        nisg_tvar=[]
+        for m in range(0,len(monc_data)):
+            monc_data[m]['model_twc'] = monc_data[m]['twc_tot_mean']
+            monc_data[m]['model_lwc'] = monc_data[m]['lwc_tot_mean']
+            lwc_zvar+=[monc_data[m]['zvar']['lwc_tot_mean']]
+            lwc_tvar+=[monc_data[m]['tvar']['lwc_tot_mean']]
+            nisg_zvar+=[monc_data[m]['zvar']['nisg_tot_mean']]
+            nisg_tvar+=[monc_data[m]['tvar']['nisg_tot_mean']]
+    if praw==True:
+        for m in range(0,len(raw_data)):
+            raw_data[m]['qt'] = raw_data[m]['qliq'] + raw_data[m]['qice']
+            raw_data[m]['lwc'] = raw_data[m]['qliq'] * raw_data[m]['rho']
+            raw_data[m]['iwc'] = raw_data[m]['qice'] * raw_data[m]['rho']
+            raw_data[m]['twc'] = raw_data[m]['lwc'] + raw_data[m]['iwc']
+
+    ###----------------------------------------------------------------
+    ###         Data fixes
+    ###----------------------------------------------------------------
+    if praw==True:
+        for m in range(0,len(raw_data)):
+            raw_data[m]['qnice'][raw_data[m]['qnice'] < 0] = 0.0
+
     # ###----------------------------------------------------------------
     # ###         Plot figure - Mean profiles
     # ###----------------------------------------------------------------
@@ -3063,10 +3069,10 @@ def main():
                # '26B_20180913T0000Z_6hSpinUp_12h0600-0000thTend_20h1200-0600thTend_6-20h0-Cooper/',
                # '27A_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24hCooper/',
                # '27B_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.5Cooper/',
-               '27C_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper/',
-               '27D_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd25/',
+               # '27C_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper/',
+               # '27D_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd25/',
                '27E_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd10/',
-               '27F_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd5/',
+               # '27F_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd5/',
                # '28A_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_AccumSolAero-CASIM-100-ARG/',
                # '28B_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_AccumSolAero-CASIM-100-Twomey/'
                # '29A_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_AccumSolAero-CASIM-20-ARG/',
