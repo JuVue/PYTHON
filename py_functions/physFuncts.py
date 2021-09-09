@@ -172,12 +172,30 @@ def svp(T):
     temperature = K
 
     """
-
-    tempC = T - 273.15
+    #converting K
+    tempC = T
+    tempC[tempC>200] = tempC[tempC>200] - 273.15
 
     satvappres = 6.112 * np.exp( 17.67*tempC / (tempC + 243.5) ) * 100
 
     return satvappres
+
+def vp(T):
+
+    """
+    Function to calculate  vapour pressure
+    ==============================
+    inputs:
+    temperature = K or C
+
+    """
+    #converting K
+    T[T<100] =T[T<100] + 273.15
+
+    vappres = =exp((-6867.7 ./T)-(5.2952*log(T))+56.658);
+
+    return vappres
+
 
 def polysvp(t,type):
 
@@ -263,3 +281,19 @@ def calcT(theta,pressure):
 
     temperature = theta / np.power(p0 / pressure,Rd/cp)
     return temperature
+
+
+def calcSH(T,p):
+
+    """
+    Function to calculate  specific humidity
+    ==============================
+    inputs:
+    temperature = K or C
+    pressure = hpa
+    """
+
+    wvp = vp(T)
+    sh=0.622*wvp ./ (p-0.378*wvp)*1000
+
+    return sh
