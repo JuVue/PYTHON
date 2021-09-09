@@ -2649,33 +2649,34 @@ def UM_MONC_Nisg(obs_data, lwcvar, lwcstr, plots_out_dir, dates, prof_time, **ar
     fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
     ### define axis instance
     ####LWC
-    plt.figure(figsize=(10,8))
+    plt.figure(figsize=(10,14))
     plt.subplots_adjust(top = 0.95, bottom = 0.1, right = 0.98, left = 0.08)
 
-    plt.subplot(211)
-    ax1 = plt.gca()
-    # plt.plot(np.nanmean(obs_data['iwc'],0)*1e3,np.nanmean(obs_data['height'],0), color = 'k', linewidth = 3, label = 'Obs_UMgrid', zorder = obs_zorder)
-    if praw==True:
-        for m in range(0,len(raw_data)):
-        # plt.plot(np.nanmean(raw_data[m]['iwc'],0)*1e3,raw_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m] + '_Raw', zorder = 1)
-            plt.pcolor(raw_data[m]['time'][:],raw_data[m]['height'][:],np.transpose(raw_data[m]['qnice'][:])/1e3,
-                vmin=0.,vmax=1.0,
-                )
-    # if pmonc==True:
-    #     for m in range(0,len(monc_data)):
-    #         plt.plot(np.nanmean(monc_data[m]['iwc_tot_mean'],0)*1e3,monc_data[m][iwc_zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
-    # plt.xlabel('N$_{isg}$ [L$^{-1}$]')
-    plt.ylabel('Z [km]')
-    plt.ylim(ylims)
-    plt.yticks(yticks)
-    ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
-    ax1.set_yticklabels(ytlabels)
-    plt.xlim([dates[0], dates[1]])
-    ax1.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
-    ax1.xaxis.set_major_locator(mdates.HourLocator(interval=2))
-    ax1.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))    
-    plt.colorbar()
-    # plt.legend()
+    for pt in range(0,len(raw_data)):
+        plt.subplot(1, len(raw_data), pt+1)
+        ax1 = plt.gca()
+        # plt.plot(np.nanmean(obs_data['iwc'],0)*1e3,np.nanmean(obs_data['height'],0), color = 'k', linewidth = 3, label = 'Obs_UMgrid', zorder = obs_zorder)
+        if praw==True:
+            for m in range(0,len(raw_data)):
+            # plt.plot(np.nanmean(raw_data[m]['iwc'],0)*1e3,raw_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m] + '_Raw', zorder = 1)
+                plt.pcolor(raw_data[m]['time'][:],raw_data[m]['height'][:],np.transpose(raw_data[m]['qnice'][:])/1e3,
+                    vmin=0.,vmax=1.0,
+                    )
+        # if pmonc==True:
+        #     for m in range(0,len(monc_data)):
+        #         plt.plot(np.nanmean(monc_data[m]['iwc_tot_mean'],0)*1e3,monc_data[m][iwc_zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+        # plt.xlabel('N$_{isg}$ [L$^{-1}$]')
+        plt.ylabel('Z [km]')
+        plt.ylim(ylims)
+        plt.yticks(yticks)
+        ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
+        ax1.set_yticklabels(ytlabels)
+        plt.xlim([dates[0], dates[1]])
+        ax1.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+        ax1.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+        ax1.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+        plt.colorbar()
+        # plt.legend()
 
     # plt.subplot(122)
     # ax1 = plt.gca()
@@ -3226,7 +3227,7 @@ def main():
     #           '24_u-cc324_RA2T_CON/',
     #           '25_u-cc568_RA2M_CON/']
     out_dir = ['23_u-cc278_RA1M_CASIM/',
-               # '30_u-cg179_RA1M_CASIM/',
+               '30_u-cg179_RA1M_CASIM/',
                # '26_u-cd847_RA1M_CASIM/',
                # '27_u-ce112_RA1M_CASIM/',
                ]
