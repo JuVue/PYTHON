@@ -543,15 +543,15 @@ def plot_Theta_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lo
         sstr=datenum2date(prof_time[pt][0])
         estr=datenum2date(prof_time[pt][1])
         plt.title(sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC')
-        # obsid= np.squeeze(np.argwhere((obs['hatpro_temp']['mday']>=prof_time[pt][0]) & (obs['hatpro_temp']['mday']<prof_time[pt][1])))
-        # plt.plot(np.nanmean(obs['hatpro_temp']['epottemp'][:,obsid],1),obs['hatpro_temp']['Z'], color = 'k', linewidth = 3, label = 'HATPRO', zorder = obs_zorder)
-        # ax1.fill_betweenx(obs['hatpro_temp']['Z'],np.nanmean(obs['hatpro_temp']['temperature'][:,obsid],1) - np.nanstd(obs['hatpro_temp']['temperature'][:,obsid],1),
-        #     np.nanmean(obs['hatpro_temp']['temperature'][:,obsid],1) + np.nanstd(obs['hatpro_temp']['temperature'][:,obsid],1), color = 'lightgrey', alpha = 0.5)
-        # # plt.xlim([0,0.2])
-        # plt.plot(np.nanmean(obs['hatpro_temp']['temperature'][:,obsid],1) - np.nanstd(obs['hatpro_temp']['temperature'][:,obsid],1),obs['hatpro_temp']['Z'],
-        #     '--', color = 'k', linewidth = 0.5)
-        # plt.plot(np.nanmean(obs['hatpro_temp']['temperature'][:,obsid],1) + np.nanstd(obs['hatpro_temp']['temperature'][:,obsid],1), obs['hatpro_temp']['Z'],
-        #     '--', color = 'k', linewidth = 0.5)
+        obsid= np.squeeze(np.argwhere((obs['hatpro_temp']['mday']>=prof_time[pt][0]) & (obs['hatpro_temp']['mday']<prof_time[pt][1])))
+        plt.plot(np.nanmean(obs['hatpro_temp']['pottemp'][:,obsid],1),obs['hatpro_temp']['Z'], color = 'k', linewidth = 3, label = 'HATPRO', zorder = obs_zorder)
+        ax1.fill_betweenx(obs['hatpro_temp']['Z'],np.nanmean(obs['hatpro_temp']['pottemp'][:,obsid],1) - np.nanstd(obs['hatpro_temp']['pottemp'][:,obsid],1),
+            np.nanmean(obs['hatpro_temp']['pottemp'][:,obsid],1) + np.nanstd(obs['hatpro_temp']['pottemp'][:,obsid],1), color = 'lightgrey', alpha = 0.5)
+        # plt.xlim([0,0.2])
+        plt.plot(np.nanmean(obs['hatpro_temp']['pottemp'][:,obsid],1) - np.nanstd(obs['hatpro_temp']['pottemp'][:,obsid],1),obs['hatpro_temp']['Z'],
+            '--', color = 'k', linewidth = 0.5)
+        plt.plot(np.nanmean(obs['hatpro_temp']['pottemp'][:,obsid],1) + np.nanstd(obs['hatpro_temp']['pottemp'][:,obsid],1), obs['hatpro_temp']['Z'],
+            '--', color = 'k', linewidth = 0.5)
         #adding RS data
         obsid= np.squeeze(np.argwhere((obs['sondes']['mday']>=prof_time[pt][0]-1/24) & (obs['sondes']['mday']<prof_time[pt][1])))
         plt.plot(obs['sondes']['pottemp'][:,obsid]+273.15,obs['sondes']['Z'], color = 'grey', linewidth = 3, label = 'RS', zorder = obs_zorder)
