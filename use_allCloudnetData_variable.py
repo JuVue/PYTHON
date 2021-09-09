@@ -2661,8 +2661,6 @@ def UM_MONC_Nisg(obs_data, lwcvar, lwcstr, plots_out_dir, dates, prof_time, **ar
             plt.pcolor(raw_data[m]['time'][:],raw_data[m]['height'][:],np.transpose(raw_data[m]['qnice'][:])/1e3,
                 vmin=0.,vmax=1.0,
                 )
-        # if pmonc==True:
-        #     plt.plot(monc_data[0]['nisg_tot_mean']*1e3,monc_data[0]['nisg_tot_mean']*1e3, color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
         plt.xlabel('N$_{isg}$ [L$^{-1}$]')
         plt.ylabel('Z [km]')
         plt.ylim(ylims)
@@ -2674,6 +2672,12 @@ def UM_MONC_Nisg(obs_data, lwcvar, lwcstr, plots_out_dir, dates, prof_time, **ar
         ax1.xaxis.set_major_locator(mdates.HourLocator(interval=2))
         ax1.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
         plt.colorbar()
+        if pmonc==True:
+            ax2 = ax1.twinx()
+            plt.plot(monc_data[0]['time'],monc_data[0]['nisg_tot_mean']*1e3, color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+            ax2.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+            ax2.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+            ax2.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))            
         # plt.legend()
 
     # plt.subplot(122)
