@@ -25,6 +25,7 @@ sys.path.insert(1, './py_functions/')
 from time_functions import datenum2date, date2datenum, calcTime_Mat2DOY, calcTime_Date2DOY
 from readMAT import readMatlabStruct
 from manipFuncts import intersect_mtlb
+from physFuncts import calcSH
 #from physFuncts import calcThetaE, calcThetaVL
 #from pyFixes import py3_FixNPLoad
 
