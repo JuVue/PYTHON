@@ -2654,7 +2654,7 @@ def UM_MONC_Nisg(obs_data, lwcvar, lwcstr, plots_out_dir, dates, prof_time, **ar
 
     # plt.subplot(121)
     ax1 = plt.gca()
-    plt.plot(np.nanmean(obs_data['iwc'],0)*1e3,np.nanmean(obs_data['height'],0), color = 'k', linewidth = 3, label = 'Obs_UMgrid', zorder = obs_zorder)
+    # plt.plot(np.nanmean(obs_data['iwc'],0)*1e3,np.nanmean(obs_data['height'],0), color = 'k', linewidth = 3, label = 'Obs_UMgrid', zorder = obs_zorder)
     if praw==True:
         for m in range(0,len(raw_data)):
         # plt.plot(np.nanmean(raw_data[m]['iwc'],0)*1e3,raw_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m] + '_Raw', zorder = 1)
