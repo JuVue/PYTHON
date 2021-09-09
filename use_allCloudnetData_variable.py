@@ -2670,6 +2670,10 @@ def UM_MONC_Nisg(obs_data, lwcvar, lwcstr, plots_out_dir, dates, prof_time, **ar
     plt.yticks(yticks)
     ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
     ax1.set_yticklabels(ytlabels)
+    plt.xlim([dates[0], dates[1]])
+    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))    
     plt.colorbar()
     # plt.legend()
 
