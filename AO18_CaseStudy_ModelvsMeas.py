@@ -418,7 +418,7 @@ def plot_T_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
             '--', color = 'k', linewidth = 0.5)
         embed()
         #adding RS data
-        obsid1= np.squeeze(np.argwhere((obs['sondes']['mday']>=prof_time[pt][0]) & (obs['sondes']['mday']<prof_time[pt][1])))
+        obsid= np.squeeze(np.argwhere((obs['sondes']['mday']>=prof_time[pt][0]-1/24) & (obs['sondes']['mday']<prof_time[pt][1])))
         plt.plot(np.nanmean(obs['sondes']['temperature'][:,obsid],1),obs['sondes']['Z'], color = 'grey', linewidth = 3, label = 'RS', zorder = obs_zorder)
         ax1.fill_betweenx(obs['sondes']['Z'],np.nanmean(obs['sondes']['temperature'][:,obsid],1) - np.nanstd(obs['sondes']['temperature'][:,obsid],1),
             np.nanmean(obs['sondes']['temperature'][:,obsid],1) + np.nanstd(obs['sondes']['temperature'][:,obsid],1), color = 'lightgrey', alpha = 0.5)
@@ -1065,10 +1065,15 @@ def main():
     print('')
     print ('Load radiosonde data from Jutta...')
     obs['sondes'] = readMatlabStruct(obs_rs_dir + '/SondeData_h10int_V03.mat')
-
+    for var in obs['sondes'].keys():
+        obs['sondes'][var]=np.squeeze(obs['sondes'][var])
+    print(obs['sondes'].keys())
     print ('**************************')
     print ('Load RS observations inversion height data from Jutta...')
     obs['inversions'] = readMatlabStruct(obs_rs_dir + '/InversionHeights_RSh05int_final_V03.mat')
+    for var in obs['inversions'].keys():
+        obs['inversions'][var]=np.squeeze(obs['inversions'][var])
+    print(obs['inversions'].keys())
 
     #print ('Load foremast data from John...')
     #obs['foremast'] = Dataset(obs_acas_dir + '/ACAS_AO2018_foremast_30min_v2_0.nc','r')
