@@ -192,7 +192,7 @@ def vp(T):
     #converting K
     T[T<100] =T[T<100] + 273.15
 
-    vappres = =exp((-6867.7 ./T)-(5.2952*log(T))+56.658);
+    vappres =exp((-6867.7 ./T)-(5.2952*log(T))+56.658);
 
     return vappres
 
