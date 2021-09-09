@@ -543,27 +543,27 @@ def plot_Theta_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lo
         sstr=datenum2date(prof_time[pt][0])
         estr=datenum2date(prof_time[pt][1])
         plt.title(sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC')
-        obsid= np.squeeze(np.argwhere((obs['hatpro_temp']['mday']>=prof_time[pt][0]) & (obs['hatpro_temp']['mday']<prof_time[pt][1])))
-        plt.plot(np.nanmean(obs['hatpro_temp']['epottemp'][:,obsid],1),obs['hatpro_temp']['Z'], color = 'k', linewidth = 3, label = 'HATPRO', zorder = obs_zorder)
-        ax1.fill_betweenx(obs['hatpro_temp']['Z'],np.nanmean(obs['hatpro_temp']['temperature'][:,obsid],1) - np.nanstd(obs['hatpro_temp']['temperature'][:,obsid],1),
-            np.nanmean(obs['hatpro_temp']['temperature'][:,obsid],1) + np.nanstd(obs['hatpro_temp']['temperature'][:,obsid],1), color = 'lightgrey', alpha = 0.5)
-        # plt.xlim([0,0.2])
-        plt.plot(np.nanmean(obs['hatpro_temp']['temperature'][:,obsid],1) - np.nanstd(obs['hatpro_temp']['temperature'][:,obsid],1),obs['hatpro_temp']['Z'],
-            '--', color = 'k', linewidth = 0.5)
-        plt.plot(np.nanmean(obs['hatpro_temp']['temperature'][:,obsid],1) + np.nanstd(obs['hatpro_temp']['temperature'][:,obsid],1), obs['hatpro_temp']['Z'],
-            '--', color = 'k', linewidth = 0.5)
+        # obsid= np.squeeze(np.argwhere((obs['hatpro_temp']['mday']>=prof_time[pt][0]) & (obs['hatpro_temp']['mday']<prof_time[pt][1])))
+        # plt.plot(np.nanmean(obs['hatpro_temp']['epottemp'][:,obsid],1),obs['hatpro_temp']['Z'], color = 'k', linewidth = 3, label = 'HATPRO', zorder = obs_zorder)
+        # ax1.fill_betweenx(obs['hatpro_temp']['Z'],np.nanmean(obs['hatpro_temp']['temperature'][:,obsid],1) - np.nanstd(obs['hatpro_temp']['temperature'][:,obsid],1),
+        #     np.nanmean(obs['hatpro_temp']['temperature'][:,obsid],1) + np.nanstd(obs['hatpro_temp']['temperature'][:,obsid],1), color = 'lightgrey', alpha = 0.5)
+        # # plt.xlim([0,0.2])
+        # plt.plot(np.nanmean(obs['hatpro_temp']['temperature'][:,obsid],1) - np.nanstd(obs['hatpro_temp']['temperature'][:,obsid],1),obs['hatpro_temp']['Z'],
+        #     '--', color = 'k', linewidth = 0.5)
+        # plt.plot(np.nanmean(obs['hatpro_temp']['temperature'][:,obsid],1) + np.nanstd(obs['hatpro_temp']['temperature'][:,obsid],1), obs['hatpro_temp']['Z'],
+        #     '--', color = 'k', linewidth = 0.5)
         #adding RS data
         obsid= np.squeeze(np.argwhere((obs['sondes']['mday']>=prof_time[pt][0]-1/24) & (obs['sondes']['mday']<prof_time[pt][1])))
-        plt.plot(obs['sondes']['temperature'][:,obsid]+273.15,obs['sondes']['Z'], color = 'grey', linewidth = 3, label = 'RS', zorder = obs_zorder)
+        plt.plot(obs['sondes']['pottemp'][:,obsid]+273.15,obs['sondes']['Z'], color = 'grey', linewidth = 3, label = 'RS', zorder = obs_zorder)
 
         if pum==True:
             for m in range(0,len(um_data)):
                 id=  np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
-                ax1.fill_betweenx(um_data[m]['height'],np.nanmean(um_data[m]['temperature'][id,:],0) - np.nanstd(um_data[m]['temperature'][id,:],0),
-                    np.nanmean(um_data[m]['temperature'][id,:],0) + np.nanstd(um_data[m]['temperature'][id,:],0), color = fcols[m], alpha = 0.05)
-                plt.plot(np.nanmean(um_data[m]['temperature'][id,:],0) - np.nanstd(um_data[m]['temperature'][id,:],0), um_data[m]['height'],
+                ax1.fill_betweenx(um_data[m]['height'],np.nanmean(um_data[m]['theta'][id,:],0) - np.nanstd(um_data[m]['theta'][id,:],0),
+                    np.nanmean(um_data[m]['theta'][id,:],0) + np.nanstd(um_data[m]['theta'][id,:],0), color = fcols[m], alpha = 0.05)
+                plt.plot(np.nanmean(um_data[m]['theta'][id,:],0) - np.nanstd(um_data[m]['theta'][id,:],0), um_data[m]['height'],
                     '--', color =lcols[m], linewidth = 0.5)
-                plt.plot(np.nanmean(um_data[m]['temperature'][id,:],0) + np.nanstd(um_data[m]['temperature'][id,:],0),um_data[m]['height'],
+                plt.plot(np.nanmean(um_data[m]['theta'][id,:],0) + np.nanstd(um_data[m]['theta'][id,:],0),um_data[m]['height'],
                     '--', color = lcols[m], linewidth = 0.5)
         if pmonc==True:
             tvar=[]
@@ -581,16 +581,16 @@ def plot_Theta_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lo
         if pum==True:
             for m in range(0,len(um_data)):
                 id= np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
-                plt.plot(np.nanmean(um_data[m]['temperature'][id,:],0),um_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
+                plt.plot(np.nanmean(um_data[m]['theta'][id,:],0),um_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
         if pmonc==True:
             for m in range(0,len(monc_data)):
                 id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
-                plt.plot(np.nanmean(monc_data[m]['T_mean'][id,:],0),monc_data[m][zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+                plt.plot(np.nanmean(monc_data[m]['th_mean'][id,:],0),monc_data[m][zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
         if pt == 1:
             plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=4)
 
 
-        plt.xlabel('Temperature [K]')
+        plt.xlabel('\Theta [K]')
         plt.ylabel('Z [km]')
         plt.xlim([260,271])
         # plt.yticks(np.arange(0,5.01e3,0.5e3))
@@ -606,9 +606,9 @@ def plot_Theta_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lo
     dstr=datenum2date(dates[1])
     # plt.grid('on')
     if pmonc==True:
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_Tprofile'  + '_split.png'
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_Theta-profile'  + '_split.png'
     else:
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) +'_Tprofile'  + '_split.png'
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) +'_Theta-profile'  + '_split.png'
 
     plt.savefig(fileout,dpi=300)
     print ('')
@@ -1323,15 +1323,22 @@ def main():
 
 
 
-    embed()
-
-    a=[]
-    for pt in range(0,len(prof_time)):
-        sstr=datenum2date(prof_time[pt][0])
-        estr=datenum2date(prof_time[pt][1])
-        obsid= np.squeeze(np.argwhere((obs['hatpro_temp']['mday']>=prof_time[pt][0]) & (obs['hatpro_temp']['mday']<prof_time[pt][1])))
-        a[pt]=obs['hatpro_temp']['sfmlbase'][obsid]
-
+    # embed()
+    #
+    # #sfml height from hatpro
+    # a=[]
+    # for pt in range(0,len(prof_time)):
+    #     sstr=datenum2date(prof_time[pt][0])
+    #     estr=datenum2date(prof_time[pt][1])
+    #     obsid= np.squeeze(np.argwhere((obs['hatpro_temp']['mday']>=prof_time[pt][0]) & (obs['hatpro_temp']['mday']<prof_time[pt][1])))
+    #     a.append(obs['hatpro_temp']['sfmlbase'][obsid])
+    #
+    # b=[]
+    # for pt in range(0,len(prof_time)):
+    #     sstr=datenum2date(prof_time[pt][0])
+    #     estr=datenum2date(prof_time[pt][1])
+    #     obsid= np.squeeze(np.argwhere((obs['dec']['mday']>=prof_time[pt][0]) & (obs['dec']['mday']<prof_time[pt][1])))
+    #     b.append(obs['dec']['cbase_sandeep'][obsid])
 
     # -------------------------------------------------------------
     # Plot paper figures
@@ -1339,6 +1346,7 @@ def main():
     #figure = plot_surfaceVariables(obs,plot_out_dir, dates, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_lwp(obs,plot_out_dir, dates, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     figure = plot_T_profiles_split(obs,plots_out_dir,dates, prof_time,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_Theta_profiles_split(obs,plots_out_dir,dates, prof_time,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_BLDepth_SMLDepth(obs,plot_out_dir, dates, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
 
