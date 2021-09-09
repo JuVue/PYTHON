@@ -697,14 +697,7 @@ def plot_q_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
         # embed()
         #adding RS data
         obsid= np.squeeze(np.argwhere((obs['sondes']['mday']>=prof_time[pt][0]) & (obs['sondes']['mday']<prof_time[pt][1])))
-        plt.plot(np.nanmean(obs['sondes']['sphum'][:,obsid],1),obs['sondes']['Z'], color = 'grey', linewidth = 3, label = 'RS', zorder = obs_zorder)
-        ax1.fill_betweenx(obs['sondes']['Z'],np.nanmean(obs['sondes']['sphum'][:,obsid],1) - np.nanstd(obs['sondes']['sphum'][:,obsid],1),
-            np.nanmean(obs['sondes']['sphum'][:,obsid],1) + np.nanstd(obs['sondes']['sphum'][:,obsid],1), color = 'lightgrey', alpha = 0.5)
-        # plt.xlim([0,0.2])
-        plt.plot(np.nanmean(obs['sondes']['sphum'][:,obsid],1) - np.nanstd(obs['sondes']['sphum'][:,obsid],1),obs['sondes']['Z'],
-            '--', color = 'grey', linewidth = 0.5)
-        plt.plot(np.nanmean(obs['sondes']['sphum'][:,obsid],1) + np.nanstd(obs['sondes']['sphum'][:,obsid],1), obs['sondes']['Z'],
-            '--', color = 'grey', linewidth = 0.5)
+        plt.plot(obs['sondes']['sphum'][:,obsid],obs['sondes']['Z'], color = 'grey', linewidth = 3, label = 'RS', zorder = obs_zorder)
 
         if pum==True:
             for m in range(0,len(um_data)):
