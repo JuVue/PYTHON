@@ -84,7 +84,6 @@ def plot_surfaceVariables(obs, plot_out_dir, dates,**args  ):
     ### -------------------------------
     ### Build figure (timeseries)
     ### -------------------------------
-    #from IPython import embed; embed()
     fig = plt.figure(figsize=(18,10 ))
     #ax  = fig.add_axes([0.07,0.7,0.53,0.22])   # left, bottom, width, height
     ax  = fig.add_axes([0.07,0.7,0.7,0.22])   # left, bottom, width, height
@@ -129,7 +128,6 @@ def plot_surfaceVariables(obs, plot_out_dir, dates,**args  ):
     print ('')
 
     date=datenum2date(dates[0])
-#    from IPython import embed; embed()
     fileout = os.path.join(plot_out_dir,date.strftime('%Y%m%d') + '_surfaceVariables_ts.png')
     plt.savefig(fileout)
 
@@ -182,7 +180,6 @@ def plot_lwp(obs_data, plot_out_dir, dates,**args ):
     ### -------------------------------
     ### Build figure (timeseries)
     ### -------------------------------
-    #from IPython import embed; embed()
     fig = plt.figure(figsize=(18,10 ))
     #ax  = fig.add_axes([0.07,0.7,0.53,0.22])   # left, bottom, width, height
     ax  = fig.add_axes([0.07,0.7,0.7,0.22])   # left, bottom, width, height
@@ -212,7 +209,6 @@ def plot_lwp(obs_data, plot_out_dir, dates,**args ):
     print ('')
 
     date=datenum2date(datenum)
-#    from IPython import embed; embed()
     fileout = os.path.join(plot_out_dir,date.strftime('%Y%m%d') + '_lwp_ts.png')
     plt.savefig(fileout)
 
@@ -265,7 +261,6 @@ def plot_BLDepth_SMLDepth(obs_data, plot_out_dir, dates,**args ):
     ### -------------------------------
     ### Build figure (timeseries)
     ### -------------------------------
-    #from IPython import embed; embed()
     fig = plt.figure(figsize=(10,12 ))
     ax  = fig.add_axes([0.1,0.7,0.8,0.2])   # left, bottom, width, height
     yB = [-10, 120]
@@ -339,7 +334,6 @@ def plot_BLDepth_SMLDepth(obs_data, plot_out_dir, dates,**args ):
     print ('')
 
     dstr=datenum2date(dates[0])
-#    from IPython import embed; embed()
     fileout = os.path.join(plot_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_BLdepth-SML.png')
     plt.savefig(fileout)
 
@@ -644,7 +638,7 @@ def plot_q_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
             monc_data[m]['sh']=calcSH(monc_data[m]['T_mean'],monc_data[m]['p_mean'])
     if pum==True:
         for m in range(0,len(um_data)):
-            um_data[m]['sh_calc']=calcSH(um_data[m]['temperature'],monc_data[m]['pressure'])
+            um_data[m]['sh_calc']=calcSH(um_data[m]['temperature'],um_data[m]['pressure']/100)
 
 
     ylims=[0,2]
@@ -702,33 +696,34 @@ def plot_q_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
         obsid= np.squeeze(np.argwhere((obs['sondes']['mday']>=prof_time[pt][0]-1/24) & (obs['sondes']['mday']<prof_time[pt][1])))
         plt.plot(obs['sondes']['sphum'][:,obsid],obs['sondes']['Z'], color = 'grey', linewidth = 3, label = 'RS', zorder = obs_zorder)
 
-        if pum==True:
-            for m in range(0,len(um_data)):
-                id=  np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
-                ax1.fill_betweenx(um_data[m]['height'],np.nanmean(um_data[m]['q'][id,:]*1000,0) - np.nanstd(um_data[m]['q'][id,:]*1000,0),
-                    np.nanmean(um_data[m]['q'][id,:]*1000,0) + np.nanstd(um_data[m]['q'][id,:]*1000,0), color = fcols[m], alpha = 0.05)
-                plt.plot(np.nanmean(um_data[m]['q'][id,:]*1000,0) - np.nanstd(um_data[m]['q'][id,:]*1000,0), um_data[m]['height'],
-                    '--', color =lcols[m], linewidth = 0.5)
-                plt.plot(np.nanmean(um_data[m]['q'][id,:]*1000,0) + np.nanstd(um_data[m]['q'][id,:]*1000,0),um_data[m]['height'],
-                    '--', color = lcols[m], linewidth = 0.5)
-        if pmonc==True:
-            tvar=[]
-            zvar=[]
-            for m in range(0,len(monc_data)):
-                tvar+=[monc_data[m]['tvar']['q_vapour_mean']]
-                zvar+=[monc_data[m]['zvar']['q_vapour_mean']]
-                id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
-                ax1.fill_betweenx(monc_data[m][zvar[m]],np.nanmean(monc_data[m]['sh'][id,:],0) - np.nanstd(monc_data[m]['sh'][id,:],0),
-                    np.nanmean(monc_data[m]['sh'][id,:],0) + np.nanstd(monc_data[m]['sh'][id,:],0), color = fcolsmonc[m], alpha = 0.05)
-                plt.plot(np.nanmean(monc_data[m]['sh'][id,:],0) - np.nanstd(monc_data[m]['sh'][id,:],0), monc_data[m][zvar[m]],
-                    '--', color =lcolsmonc[m], linewidth = 0.5)
-                plt.plot(np.nanmean(monc_data[m]['sh'][id,:],0) + np.nanstd(monc_data[m]['sh'][id,:],0), monc_data[m][zvar[m]],
-                    '--', color = lcolsmonc[m], linewidth = 0.5)
+        # if pum==True:
+        #     for m in range(0,len(um_data)):
+        #         id=  np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
+        #         ax1.fill_betweenx(um_data[m]['height'],np.nanmean(um_data[m]['q'][id,:]*1000,0) - np.nanstd(um_data[m]['q'][id,:]*1000,0),
+        #             np.nanmean(um_data[m]['q'][id,:]*1000,0) + np.nanstd(um_data[m]['q'][id,:]*1000,0), color = fcols[m], alpha = 0.05)
+        #         plt.plot(np.nanmean(um_data[m]['q'][id,:]*1000,0) - np.nanstd(um_data[m]['q'][id,:]*1000,0), um_data[m]['height'],
+        #             '--', color =lcols[m], linewidth = 0.5)
+        #         plt.plot(np.nanmean(um_data[m]['q'][id,:]*1000,0) + np.nanstd(um_data[m]['q'][id,:]*1000,0),um_data[m]['height'],
+        #             '--', color = lcols[m], linewidth = 0.5)
+        # if pmonc==True:
+        #     tvar=[]
+        #     zvar=[]
+        #     for m in range(0,len(monc_data)):
+        #         tvar+=[monc_data[m]['tvar']['q_vapour_mean']]
+        #         zvar+=[monc_data[m]['zvar']['q_vapour_mean']]
+        #         id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
+        #         ax1.fill_betweenx(monc_data[m][zvar[m]],np.nanmean(monc_data[m]['sh'][id,:],0) - np.nanstd(monc_data[m]['sh'][id,:],0),
+        #             np.nanmean(monc_data[m]['sh'][id,:],0) + np.nanstd(monc_data[m]['sh'][id,:],0), color = fcolsmonc[m], alpha = 0.05)
+        #         plt.plot(np.nanmean(monc_data[m]['sh'][id,:],0) - np.nanstd(monc_data[m]['sh'][id,:],0), monc_data[m][zvar[m]],
+        #             '--', color =lcolsmonc[m], linewidth = 0.5)
+        #         plt.plot(np.nanmean(monc_data[m]['sh'][id,:],0) + np.nanstd(monc_data[m]['sh'][id,:],0), monc_data[m][zvar[m]],
+        #             '--', color = lcolsmonc[m], linewidth = 0.5)
         if pum==True:
             for m in range(0,len(um_data)):
                 id= np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
 #                plt.plot(np.nanmean(um_data[m]['q'][id,:]*1000,0),um_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
-                plt.plot(np.nanmean(um_data[m]['sh_calc'][id,:]*1000,0),um_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
+            #    plt.plot(np.nanmean(um_data[m]['q'][id,:]*1000,0),um_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
+                plt.plot(np.nanmean(um_data[m]['sh_calc'][id,:]*1000,0),um_data[m]['height'], color = lcols[m], linewidth = 1, label = label[m], zorder = 1)
         if pmonc==True:
             for m in range(0,len(monc_data)):
                 id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
@@ -739,7 +734,7 @@ def plot_q_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
 
         plt.xlabel('spec. hum [g/kg]')
         plt.ylabel('Z [km]')
-        #plt.xlim([260,271])
+        plt.xlim([1, 10])
         # plt.yticks(np.arange(0,5.01e3,0.5e3))
         # ax1.set_yticklabels([0,' ',1,' ',2,' ',3,' ',4,' ',5])
         plt.ylim(ylims)
