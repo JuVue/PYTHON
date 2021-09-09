@@ -638,6 +638,11 @@ def plot_q_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
             elif list(args.keys())[n] == 'outstr':
                 outstr= args[list(args.keys())[n]]
 
+    if pmonc==True:
+        for m in range(0,len(monc_data)):
+            monc_data[m]['sh']=calcSH(monc_data[m]['T_mean'],monc_data[m]['p_mean']))
+
+
     ylims=[0,2]
     yticks=np.arange(0,2e3,0.5e3)
     ytlabels=yticks/1e3
@@ -645,7 +650,7 @@ def plot_q_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
 
     print ('******')
     print ('')
-    print ('Plotting Q mean profiles split times:')
+    print ('Plotting MMR mean profiles split times:')
     print ('')
 
     ###----------------------------------------------------------------
@@ -691,23 +696,23 @@ def plot_q_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
         # embed()
         #adding RS data
         obsid= np.squeeze(np.argwhere((obs['sondes']['mday']>=prof_time[pt][0]) & (obs['sondes']['mday']<prof_time[pt][1])))
-        plt.plot(np.nanmean(obs['sondes']['temperature'][:,obsid],1),obs['sondes']['Z'], color = 'grey', linewidth = 3, label = 'RS', zorder = obs_zorder)
-        ax1.fill_betweenx(obs['sondes']['Z'],np.nanmean(obs['sondes']['temperature'][:,obsid],1) - np.nanstd(obs['sondes']['temperature'][:,obsid],1),
-            np.nanmean(obs['sondes']['temperature'][:,obsid],1) + np.nanstd(obs['sondes']['temperature'][:,obsid],1), color = 'lightgrey', alpha = 0.5)
+        plt.plot(np.nanmean(obs['sondes']['sphum'][:,obsid],1),obs['sondes']['Z'], color = 'grey', linewidth = 3, label = 'RS', zorder = obs_zorder)
+        ax1.fill_betweenx(obs['sondes']['Z'],np.nanmean(obs['sondes']['sphum'][:,obsid],1) - np.nanstd(obs['sondes']['sphum'][:,obsid],1),
+            np.nanmean(obs['sondes']['sphum'][:,obsid],1) + np.nanstd(obs['sondes']['sphum'][:,obsid],1), color = 'lightgrey', alpha = 0.5)
         # plt.xlim([0,0.2])
-        plt.plot(np.nanmean(obs['sondes']['temperature'][:,obsid],1) - np.nanstd(obs['sondes']['temperature'][:,obsid],1),obs['sondes']['Z'],
+        plt.plot(np.nanmean(obs['sondes']['sphum'][:,obsid],1) - np.nanstd(obs['sondes']['sphum'][:,obsid],1),obs['sondes']['Z'],
             '--', color = 'grey', linewidth = 0.5)
-        plt.plot(np.nanmean(obs['sondes']['temperature'][:,obsid],1) + np.nanstd(obs['sondes']['temperature'][:,obsid],1), obs['sondes']['Z'],
+        plt.plot(np.nanmean(obs['sondes']['sphum'][:,obsid],1) + np.nanstd(obs['sondes']['sphum'][:,obsid],1), obs['sondes']['Z'],
             '--', color = 'grey', linewidth = 0.5)
 
         if pum==True:
             for m in range(0,len(um_data)):
                 id=  np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
-                ax1.fill_betweenx(um_data[m]['height'],np.nanmean(um_data[m]['temperature'][id,:],0) - np.nanstd(um_data[m]['temperature'][id,:],0),
-                    np.nanmean(um_data[m]['temperature'][id,:],0) + np.nanstd(um_data[m]['temperature'][id,:],0), color = fcols[m], alpha = 0.05)
-                plt.plot(np.nanmean(um_data[m]['temperature'][id,:],0) - np.nanstd(um_data[m]['temperature'][id,:],0), um_data[m]['height'],
+                ax1.fill_betweenx(um_data[m]['height'],np.nanmean(um_data[m]['q'][id,:],0) - np.nanstd(um_data[m]['q'][id,:],0),
+                    np.nanmean(um_data[m]['q'][id,:],0) + np.nanstd(um_data[m]['q'][id,:],0), color = fcols[m], alpha = 0.05)
+                plt.plot(np.nanmean(um_data[m]['q'][id,:],0) - np.nanstd(um_data[m]['q'][id,:],0), um_data[m]['height'],
                     '--', color =lcols[m], linewidth = 0.5)
-                plt.plot(np.nanmean(um_data[m]['temperature'][id,:],0) + np.nanstd(um_data[m]['temperature'][id,:],0),um_data[m]['height'],
+                plt.plot(np.nanmean(um_data[m]['q'][id,:],0) + np.nanstd(um_data[m]['q'][id,:],0),um_data[m]['height'],
                     '--', color = lcols[m], linewidth = 0.5)
         if pmonc==True:
             tvar=[]
@@ -716,16 +721,16 @@ def plot_q_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
                 tvar+=[monc_data[m]['tvar']['q_vapour_mean']]
                 zvar+=[monc_data[m]['zvar']['q_vapour_mean']]
                 id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
-                ax1.fill_betweenx(monc_data[m][zvar[m]],np.nanmean(monc_data[m]['q_vapour_mean'][id,:],0) - np.nanstd(monc_data[m]['q_vapour_mean'][id,:],0),
-                    np.nanmean(monc_data[m]['q_vapour_mean'][id,:],0) + np.nanstd(monc_data[m]['q_vapour_mean'][id,:],0), color = fcolsmonc[m], alpha = 0.05)
-                plt.plot(np.nanmean(monc_data[m]['q_vapour_mean'][id,:],0) - np.nanstd(monc_data[m]['q_vapour_mean'][id,:],0), monc_data[m][zvar[m]],
+                ax1.fill_betweenx(monc_data[m][zvar[m]],np.nanmean(monc_data[m]['sh'][id,:],0) - np.nanstd(monc_data[m]['sh'][id,:],0),
+                    np.nanmean(monc_data[m]['sh'][id,:],0) + np.nanstd(monc_data[m]['sh'][id,:],0), color = fcolsmonc[m], alpha = 0.05)
+                plt.plot(np.nanmean(monc_data[m]['sh'][id,:],0) - np.nanstd(monc_data[m]['sh'][id,:],0), monc_data[m][zvar[m]],
                     '--', color =lcolsmonc[m], linewidth = 0.5)
-                plt.plot(np.nanmean(monc_data[m]['q_vapour_mean'][id,:],0) + np.nanstd(monc_data[m]['q_vapour_mean'][id,:],0), monc_data[m][zvar[m]],
+                plt.plot(np.nanmean(monc_data[m]['sh'][id,:],0) + np.nanstd(monc_data[m]['sh'][id,:],0), monc_data[m][zvar[m]],
                     '--', color = lcolsmonc[m], linewidth = 0.5)
         if pum==True:
             for m in range(0,len(um_data)):
                 id= np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
-                plt.plot(np.nanmean(um_data[m]['temperature'][id,:],0),um_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
+                plt.plot(np.nanmean(um_data[m]['q'][id,:],0),um_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
         if pmonc==True:
             for m in range(0,len(monc_data)):
                 id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
@@ -935,7 +940,7 @@ def main():
     for var in nc[0].variables: print(var)
     var_list1 = ['u_10m','v_10m', 'air_temperature_at_1.5m','q_1.5m','rh_1.5m','visibility','dew_point_temperature_at_1.5m','LWP','IWP',
                 'surface_net_SW_radiation','surface_net_LW_radiation','surface_downwelling_LW_radiation','surface_downwelling_SW_radiation',
-                'sensible_heat_flux','latent_heat_flux', 'bl_depth','bl_type','temperature','theta']
+                'sensible_heat_flux','latent_heat_flux', 'bl_depth','bl_type','temperature','theta','q']
                 #PLOT FROM CLOUDNET:
                 #'temperature','q','pressure','bl_depth','bl_type','qliq','qice','uwind','vwind','wwind',
                 #'cloud_fraction','radr_refl','rainfall_flux','snowfall_flux',]#
