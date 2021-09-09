@@ -2658,7 +2658,7 @@ def UM_MONC_Nisg(obs_data, lwcvar, lwcstr, plots_out_dir, dates, prof_time, **ar
     if praw==True:
         for m in range(0,len(raw_data)):
         # plt.plot(np.nanmean(raw_data[m]['iwc'],0)*1e3,raw_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m] + '_Raw', zorder = 1)
-            plt.pcolor(raw_data[m]['time'][:],raw_data[m]['height'][:],np.transpose(raw_data[m]['qnice'][:])/1e3,
+            plt.pcolor(raw_data[m]['time'][:]/3600.,raw_data[m]['height'][:],np.transpose(raw_data[m]['qnice'][:])/1e3,
                 vmin=0.,vmax=1.0,
                 )
     # if pmonc==True:
