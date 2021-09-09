@@ -2661,8 +2661,8 @@ def UM_MONC_Nisg(obs_data, lwcvar, lwcstr, plots_out_dir, dates, prof_time, **ar
             plt.pcolor(raw_data[m]['time'][:],raw_data[m]['height'][:],np.transpose(raw_data[m]['qnice'][:])/1e3,
                 vmin=0.,vmax=1.0,
                 )
-        if pmonc==True:
-            plt.plot(np.nanmean(monc_data[0]['iwc_tot_mean'],0)*1e3,monc_data[0][iwc_zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+        # if pmonc==True:
+        #     plt.plot(monc_data[0]['nisg_tot_mean']*1e3,monc_data[0]['nisg_tot_mean']*1e3, color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
         plt.xlabel('N$_{isg}$ [L$^{-1}$]')
         plt.ylabel('Z [km]')
         plt.ylim(ylims)
