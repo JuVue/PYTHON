@@ -406,6 +406,9 @@ def main():
         elif m_out_dir[m][:3] == '27F':
             mlabel.append('MONC_0.1Cooper_FixedNd5')
             moutstr.append('MONC-27F')
+        elif m_out_dir[m][:3] == '27G':
+            mlabel.append('MONC_0.1Cooper_FixedNd10_5KDecouple')
+            moutstr.append('MONC-27G')
         elif m_out_dir[m][:3] == '28A':
             mlabel.append('MONC_0.1Cooper_CASIM-100-ARG')
             moutstr.append('MONC-28A')
