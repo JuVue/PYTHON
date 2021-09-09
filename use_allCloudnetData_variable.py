@@ -2652,20 +2652,18 @@ def UM_MONC_Nisg(obs_data, lwcvar, lwcstr, plots_out_dir, dates, prof_time, **ar
     plt.figure(figsize=(10,14))
     plt.subplots_adjust(top = 0.95, bottom = 0.1, right = 0.98, left = 0.08)
 
-    for pt in range(0,len(raw_data)):
-        plt.subplot(len(raw_data), 1, pt+1)
+    for m in range(0,len(raw_data)):
+        plt.subplot(len(raw_data), 1, m+1)
         ax1 = plt.gca()
         # plt.plot(np.nanmean(obs_data['iwc'],0)*1e3,np.nanmean(obs_data['height'],0), color = 'k', linewidth = 3, label = 'Obs_UMgrid', zorder = obs_zorder)
         if praw==True:
-            for m in range(0,len(raw_data)):
             # plt.plot(np.nanmean(raw_data[m]['iwc'],0)*1e3,raw_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m] + '_Raw', zorder = 1)
-                plt.pcolor(raw_data[m]['time'][:],raw_data[m]['height'][:],np.transpose(raw_data[m]['qnice'][:])/1e3,
-                    vmin=0.,vmax=1.0,
-                    )
-        # if pmonc==True:
-        #     for m in range(0,len(monc_data)):
-        #         plt.plot(np.nanmean(monc_data[m]['iwc_tot_mean'],0)*1e3,monc_data[m][iwc_zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
-        # plt.xlabel('N$_{isg}$ [L$^{-1}$]')
+            plt.pcolor(raw_data[m]['time'][:],raw_data[m]['height'][:],np.transpose(raw_data[m]['qnice'][:])/1e3,
+                vmin=0.,vmax=1.0,
+                )
+        if pmonc==True:
+            plt.plot(np.nanmean(monc_data[0]['iwc_tot_mean'],0)*1e3,monc_data[0][iwc_zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+        plt.xlabel('N$_{isg}$ [L$^{-1}$]')
         plt.ylabel('Z [km]')
         plt.ylim(ylims)
         plt.yticks(yticks)
