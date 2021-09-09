@@ -569,14 +569,14 @@ def plot_Theta_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lo
             tvar=[]
             zvar=[]
             for m in range(0,len(monc_data)):
-                tvar+=[monc_data[m]['tvar']['T_mean']]
-                zvar+=[monc_data[m]['zvar']['T_mean']]
+                tvar+=[monc_data[m]['tvar']['th_mean']]
+                zvar+=[monc_data[m]['zvar']['th_mean']]
                 id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
-                ax1.fill_betweenx(monc_data[m][zvar[m]],np.nanmean(monc_data[m]['T_mean'][id,:],0) - np.nanstd(monc_data[m]['T_mean'][id,:],0),
-                    np.nanmean(monc_data[m]['T_mean'][id,:],0) + np.nanstd(monc_data[m]['T_mean'][id,:],0), color = fcolsmonc[m], alpha = 0.05)
-                plt.plot(np.nanmean(monc_data[m]['T_mean'][id,:],0) - np.nanstd(monc_data[m]['T_mean'][id,:],0), monc_data[m][zvar[m]],
+                ax1.fill_betweenx(monc_data[m][zvar[m]],np.nanmean(monc_data[m]['th_mean'][id,:],0) - np.nanstd(monc_data[m]['th_mean'][id,:],0),
+                    np.nanmean(monc_data[m]['th_mean'][id,:],0) + np.nanstd(monc_data[m]['th_mean'][id,:],0), color = fcolsmonc[m], alpha = 0.05)
+                plt.plot(np.nanmean(monc_data[m]['th_mean'][id,:],0) - np.nanstd(monc_data[m]['th_mean'][id,:],0), monc_data[m][zvar[m]],
                     '--', color =lcolsmonc[m], linewidth = 0.5)
-                plt.plot(np.nanmean(monc_data[m]['T_mean'][id,:],0) + np.nanstd(monc_data[m]['T_mean'][id,:],0), monc_data[m][zvar[m]],
+                plt.plot(np.nanmean(monc_data[m]['th_mean'][id,:],0) + np.nanstd(monc_data[m]['th_mean'][id,:],0), monc_data[m][zvar[m]],
                     '--', color = lcolsmonc[m], linewidth = 0.5)
         if pum==True:
             for m in range(0,len(um_data)):
@@ -592,7 +592,7 @@ def plot_Theta_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lo
 
         plt.xlabel('\Theta [K]')
         plt.ylabel('Z [km]')
-        plt.xlim([260,271])
+        plt.xlim([267,275])
         # plt.yticks(np.arange(0,5.01e3,0.5e3))
         # ax1.set_yticklabels([0,' ',1,' ',2,' ',3,' ',4,' ',5])
         plt.ylim(ylims)
