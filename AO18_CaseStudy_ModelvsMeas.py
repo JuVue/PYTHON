@@ -590,7 +590,7 @@ def plot_Theta_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lo
             plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=4)
 
 
-        plt.xlabel('\Theta [K]')
+        plt.xlabel('Theta [K]')
         plt.ylabel('Z [km]')
         plt.xlim([267,275])
         # plt.yticks(np.arange(0,5.01e3,0.5e3))
