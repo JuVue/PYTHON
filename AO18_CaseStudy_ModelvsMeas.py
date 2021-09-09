@@ -702,11 +702,11 @@ def plot_q_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
         if pum==True:
             for m in range(0,len(um_data)):
                 id=  np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
-                ax1.fill_betweenx(um_data[m]['height'],np.nanmean(um_data[m]['q'][id,:],0) - np.nanstd(um_data[m]['q'][id,:],0),
-                    np.nanmean(um_data[m]['q'][id,:],0) + np.nanstd(um_data[m]['q'][id,:],0), color = fcols[m], alpha = 0.05)
-                plt.plot(np.nanmean(um_data[m]['q'][id,:],0) - np.nanstd(um_data[m]['q'][id,:],0), um_data[m]['height'],
+                ax1.fill_betweenx(um_data[m]['height'],np.nanmean(um_data[m]['q'][id,:]*1000,0) - np.nanstd(um_data[m]['q'][id,:]*1000,0),
+                    np.nanmean(um_data[m]['q'][id,:]*1000,0) + np.nanstd(um_data[m]['q'][id,:]*1000,0), color = fcols[m], alpha = 0.05)
+                plt.plot(np.nanmean(um_data[m]['q'][id,:]*1000,0) - np.nanstd(um_data[m]['q'][id,:]*1000,0), um_data[m]['height'],
                     '--', color =lcols[m], linewidth = 0.5)
-                plt.plot(np.nanmean(um_data[m]['q'][id,:],0) + np.nanstd(um_data[m]['q'][id,:],0),um_data[m]['height'],
+                plt.plot(np.nanmean(um_data[m]['q'][id,:]*1000,0) + np.nanstd(um_data[m]['q'][id,:]*1000,0),um_data[m]['height'],
                     '--', color = lcols[m], linewidth = 0.5)
         if pmonc==True:
             tvar=[]
@@ -724,7 +724,7 @@ def plot_q_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
         if pum==True:
             for m in range(0,len(um_data)):
                 id= np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
-                plt.plot(np.nanmean(um_data[m]['q'][id,:],0),um_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
+                plt.plot(np.nanmean(um_data[m]['q'][id,:]*1000,0),um_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
         if pmonc==True:
             for m in range(0,len(monc_data)):
                 id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
@@ -733,7 +733,7 @@ def plot_q_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
             plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=4)
 
 
-        plt.xlabel('spec. hum [K]')
+        plt.xlabel('spec. hum [g/kg]')
         plt.ylabel('Z [km]')
         #plt.xlim([260,271])
         # plt.yticks(np.arange(0,5.01e3,0.5e3))
