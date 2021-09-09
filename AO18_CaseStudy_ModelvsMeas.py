@@ -641,7 +641,7 @@ def plot_q_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
 
     if pmonc==True:
         for m in range(0,len(monc_data)):
-            monc_data[m]['sh']=calcSH(monc_data[m]['T_mean'],monc_data[m]['p_mean']))
+            monc_data[m]['sh']=calcSH(monc_data[m]['T_mean'],monc_data[m]['p_mean'])
 
 
     ylims=[0,2]
