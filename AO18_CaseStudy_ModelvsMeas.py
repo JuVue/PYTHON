@@ -651,7 +651,7 @@ def plot_q_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
 
     print ('******')
     print ('')
-    print ('Plotting MMR mean profiles split times:')
+    print ('Plotting q mean profiles split times:')
     print ('')
 
     ###----------------------------------------------------------------
@@ -696,7 +696,7 @@ def plot_q_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
         #     '--', color = 'k', linewidth = 0.5)
         # embed()
         #adding RS data
-        obsid= np.squeeze(np.argwhere((obs['sondes']['mday']>=prof_time[pt][0]) & (obs['sondes']['mday']<prof_time[pt][1])))
+        obsid= np.squeeze(np.argwhere((obs['sondes']['mday']>=prof_time[pt][0]-1/24) & (obs['sondes']['mday']<prof_time[pt][1])))
         plt.plot(obs['sondes']['sphum'][:,obsid],obs['sondes']['Z'], color = 'grey', linewidth = 3, label = 'RS', zorder = obs_zorder)
 
         if pum==True:
