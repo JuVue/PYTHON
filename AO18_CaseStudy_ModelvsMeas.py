@@ -642,7 +642,11 @@ def plot_q_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
     if pmonc==True:
         for m in range(0,len(monc_data)):
             monc_data[m]['sh']=calcSH(monc_data[m]['T_mean'],monc_data[m]['p_mean'])
+    if pum==True:
+        for m in range(0,len(um_data)):
+            um_data[m]['sh_calc']=calcSH(um_data[m]['temperature'],monc_data[m]['pressure'])
 
+    embed()
 
     ylims=[0,2]
     yticks=np.arange(0,2e3,0.5e3)
