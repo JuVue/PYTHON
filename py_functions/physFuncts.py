@@ -294,6 +294,6 @@ def calcSH(T,p):
     """
 
     wvp = vp(T)
-    sh=0.622*wvp ./ (p-0.378*wvp)*1000
+    sh=0.622*wvp/(p-0.378*wvp)*1000
 
     return sh
