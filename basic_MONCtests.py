@@ -396,18 +396,18 @@ def main():
             mlabel.append('MONC_0.5Cooper_FixedNd50')
             moutstr.append('MONC-27B')
         elif m_out_dir[m][:3] == '27C':
-            mlabel.append('MONC_0.1Cooper_FixedNd50')
-            moutstr.append('MONC-27C')
+            if m_out_dir[m][-5:] == 'test/':
+                mlabel.append('MONC_0.1Cooper_FixedNd10_vnTest')
+                moutstr.append('MONC-27C-test')
+            else:
+                mlabel.append('MONC_0.1Cooper_FixedNd50')
+                moutstr.append('MONC-27C')
         elif m_out_dir[m][:3] == '27D':
             mlabel.append('MONC_0.1Cooper_FixedNd25')
             moutstr.append('MONC-27D')
         elif m_out_dir[m][:3] == '27E':
-            if m_out_dir[m][-5:] == 'test/':
-                mlabel.append('MONC_0.1Cooper_FixedNd10_vnTest')
-                moutstr.append('MONC-27E-test')
-            else:
-                mlabel.append('MONC_0.1Cooper_FixedNd10')
-                moutstr.append('MONC-27E')
+            mlabel.append('MONC_0.1Cooper_FixedNd10')
+            moutstr.append('MONC-27E')
         elif m_out_dir[m][:3] == '27F':
             mlabel.append('MONC_0.1Cooper_FixedNd5')
             moutstr.append('MONC-27F')

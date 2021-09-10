@@ -3248,10 +3248,10 @@ def main():
                # '26B_20180913T0000Z_6hSpinUp_12h0600-0000thTend_20h1200-0600thTend_6-20h0-Cooper/',
                # '27A_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24hCooper/',
                # '27B_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.5Cooper/',
-               # '27C_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper/',
+               '27C_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper/',
+               '27C_CASIMvn0.3.4-MONCr8166-test/',
                # '27D_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd25/',
-               '27E_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd10/',
-               '27E_CASIMvn0.3.4-MONCr8166-test/',
+               # '27E_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd10/',
                # '27F_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd5/',
                # '27G_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd10_5KDecouple14-24h/',
                # '28A_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_AccumSolAero-CASIM-100-ARG/',
@@ -3340,18 +3340,18 @@ def main():
             mlabel.append('MONC_0.5Cooper_FixedNd50')
             moutstr.append('MONC-27B')
         elif m_out_dir[m][:3] == '27C':
-            mlabel.append('MONC_0.1Cooper_FixedNd50')
-            moutstr.append('MONC-27C')
+            if m_out_dir[m][-5:] == 'test/':
+                mlabel.append('MONC_0.1Cooper_FixedNd10_vnTest')
+                moutstr.append('MONC-27C-test')
+            else:
+                mlabel.append('MONC_0.1Cooper_FixedNd50')
+                moutstr.append('MONC-27C')
         elif m_out_dir[m][:3] == '27D':
             mlabel.append('MONC_0.1Cooper_FixedNd25')
             moutstr.append('MONC-27D')
         elif m_out_dir[m][:3] == '27E':
-            if m_out_dir[m][-5:] == 'test/':
-                mlabel.append('MONC_0.1Cooper_FixedNd10_vnTest')
-                moutstr.append('MONC-27E-test')
-            else:
-                mlabel.append('MONC_0.1Cooper_FixedNd10')
-                moutstr.append('MONC-27E')
+            mlabel.append('MONC_0.1Cooper_FixedNd10')
+            moutstr.append('MONC-27E')
         elif m_out_dir[m][:3] == '27F':
             mlabel.append('MONC_0.1Cooper_FixedNd5')
             moutstr.append('MONC-27F')
