@@ -25,7 +25,7 @@ sys.path.insert(1, './py_functions/')
 from time_functions import datenum2date, date2datenum, calcTime_Mat2DOY, calcTime_Date2DOY
 from readMAT import readMatlabStruct
 from manipFuncts import intersect_mtlb
-from physFuncts import calcSH_mr, calcSH_wvp, calcvp,calcsvp 
+from physFuncts import calcSH_mr, calcSH_wvp, calcvp,calcsvp
 #from physFuncts import calcThetaE, calcThetaVL
 #from pyFixes import py3_FixNPLoad
 
@@ -634,10 +634,10 @@ def plot_q_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
                 outstr= args[list(args.keys())[n]]
     if pmonc==True:
         for m in range(0,len(monc_data)):
-            monc_data[m]['sh']=calcSH(monc_data[m]['T_mean'],monc_data[m]['p_mean'])
-    if pum==True:
-        for m in range(0,len(um_data)):
-            um_data[m]['sh_calc']=calcSH(um_data[m]['temperature'],um_data[m]['pressure']/100)
+            monc_data[m]['sh']=calcSH_mr(monc_data[m]['q_vapour_mean'],monc_data[m]['p_mean'])
+    # if pum==True:
+    #     for m in range(0,len(um_data)):
+    #         um_data[m]['sh_calc']=calcSH(um_data[m]['temperature'],um_data[m]['pressure']/100)
 
     obs['sondes']['sh_calc']=calcSH_mr(obs['sondes']['mr'],obs['sondes']['pressure'])
     obs['sondes']['sh_calc1']=calcSH_wvp(obs['sondes']['vp'],obs['sondes']['pressure'])
