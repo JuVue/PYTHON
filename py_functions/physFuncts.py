@@ -237,6 +237,7 @@ def calcRH(temperature, pressure, q):
 
     """
     Function to calculate RH from given water vapour mixing ratio
+    also works with specific humidity
     ==============================
     inputs:
     pressure = Pa
