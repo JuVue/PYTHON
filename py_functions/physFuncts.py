@@ -358,8 +358,13 @@ def calcP(T,Theta):
 
     kd = Rd/cpd     # k dry air
 
+    if (T<100).any():
+        T+=273.15
+
+    if (Theta<100).any():
+        Theta+=273.15
 
     p0=1000
-    p=p0/((Theta/T)**(1/kd))
+    p=p0/np.power(Theta/T,1/kd)
 
     return p
