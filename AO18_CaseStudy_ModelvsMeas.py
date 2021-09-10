@@ -649,6 +649,21 @@ def plot_q_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
     # obs['sondes']['sh_calc1']=calcSH_wvp(obs['sondes']['vp'],obs['sondes']['pressure'])
     # obs['sondes']['vp_calc']=calcvp(obs['sondes']['dewp'])
     # obs['sondes']['svp_calc']=calcsvp(obs['sondes']['temperature'])
+    ####temperature using hatpro temperature profiles for observations
+    embed()
+    plt.figure(figsize=(18,8))
+    plt.subplots_adjust(top = 0.8, bottom = 0.1, right = 0.92, left = 0.08)
+    for pt in range(0,len(prof_time)):
+        plt.subplot(1,len(prof_time),pt+1)
+        ax1 = plt.gca()
+        sstr=datenum2date(prof_time[pt][0])
+        estr=datenum2date(prof_time[pt][1])
+        plt.title(sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC')
+        obsid= np.squeeze(np.argwhere((obs['hatpro_temp']['mday']>=prof_time[pt][0]) & (obs['hatpro_temp']['mday']<prof_time[pt][1])))
+        plt.plot(np.nanmean(obs['hatpro_temp']['rh'][:,obsid],1),obs['hatpro_temp']['Z'], color = 'k', linewidth = 3, label = 'HATPRO', zorder = obs_zorder)
+            #adding RS data
+        obsid= np.squeeze(np.argwhere((obs['sondes']['mday']>=prof_time[pt][0]-1/24) & (obs['sondes']['mday']<prof_time[pt][1])))
+        plt.plot(obs['sondes']['sphum'][:,obsid],obs['sondes']['Z'], color = 'grey', linewidth = 3, label = 'RS', zorder = obs_zorder)
 
 
 
