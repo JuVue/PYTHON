@@ -350,3 +350,16 @@ def calcSH_wvp(wvp,p):
     sh=0.622*wvp/(p-0.378*wvp)*1000
 
     return sh
+
+def calcP(T,Theta):
+
+    cpd = 1005.7     # J/kg.K
+    Rd = 287.04   # dry air J kg^-1 K^-1
+
+    kd = Rd/cpd     # k dry air
+
+
+    p0=1000
+    p=p0/((Theta/T)^(1/kd))
+
+    return p
