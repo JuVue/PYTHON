@@ -642,28 +642,28 @@ def plot_q_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
 
 
     plt.figure(figsize=(18,8))
-        obsid= np.squeeze(np.argwhere((obs['sondes']['mday']>=prof_time[pt][0]-1/24) & (obs['sondes']['mday']<prof_time[pt][1])))
-        plt.plot(obs['sondes']['sphum'][:,obsid],obs['sondes']['Z'], color = 'grey', linewidth = 3, label = 'RS', zorder = obs_zorder)
+    obsid= np.squeeze(np.argwhere((obs['sondes']['mday']>=prof_time[pt][0]-1/24) & (obs['sondes']['mday']<prof_time[pt][1])))
+    plt.plot(obs['sondes']['sphum'][:,obsid],obs['sondes']['Z'], color = 'grey', linewidth = 3, label = 'RS', zorder = obs_zorder)
 
-        if pum==True:
-            for m in range(0,len(um_data)):
-                id= np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
-                plt.plot(np.nanmean(um_data[m]['sh_calc'][id,:]*1000,0),um_data[m]['height'], color = lcols[m], linewidth = 1, label = label[m], zorder = 1)
-        if pmonc==True:
-            for m in range(0,len(monc_data)):
-                id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
-                plt.plot(np.nanmean(monc_data[m]['sh'][id,:],0),monc_data[m][zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
-        if pt == 1:
-            plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=4)
-        plt.xlabel('spec. hum [g/kg]')
-        plt.ylabel('Z [km]')
-        plt.xlim([1, 10])
-        # plt.yticks(np.arange(0,5.01e3,0.5e3))
-        # ax1.set_yticklabels([0,' ',1,' ',2,' ',3,' ',4,' ',5])
-        plt.ylim(ylims)
-        plt.yticks(yticks)
-        ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
-        ax1.set_yticklabels(ytlabels)
+    if pum==True:
+        for m in range(0,len(um_data)):
+            id= np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
+            plt.plot(np.nanmean(um_data[m]['sh_calc'][id,:]*1000,0),um_data[m]['height'], color = lcols[m], linewidth = 1, label = label[m], zorder = 1)
+    if pmonc==True:
+        for m in range(0,len(monc_data)):
+            id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
+            plt.plot(np.nanmean(monc_data[m]['sh'][id,:],0),monc_data[m][zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+    if pt == 1:
+        plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=4)
+    plt.xlabel('spec. hum [g/kg]')
+    plt.ylabel('Z [km]')
+    plt.xlim([1, 10])
+    # plt.yticks(np.arange(0,5.01e3,0.5e3))
+    # ax1.set_yticklabels([0,' ',1,' ',2,' ',3,' ',4,' ',5])
+    plt.ylim(ylims)
+    plt.yticks(yticks)
+    ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
+    ax1.set_yticklabels(ytlabels)
 
 
 
