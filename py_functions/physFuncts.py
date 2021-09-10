@@ -163,7 +163,7 @@ def calcThetaVL(temperature, pressure, q, ql, qi, tim, height):
 
     return theta, theta_l, theta_vl
 
-def svp(T):
+def calcsvp(T):
 
     """
     Function to calculate saturation vapour pressure
@@ -182,7 +182,7 @@ def svp(T):
 
     return satvappres
 
-def vp(T):
+def calcvp(T):
 
     """
     Function to calculate  vapour pressure
@@ -310,7 +310,7 @@ def calcDewPoint(mr,p ):
     # check Q for -ve values (yes it has happened!!)
     mr(mr<0)=mr(mr<0)*0+1e-6
 
-    dp=B/np.log(A*epsilon./(mr.*p));
+    dp=B/np.log(A*epsilon/(mr*p))
 
     return dp
 
@@ -324,7 +324,7 @@ def calcSH_mr(mr,p):
     pressure = hpa
     """
     Td = calcDewPoint(mr,p)
-    wvp = vp(Td)  # vp at Td is actual vapour pressure
+    wvp = calcvp(Td)  # vp at Td is actual vapour pressure
     sh=0.622*wvp/(p-0.378*wvp)*1000
 
     return sh
