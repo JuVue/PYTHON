@@ -25,7 +25,7 @@ sys.path.insert(1, './py_functions/')
 from time_functions import datenum2date, date2datenum, calcTime_Mat2DOY, calcTime_Date2DOY
 from readMAT import readMatlabStruct
 from manipFuncts import intersect_mtlb
-from physFuncts import calcSH_mr, calcSH_wvp, calcvp,calcsvp,calcRH,calcDewPoint
+from physFuncts import calcSH_mr, calcSH_wvp, calcvp,calcsvp,calcRH,calcDewPoint,calcP
 #from physFuncts import calcThetaE, calcThetaVL
 #from pyFixes import py3_FixNPLoad
 
@@ -644,7 +644,12 @@ def plot_q_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
             um_data[m]['svp_calc']=calcsvp(um_data[m]['temperature'])
             um_data[m]['dp_calc']=calcDewPoint(um_data[m]['q'],um_data[m]['pressure'])
 
-    #for testing purposes only
+    obs['hatpro_temp']['svp']=calcsvp(obs['hatpro_temp']['temperature'])
+    obs['hatpro_temp']['p']=calcP(obs['hatpro_temp']['temperature'],obs['hatpro_temp']['pottemp'])
+    obs['hatpro_temp']['vp']=obs['hatpro_temp']['rh']*obs['hatpro_temp']['svp']/100
+    obs['hatpro_temp']['sh']=calcSH_wvp(obs['hatpro_temp']['vp'],obs['hatpro_temp']['p'])
+
+        #for testing purposes only
     # obs['sondes']['sh_calc']=calcSH_mr(obs['sondes']['mr'],obs['sondes']['pressure'])
     # obs['sondes']['sh_calc1']=calcSH_wvp(obs['sondes']['vp'],obs['sondes']['pressure'])
     # obs['sondes']['vp_calc']=calcvp(obs['sondes']['dewp'])
@@ -663,14 +668,18 @@ def plot_q_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
         plt.plot(np.nanmean(obs['hatpro_temp']['rh'][:,obsid],1),obs['hatpro_temp']['Z'], color = 'k', linewidth = 3, label = 'HATPRO', zorder = obs_zorder)
             #adding RS data
         obsid= np.squeeze(np.argwhere((obs['sondes']['mday']>=prof_time[pt][0]-1/24) & (obs['sondes']['mday']<prof_time[pt][1])))
-        plt.plot(obs['sondes']['sphum'][:,obsid],obs['sondes']['Z'], color = 'grey', linewidth = 3, label = 'RS', zorder = obs_zorder)
+        plt.plot(obs['sondes']['RH'][:,obsid],obs['sondes']['Z'], color = 'grey', linewidth = 3, label = 'RS', zorder = obs_zorder)
 
+        ylims=[0,2]
+        yticks=np.arange(0,2e3,0.5e3)
+        ytlabels=yticks/1e3
+            # ax1.set_yticklabels([0,' ',1,' ',2,' ',3,' ',4,' ',5])
+        plt.ylim(ylims)
+        plt.yticks(yticks)
+        ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
+        ax1.set_yticklabels(ytlabels)
 
-
-    ylims=[0,2]
-    yticks=np.arange(0,2e3,0.5e3)
-    ytlabels=yticks/1e3
-
+    plt.show()
 
     print ('******')
     print ('')
