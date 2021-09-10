@@ -643,7 +643,6 @@ def plot_q_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
             um_data[m]['rh_calc']=calcRH(um_data[m]['temperature'],um_data[m]['pressure']/100,um_data[m]['q'])
             um_data[m]['svp_calc']=calcsvp(um_data[m]['temperature'])
             um_data[m]['dp_calc']=calcDewPoint(um_data[m]['q'],um_data[m]['pressure'])
-    embed()
     obs['hatpro_temp']['svp']=calcsvp(obs['hatpro_temp']['temperature'])
     obs['hatpro_temp']['p']=calcP(obs['hatpro_temp']['temperature'],obs['hatpro_temp']['pottemp'])
     obs['hatpro_temp']['vp']=obs['hatpro_temp']['rh']*obs['hatpro_temp']['svp']/100
@@ -669,10 +668,10 @@ def plot_q_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
     #         #adding RS data
     #     obsid= np.squeeze(np.argwhere((obs['sondes']['mday']>=prof_time[pt][0]-1/24) & (obs['sondes']['mday']<prof_time[pt][1])))
     #     plt.plot(obs['sondes']['sphum'][:,obsid],obs['sondes']['Z'], color = 'grey', linewidth = 3, label = 'RS', zorder = obs_zorder)
-    #
     #     ylims=[0,2]
     #     yticks=np.arange(0,2e3,0.5e3)
     #     ytlabels=yticks/1e3
+    #
     #         # ax1.set_yticklabels([0,' ',1,' ',2,' ',3,' ',4,' ',5])
     #     plt.ylim(ylims)
     #     plt.yticks(yticks)
@@ -680,6 +679,11 @@ def plot_q_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
     #     ax1.set_yticklabels(ytlabels)
     #
     # plt.show()
+
+    ylims=[0,2]
+    yticks=np.arange(0,2e3,0.5e3)
+    ytlabels=yticks/1e3
+
 
     print ('******')
     print ('')
