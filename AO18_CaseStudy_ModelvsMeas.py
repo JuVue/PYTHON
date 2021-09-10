@@ -586,7 +586,7 @@ def plot_Theta_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lo
             zvar=[]
             for m in range(0,1):
                 tvar+=[monc_data[m]['tvar']['th_mean']]
-                zvar+=[monc_data[m]['zvar']['rh_mean']]
+                zvar+=[monc_data[m]['zvar']['th_mean']]
                 id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
                 plt.plot(np.nanmean(monc_data[m]['th_mean'][id,:],0),monc_data[m][zvar[m]], color = lcols[pt],linewidth = 3, label = lstr, zorder = 1)
     plt.ylim(ylims)
