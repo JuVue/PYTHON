@@ -654,36 +654,79 @@ def plot_q_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
     # obs['sondes']['vp_calc']=calcvp(obs['sondes']['dewp'])
     # obs['sondes']['svp_calc']=calcsvp(obs['sondes']['temperature'])
     ####temperature using hatpro temperature profiles for observations
-    # embed()
-    # plt.figure(figsize=(18,8))
-    # plt.subplots_adjust(top = 0.8, bottom = 0.1, right = 0.92, left = 0.08)
-    # for pt in range(0,len(prof_time)):
-    #     plt.subplot(1,len(prof_time),pt+1)
-    #     ax1 = plt.gca()
-    #     sstr=datenum2date(prof_time[pt][0])
-    #     estr=datenum2date(prof_time[pt][1])
-    #     plt.title(sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC')
-    #     obsid= np.squeeze(np.argwhere((obs['hatpro_temp']['mday']>=prof_time[pt][0]) & (obs['hatpro_temp']['mday']<prof_time[pt][1])))
-    #     plt.plot(np.nanmean(obs['hatpro_temp']['sh'][:,obsid],1),obs['hatpro_temp']['Z'], color = 'k', linewidth = 3, label = 'HATPRO', zorder = obs_zorder)
-    #         #adding RS data
-    #     obsid= np.squeeze(np.argwhere((obs['sondes']['mday']>=prof_time[pt][0]-1/24) & (obs['sondes']['mday']<prof_time[pt][1])))
-    #     plt.plot(obs['sondes']['sphum'][:,obsid],obs['sondes']['Z'], color = 'grey', linewidth = 3, label = 'RS', zorder = obs_zorder)
-    #     ylims=[0,2]
-    #     yticks=np.arange(0,2e3,0.5e3)
-    #     ytlabels=yticks/1e3
-    #
-    #         # ax1.set_yticklabels([0,' ',1,' ',2,' ',3,' ',4,' ',5])
-    #     plt.ylim(ylims)
-    #     plt.yticks(yticks)
-    #     ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
-    #     ax1.set_yticklabels(ytlabels)
-    #
-    # plt.show()
+    embed()
+    plt.figure(figsize=(18,8))
+    plt.subplots_adjust(top = 0.8, bottom = 0.1, right = 0.92, left = 0.08)
+    for pt in range(0,len(prof_time)):
+        plt.subplot(1,len(prof_time),pt+1)
+        ax1 = plt.gca()
+        sstr=datenum2date(prof_time[pt][0])
+        estr=datenum2date(prof_time[pt][1])
+        plt.title(sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC')
+        obsid= np.squeeze(np.argwhere((obs['hatpro_temp']['mday']>=prof_time[pt][0]) & (obs['hatpro_temp']['mday']<prof_time[pt][1])))
+        plt.plot(np.nanmean(obs['hatpro_temp']['sh'][:,obsid],1),obs['hatpro_temp']['Z'], color = 'k', linewidth = 3, label = 'HATPRO', zorder = obs_zorder)
+            #adding RS data
+        obsid= np.squeeze(np.argwhere((obs['sondes']['mday']>=prof_time[pt][0]-1/24) & (obs['sondes']['mday']<prof_time[pt][1])))
+        plt.plot(obs['sondes']['sphum'][:,obsid],obs['sondes']['Z'], color = 'grey', linewidth = 3, label = 'RS', zorder = obs_zorder)
+        ylims=[0,2]
+        yticks=np.arange(0,2e3,0.5e3)
+        ytlabels=yticks/1e3
+
+            # ax1.set_yticklabels([0,' ',1,' ',2,' ',3,' ',4,' ',5])
+        plt.ylim(ylims)
+        plt.yticks(yticks)
+        ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
+        ax1.set_yticklabels(ytlabels)
+
+    plt.show()
 
     ylims=[0,2]
     yticks=np.arange(0,2e3,0.5e3)
     ytlabels=yticks/1e3
 
+    plt.figure(figsize=(18,8))
+    plt.subplots_adjust(top = 0.8, bottom = 0.1, right = 0.92, left = 0.08)
+    plt.subplot(1,3,1)
+    ax1 = plt.gca()
+    for pt in range(0,len(prof_time)):
+        sstr=datenum2date(prof_time[pt][0])
+        estr=datenum2date(prof_time[pt][1])
+        obsid= np.squeeze(np.argwhere((obs['hatpro_temp']['mday']>=prof_time[pt][0]) & (obs['hatpro_temp']['mday']<prof_time[pt][1])))
+        plt.plot(np.nanmean(obs['hatpro_temp']['sh'][:,obsid],1),obs['hatpro_temp']['Z'],color =lcols[pt], linewidth = 3, label = 'HATPRO', zorder = obs_zorder)
+            #adding RS data
+        obsid= np.squeeze(np.argwhere((obs['sondes']['mday']>=prof_time[pt][0]-1/24) & (obs['sondes']['mday']<prof_time[pt][1])))
+        plt.plot(obs['sondes']['sphum'][:,obsid],obs['sondes']['Z'],color =lcols[pt], linewidth = 3, label = 'RS', zorder = obs_zorder)
+        plt.ylim(ylims)
+        plt.yticks(yticks)
+        ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
+        ax1.set_yticklabels(ytlabels)
+    plt.subplot(1,3,2)
+    ax1 = plt.gca()
+    for pt in range(0,len(prof_time)):
+        if pum==True:
+            for m in range(0,len(um_data)):
+                id= np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
+                plt.plot(np.nanmean(um_data[m]['q'][id,:]*1000,0),um_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
+    plt.subplot(1,3,3)
+    ax1 = plt.gca()
+    for pt in range(0,len(prof_time)):
+        if pmonc==True:
+            for m in range(0,len(monc_data)):
+                id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
+                plt.plot(np.nanmean(monc_data[m]['sh'][id,:],0),monc_data[m][zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+        plt.ylim(ylims)
+        plt.yticks(yticks)
+        ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
+        ax1.set_yticklabels(ytlabels)
+
+    plt.show()
+
+
+
+
+    ylims=[0,2]
+    yticks=np.arange(0,2e3,0.5e3)
+    ytlabels=yticks/1e3
 
     print ('******')
     print ('')
