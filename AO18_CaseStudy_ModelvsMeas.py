@@ -641,8 +641,8 @@ def plot_q_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
 
     obs['sondes']['sh_calc']=calcSH_mr(obs['sondes']['mr'],obs['sondes']['pressure'])
     obs['sondes']['sh_calc1']=calcSH_wvp(obs['sondes']['vp'],obs['sondes']['pressure'])
-    obs['sondes']['vp_calc']=vp(obs['sondes']['temperature'])
-    obs['sondes']['svp_calc']=svp(obs['sondes']['temperature'])
+    obs['sondes']['vp_calc']=calcvp(obs['sondes']['temperature'])
+    obs['sondes']['svp_calc']=calcsvp(obs['sondes']['temperature'])
     embed()
 
     plt.figure
