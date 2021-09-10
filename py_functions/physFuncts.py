@@ -360,6 +360,6 @@ def calcP(T,Theta):
 
 
     p0=1000
-    p=p0/((Theta/T)^(1/kd))
+    p=p0/((Theta/T)**(1/kd))
 
     return p
