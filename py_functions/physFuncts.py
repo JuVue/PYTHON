@@ -308,7 +308,7 @@ def calcDewPoint(mr,p ):
     if (mr>1).any():
         mr=mr/1000
     # check Q for -ve values (yes it has happened!!)
-    mr(mr<0)=mr(mr<0)*0+1e-6
+    mr[mr<0]=mr[mr<0]*0+1e-6
 
     dp=B/np.log(A*epsilon/(mr*p))
 
