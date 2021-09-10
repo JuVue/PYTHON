@@ -3346,7 +3346,7 @@ def main():
             mlabel.append('MONC_0.1Cooper_FixedNd25')
             moutstr.append('MONC-27D')
         elif m_out_dir[m][:3] == '27E':
-            if m_out_dir[m][-5:] == 'test':
+            if m_out_dir[m][-5:] == 'test/':
                 mlabel.append('MONC_0.1Cooper_FixedNd10_vnTest')
                 moutstr.append('MONC-27E-test')
             else:
