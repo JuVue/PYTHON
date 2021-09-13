@@ -1033,7 +1033,7 @@ def plot_T_Timeseries(obs,plots_out_dir, dates,prof_time, **args): #, lon, lat):
     plt.title('Temperature [K]')
     if pum==True:
         for m in range(0,len(um_data)):
-            plt.subplot(rows,2,m+1)
+            plt.subplot(rows,2,m+2)
             ax = plt.gca()
             plt.contourf(um_data[m]['time'], np.squeeze(um_data[m]['height']), np.transpose(um_data[m]['temperature']),
                 levels=clev,cmap = newcmp)
@@ -1075,7 +1075,7 @@ def plot_T_Timeseries(obs,plots_out_dir, dates,prof_time, **args): #, lon, lat):
             ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
             ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
             plt.xlim([dates[0], dates[1]])
-            if m==numsp:
+            if m==len(monc_data)-1:
                 plt.xlabel('Time [UTC]')
             ax2 = ax.twinx()
             ax2.set_ylabel(mlabel[m], rotation = 270, labelpad = 27,fontsize=SMALL_SIZE)
@@ -1083,10 +1083,10 @@ def plot_T_Timeseries(obs,plots_out_dir, dates,prof_time, **args): #, lon, lat):
 
     dstr=datenum2date(dates[1])
     if pmonc == True:
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) +'_' + '_'.join(moutstr) + '_T-Timeseries'+ lwcstr + '.png'
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) +'_' + '_'.join(moutstr) + '_T-Timeseries'+ '.png'
     else:
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_T-Timeseries'+ lwcstr + '.png'
-    plt.savefig(fileout)
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_T-Timeseries' + '.png'
+    plt.savefig(fileout,dpi=300)
     plt.close()
 
     print ('')
@@ -1420,7 +1420,6 @@ def main():
     ## -------------------------------------------------------------
     ## remove spin up time from monc data
     ## -------------------------------------------------------------
-    embed()
     monc_data=removeSpinUp(monc_data,monc_spin)
 
     ## -------------------------------------------------------------
