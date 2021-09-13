@@ -450,7 +450,6 @@ def plot_T_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
         if pt == 1:
             plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=4)
 
-
         plt.xlabel('Temperature [K]')
         plt.ylabel('Z [km]')
         plt.xlim([260,271])
@@ -1003,13 +1002,13 @@ def plot_T_Timeseries(obs,plots_out_dir, dates,prof_time, **args): #, lon, lat):
     print ('Plotting T timeseries for CaseStudy:')
     print ('')
     embed()
-    clev=np.arange(258,271,0.5)
+    clev=np.arange(259,270,0.5)
     #####PlotLwc###############################################
     yheight=3
     rows=int(np.ceil(numsp/2))
     fig = plt.figure(figsize=(18,yheight*rows+1))
-    plt.subplots_adjust(top = 0.92, bottom = 0.06, right = 0.92, left = 0.08,
-            hspace = 0.4, wspace = 0.2)
+    plt.subplots_adjust(top = 0.9, bottom = 0.06, right = 0.92, left = 0.08,
+            hspace = 0.38, wspace = 0.2)
     plt.subplot(rows,2,1)
     ax = plt.gca()
     img = plt.contourf(obs['hatpro_temp']['mday'], np.squeeze(obs['hatpro_temp']['Z']), obs['hatpro_temp']['temperature'],
@@ -1026,7 +1025,7 @@ def plot_T_Timeseries(obs,plots_out_dir, dates,prof_time, **args): #, lon, lat):
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
     #nans = ax.get_ylim()
     ax2 = ax.twinx()
-    ax2.set_ylabel('Measurements', rotation = 270, labelpad = 27,labelsize=SMALL_SIZE)
+    ax2.set_ylabel('Measurements', rotation = 270, labelpad = 27,fontsize=SMALL_SIZE)
     ax2.set_yticks([])
     #plt.title('Obs-' + obs_switch + 'grid')
     cbaxes = fig.add_axes([0.225, 0.95, 0.6, 0.015])
@@ -1034,7 +1033,7 @@ def plot_T_Timeseries(obs,plots_out_dir, dates,prof_time, **args): #, lon, lat):
     plt.title('Temperature [K]')
     if pum==True:
         for m in range(0,len(um_data)):
-            plt.subplot(rows,2,m+2)
+            plt.subplot(rows,2,m+1)
             ax = plt.gca()
             plt.contourf(um_data[m]['time'], np.squeeze(um_data[m]['height']), np.transpose(um_data[m]['temperature']),
                 levels=clev,cmap = newcmp)
@@ -1049,11 +1048,11 @@ def plot_T_Timeseries(obs,plots_out_dir, dates,prof_time, **args): #, lon, lat):
             ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
             ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
             ax2 = ax.twinx()
-            ax2.set_ylabel(label[m], rotation = 270, labelpad = 27,labelsize=SMALL_SIZE)
+            ax2.set_ylabel(label[m], rotation = 270, labelpad = 27,fontsize=SMALL_SIZE)
             ax2.set_yticks([])
             # plt.colorbar()
-            if m== numsp:
-                plt.xlabel('Date')
+            if m==numsp:
+                plt.xlabel('Time [UTC]')
 
     if pmonc==True:
         tvar=[]
@@ -1075,9 +1074,11 @@ def plot_T_Timeseries(obs,plots_out_dir, dates,prof_time, **args): #, lon, lat):
             ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
             ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
             ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-            plt.xlabel('Time (UTC)')
+            plt.xlim([dates[0], dates[1]])
+            if m==numsp:
+                plt.xlabel('Time [UTC]')
             ax2 = ax.twinx()
-            ax2.set_ylabel(mlabel[m], rotation = 270, labelpad = 27,labelsize=SMALL_SIZE)
+            ax2.set_ylabel(mlabel[m], rotation = 270, labelpad = 27,fontsize=SMALL_SIZE)
             ax2.set_yticks([])
 
     dstr=datenum2date(dates[1])
@@ -1567,10 +1568,10 @@ def main():
             label.append('UM_CASIM-AP')
             outstr.append('CASIM-AP')
         elif out_dir[m][:10] == '27_u-ce112':
-            label.append('UM_CASIM-AP-PasProc')
+            label.append('UM_CASIM-AP \n PasProc')
             outstr.append('CASIM-AP-PasProc')
         elif out_dir[m][:10] == '30_u-cg179':
-            label.append('UM_CASIM-100-PasProc')
+            label.append('UM_CASIM-100 \n PasProc')
             outstr.append('CASIM100-PasProc')
         else:
             label.append('undefined_label')
@@ -1628,28 +1629,28 @@ def main():
             mlabel.append('MONC_0.5Cooper_FixedNd50')
             moutstr.append('MONC-27B')
         elif m_out_dir[m][:3] == '27C':
-            mlabel.append('MONC_0.1Cooper_FixedNd50')
+            mlabel.append('MONC_0.1Cooper \n FixedNd50')
             moutstr.append('MONC-27C')
         elif m_out_dir[m][:3] == '27D':
-            mlabel.append('MONC_0.1Cooper_FixedNd25')
+            mlabel.append('MONC_0.1Cooper \n FixedNd25')
             moutstr.append('MONC-27D')
         elif m_out_dir[m][:3] == '27E':
-            mlabel.append('MONC_0.1Cooper_FixedNd10')
+            mlabel.append('MONC_0.1Cooper \n FixedNd10')
             moutstr.append('MONC-27E')
         elif m_out_dir[m][:3] == '27F':
-            mlabel.append('MONC_0.1Cooper_FixedNd5')
+            mlabel.append('MONC_0.1Cooper \n FixedNd5')
             moutstr.append('MONC-27F')
         elif m_out_dir[m][:3] == '28A':
-            mlabel.append('MONC_0.1Cooper_CASIM-100-ARG')
+            mlabel.append('MONC_0.1Cooper \n CASIM-100-ARG')
             moutstr.append('MONC-28A')
         elif m_out_dir[m][:3] == '28B':
-            mlabel.append('MONC_0.1Cooper_CASIM-100-Twomey')
+            mlabel.append('MONC_0.1Cooper \n CASIM-100-Twomey')
             moutstr.append('MONC-28B')
         elif m_out_dir[m][:3] == '29A':
-            mlabel.append('MONC_0.1Cooper_CASIM-20-ARG')
+            mlabel.append('MONC_0.1Cooper \n CASIM-20-ARG')
             moutstr.append('MONC-29A')
         elif m_out_dir[m][:3] == '29B':
-            mlabel.append('MONC_0.1Cooper_CASIM-20-allAct')
+            mlabel.append('MONC_0.1Cooper \n CASIM-20-allAct')
             moutstr.append('MONC-29B')
         else:
             label.append('undefined_label')
