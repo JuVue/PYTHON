@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import matplotlib.ticker as ticker
 import matplotlib.cm as mpl_cm
+from matplotlib.colors import ListedColormap, LinearSegmentedColormap,LogNorm
 
 #import matplotlib.cm as mpl_cm
 import os
