@@ -1003,21 +1003,19 @@ def plot_T_Timeseries(obs,plots_out_dir, dates,prof_time, **args): #, lon, lat):
     print ('Plotting T timeseries for CaseStudy:')
     print ('')
     embed()
-    cmax=0.3
-    clev=np.arange(0.0,0.45,0.05)
+    clev=np.arange(258,271,0.5)
     #####PlotLwc###############################################
     yheight=3
-    rows=int(numsp/2)
+    rows=int(np.ceil(numsp/2))
     fig = plt.figure(figsize=(18,yheight*rows+1))
     plt.subplots_adjust(top = 0.92, bottom = 0.06, right = 0.92, left = 0.08,
             hspace = 0.4, wspace = 0.2)
-
     plt.subplot(rows,2,1)
     ax = plt.gca()
-    img = plt.contourf(obs['hatpro_temp']['mday'], np.squeeze(obs['hatpro_temp']['Z']), np.transpose(obs['hatpro_temp']['temperature']),
+    img = plt.contourf(obs['hatpro_temp']['mday'], np.squeeze(obs['hatpro_temp']['Z']), obs['hatpro_temp']['temperature'],
         levels=clev,cmap = newcmp)
     for pt in range(0,len(prof_time)):
-        plt.plot([[prof_time][pt][0],[prof_time][pt][0]],ylims,'--k')
+        plt.plot([prof_time[pt][0],prof_time[pt][0]],np.array(ylims)*1e3,'--k')
     plt.ylabel('Z [km]')
     plt.ylim(ylims)
     plt.yticks(yticks)
@@ -1028,7 +1026,7 @@ def plot_T_Timeseries(obs,plots_out_dir, dates,prof_time, **args): #, lon, lat):
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
     #nans = ax.get_ylim()
     ax2 = ax.twinx()
-    ax2.set_ylabel('Measurements', rotation = 270, labelpad = 50)
+    ax2.set_ylabel('Measurements', rotation = 270, labelpad = 27,fontsize=SMALL_SIZE)
     ax2.set_yticks([])
     #plt.title('Obs-' + obs_switch + 'grid')
     cbaxes = fig.add_axes([0.225, 0.95, 0.6, 0.015])
@@ -1038,10 +1036,10 @@ def plot_T_Timeseries(obs,plots_out_dir, dates,prof_time, **args): #, lon, lat):
         for m in range(0,len(um_data)):
             plt.subplot(rows,2,m+2)
             ax = plt.gca()
-            plt.contourf(um_data[m]['time'], np.squeeze(um_data[m]['height'][0,:]), np.transpose(um_data[m]['temperature']),
+            plt.contourf(um_data[m]['time'], np.squeeze(um_data[m]['height']), np.transpose(um_data[m]['temperature']),
                 levels=clev,cmap = newcmp)
             for pt in range(0,len(prof_time)):
-                plt.plot([[prof_time][pt][0],[prof_time][pt][0]],ylims,'--k')
+                plt.plot([prof_time[pt][0],prof_time[pt][0]],np.array(ylims)*1e3,'--k')
             plt.ylabel('Z [km]')
             plt.ylim(ylims)
             plt.yticks(yticks)
@@ -1051,13 +1049,15 @@ def plot_T_Timeseries(obs,plots_out_dir, dates,prof_time, **args): #, lon, lat):
             ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
             ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
             ax2 = ax.twinx()
-            ax2.set_ylabel(label[m], rotation = 270, labelpad = 27)
+            ax2.set_ylabel(label[m], rotation = 270, labelpad = 27,fontsize=SMALL_SIZE)
             ax2.set_yticks([])
             # plt.colorbar()
             if m== numsp:
                 plt.xlabel('Date')
 
     if pmonc==True:
+        tvar=[]
+        zvar=[]
         for m in range(0,len(monc_data)):
             tvar+=[monc_data[m]['tvar']['T_mean']]
             zvar+=[monc_data[m]['zvar']['T_mean']]
@@ -1067,7 +1067,7 @@ def plot_T_Timeseries(obs,plots_out_dir, dates,prof_time, **args): #, lon, lat):
             plt.contourf(monc_data[m][tvar[m]], np.squeeze(monc_data[m][zvar[m]][:]), np.transpose(monc_data[m]['T_mean']),
             levels=clev,cmap = newcmp)
             for pt in range(0,len(prof_time)):
-                plt.plot([[prof_time][pt][0],[prof_time][pt][0]],ylims,'--k')
+                plt.plot([prof_time[pt][0],prof_time[pt][0]],np.array(ylims)*1e3,'--k')
             plt.ylabel('Z [km]')
             plt.ylim(ylims)
             plt.yticks(yticks)
@@ -1077,7 +1077,7 @@ def plot_T_Timeseries(obs,plots_out_dir, dates,prof_time, **args): #, lon, lat):
             ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
             plt.xlabel('Time (UTC)')
             ax2 = ax.twinx()
-            ax2.set_ylabel(mlabel[m], rotation = 270, labelpad = 27)
+            ax2.set_ylabel(mlabel[m], rotation = 270, labelpad = 27,fontsize=SMALL_SIZE)
             ax2.set_yticks([])
 
     dstr=datenum2date(dates[1])
@@ -1419,6 +1419,7 @@ def main():
     ## -------------------------------------------------------------
     ## remove spin up time from monc data
     ## -------------------------------------------------------------
+    embed()
     monc_data=removeSpinUp(monc_data,monc_spin)
 
     ## -------------------------------------------------------------
