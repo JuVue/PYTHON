@@ -1143,7 +1143,7 @@ def plot_Theta_Timeseries(obs,plots_out_dir, dates,prof_time, **args): #, lon, l
     print ('Plotting Theta timeseries for CaseStudy:')
     print ('')
     embed()
-    clev=np.arange(270,300, 0.5)
+    clev=np.arange(267,290, 0.2)
     #####PlotLwc###############################################
     yheight=3
     rows=int(np.ceil(numsp/2))
@@ -1171,7 +1171,7 @@ def plot_Theta_Timeseries(obs,plots_out_dir, dates,prof_time, **args): #, lon, l
     #plt.title('Obs-' + obs_switch + 'grid')
     cbaxes = fig.add_axes([0.225, 0.95, 0.6, 0.015])
     cb = plt.colorbar(img, cax = cbaxes, orientation = 'horizontal')
-    plt.title('Temperature [K]')
+    plt.title('Theta [K]')
     if pum==True:
         for m in range(0,len(um_data)):
             plt.subplot(rows,2,m+2)
@@ -1235,6 +1235,164 @@ def plot_Theta_Timeseries(obs,plots_out_dir, dates,prof_time, **args): #, lon, l
     print ('')
     print ('******')
 
+
+
+def plot_q_Timeseries(obs,plots_out_dir, dates,prof_time, **args): #, lon, lat):
+
+    numsp=1
+    if bool(args):
+        for n in range(0,len(args)):
+            if  list(args.keys())[n] == 'monc_data':
+                monc_data=args[list(args.keys())[n]]
+                numsp += len(monc_data)
+                pmonc=True
+            elif list(args.keys())[n] == 'mlabel':
+                mlabel = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'moutstr':
+                moutstr= args[list(args.keys())[n]]
+            elif  list(args.keys())[n] == 'um_data':
+                um_data=args[list(args.keys())[n]]
+                numsp += len(um_data)
+                pum=True
+            elif list(args.keys())[n] == 'label':
+                label = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'outstr':
+                outstr= args[list(args.keys())[n]]
+
+    if pmonc==True:
+        for m in range(0,len(monc_data)):
+            monc_data[m]['sh']=calcSH_mr(monc_data[m]['q_vapour_mean'],monc_data[m]['p_mean'])
+            monc_data[m]['svp']=calcsvp(monc_data[m]['T_mean'])
+            monc_data[m]['dp']=calcDewPoint(monc_data[m]['q_vapour_mean'],monc_data[m]['p_mean'])
+
+    if pum==True:
+        for m in range(0,len(um_data)):
+            um_data[m]['rh_calc']=calcRH(um_data[m]['temperature'],um_data[m]['pressure']/100,um_data[m]['q'])
+            um_data[m]['svp_calc']=calcsvp(um_data[m]['temperature'])
+            um_data[m]['dp_calc']=calcDewPoint(um_data[m]['q'],um_data[m]['pressure'])
+
+    obs['hatpro_temp']['svp']=calcsvp(obs['hatpro_temp']['temperature'])
+    obs['hatpro_temp']['p']=calcP(obs['hatpro_temp']['temperature'],obs['hatpro_temp']['pottemp'])
+    obs['hatpro_temp']['vp']=obs['hatpro_temp']['rh']*obs['hatpro_temp']['svp']/100
+    obs['hatpro_temp']['sh']=calcSH_wvp(obs['hatpro_temp']['vp'],obs['hatpro_temp']['p'])
+
+    ylims=[0,3]
+    yticks=np.arange(0,3e3,0.5e3)
+    ytlabels=yticks/1e3
+
+    SMALL_SIZE = 10
+    MED_SIZE = 14
+    LARGE_SIZE = 16
+
+    plt.rc('font',size=MED_SIZE)
+    plt.rc('axes',titlesize=MED_SIZE)
+    plt.rc('axes',labelsize=MED_SIZE)
+    plt.rc('xtick',labelsize=MED_SIZE)
+    plt.rc('ytick',labelsize=MED_SIZE)
+    plt.rc('legend',fontsize=MED_SIZE)
+
+    viridis = mpl_cm.get_cmap('viridis', 256) # nice colormap purple to yellow
+    newcolors = viridis(np.linspace(0, 1, 256)) #assgin new colormap with viridis colors
+    greyclr = np.array([0.1, 0.1, 0.1, 0.1])
+    newcolors[:1, :] = greyclr   # make first 20 colors greyclr
+    newcmp = ListedColormap(newcolors)
+
+    print ('******')
+    print ('')
+    print ('Plotting q timeseries for CaseStudy:')
+    print ('')
+    embed()
+    clev=np.arange(0 ,2.8, 0.05)
+    #####PlotLwc###############################################
+    yheight=3
+    rows=int(np.ceil(numsp/2))
+    fig = plt.figure(figsize=(18,yheight*rows+1))
+    plt.subplots_adjust(top = 0.9, bottom = 0.06, right = 0.92, left = 0.08,
+            hspace = 0.38, wspace = 0.2)
+    plt.subplot(rows,2,1)
+    ax = plt.gca()
+    img = plt.contourf(obs['hatpro_temp']['mday'], np.squeeze(obs['hatpro_temp']['Z']), obs['hatpro_temp']['sh'],
+        levels=clev,cmap = newcmp)
+    for pt in range(0,len(prof_time)):
+        plt.plot([prof_time[pt][0],prof_time[pt][0]],np.array(ylims)*1e3,'--k')
+    plt.ylabel('Z [km]')
+    plt.ylim(ylims)
+    plt.yticks(yticks)
+    ax.set_yticklabels(ytlabels)
+    plt.xlim([dates[0], dates[1]])
+    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+    #nans = ax.get_ylim()
+    ax2 = ax.twinx()
+    ax2.set_ylabel('Measurements', rotation = 270, labelpad = 27,fontsize=SMALL_SIZE)
+    ax2.set_yticks([])
+    #plt.title('Obs-' + obs_switch + 'grid')
+    cbaxes = fig.add_axes([0.225, 0.95, 0.6, 0.015])
+    cb = plt.colorbar(img, cax = cbaxes, orientation = 'horizontal')
+    plt.title('spec. hum. [g/kg]')
+    if pum==True:
+        for m in range(0,len(um_data)):
+            plt.subplot(rows,2,m+2)
+            ax = plt.gca()
+            plt.contourf(um_data[m]['time'], np.squeeze(um_data[m]['height']), np.transpose(um_data[m]['q'])*1000,
+                levels=clev,cmap = newcmp)
+            for pt in range(0,len(prof_time)):
+                plt.plot([prof_time[pt][0],prof_time[pt][0]],np.array(ylims)*1e3,'--k')
+            plt.ylabel('Z [km]')
+            plt.ylim(ylims)
+            plt.yticks(yticks)
+            ax.set_yticklabels(ytlabels)
+            plt.xlim([dates[0], dates[1]])
+            ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+            ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+            ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+            ax2 = ax.twinx()
+            ax2.set_ylabel(label[m], rotation = 270, labelpad = 27,fontsize=SMALL_SIZE)
+            ax2.set_yticks([])
+            # plt.colorbar()
+            if m==numsp:
+                plt.xlabel('Time [UTC]')
+
+    if pmonc==True:
+        tvar=[]
+        zvar=[]
+        for m in range(0,len(monc_data)):
+            tvar+=[monc_data[m]['tvar']['T_mean']]
+            zvar+=[monc_data[m]['zvar']['T_mean']]
+            plt.subplot(rows,2,numsp-len(monc_data)+1+m)
+            ax = plt.gca()
+            # ax.set_facecolor('aliceblue')
+            plt.contourf(monc_data[m][tvar[m]], np.squeeze(monc_data[m][zvar[m]][:]), np.transpose(monc_data[m]['sh']),
+            levels=clev,cmap = newcmp)
+            for pt in range(0,len(prof_time)):
+                plt.plot([prof_time[pt][0],prof_time[pt][0]],np.array(ylims)*1e3,'--k')
+            plt.ylabel('Z [km]')
+            plt.ylim(ylims)
+            plt.yticks(yticks)
+            ax.set_yticklabels(ytlabels)
+            ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+            ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+            ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+            plt.xlim([dates[0], dates[1]])
+            if m==len(monc_data)-1:
+                plt.xlabel('Time [UTC]')
+            ax2 = ax.twinx()
+            ax2.set_ylabel(mlabel[m], rotation = 270, labelpad = 27,fontsize=SMALL_SIZE)
+            ax2.set_yticks([])
+
+    dstr=datenum2date(dates[1])
+    if pmonc == True:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) +'_' + '_'.join(moutstr) + '_q-Timeseries'+ '.png'
+    else:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_q-Timeseries' + '.png'
+    plt.savefig(fileout,dpi=300)
+    plt.close()
+
+    print ('')
+    print ('Finished plotting! :)')
+    print ('')
+    print ('******')
 
 
 def removeSpinUp(monc_data,monc_spin):
