@@ -981,7 +981,7 @@ def plot_T_Timeseries(obs,plots_out_dir, dates,prof_time, **args): #, lon, lat):
     yticks=np.arange(0,3e3,0.5e3)
     ytlabels=yticks/1e3
 
-    SMALL_SIZE = 12
+    SMALL_SIZE = 10
     MED_SIZE = 14
     LARGE_SIZE = 16
 
@@ -1026,7 +1026,7 @@ def plot_T_Timeseries(obs,plots_out_dir, dates,prof_time, **args): #, lon, lat):
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
     #nans = ax.get_ylim()
     ax2 = ax.twinx()
-    ax2.set_ylabel('Measurements', rotation = 270, labelpad = 27,fontsize=SMALL_SIZE)
+    ax2.set_ylabel('Measurements', rotation = 270, labelpad = 27,labelsize=SMALL_SIZE)
     ax2.set_yticks([])
     #plt.title('Obs-' + obs_switch + 'grid')
     cbaxes = fig.add_axes([0.225, 0.95, 0.6, 0.015])
@@ -1049,7 +1049,7 @@ def plot_T_Timeseries(obs,plots_out_dir, dates,prof_time, **args): #, lon, lat):
             ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
             ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
             ax2 = ax.twinx()
-            ax2.set_ylabel(label[m], rotation = 270, labelpad = 27,fontsize=SMALL_SIZE)
+            ax2.set_ylabel(label[m], rotation = 270, labelpad = 27,labelsize=SMALL_SIZE)
             ax2.set_yticks([])
             # plt.colorbar()
             if m== numsp:
@@ -1077,7 +1077,7 @@ def plot_T_Timeseries(obs,plots_out_dir, dates,prof_time, **args): #, lon, lat):
             ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
             plt.xlabel('Time (UTC)')
             ax2 = ax.twinx()
-            ax2.set_ylabel(mlabel[m], rotation = 270, labelpad = 27,fontsize=SMALL_SIZE)
+            ax2.set_ylabel(mlabel[m], rotation = 270, labelpad = 27,labelsize=SMALL_SIZE)
             ax2.set_yticks([])
 
     dstr=datenum2date(dates[1])
