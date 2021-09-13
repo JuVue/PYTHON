@@ -544,7 +544,7 @@ def plot_Theta_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lo
         # plt.plot(np.nanmean(obs['hatpro_temp']['sh'][:,obsid],1),obs['hatpro_temp']['Z'],color =lcols[pt], linewidth = 3, label = 'HATPRO', zorder = obs_zorder)
         #     #adding RS data
         obsid= np.squeeze(np.argwhere((obs['sondes']['mday']>=prof_time[pt][0]-1/24) & (obs['sondes']['mday']<prof_time[pt][1])))
-        plt.plot(obs['sondes']['pottemp'][:,obsid],obs['sondes']['Z'],color = lcols[pt], linewidth = 3, label = lstr, zorder = obs_zorder)
+        plt.plot(obs['sondes']['pottemp'][:,obsid]+273.15,obs['sondes']['Z'],color = lcols[pt], linewidth = 3, label = lstr, zorder = obs_zorder)
     plt.ylim(ylims)
     plt.yticks(yticks)
     ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
@@ -947,6 +947,145 @@ def plot_q_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) +'_q-profile'  + '_split.png'
 
     plt.savefig(fileout,dpi=300)
+    print ('')
+    print ('Finished plotting! :)')
+    print ('')
+    print ('******')
+
+def plot_T_Timeseries(obs,plots_out_dir, dates,prof_time, **args): #, lon, lat):
+
+    numsp=1
+    if bool(args):
+        for n in range(0,len(args)):
+            if  list(args.keys())[n] == 'monc_data':
+                monc_data=args[list(args.keys())[n]]
+                numsp += len(monc_data)
+                pmonc=True
+            elif list(args.keys())[n] == 'mlabel':
+                mlabel = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'moutstr':
+                moutstr= args[list(args.keys())[n]]
+            elif  list(args.keys())[n] == 'um_data':
+                um_data=args[list(args.keys())[n]]
+                numsp += len(um_data)
+                pum=True
+            elif list(args.keys())[n] == 'label':
+                label = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'outstr':
+                outstr= args[list(args.keys())[n]]
+
+
+    ylims=[0,3]
+    yticks=np.arange(0,3e3,0.5e3)
+    ytlabels=yticks/1e3
+
+    SMALL_SIZE = 12
+    MED_SIZE = 14
+    LARGE_SIZE = 16
+
+    plt.rc('font',size=MED_SIZE)
+    plt.rc('axes',titlesize=MED_SIZE)
+    plt.rc('axes',labelsize=MED_SIZE)
+    plt.rc('xtick',labelsize=MED_SIZE)
+    plt.rc('ytick',labelsize=MED_SIZE)
+    plt.rc('legend',fontsize=MED_SIZE)
+
+    viridis = mpl_cm.get_cmap('viridis', 256) # nice colormap purple to yellow
+    newcolors = viridis(np.linspace(0, 1, 256)) #assgin new colormap with viridis colors
+    greyclr = np.array([0.1, 0.1, 0.1, 0.1])
+    newcolors[:1, :] = greyclr   # make first 20 colors greyclr
+    newcmp = ListedColormap(newcolors)
+
+    print ('******')
+    print ('')
+    print ('Plotting T timeseries for CaseStudy:')
+    print ('')
+    embed()
+    cmax=0.3
+    clev=np.arange(0.0,0.45,0.05)
+    #####PlotLwc###############################################
+    yheight=3
+    rows=int(numsp/2)
+    fig = plt.figure(figsize=(18,yheight*rows+1))
+    plt.subplots_adjust(top = 0.92, bottom = 0.06, right = 0.92, left = 0.08,
+            hspace = 0.4, wspace = 0.2)
+
+    plt.subplot(rows,2,1)
+    ax = plt.gca()
+    img = plt.contourf(obs['hatpro_temp']['mday'], np.squeeze(obs['hatpro_temp']['Z']), np.transpose(obs['hatpro_temp']['temperature']),
+        levels=clev,cmap = newcmp)
+    for pt in range(0,len(prof_time)):
+        plt.plot([[prof_time][pt][0],[prof_time][pt][0]],ylims,'--k')
+    plt.ylabel('Z [km]')
+    plt.ylim(ylims)
+    plt.yticks(yticks)
+    ax.set_yticklabels(ytlabels)
+    plt.xlim([dates[0], dates[1]])
+    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+    #nans = ax.get_ylim()
+    ax2 = ax.twinx()
+    ax2.set_ylabel('Measurements', rotation = 270, labelpad = 50)
+    ax2.set_yticks([])
+    #plt.title('Obs-' + obs_switch + 'grid')
+    cbaxes = fig.add_axes([0.225, 0.95, 0.6, 0.015])
+    cb = plt.colorbar(img, cax = cbaxes, orientation = 'horizontal')
+    plt.title('Temperature [K]')
+    if pum==True:
+        for m in range(0,len(um_data)):
+            plt.subplot(rows,2,m+2)
+            ax = plt.gca()
+            plt.contourf(um_data[m]['time'], np.squeeze(um_data[m]['height'][0,:]), np.transpose(um_data[m]['temperature']),
+                levels=clev,cmap = newcmp)
+            for pt in range(0,len(prof_time)):
+                plt.plot([[prof_time][pt][0],[prof_time][pt][0]],ylims,'--k')
+            plt.ylabel('Z [km]')
+            plt.ylim(ylims)
+            plt.yticks(yticks)
+            ax.set_yticklabels(ytlabels)
+            plt.xlim([dates[0], dates[1]])
+            ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+            ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+            ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+            ax2 = ax.twinx()
+            ax2.set_ylabel(label[m], rotation = 270, labelpad = 27)
+            ax2.set_yticks([])
+            # plt.colorbar()
+            if m== numsp:
+                plt.xlabel('Date')
+
+    if pmonc==True:
+        for m in range(0,len(monc_data)):
+            tvar+=[monc_data[m]['tvar']['T_mean']]
+            zvar+=[monc_data[m]['zvar']['T_mean']]
+            plt.subplot(rows,2,numsp-len(monc_data)+1+m)
+            ax = plt.gca()
+            # ax.set_facecolor('aliceblue')
+            plt.contourf(monc_data[m][tvar[m]], np.squeeze(monc_data[m][zvar[m]][:]), np.transpose(monc_data[m]['T_mean']),
+            levels=clev,cmap = newcmp)
+            for pt in range(0,len(prof_time)):
+                plt.plot([[prof_time][pt][0],[prof_time][pt][0]],ylims,'--k')
+            plt.ylabel('Z [km]')
+            plt.ylim(ylims)
+            plt.yticks(yticks)
+            ax.set_yticklabels(ytlabels)
+            ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+            ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+            ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+            plt.xlabel('Time (UTC)')
+            ax2 = ax.twinx()
+            ax2.set_ylabel(mlabel[m], rotation = 270, labelpad = 27)
+            ax2.set_yticks([])
+
+    dstr=datenum2date(dates[1])
+    if pmonc == True:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) +'_' + '_'.join(moutstr) + '_T-Timeseries'+ lwcstr + '.png'
+    else:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_T-Timeseries'+ lwcstr + '.png'
+    plt.savefig(fileout)
+    plt.close()
+
     print ('')
     print ('Finished plotting! :)')
     print ('')
@@ -1542,6 +1681,7 @@ def main():
     figure = plot_Theta_profiles_split(obs,plots_out_dir,dates, prof_time,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_BLDepth_SMLDepth(obs,plot_out_dir, dates, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
+    figure = plot_T_Timeseries(obs,plot_out_dir, dates,prof_time, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
     ### example plot list from Gillians Script:
     #figure = plot_radiation(obs,plot_out_dir, dates,plot_out_dir, um_data=um_data,label=label,outsr=outsr, monc_data=monc_data,mlabel=mlabel,moutsr=moutsr)
