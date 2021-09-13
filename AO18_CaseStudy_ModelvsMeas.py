@@ -13,6 +13,8 @@ from netCDF4 import Dataset
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import matplotlib.ticker as ticker
+import matplotlib.cm as mpl_cm
+from matplotlib.colors import ListedColormap, LinearSegmentedColormap,LogNorm
 
 #import matplotlib.cm as mpl_cm
 import os
@@ -25,7 +27,7 @@ sys.path.insert(1, './py_functions/')
 from time_functions import datenum2date, date2datenum, calcTime_Mat2DOY, calcTime_Date2DOY
 from readMAT import readMatlabStruct
 from manipFuncts import intersect_mtlb
-from physFuncts import calcSH
+from physFuncts import calcSH_mr, calcSH_wvp, calcvp,calcsvp,calcRH,calcDewPoint,calcP
 #from physFuncts import calcThetaE, calcThetaVL
 #from pyFixes import py3_FixNPLoad
 
@@ -84,7 +86,6 @@ def plot_surfaceVariables(obs, plot_out_dir, dates,**args  ):
     ### -------------------------------
     ### Build figure (timeseries)
     ### -------------------------------
-    #from IPython import embed; embed()
     fig = plt.figure(figsize=(18,10 ))
     #ax  = fig.add_axes([0.07,0.7,0.53,0.22])   # left, bottom, width, height
     ax  = fig.add_axes([0.07,0.7,0.7,0.22])   # left, bottom, width, height
@@ -129,7 +130,6 @@ def plot_surfaceVariables(obs, plot_out_dir, dates,**args  ):
     print ('')
 
     date=datenum2date(dates[0])
-#    from IPython import embed; embed()
     fileout = os.path.join(plot_out_dir,date.strftime('%Y%m%d') + '_surfaceVariables_ts.png')
     plt.savefig(fileout)
 
@@ -182,7 +182,6 @@ def plot_lwp(obs_data, plot_out_dir, dates,**args ):
     ### -------------------------------
     ### Build figure (timeseries)
     ### -------------------------------
-    #from IPython import embed; embed()
     fig = plt.figure(figsize=(18,10 ))
     #ax  = fig.add_axes([0.07,0.7,0.53,0.22])   # left, bottom, width, height
     ax  = fig.add_axes([0.07,0.7,0.7,0.22])   # left, bottom, width, height
@@ -212,7 +211,6 @@ def plot_lwp(obs_data, plot_out_dir, dates,**args ):
     print ('')
 
     date=datenum2date(datenum)
-#    from IPython import embed; embed()
     fileout = os.path.join(plot_out_dir,date.strftime('%Y%m%d') + '_lwp_ts.png')
     plt.savefig(fileout)
 
@@ -265,7 +263,6 @@ def plot_BLDepth_SMLDepth(obs_data, plot_out_dir, dates,**args ):
     ### -------------------------------
     ### Build figure (timeseries)
     ### -------------------------------
-    #from IPython import embed; embed()
     fig = plt.figure(figsize=(10,12 ))
     ax  = fig.add_axes([0.1,0.7,0.8,0.2])   # left, bottom, width, height
     yB = [-10, 120]
@@ -339,7 +336,6 @@ def plot_BLDepth_SMLDepth(obs_data, plot_out_dir, dates,**args ):
     print ('')
 
     dstr=datenum2date(dates[0])
-#    from IPython import embed; embed()
     fileout = os.path.join(plot_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_BLdepth-SML.png')
     plt.savefig(fileout)
 
@@ -510,7 +506,7 @@ def plot_Theta_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lo
 
     print ('******')
     print ('')
-    print ('Plotting T mean profiles split times:')
+    print ('Plotting Theta mean profiles split times:')
     print ('')
 
     ###----------------------------------------------------------------
@@ -534,7 +530,84 @@ def plot_Theta_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lo
     fcols=['lightcyan','lightblue','skyblue','blue']
     lcolsmonc=['gold','darkgoldenrod','darkorange','orangered','firebrick']
     fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
-    ### define axis instance
+
+    #plot RS, monc,um separately only first monc/um run
+    plt.figure(figsize=(18,8))
+    plt.subplots_adjust(top = 0.8, bottom = 0.1, right = 0.92, left = 0.08)
+    plt.subplot(1,3,1)
+    ax1 = plt.gca()
+    for pt in range(0,len(prof_time)):
+        lnmrks=['-','--','-.']
+        sstr=datenum2date(prof_time[pt][0])
+        estr=datenum2date(prof_time[pt][1])
+        lstr=sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC'
+        plt.title('RS')
+        # obsid= np.squeeze(np.argwhere((obs['hatpro_temp']['mday']>=prof_time[pt][0]) & (obs['hatpro_temp']['mday']<prof_time[pt][1])))
+        # plt.plot(np.nanmean(obs['hatpro_temp']['sh'][:,obsid],1),obs['hatpro_temp']['Z'],color =lcols[pt], linewidth = 3, label = 'HATPRO', zorder = obs_zorder)
+        #     #adding RS data
+        obsid= np.squeeze(np.argwhere((obs['sondes']['mday']>=prof_time[pt][0]-1/24) & (obs['sondes']['mday']<prof_time[pt][1])))
+        plt.plot(obs['sondes']['pottemp'][:,obsid]+273.15,obs['sondes']['Z'],color = lcols[pt], linewidth = 3, label = lstr, zorder = obs_zorder)
+    plt.ylim(ylims)
+    plt.yticks(yticks)
+    ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
+    ax1.set_yticklabels(ytlabels)
+    plt.xlabel('Theta [K]')
+    plt.ylabel('Z [km]')
+    plt.xlim([267,275])
+    plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=4)
+
+    plt.subplot(1,3,2)
+    ax1 = plt.gca()
+    plt.title(label[0])
+    for pt in range(0,len(prof_time)):
+        sstr=datenum2date(prof_time[pt][0])
+        estr=datenum2date(prof_time[pt][1])
+        lstr=sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC'
+        lnmrks=['-','--','-.']
+        if pum==True:
+            for m in range(0,1):
+                id= np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
+                plt.plot(np.nanmean(um_data[m]['theta'][id,:],0),um_data[m]['height'], color = lcols[pt], linewidth = 3, label = lstr, zorder = 1)
+    plt.ylim(ylims)
+    plt.yticks(yticks)
+    ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
+    ax1.set_yticklabels(ytlabels)
+    plt.xlabel('Theta [K]')
+    plt.ylabel('Z [km]')
+    plt.xlim([267,275])
+
+    plt.subplot(1,3,3)
+    plt.title(mlabel[0])
+    ax1 = plt.gca()
+    for pt in range(0,len(prof_time)):
+        sstr=datenum2date(prof_time[pt][0])
+        estr=datenum2date(prof_time[pt][1])
+        lstr=sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC'
+        if pmonc==True:
+            tvar=[]
+            zvar=[]
+            for m in range(0,1):
+                tvar+=[monc_data[m]['tvar']['th_mean']]
+                zvar+=[monc_data[m]['zvar']['th_mean']]
+                id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
+                plt.plot(np.nanmean(monc_data[m]['th_mean'][id,:],0),monc_data[m][zvar[m]], color = lcols[pt],linewidth = 3, label = lstr, zorder = 1)
+    plt.ylim(ylims)
+    plt.yticks(yticks)
+    ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
+    ax1.set_yticklabels(ytlabels)
+    plt.xlabel('Theta [K]')
+    plt.ylabel('Z [km]')
+    plt.xlim([267,275])
+    dstr=datenum2date(dates[1])
+    # plt.grid('on')
+    if pmonc==True:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' +outstr[0] + '_' +moutstr[0] + '_theta-profile'  + '_platform_split.png'
+    else:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + +outstr[0] +'_theta-profile'  + '_platform_split.png'
+
+    plt.savefig(fileout,dpi=300)
+
+
     ####temperature using hatpro temperature profiles for observations
     plt.figure(figsize=(18,8))
     plt.subplots_adjust(top = 0.8, bottom = 0.1, right = 0.92, left = 0.08)
@@ -593,7 +666,7 @@ def plot_Theta_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lo
 
         plt.xlabel('Theta [K]')
         plt.ylabel('Z [km]')
-        plt.xlim([267,275])
+        plt.xlim([267,277])
         # plt.yticks(np.arange(0,5.01e3,0.5e3))
         # ax1.set_yticklabels([0,' ',1,' ',2,' ',3,' ',4,' ',5])
         plt.ylim(ylims)
@@ -638,16 +711,60 @@ def plot_q_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
                 label = args[list(args.keys())[n]]
             elif list(args.keys())[n] == 'outstr':
                 outstr= args[list(args.keys())[n]]
-
     if pmonc==True:
         for m in range(0,len(monc_data)):
-            monc_data[m]['sh']=calcSH(monc_data[m]['T_mean'],monc_data[m]['p_mean'])
+            monc_data[m]['sh']=calcSH_mr(monc_data[m]['q_vapour_mean'],monc_data[m]['p_mean'])
+            monc_data[m]['svp']=calcsvp(monc_data[m]['T_mean'])
+            monc_data[m]['dp']=calcDewPoint(monc_data[m]['q_vapour_mean'],monc_data[m]['p_mean'])
 
+    if pum==True:
+        for m in range(0,len(um_data)):
+            um_data[m]['rh_calc']=calcRH(um_data[m]['temperature'],um_data[m]['pressure']/100,um_data[m]['q'])
+            um_data[m]['svp_calc']=calcsvp(um_data[m]['temperature'])
+            um_data[m]['dp_calc']=calcDewPoint(um_data[m]['q'],um_data[m]['pressure'])
+    obs['hatpro_temp']['svp']=calcsvp(obs['hatpro_temp']['temperature'])
+    obs['hatpro_temp']['p']=calcP(obs['hatpro_temp']['temperature'],obs['hatpro_temp']['pottemp'])
+    obs['hatpro_temp']['vp']=obs['hatpro_temp']['rh']*obs['hatpro_temp']['svp']/100
+    obs['hatpro_temp']['sh']=calcSH_wvp(obs['hatpro_temp']['vp'],obs['hatpro_temp']['p'])
 
+        #for testing purposes only
+    # obs['sondes']['sh_calc']=calcSH_mr(obs['sondes']['mr'],obs['sondes']['pressure'])
+    # obs['sondes']['sh_calc1']=calcSH_wvp(obs['sondes']['vp'],obs['sondes']['pressure'])
+    # obs['sondes']['vp_calc']=calcvp(obs['sondes']['dewp'])
+    # obs['sondes']['svp_calc']=calcsvp(obs['sondes']['temperature'])
+
+    ####temperature using hatpro temperature profiles for observations
+    # plt.figure(figsize=(18,8))
+    # plt.subplots_adjust(top = 0.8, bottom = 0.1, right = 0.92, left = 0.08)
+    # for pt in range(0,len(prof_time)):
+    #     plt.subplot(1,len(prof_time),pt+1)
+    #     ax1 = plt.gca()
+    #     sstr=datenum2date(prof_time[pt][0])
+    #     estr=datenum2date(prof_time[pt][1])
+    #     plt.title(sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC')
+    #     obsid= np.squeeze(np.argwhere((obs['hatpro_temp']['mday']>=prof_time[pt][0]) & (obs['hatpro_temp']['mday']<prof_time[pt][1])))
+    #     plt.plot(np.nanmean(obs['hatpro_temp']['sh'][:,obsid],1),obs['hatpro_temp']['Z'], color = 'k', linewidth = 3, label = 'HATPRO', zorder = obs_zorder)
+    #         #adding RS data
+    #     obsid= np.squeeze(np.argwhere((obs['sondes']['mday']>=prof_time[pt][0]-1/24) & (obs['sondes']['mday']<prof_time[pt][1])))
+    #     plt.plot(obs['sondes']['sphum'][:,obsid],obs['sondes']['Z'], color = 'grey', linewidth = 3, label = 'RS', zorder = obs_zorder)
+    #     ylims=[0,2]
+    #     yticks=np.arange(0,2e3,0.5e3)
+    #     ytlabels=yticks/1e3
+    #
+    #         # ax1.set_yticklabels([0,' ',1,' ',2,' ',3,' ',4,' ',5])
+    #     plt.ylim(ylims)
+    #     plt.yticks(yticks)
+    #     ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
+    #     ax1.set_yticklabels(ytlabels)
+    #
+    # plt.show()
+
+    #############################################################
+    ### PLOTTING
+    ############################################################
     ylims=[0,2]
     yticks=np.arange(0,2e3,0.5e3)
     ytlabels=yticks/1e3
-
 
     print ('******')
     print ('')
@@ -668,13 +785,91 @@ def plot_q_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
     plt.rc('xtick',labelsize=MED_SIZE)
     plt.rc('ytick',labelsize=MED_SIZE)
     plt.rc('legend',fontsize=SMALL_SIZE)
-    # plt.subplots_adjust(top = 0.95, bottom = 0.12, right = 0.95, left = 0.15,
-    #         hspace = 0.4, wspace = 0.1)
     ###define colors
     lcols=['lightseagreen','steelblue','royalblue','darkblue']
     fcols=['lightcyan','lightblue','skyblue','blue']
     lcolsmonc=['gold','darkgoldenrod','darkorange','orangered','firebrick']
     fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
+
+    #plot RS, monc,um separately only first monc/um run
+    plt.figure(figsize=(18,8))
+    plt.subplots_adjust(top = 0.8, bottom = 0.1, right = 0.92, left = 0.08)
+    plt.subplot(1,3,1)
+    ax1 = plt.gca()
+    for pt in range(0,len(prof_time)):
+        lnmrks=['-','--','-.']
+        sstr=datenum2date(prof_time[pt][0])
+        estr=datenum2date(prof_time[pt][1])
+        lstr=sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC'
+        plt.title('RS')
+        # obsid= np.squeeze(np.argwhere((obs['hatpro_temp']['mday']>=prof_time[pt][0]) & (obs['hatpro_temp']['mday']<prof_time[pt][1])))
+        # plt.plot(np.nanmean(obs['hatpro_temp']['sh'][:,obsid],1),obs['hatpro_temp']['Z'],color =lcols[pt], linewidth = 3, label = 'HATPRO', zorder = obs_zorder)
+        #     #adding RS data
+        obsid= np.squeeze(np.argwhere((obs['sondes']['mday']>=prof_time[pt][0]-1/24) & (obs['sondes']['mday']<prof_time[pt][1])))
+        plt.plot(obs['sondes']['sphum'][:,obsid],obs['sondes']['Z'],color = lcols[pt], linewidth = 3, label = lstr, zorder = obs_zorder)
+    plt.ylim(ylims)
+    plt.yticks(yticks)
+    ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
+    ax1.set_yticklabels(ytlabels)
+    plt.xlabel('spec. hum [g/kg]')
+    plt.ylabel('Z [km]')
+    plt.xlim([1, 3])
+    plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=4)
+    plt.subplot(1,3,2)
+    ax1 = plt.gca()
+    plt.title(label[0])
+    for pt in range(0,len(prof_time)):
+        sstr=datenum2date(prof_time[pt][0])
+        estr=datenum2date(prof_time[pt][1])
+        lstr=sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC'
+        lnmrks=['-','--','-.']
+        if pum==True:
+            for m in range(0,1):
+                id= np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
+                plt.plot(np.nanmean(um_data[m]['q'][id,:]*1000,0),um_data[m]['height'], color = lcols[pt], linewidth = 3, label = lstr, zorder = 1)
+    plt.ylim(ylims)
+    plt.yticks(yticks)
+    ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
+    ax1.set_yticklabels(ytlabels)
+    plt.xlabel('spec. hum [g/kg]')
+    plt.ylabel('Z [km]')
+    plt.xlim([1, 3])
+
+    plt.subplot(1,3,3)
+    plt.title(mlabel[0])
+    ax1 = plt.gca()
+    for pt in range(0,len(prof_time)):
+        sstr=datenum2date(prof_time[pt][0])
+        estr=datenum2date(prof_time[pt][1])
+        lstr=sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC'
+        if pmonc==True:
+            tvar=[]
+            zvar=[]
+            for m in range(0,1):
+                tvar+=[monc_data[m]['tvar']['q_vapour_mean']]
+                zvar+=[monc_data[m]['zvar']['q_vapour_mean']]
+                id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
+                plt.plot(np.nanmean(monc_data[m]['sh'][id,:],0),monc_data[m][zvar[m]], color = lcols[pt],linewidth = 3, label = lstr, zorder = 1)
+    plt.ylim(ylims)
+    plt.yticks(yticks)
+    ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
+    ax1.set_yticklabels(ytlabels)
+    plt.xlabel('spec. hum [g/kg]')
+    plt.ylabel('Z [km]')
+    plt.xlim([1, 3])
+    dstr=datenum2date(dates[1])
+    # plt.grid('on')
+    if pmonc==True:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' +outstr[0] + '_' +moutstr[0] + '_q-profile'  + '_platform_split.png'
+    else:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + +outstr[0] +'_q-profile'  + '_platform_split.png'
+
+    plt.savefig(fileout,dpi=300)
+    print ('')
+    print ('Finished plotting! :)')
+    print ('')
+    print ('******')
+
     ### define axis instance
     ####temperature using hatpro temperature profiles for observations
     plt.figure(figsize=(18,8))
@@ -685,16 +880,16 @@ def plot_q_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
         sstr=datenum2date(prof_time[pt][0])
         estr=datenum2date(prof_time[pt][1])
         plt.title(sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC')
-        # obsid= np.squeeze(np.argwhere((obs['hatpro_temp']['mday']>=prof_time[pt][0]) & (obs['hatpro_temp']['mday']<prof_time[pt][1])))
-        # plt.plot(np.nanmean(obs['hatpro_temp']['temperature'][:,obsid],1),obs['hatpro_temp']['Z'], color = 'k', linewidth = 3, label = 'HATPRO', zorder = obs_zorder)
-        # ax1.fill_betweenx(obs['hatpro_temp']['Z'],np.nanmean(obs['hatpro_temp']['temperature'][:,obsid],1) - np.nanstd(obs['hatpro_temp']['temperature'][:,obsid],1),
-        #     np.nanmean(obs['hatpro_temp']['temperature'][:,obsid],1) + np.nanstd(obs['hatpro_temp']['temperature'][:,obsid],1), color = 'lightgrey', alpha = 0.5)
-        # # plt.xlim([0,0.2])
-        # plt.plot(np.nanmean(obs['hatpro_temp']['temperature'][:,obsid],1) - np.nanstd(obs['hatpro_temp']['temperature'][:,obsid],1),obs['hatpro_temp']['Z'],
-        #     '--', color = 'k', linewidth = 0.5)
-        # plt.plot(np.nanmean(obs['hatpro_temp']['temperature'][:,obsid],1) + np.nanstd(obs['hatpro_temp']['temperature'][:,obsid],1), obs['hatpro_temp']['Z'],
-        #     '--', color = 'k', linewidth = 0.5)
-        # embed()
+        plt.title(sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC')
+        obsid= np.squeeze(np.argwhere((obs['hatpro_temp']['mday']>=prof_time[pt][0]) & (obs['hatpro_temp']['mday']<prof_time[pt][1])))
+        plt.plot(np.nanmean(obs['hatpro_temp']['sh'][:,obsid],1),obs['hatpro_temp']['Z'], color = 'k', linewidth = 3, label = 'HATPRO', zorder = obs_zorder)
+        ax1.fill_betweenx(obs['hatpro_temp']['Z'],np.nanmean(obs['hatpro_temp']['sh'][:,obsid],1) - np.nanstd(obs['hatpro_temp']['sh'][:,obsid],1),
+            np.nanmean(obs['hatpro_temp']['sh'][:,obsid],1) + np.nanstd(obs['hatpro_temp']['sh'][:,obsid],1), color = 'lightgrey', alpha = 0.5)
+        # plt.xlim([0,0.2])
+        plt.plot(np.nanmean(obs['hatpro_temp']['sh'][:,obsid],1) - np.nanstd(obs['hatpro_temp']['sh'][:,obsid],1),obs['hatpro_temp']['Z'],
+            '--', color = 'k', linewidth = 0.5)
+        plt.plot(np.nanmean(obs['hatpro_temp']['sh'][:,obsid],1) + np.nanstd(obs['hatpro_temp']['sh'][:,obsid],1), obs['hatpro_temp']['Z'],
+            '--', color = 'k', linewidth = 0.5)
         #adding RS data
         obsid= np.squeeze(np.argwhere((obs['sondes']['mday']>=prof_time[pt][0]-1/24) & (obs['sondes']['mday']<prof_time[pt][1])))
         plt.plot(obs['sondes']['sphum'][:,obsid],obs['sondes']['Z'], color = 'grey', linewidth = 3, label = 'RS', zorder = obs_zorder)
@@ -735,7 +930,7 @@ def plot_q_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
 
         plt.xlabel('spec. hum [g/kg]')
         plt.ylabel('Z [km]')
-        #plt.xlim([260,271])
+        plt.xlim([1, 3])
         # plt.yticks(np.arange(0,5.01e3,0.5e3))
         # ax1.set_yticklabels([0,' ',1,' ',2,' ',3,' ',4,' ',5])
         plt.ylim(ylims)
@@ -754,6 +949,145 @@ def plot_q_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) +'_q-profile'  + '_split.png'
 
     plt.savefig(fileout,dpi=300)
+    print ('')
+    print ('Finished plotting! :)')
+    print ('')
+    print ('******')
+
+def plot_T_Timeseries(obs,plots_out_dir, dates,prof_time, **args): #, lon, lat):
+
+    numsp=1
+    if bool(args):
+        for n in range(0,len(args)):
+            if  list(args.keys())[n] == 'monc_data':
+                monc_data=args[list(args.keys())[n]]
+                numsp += len(monc_data)
+                pmonc=True
+            elif list(args.keys())[n] == 'mlabel':
+                mlabel = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'moutstr':
+                moutstr= args[list(args.keys())[n]]
+            elif  list(args.keys())[n] == 'um_data':
+                um_data=args[list(args.keys())[n]]
+                numsp += len(um_data)
+                pum=True
+            elif list(args.keys())[n] == 'label':
+                label = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'outstr':
+                outstr= args[list(args.keys())[n]]
+
+
+    ylims=[0,3]
+    yticks=np.arange(0,3e3,0.5e3)
+    ytlabels=yticks/1e3
+
+    SMALL_SIZE = 10
+    MED_SIZE = 14
+    LARGE_SIZE = 16
+
+    plt.rc('font',size=MED_SIZE)
+    plt.rc('axes',titlesize=MED_SIZE)
+    plt.rc('axes',labelsize=MED_SIZE)
+    plt.rc('xtick',labelsize=MED_SIZE)
+    plt.rc('ytick',labelsize=MED_SIZE)
+    plt.rc('legend',fontsize=MED_SIZE)
+
+    viridis = mpl_cm.get_cmap('viridis', 256) # nice colormap purple to yellow
+    newcolors = viridis(np.linspace(0, 1, 256)) #assgin new colormap with viridis colors
+    greyclr = np.array([0.1, 0.1, 0.1, 0.1])
+    newcolors[:1, :] = greyclr   # make first 20 colors greyclr
+    newcmp = ListedColormap(newcolors)
+
+    print ('******')
+    print ('')
+    print ('Plotting T timeseries for CaseStudy:')
+    print ('')
+    embed()
+    clev=np.arange(258,271,0.5)
+    #####PlotLwc###############################################
+    yheight=3
+    rows=int(np.ceil(numsp/2))
+    fig = plt.figure(figsize=(18,yheight*rows+1))
+    plt.subplots_adjust(top = 0.92, bottom = 0.06, right = 0.92, left = 0.08,
+            hspace = 0.4, wspace = 0.2)
+    plt.subplot(rows,2,1)
+    ax = plt.gca()
+    img = plt.contourf(obs['hatpro_temp']['mday'], np.squeeze(obs['hatpro_temp']['Z']), obs['hatpro_temp']['temperature'],
+        levels=clev,cmap = newcmp)
+    for pt in range(0,len(prof_time)):
+        plt.plot([prof_time[pt][0],prof_time[pt][0]],np.array(ylims)*1e3,'--k')
+    plt.ylabel('Z [km]')
+    plt.ylim(ylims)
+    plt.yticks(yticks)
+    ax.set_yticklabels(ytlabels)
+    plt.xlim([dates[0], dates[1]])
+    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+    #nans = ax.get_ylim()
+    ax2 = ax.twinx()
+    ax2.set_ylabel('Measurements', rotation = 270, labelpad = 27,labelsize=SMALL_SIZE)
+    ax2.set_yticks([])
+    #plt.title('Obs-' + obs_switch + 'grid')
+    cbaxes = fig.add_axes([0.225, 0.95, 0.6, 0.015])
+    cb = plt.colorbar(img, cax = cbaxes, orientation = 'horizontal')
+    plt.title('Temperature [K]')
+    if pum==True:
+        for m in range(0,len(um_data)):
+            plt.subplot(rows,2,m+2)
+            ax = plt.gca()
+            plt.contourf(um_data[m]['time'], np.squeeze(um_data[m]['height']), np.transpose(um_data[m]['temperature']),
+                levels=clev,cmap = newcmp)
+            for pt in range(0,len(prof_time)):
+                plt.plot([prof_time[pt][0],prof_time[pt][0]],np.array(ylims)*1e3,'--k')
+            plt.ylabel('Z [km]')
+            plt.ylim(ylims)
+            plt.yticks(yticks)
+            ax.set_yticklabels(ytlabels)
+            plt.xlim([dates[0], dates[1]])
+            ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+            ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+            ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+            ax2 = ax.twinx()
+            ax2.set_ylabel(label[m], rotation = 270, labelpad = 27,labelsize=SMALL_SIZE)
+            ax2.set_yticks([])
+            # plt.colorbar()
+            if m== numsp:
+                plt.xlabel('Date')
+
+    if pmonc==True:
+        tvar=[]
+        zvar=[]
+        for m in range(0,len(monc_data)):
+            tvar+=[monc_data[m]['tvar']['T_mean']]
+            zvar+=[monc_data[m]['zvar']['T_mean']]
+            plt.subplot(rows,2,numsp-len(monc_data)+1+m)
+            ax = plt.gca()
+            # ax.set_facecolor('aliceblue')
+            plt.contourf(monc_data[m][tvar[m]], np.squeeze(monc_data[m][zvar[m]][:]), np.transpose(monc_data[m]['T_mean']),
+            levels=clev,cmap = newcmp)
+            for pt in range(0,len(prof_time)):
+                plt.plot([prof_time[pt][0],prof_time[pt][0]],np.array(ylims)*1e3,'--k')
+            plt.ylabel('Z [km]')
+            plt.ylim(ylims)
+            plt.yticks(yticks)
+            ax.set_yticklabels(ytlabels)
+            ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+            ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+            ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+            plt.xlabel('Time (UTC)')
+            ax2 = ax.twinx()
+            ax2.set_ylabel(mlabel[m], rotation = 270, labelpad = 27,labelsize=SMALL_SIZE)
+            ax2.set_yticks([])
+
+    dstr=datenum2date(dates[1])
+    if pmonc == True:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) +'_' + '_'.join(moutstr) + '_T-Timeseries'+ lwcstr + '.png'
+    else:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_T-Timeseries'+ lwcstr + '.png'
+    plt.savefig(fileout)
+    plt.close()
+
     print ('')
     print ('Finished plotting! :)')
     print ('')
@@ -934,7 +1268,7 @@ def main():
     for var in nc[0].variables: print(var)
     var_list1 = ['u_10m','v_10m', 'air_temperature_at_1.5m','q_1.5m','rh_1.5m','visibility','dew_point_temperature_at_1.5m','LWP','IWP',
                 'surface_net_SW_radiation','surface_net_LW_radiation','surface_downwelling_LW_radiation','surface_downwelling_SW_radiation',
-                'sensible_heat_flux','latent_heat_flux', 'bl_depth','bl_type','temperature','theta','q']
+                'sensible_heat_flux','latent_heat_flux', 'bl_depth','bl_type','temperature','theta','q','pressure']
                 #PLOT FROM CLOUDNET:
                 #'temperature','q','pressure','bl_depth','bl_type','qliq','qice','uwind','vwind','wwind',
                 #'cloud_fraction','radr_refl','rainfall_flux','snowfall_flux',]#
@@ -1085,6 +1419,7 @@ def main():
     ## -------------------------------------------------------------
     ## remove spin up time from monc data
     ## -------------------------------------------------------------
+    embed()
     monc_data=removeSpinUp(monc_data,monc_spin)
 
     ## -------------------------------------------------------------
@@ -1345,10 +1680,11 @@ def main():
     #figure = plot_surfaceVariables(obs,plot_out_dir, dates, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_lwp(obs,plot_out_dir, dates, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_T_profiles_split(obs,plots_out_dir,dates, prof_time,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    figure = plot_q_profiles_split(obs,plots_out_dir,dates, prof_time,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    #figure = plot_q_profiles_split(obs,plots_out_dir,dates, prof_time,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_Theta_profiles_split(obs,plots_out_dir,dates, prof_time,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_BLDepth_SMLDepth(obs,plot_out_dir, dates, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
+    figure = plot_T_Timeseries(obs,plot_out_dir, dates,prof_time, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
     ### example plot list from Gillians Script:
     #figure = plot_radiation(obs,plot_out_dir, dates,plot_out_dir, um_data=um_data,label=label,outsr=outsr, monc_data=monc_data,mlabel=mlabel,moutsr=moutsr)
