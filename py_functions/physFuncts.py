@@ -163,30 +163,34 @@ def calcThetaVL(temperature, pressure, q, ql, qi, tim, height):
 
     return theta, theta_l, theta_vl
 
-def svp(T):
+def calcsvp(T):
 
     """
     Function to calculate saturation vapour pressure
     ==============================
     inputs:
-    temperature = K
+    temperature in K or C
+    output:
+    SVP in hPa
 
     """
     #converting K
     tempC = T
     tempC[tempC>200] = tempC[tempC>200] - 273.15
 
-    satvappres = 6.112 * np.exp( 17.67*tempC / (tempC + 243.5) ) * 100
+    satvappres = 6.112 * np.exp( 17.67*tempC / (tempC + 243.5) )
 
     return satvappres
 
-def vp(T):
+def calcvp(T):
 
     """
     Function to calculate  vapour pressure
     ==============================
     inputs:
     temperature = K or C
+    if T=ambient then vp=saturation vapour pressure at T
+    if T=DP then vp=ambient vapour pressure at ambient air temp
 
     """
     #converting K
@@ -233,6 +237,7 @@ def calcRH(temperature, pressure, q):
 
     """
     Function to calculate RH from given water vapour mixing ratio
+    also works with specific humidity
     ==============================
     inputs:
     pressure = Pa
@@ -282,18 +287,84 @@ def calcT(theta,pressure):
     temperature = theta / np.power(p0 / pressure,Rd/cp)
     return temperature
 
+def calcDewPoint(mr,p ):
 
-def calcSH(T,p):
+    """
+    Function to calculate  dewpoint
+    equation & constants from Roger & Yau, 'Short course in cloud physics', Eqn 2.28
+    ==============================
+    inputs:
+    pressure in hPa
+    vapour mixing ratio (mr)  in g/kg or kg/kg
+    """
+
+    A=2.53e9
+    B=5.42e3
+    epsilon=0.622
+
+    # convert to hPa if necessary
+    if (p>9000).any():
+        p=p/100
+    #convert Q to kg/kg
+    if (mr>1).any():
+        mr=mr/1000
+    # check Q for -ve values (yes it has happened!!)
+    mr[mr<0]=mr[mr<0]*0+1e-6
+
+    dp=B/np.log(A*epsilon/(mr*p))
+
+    return dp
+
+def calcSH_mr(mr,p):
 
     """
     Function to calculate  specific humidity
     ==============================
     inputs:
-    temperature = K or C
+    vapour mixing ratio in in g/kg or kg/kg
     pressure = hpa
     """
-
-    wvp = vp(T)
+    Td = calcDewPoint(mr,p)
+    wvp = calcvp(Td)  # vp at Td is actual vapour pressure
     sh=0.622*wvp/(p-0.378*wvp)*1000
 
     return sh
+
+def calcSH_wvp(wvp,p):
+
+    """
+    Function to calculate  specific humidity
+    ==============================
+    inputs:
+    water vapour pressure hPa
+    pressure = hpa
+    """
+    #convert vp to hpa
+    if (wvp>100).any():
+        wvp=wvp/100
+
+    # convert to hPa if necessary
+    if (p>9000).any():
+        p=p/100
+
+    sh=0.622*wvp/(p-0.378*wvp)*1000
+
+    return sh
+
+def calcP(T,Theta):
+
+    cpd = 1005.7     # J/kg.K
+    Rd = 287.04   # dry air J kg^-1 K^-1
+
+    kd = Rd/cpd     # k dry air
+
+    if (T<100).any():
+        T+=273.15
+
+    if (Theta<100).any():
+        Theta+=273.15
+
+    p0=1000
+    p=p0/np.power(Theta/T,1/kd)
+
+    return p
