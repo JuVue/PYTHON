@@ -348,7 +348,7 @@ def main():
     mlabel=[]
     moutstr=[]
     for m in range(0, len(m_out_dir)):
-        if m_out_dir[m][:1] == '3':
+        if m_out_dir[m][:2] == '3_':
             mlabel.append('MONC nosub')
             moutstr.append('Mnowsub')
         elif m_out_dir[m][:1] == '4':
