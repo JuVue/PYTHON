@@ -436,7 +436,7 @@ def main():
 
     #---- MONC SPIN UP TIME
     spin6 = ['26']
-    spin8 = ['27','28','29']
+    spin8 = ['27','28','29','30']
 
     if m_out_dir[0][:2] in spin6:
         monc_spin = 6 *60 *60

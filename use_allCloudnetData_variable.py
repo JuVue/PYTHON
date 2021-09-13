@@ -3373,14 +3373,14 @@ def main():
             moutstr.append('MONC-29B')
         elif m_out_dir[m][:3] == '30A':
             mlabel.append('MONC_0.1Cooper_FixedNd10_uvRelax')
-            moutstr.append('MONC-30A')            
+            moutstr.append('MONC-30A')
         else:
             label.append('undefined_label')
             moutstr.append('')
 
     #---- MONC SPIN UP TIME
     spin6 = ['26']
-    spin8 = ['27','28','29']
+    spin8 = ['27','28','29','30']
 
     if m_out_dir[0][:2] in spin6:
         monc_spin = 6 *60 *60
