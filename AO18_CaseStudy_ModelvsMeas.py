@@ -1879,28 +1879,28 @@ def main():
     mlabel=[]
     moutstr=[]
     for m in range(0, len(m_out_dir)):
-        if m_out_dir[m][:1] == '3':
-            mlabel.append('MONC nosub')
-            moutstr.append('Mnowsub')
-        elif m_out_dir[m][:1] == '4':
-            mlabel.append('MONC Wsub1.5')
-            moutstr.append('Mwsub')
-        elif m_out_dir[m][:1] == '5':
-            mlabel.append('MONC Wsub1.5 \n Fletcher')
-            moutstr.append('Mwsubfle')
-        elif m_out_dir[m][:1] == '6':
-            mlabel.append('MONC Wsub1.5-1km')
-            moutstr.append('Mwsub1.5-1km')
-        elif m_out_dir[m][:1] == '7':
-            mlabel.append('MONC Wsub1.5-1km \n solACC-100')
-            moutstr.append('Mwsub1kmsolACC100')
-        elif m_out_dir[m][:1] == '8':
-            mlabel.append('MONC Wsub1.0-1km')
-            moutstr.append('Mwsub1.0-1km')
-        elif m_out_dir[m][:1] == '9':
-            mlabel.append('MONC Wsub0.5-1km')
-            moutstr.append('Mwsub0.5-1km')
-        elif m_out_dir[m][:2] == '20':
+        # if m_out_dir[m][:1] == '3':
+        #     mlabel.append('MONC nosub')
+        #     moutstr.append('Mnowsub')
+        # elif m_out_dir[m][:1] == '4':
+        #     mlabel.append('MONC Wsub1.5')
+        #     moutstr.append('Mwsub')
+        # elif m_out_dir[m][:1] == '5':
+        #     mlabel.append('MONC Wsub1.5 \n Fletcher')
+        #     moutstr.append('Mwsubfle')
+        # elif m_out_dir[m][:1] == '6':
+        #     mlabel.append('MONC Wsub1.5-1km')
+        #     moutstr.append('Mwsub1.5-1km')
+        # elif m_out_dir[m][:1] == '7':
+        #     mlabel.append('MONC Wsub1.5-1km \n solACC-100')
+        #     moutstr.append('Mwsub1kmsolACC100')
+        # elif m_out_dir[m][:1] == '8':
+        #     mlabel.append('MONC Wsub1.0-1km')
+        #     moutstr.append('Mwsub1.0-1km')
+        # elif m_out_dir[m][:1] == '9':
+        #     mlabel.append('MONC Wsub0.5-1km')
+        #     moutstr.append('Mwsub0.5-1km')
+        if m_out_dir[m][:2] == '20':
             mlabel.append('MONC qinit2 800m \n thqvTend noice')
             moutstr.append('qin2-thqvTend-noice')
         elif m_out_dir[m][:2] == '22':
@@ -1928,28 +1928,28 @@ def main():
             mlabel.append('MONC_0.5Cooper_FixedNd50')
             moutstr.append('MONC-27B')
         elif m_out_dir[m][:3] == '27C':
-            mlabel.append('MONC_0.1Cooper \n FixedNd50')
+            mlabel.append('MONC_0.1Cooper FixedNd50')
             moutstr.append('MONC-27C')
         elif m_out_dir[m][:3] == '27D':
-            mlabel.append('MONC_0.1Cooper \n FixedNd25')
+            mlabel.append('MONC_0.1Cooper FixedNd25')
             moutstr.append('MONC-27D')
         elif m_out_dir[m][:3] == '27E':
-            mlabel.append('MONC_0.1Cooper \n FixedNd10')
+            mlabel.append('MONC_0.1Cooper FixedNd10')
             moutstr.append('MONC-27E')
         elif m_out_dir[m][:3] == '27F':
-            mlabel.append('MONC_0.1Cooper \n FixedNd5')
+            mlabel.append('MONC_0.1Cooper FixedNd5')
             moutstr.append('MONC-27F')
         elif m_out_dir[m][:3] == '28A':
-            mlabel.append('MONC_0.1Cooper \n CASIM-100-ARG')
+            mlabel.append('MONC_0.1Cooper CASIM-100-ARG')
             moutstr.append('MONC-28A')
         elif m_out_dir[m][:3] == '28B':
-            mlabel.append('MONC_0.1Cooper \n CASIM-100-Twomey')
+            mlabel.append('MONC_0.1Cooper CASIM-100-Twomey')
             moutstr.append('MONC-28B')
         elif m_out_dir[m][:3] == '29A':
-            mlabel.append('MONC_0.1Cooper \n CASIM-20-ARG')
+            mlabel.append('MONC_0.1Cooper CASIM-20-ARG')
             moutstr.append('MONC-29A')
         elif m_out_dir[m][:3] == '29B':
-            mlabel.append('MONC_0.1Cooper \n CASIM-20-allAct')
+            mlabel.append('MONC_0.1Cooper CASIM-20-allAct')
             moutstr.append('MONC-29B')
         elif m_out_dir[m][:3] == '30A':
             mlabel.append('MONC_0.1Cooper \n UVRelax FixedNd10')
