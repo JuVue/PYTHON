@@ -1142,7 +1142,7 @@ def plot_Theta_Timeseries(obs,plots_out_dir, dates,prof_time, **args): #, lon, l
     print ('')
     print ('Plotting Theta timeseries for CaseStudy:')
     print ('')
-    embed()
+
     clev=np.arange(267,290, 0.2)
     #####PlotLwc###############################################
     yheight=3
@@ -1301,7 +1301,6 @@ def plot_q_Timeseries(obs,plots_out_dir, dates,prof_time, **args): #, lon, lat):
     print ('')
     print ('Plotting q timeseries for CaseStudy:')
     print ('')
-    embed()
     clev=np.arange(0 ,2.8, 0.05)
     #####PlotLwc###############################################
     yheight=3
@@ -1952,7 +1951,7 @@ def main():
         elif m_out_dir[m][:3] == '29B':
             mlabel.append('MONC_0.1Cooper \n CASIM-20-allAct')
             moutstr.append('MONC-29B')
-        elif m_out_dir[m][:3] == '29B':
+        elif m_out_dir[m][:3] == '30A':
             mlabel.append('MONC_0.1Cooper \n UVRelax FixedNd10')
             moutstr.append('MONC-30A')
         else:
@@ -1961,7 +1960,6 @@ def main():
 
 
 
-    # embed()
     #
     # #sfml height from hatpro
     # a=[]
