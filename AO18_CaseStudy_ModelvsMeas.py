@@ -1662,7 +1662,6 @@ def main():
         for n in range(0, len(monc_filename[m])):
             #print(monc_filename[m][n])
             ncm = Dataset(monc_filename[m][n],'r')
-            embed()
             if n == 0:
                 print('initialise monc_data' + str(m) )
                 monc_data[m]={}
