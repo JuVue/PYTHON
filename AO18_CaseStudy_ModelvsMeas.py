@@ -533,7 +533,7 @@ def plot_Theta_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lo
     cols=(len(um_data)+len(monc_data)+1)/2
     #plot RS, monc,um separately only first monc/um run
     plt.figure(figsize=(18,10))
-    plt.subplots_adjust(top = 0.8, bottom = 0.1, right = 0.92, left = 0.08)
+    plt.subplots_adjust(top = 0.9, bottom = 0.1, right = 0.92, left = 0.08, hspace=0.5)
     plt.subplot(2,cols,1)
     ax1 = plt.gca()
     for pt in range(0,len(prof_time)):
@@ -796,7 +796,7 @@ def plot_q_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
 
     #plot RS, monc,um separately only first monc/um run
     plt.figure(figsize=(18,8))
-    plt.subplots_adjust(top = 0.9, bottom = 0.1, right = 0.92, left = 0.08,hspace=0.1)
+    plt.subplots_adjust(top = 0.9, bottom = 0.1, right = 0.92, left = 0.08,hspace=0.5)
     plt.subplot(2,cols,1)
     ax1 = plt.gca()
     for pt in range(0,len(prof_time)):
@@ -875,8 +875,7 @@ def plot_q_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
     print ('Finished plotting! :)')
     print ('')
     print ('******')
-    embed()
-    plt.show()
+
     ### define axis instance
     ####temperature using hatpro temperature profiles for observations
     plt.figure(figsize=(18,8))
