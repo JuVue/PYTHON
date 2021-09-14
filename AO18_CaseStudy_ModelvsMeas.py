@@ -1509,18 +1509,19 @@ def main():
     # out_dir3 = '24_u-cc324_RA2T_CON/'
 
     out_dir = ['23_u-cc278_RA1M_CASIM/',
-               '30_u-cg179_RA1M_CASIM/',
-              '26_u-cd847_RA1M_CASIM/',
-              '27_u-ce112_RA1M_CASIM/']
+              # '30_u-cg179_RA1M_CASIM/',
+              # '26_u-cd847_RA1M_CASIM/',
+              # '27_u-ce112_RA1M_CASIM/'
+              ]
 #    out_dir = [  '30_u-cg179_RA1M_CASIM/' ]
     ### CHOOSE MONC RUNS
     m_out_dir =[#'22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/'
-                '27C_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper/',
-                '27D_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd25/',
-                '27E_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd10/',
-                '27F_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd5/',
-                '30A_20180913T0000Z_8hSpinUp_8-14hUVRelax0600_14-24hUVRelax1200_8-24h0.1Cooper_FixedNd10/']
-
+                # '27C_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper/',
+                # '27D_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd25/',
+                # '27E_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd10/',
+                # '27F_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd5/',
+                '30A_20180913T0000Z_8hSpinUp_8-14hUVRelax0600_14-24hUVRelax1200_8-24h0.1Cooper_FixedNd10/'
+                ]
     # m_out_dir = ['5_control_20180913T0000Z_Wsub-1.5_Fletcher/',
     #             '6_control_20180913T0000Z_Wsub-1.5-1km/',
     #             '7_20180913T0000Z_Wsub-1.5-1km_solAccum-100_inuc-0_iact-3/']
@@ -1568,6 +1569,7 @@ def main():
     for m in range(0, len(out_dir)):
         filename_um = um_root_dir + out_dir[m] + um_sub_dir + strdate + '_oden_metum.nc'
         nc[m] = Dataset(filename_um,'r')
+        embed()
     # -------------------------------------------------------------
     print ('')
     #### LOAD IN SPECIFIC DIAGNOSTICS
@@ -1654,6 +1656,7 @@ def main():
         for n in range(0, len(monc_filename[m])):
             #print(monc_filename[m][n])
             ncm = Dataset(monc_filename[m][n],'r')
+            embed()
             if n == 0:
                 print('initialise monc_data' + str(m) )
                 monc_data[m]={}
