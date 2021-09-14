@@ -556,7 +556,7 @@ def plot_Theta_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lo
     plt.xlim([267,275])
     plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=4)
 
-    for m in range(0,len(um_data))
+    for m in range(0,len(um_data)):
         plt.subplot(2,cols,m+2)
         ax1 = plt.gca()
         plt.title(label[m])
@@ -577,7 +577,7 @@ def plot_Theta_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lo
         plt.ylabel('Z [km]')
         plt.xlim([267,275])
 
-    for m in range(0,len(monc_data)
+    for m in range(0,len(monc_data):
         plt.subplot(2,cols,len(um_data)+2+m)
         plt.title(mlabel[m])
         ax1 = plt.gca()
@@ -819,7 +819,7 @@ def plot_q_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
     plt.xlim([1, 3])
     plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=4)
 
-    for m in range(0,len(um_data))
+    for m in range(0,len(um_data)):
         plt.subplot(2,cols,m+2)
         ax1 = plt.gca()
         plt.title(label[m])
@@ -840,7 +840,7 @@ def plot_q_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
         plt.ylabel('Z [km]')
         plt.xlim([1, 3])
 
-    for m in range(0,len(monc_data)
+    for m in range(0,len(monc_data):
         plt.subplot(2,cols,len(um_data)+2+m)
         plt.title(mlabel[m])
         ax1 = plt.gca()
