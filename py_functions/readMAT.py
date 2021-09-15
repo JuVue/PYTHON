@@ -50,7 +50,6 @@ def readMatlabStruct(filename):
         #### --------------------------------------------------------------------
         a = struct[0,0]
         print (a.dtype.names)
-        embed()
             #### data.dtype:
                 #### returns keys of dictionary (normal python dictionary access
                 #### commands don't quite work...). MATLAB structs come back as
