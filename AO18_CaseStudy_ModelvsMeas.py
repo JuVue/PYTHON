@@ -1324,6 +1324,7 @@ def plot_tke_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon,
                                           monc_data[m]['vv_mean']+monc_data[m]['vvsg_mean']+
                                           monc_data[m]['ww_mean']+monc_data[m]['wwsg_mean'])
 
+
     #quality control of dissipation data following sandeeps SCRIPT
     # epsilonL >=0 or epsilonL<=-8 o epsilonL error >=350 set to NaN
     # same for radar data
@@ -1343,7 +1344,7 @@ def plot_tke_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon,
     a[a<=-8]=np.NaN
     a[b>=350]=np.NaN
     obs['dissR']['epsilon_corr']=a
-    obs['dissR']['height']=obs['dissR']['Lranges']*1000
+    obs['dissR']['height']=obs['dissR']['Rranges']*1000
 
     ylims=[0,2]
     yticks=np.arange(0,2e3,0.5e3)
