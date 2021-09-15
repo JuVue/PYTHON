@@ -381,7 +381,7 @@ def windcomp2windvec(u_ms,v_ms):
     #calculate wind velocity
     wsp = np.sqrt(u_ms*u_ms +v_ms*v_ms)
     wind_dir_trig_to = np.arctan2(u_ms/wsp, v_ms/wsp)
-    wind_dir_trig_to_degrees = wind_dir_trig_to * 180/pi ##
+    wind_dir_trig_to_degrees = wind_dir_trig_to * 180/np.pi ##
     wind_dir_trig_from_degrees = wind_dir_trig_to_degrees + 180 ##
     wind_dir_cardinal = 90 - wind_dir_trig_from_degrees
 
