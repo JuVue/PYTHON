@@ -380,9 +380,9 @@ def windcomp2windvec(u_ms,v_ms):
 
     #calculate wind velocity
     wsp = np.sqrt(u_ms*u_ms +v_ms*v_ms)
-    wind_dir_trig_to = np.arctan2(u_ms/wsp, v_ms/wsp)
-    wind_dir_trig_to_degrees = wind_dir_trig_to * 180/np.pi ##
-    wind_dir_trig_from_degrees = wind_dir_trig_to_degrees + 180 ##
-    wind_dir_cardinal = 90 - wind_dir_trig_from_degrees
-
-    return wsp,wind_dir_cardinal
+    wind_dir_trig = np.arctan2(u_ms/wsp, v_ms/wsp)  # arctan needs normalized wind components
+    wind_dir_trig_to_degrees = wind_dir_trig * 180/np.pi ## convert back to degrees from radians
+    wind_dir_trig_from_degrees = wind_dir_trig_to_degrees + 180 ## convert to met. wind directions
+    wd = wind_dir_trig_from_degrees
+    wd[wd==0]=360.
+    return wsp,wd
