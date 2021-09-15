@@ -1424,7 +1424,7 @@ def plot_tke_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon,
 
         plt.xlabel('tke [m2/s2]')
         plt.ylabel('Z [km]')
-        plt.xlim([0, 3])
+        plt.xlim([0, 1.5])
         plt.ylim(ylims)
         plt.yticks(yticks)
         ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
@@ -1436,9 +1436,9 @@ def plot_tke_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon,
     else:
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) +'_tke-profile'  + '_split.png'
     plt.savefig(fileout,dpi=300)
-    plt.show()
+    
 
-
+    embed()
     ####TKE DISSIPATION PLOTTING OBS & MONC
     plt.figure(figsize=(18,8))
     plt.subplots_adjust(top = 0.8, bottom = 0.1, right = 0.92, left = 0.08)
