@@ -1089,7 +1089,6 @@ def plot_wind_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon
         #ax1.set_xticklabels([0,' ',0.015,' ',0.03,' ',0.045,' ',0.06])
         # ax1.xaxis.set_minor_locator(ticker.MultipleLocator(0.0075))
     dstr=datenum2date(dates[1])
-    plt.show()
     # plt.grid('on')
     if pmonc==True:
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_ws-profile'  + '_split.png'
@@ -1159,7 +1158,6 @@ def plot_wind_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon
         ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
         ax1.set_yticklabels(ytlabels)
     dstr=datenum2date(dates[1])
-    plt.show()
     # plt.grid('on')
     if pmonc==True:
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_wd-profile'  + '_split.png'
@@ -2490,7 +2488,8 @@ def main():
     #figure = plot_lwp(obs,plot_out_dir, dates, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_T_profiles_split(obs,plots_out_dir,dates, prof_time,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_q_profiles_split(obs,plots_out_dir,dates, prof_time,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    figure = plot_wind_profiles_split(obs,plots_out_dir,dates, prof_time,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    #figure = plot_wind_profiles_split(obs,plots_out_dir,dates, prof_time,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_tke_profiles_split(obs,plots_out_dir,dates, prof_time,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_Theta_profiles_split(obs,plots_out_dir,dates, prof_time,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_BLDepth_SMLDepth(obs,plot_out_dir, dates, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
