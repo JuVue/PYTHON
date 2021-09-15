@@ -1317,7 +1317,6 @@ def plot_tke_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon,
             elif list(args.keys())[n] == 'outstr':
                 outstr= args[list(args.keys())[n]]
 
-    embed()
     if pmonc == True:
         for m in range(0,len(monc_data)):
             monc_data[m]['tke_mean']=0.5*(monc_data[m]['uu_mean']+monc_data[m]['vv_mean']+monc_data[m]['ww_mean'])
@@ -1325,6 +1324,8 @@ def plot_tke_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon,
                                           monc_data[m]['vv_mean']+monc_data[m]['vvsg_mean']+
                                           monc_data[m]['ww_mean']+monc_data[m]['wwsg_mean'])
 
+    obs['dissL']['diss_corr']=obs['dissL']['epsilon_L']
+    obs['dissL']['diss_corr'][]
 
 
     ylims=[0,2]
@@ -1359,7 +1360,7 @@ def plot_tke_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon,
     fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
     ### define axis instance
 
-    ####ws using halo VAD profiles for observations
+    ####TKE WITHOUT OBSERVATIONS
     plt.figure(figsize=(18,8))
     plt.subplots_adjust(top = 0.8, bottom = 0.1, right = 0.92, left = 0.08)
     for pt in range(0,len(prof_time)):
@@ -1368,15 +1369,76 @@ def plot_tke_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon,
         sstr=datenum2date(prof_time[pt][0])
         estr=datenum2date(prof_time[pt][1])
         plt.title(sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC')
-        # obsid= np.squeeze(np.argwhere((obs['halo']['mday']>=prof_time[pt][0]) & (obs['halo']['mday']<prof_time[pt][1])))
-        # plt.plot(np.nanmean(obs['halo']['ws'][:,obsid],1),obs['halo']['height'][:,0], color = 'k', linewidth = 3, label = 'Halo', zorder = obs_zorder)
-        # ax1.fill_betweenx(obs['halo']['height'][:,0],np.nanmean(obs['halo']['ws'][:,obsid],1) - np.nanstd(obs['halo']['ws'][:,obsid],1),
-        #     np.nanmean(obs['halo']['ws'][:,obsid],1) + np.nanstd(obs['halo']['ws'][:,obsid],1), color = 'lightgrey', alpha = 0.5)
-        # # plt.xlim([0,0.2])
-        # plt.plot(np.nanmean(obs['halo']['ws'][:,obsid],1) - np.nanstd(obs['halo']['ws'][:,obsid],1),obs['halo']['height'][:,0],
-        #     '--', color = 'k', linewidth = 0.5)
-        # plt.plot(np.nanmean(obs['halo']['ws'][:,obsid],1) + np.nanstd(obs['halo']['ws'][:,obsid],1), obs['halo']['height'][:,0],
-        #     '--', color = 'k', linewidth = 0.5)
+
+        if pum==True:
+            for m in range(0,len(um_data)):
+                id=  np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
+                ax1.fill_betweenx(um_data[m]['height2'],np.nanmean(um_data[m]['tke'][id,:],0) - np.nanstd(um_data[m]['tke'][id,:],0),
+                    np.nanmean(um_data[m]['tke'][id,:],0) + np.nanstd(um_data[m]['tke'][id,:],0), color = fcols[m], alpha = 0.05)
+                plt.plot(np.nanmean(um_data[m]['tke'][id,:],0) - np.nanstd(um_data[m]['tke'][id,:],0), um_data[m]['height2'],
+                    '--', color =lcols[m], linewidth = 0.5)
+                plt.plot(np.nanmean(um_data[m]['tke'][id,:],0) + np.nanstd(um_data[m]['tke'][id,:],0),um_data[m]['height2'],
+                    '--', color = lcols[m], linewidth = 0.5)
+        if pmonc==True:
+            tvar=[]
+            zvar=[]
+            for m in range(0,len(monc_data)):
+                tvar+=[monc_data[m]['tvar']['u_wind_mean']]
+                zvar+=[monc_data[m]['zvar']['u_wind_mean']]
+                id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
+                ax1.fill_betweenx(monc_data[m][zvar[m]],np.nanmean(monc_data[m]['tke_mean'][id,:],0) - np.nanstd(monc_data[m]['tke_mean'][id,:],0),
+                    np.nanmean(monc_data[m]['tke_mean'][id,:],0) + np.nanstd(monc_data[m]['tke_mean'][id,:],0), color = fcolsmonc[m], alpha = 0.05)
+                plt.plot(np.nanmean(monc_data[m]['tke_mean'][id,:],0) - np.nanstd(monc_data[m]['tke_mean'][id,:],0), monc_data[m][zvar[m]],
+                    '--', color =lcolsmonc[m], linewidth = 0.5)
+                plt.plot(np.nanmean(monc_data[m]['tke_mean'][id,:],0) + np.nanstd(monc_data[m]['tke_mean'][id,:],0), monc_data[m][zvar[m]],
+                    '--', color = lcolsmonc[m], linewidth = 0.5)
+        if pum==True:
+            for m in range(0,len(um_data)):
+                id= np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
+                plt.plot(np.nanmean(um_data[m]['tke'][id,:],0),um_data[m]['height2'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
+        if pmonc==True:
+            for m in range(0,len(monc_data)):
+                id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
+                plt.plot(np.nanmean(monc_data[m]['tke_mean'][id,:],0),monc_data[m][zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+                plt.plot(np.nanmean(monc_data[m]['tke_plus-sg_mean'][id,:],0),monc_data[m][zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+        if pt == 1:
+            plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=4)
+
+        plt.xlabel('tke [m2/s2]')
+        plt.ylabel('Z [km]')
+        plt.xlim([0, 3])
+        plt.ylim(ylims)
+        plt.yticks(yticks)
+        ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
+        ax1.set_yticklabels(ytlabels)
+    dstr=datenum2date(dates[1])
+    plt.show()
+    # plt.grid('on')
+    if pmonc==True:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_tke-profile'  + '_split.png'
+    else:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) +'_ws-profile'  + '_split.png'
+    plt.savefig(fileout,dpi=300)
+
+
+    ####TKE DISSIPATION PLOTTING OBS & MONC
+    plt.figure(figsize=(18,8))
+    plt.subplots_adjust(top = 0.8, bottom = 0.1, right = 0.92, left = 0.08)
+    for pt in range(0,len(prof_time)):
+        plt.subplot(1,len(prof_time),pt+1)
+        ax1 = plt.gca()
+        sstr=datenum2date(prof_time[pt][0])
+        estr=datenum2date(prof_time[pt][1])
+        plt.title(sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC')
+        obsid= np.squeeze(np.argwhere((obs['dissL']['mday']>=prof_time[pt][0]) & (obs['dissL']['mday']<prof_time[pt][1])))
+        plt.plot(np.nanmean(obs['dissL']['ws'][:,obsid],1),obs['dissL'][''][:,0], color = 'k', linewidth = 3, label = 'dissL', zorder = obs_zorder)
+        ax1.fill_betweenx(obs['dissL']['height'][:,0],np.nanmean(obs['dissL']['ws'][:,obsid],1) - np.nanstd(obs['dissL']['ws'][:,obsid],1),
+            np.nanmean(obs['dissL']['ws'][:,obsid],1) + np.nanstd(obs['dissL']['ws'][:,obsid],1), color = 'lightgrey', alpha = 0.5)
+        # plt.xlim([0,0.2])
+        plt.plot(np.nanmean(obs['dissL']['ws'][:,obsid],1) - np.nanstd(obs['dissL']['ws'][:,obsid],1),obs['dissL']['height'][:,0],
+            '--', color = 'k', linewidth = 0.5)
+        plt.plot(np.nanmean(obs['dissL']['ws'][:,obsid],1) + np.nanstd(obs['dissL']['ws'][:,obsid],1), obs['dissL']['height'][:,0],
+            '--', color = 'k', linewidth = 0.5)
         # #adding RS data
         # obsid= np.squeeze(np.argwhere((obs['sondes']['mday']>=prof_time[pt][0]-1/24) & (obs['sondes']['mday']<prof_time[pt][1])))
         # plt.plot(obs['sondes']['ws'][:,obsid],obs['sondes']['Z'], color = 'grey', linewidth = 3, label = 'RS', zorder = obs_zorder)
@@ -1411,29 +1473,24 @@ def plot_tke_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon,
             for m in range(0,len(monc_data)):
                 id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
                 plt.plot(np.nanmean(monc_data[m]['tke_mean'][id,:],0),monc_data[m][zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+                plt.plot(np.nanmean(monc_data[m]['tke_plus-sg_mean'][id,:],0),monc_data[m][zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
         if pt == 1:
             plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=4)
 
-        plt.xlabel('tke [m2/s2]')
+        plt.xlabel('tke [m^2/s^2]')
         plt.ylabel('Z [km]')
         plt.xlim([0, 3])
-        # plt.yticks(np.arange(0,5.01e3,0.5e3))
-        # ax1.set_yticklabels([0,' ',1,' ',2,' ',3,' ',4,' ',5])
         plt.ylim(ylims)
         plt.yticks(yticks)
         ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
         ax1.set_yticklabels(ytlabels)
-        # plt.xlim([0,0.05])
-        # plt.xticks(np.arange(0,0.051,0.015))
-        #ax1.set_xticklabels([0,' ',0.015,' ',0.03,' ',0.045,' ',0.06])
-        # ax1.xaxis.set_minor_locator(ticker.MultipleLocator(0.0075))
+
     dstr=datenum2date(dates[1])
     plt.show()
-    # plt.grid('on')
     if pmonc==True:
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_tke-profile'  + '_split.png'
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_diss-profile'  + '_split.png'
     else:
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) +'_ws-profile'  + '_split.png'
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) +'_diss-profile'  + '_split.png'
     plt.savefig(fileout,dpi=300)
 
 
@@ -1963,6 +2020,7 @@ def main():
         obs_rad_dir='/gws/nopw/j04/ncas_radar_vol1/jutta/DATA/OBS/radiation/'
         obs_dec_dir = '/gws/nopw/j04/ncas_radar_vol1/jutta/DATA/OBS/HATPRO/'
         obs_halo_dir = '/gws/nopw/j04/ncas_radar_vol1/jutta/DATA/OBS/halo/'
+        obs_diss_dir = '/gws/nopw/j04/ncas_radar_vol1/jutta/DATA/OBS/dissipation_sandeep/'
         inv_dir = '/gws/nopw/j04/ncas_radar_vol1/jutta/DATA/Inversions/'
         monc_root_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/MONC/output/'
         #monc_avg_dir = '/gws/nopw/j04/ncas_radar_vol1/jutta/MONC/output/'
@@ -2341,6 +2399,17 @@ def main():
     obs['halo'] = readMatlabStruct(obs_halo_dir + 'WindData_VAD_v2.0.mat')
     for var in obs['halo'].keys():
         obs['halo'][var]=np.squeeze(obs['halo'][var])
+
+    print ('**************************')
+    print ('Load dissipation profiles sandeep')
+    obs['dissL'] = readMatlabStruct(obs_halo_dir + 'LIDARattributes_' + strdate + '.mat')
+    for var in obs['dissL'].keys():
+        obs['dissL'][var]=np.squeeze(obs['dissL'][var])
+    obs['dissL']['mday']= date2datenum(dtime.datetime.strptime(strdate,'%Y%m%d')) + obs['dissL']['atime']/24
+    obs['dissR'] = readMatlabStruct(obs_halo_dir + 'RADARattributes_' + strdate + '.mat')
+    for var in obs['dissR'].keys():
+        obs['dissR'][var]=np.squeeze(obs['dissR'][var])
+    obs['dissR']['mday']= date2datenum(dtime.datetime.strptime(strdate,'%Y%m%d')) + obs['dissR']['atime']/24
 
     #print ('Load foremast data from John...')
     #obs['foremast'] = Dataset(obs_acas_dir + '/ACAS_AO2018_foremast_30min_v2_0.nc','r')
