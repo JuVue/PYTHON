@@ -6,6 +6,7 @@ Functions to calculate physical properties
 
 import numpy as np
 from IPython import embed
+import math
 
 # from __future__ import print_function
 
