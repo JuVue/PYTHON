@@ -6,7 +6,6 @@ Functions to calculate physical properties
 
 import numpy as np
 from IPython import embed
-import math
 
 # from __future__ import print_function
 
@@ -381,7 +380,7 @@ def windcomp2windvec(u_ms,v_ms):
 
     #calculate wind velocity
     wsp = np.sqrt(u_ms*u_ms +v_ms*v_ms)
-    wind_dir_trig_to = atan2(u_ms/wsp, v_ms/wsp)
+    wind_dir_trig_to = np.arctan2(u_ms/wsp, v_ms/wsp)
     wind_dir_trig_to_degrees = wind_dir_trig_to * 180/pi ##
     wind_dir_trig_from_degrees = wind_dir_trig_to_degrees + 180 ##
     wind_dir_cardinal = 90 - wind_dir_trig_from_degrees
