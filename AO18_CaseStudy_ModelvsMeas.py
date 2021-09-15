@@ -1031,7 +1031,7 @@ def plot_wind_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon
         plt.title(sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC')
         obsid= np.squeeze(np.argwhere((obs['halo']['mday']>=prof_time[pt][0]) & (obs['halo']['mday']<prof_time[pt][1])))
         plt.plot(np.nanmean(obs['halo']['ws'][:,obsid],1),obs['halo']['height'][:,0], color = 'k', linewidth = 3, label = 'Halo', zorder = obs_zorder)
-        ax1.fill_betweenx(obs['halo']['height'],np.nanmean(obs['halo']['ws'][:,obsid],1) - np.nanstd(obs['halo']['ws'][:,obsid],1),
+        ax1.fill_betweenx(obs['halo']['height'][:,0],np.nanmean(obs['halo']['ws'][:,obsid],1) - np.nanstd(obs['halo']['ws'][:,obsid],1),
             np.nanmean(obs['halo']['ws'][:,obsid],1) + np.nanstd(obs['halo']['ws'][:,obsid],1), color = 'lightgrey', alpha = 0.5)
         # plt.xlim([0,0.2])
         plt.plot(np.nanmean(obs['halo']['ws'][:,obsid],1) - np.nanstd(obs['halo']['ws'][:,obsid],1),obs['halo']['height'][:,0],
@@ -1040,7 +1040,7 @@ def plot_wind_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon
             '--', color = 'k', linewidth = 0.5)
         #adding RS data
         obsid= np.squeeze(np.argwhere((obs['sondes']['mday']>=prof_time[pt][0]-1/24) & (obs['sondes']['mday']<prof_time[pt][1])))
-        plt.plot(obs['sondes']['ws'][:,obsid]+273.15,obs['sondes']['Z'], color = 'grey', linewidth = 3, label = 'RS', zorder = obs_zorder)
+        plt.plot(obs['sondes']['ws'][:,obsid],obs['sondes']['Z'], color = 'grey', linewidth = 3, label = 'RS', zorder = obs_zorder)
 
         if pum==True:
             for m in range(0,len(um_data)):
@@ -1077,7 +1077,7 @@ def plot_wind_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon
 
         plt.xlabel('ws [m/s]')
         plt.ylabel('Z [km]')
-        plt.xlim([0, 15])
+        plt.xlim([0, 18])
         # plt.yticks(np.arange(0,5.01e3,0.5e3))
         # ax1.set_yticklabels([0,' ',1,' ',2,' ',3,' ',4,' ',5])
         plt.ylim(ylims)
@@ -1095,8 +1095,202 @@ def plot_wind_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_ws-profile'  + '_split.png'
     else:
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) +'_ws-profile'  + '_split.png'
+    plt.savefig(fileout,dpi=300)
+    #####  WD   ########
+    plt.figure(figsize=(18,8))
+    plt.subplots_adjust(top = 0.8, bottom = 0.1, right = 0.92, left = 0.08)
+    for pt in range(0,len(prof_time)):
+        plt.subplot(1,len(prof_time),pt+1)
+        ax1 = plt.gca()
+        sstr=datenum2date(prof_time[pt][0])
+        estr=datenum2date(prof_time[pt][1])
+        plt.title(sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC')
+        obsid= np.squeeze(np.argwhere((obs['halo']['mday']>=prof_time[pt][0]) & (obs['halo']['mday']<prof_time[pt][1])))
+        plt.plot(np.nanmean(obs['halo']['wd'][:,obsid],1),obs['halo']['height'][:,0], color = 'k', linewidth = 3, label = 'Halo', zorder = obs_zorder)
+        ax1.fill_betweenx(obs['halo']['height'][:,0],np.nanmean(obs['halo']['wd'][:,obsid],1) - np.nanstd(obs['halo']['wd'][:,obsid],1),
+            np.nanmean(obs['halo']['wd'][:,obsid],1) + np.nanstd(obs['halo']['wd'][:,obsid],1), color = 'lightgrey', alpha = 0.5)
+        # plt.xlim([0,0.2])
+        plt.plot(np.nanmean(obs['halo']['wd'][:,obsid],1) - np.nanstd(obs['halo']['wd'][:,obsid],1),obs['halo']['height'][:,0],
+            '--', color = 'k', linewidth = 0.5)
+        plt.plot(np.nanmean(obs['halo']['wd'][:,obsid],1) + np.nanstd(obs['halo']['wd'][:,obsid],1), obs['halo']['height'][:,0],
+            '--', color = 'k', linewidth = 0.5)
+        #adding RS data
+        obsid= np.squeeze(np.argwhere((obs['sondes']['mday']>=prof_time[pt][0]-1/24) & (obs['sondes']['mday']<prof_time[pt][1])))
+        plt.plot(obs['sondes']['wd'][:,obsid],obs['sondes']['Z'], color = 'grey', linewidth = 3, label = 'RS', zorder = obs_zorder)
+
+        if pum==True:
+            for m in range(0,len(um_data)):
+                id=  np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
+                ax1.fill_betweenx(um_data[m]['height'],np.nanmean(um_data[m]['wd'][id,:],0) - np.nanstd(um_data[m]['wd'][id,:],0),
+                    np.nanmean(um_data[m]['wd'][id,:],0) + np.nanstd(um_data[m]['wd'][id,:],0), color = fcols[m], alpha = 0.05)
+                plt.plot(np.nanmean(um_data[m]['wd'][id,:],0) - np.nanstd(um_data[m]['wd'][id,:],0), um_data[m]['height'],
+                    '--', color =lcols[m], linewidth = 0.5)
+                plt.plot(np.nanmean(um_data[m]['wd'][id,:],0) + np.nanstd(um_data[m]['wd'][id,:],0),um_data[m]['height'],
+                    '--', color = lcols[m], linewidth = 0.5)
+        if pmonc==True:
+            tvar=[]
+            zvar=[]
+            for m in range(0,len(monc_data)):
+                tvar+=[monc_data[m]['tvar']['u_wind_mean']]
+                zvar+=[monc_data[m]['zvar']['u_wind_mean']]
+                id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
+                ax1.fill_betweenx(monc_data[m][zvar[m]],np.nanmean(monc_data[m]['wd'][id,:],0) - np.nanstd(monc_data[m]['wd'][id,:],0),
+                    np.nanmean(monc_data[m]['wd'][id,:],0) + np.nanstd(monc_data[m]['wd'][id,:],0), color = fcolsmonc[m], alpha = 0.05)
+                plt.plot(np.nanmean(monc_data[m]['wd'][id,:],0) - np.nanstd(monc_data[m]['wd'][id,:],0), monc_data[m][zvar[m]],
+                    '--', color =lcolsmonc[m], linewidth = 0.5)
+                plt.plot(np.nanmean(monc_data[m]['wd'][id,:],0) + np.nanstd(monc_data[m]['wd'][id,:],0), monc_data[m][zvar[m]],
+                    '--', color = lcolsmonc[m], linewidth = 0.5)
+        if pum==True:
+            for m in range(0,len(um_data)):
+                id= np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
+                plt.plot(np.nanmean(um_data[m]['wd'][id,:],0),um_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
+        if pmonc==True:
+            for m in range(0,len(monc_data)):
+                id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
+                plt.plot(np.nanmean(monc_data[m]['wd'][id,:],0),monc_data[m][zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+        if pt == 1:
+            plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=4)
+
+        plt.xlabel('wd [deg]')
+        plt.ylabel('Z [km]')
+        plt.xlim([0, 360])
+        plt.ylim(ylims)
+        plt.yticks(yticks)
+        ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
+        ax1.set_yticklabels(ytlabels)
+    dstr=datenum2date(dates[1])
+    plt.show()
+    # plt.grid('on')
+    if pmonc==True:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_wd-profile'  + '_split.png'
+    else:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) +'_wd-profile'  + '_split.png'
 
     plt.savefig(fileout,dpi=300)
+
+    #####  windcomps   ########
+    plt.figure(figsize=(18,12))
+    plt.subplots_adjust(top = 0.85, bottom = 0.1, right = 0.92, left = 0.08,hspace=0.3)
+    for pt in range(0,len(prof_time)):
+        plt.subplot(2,len(prof_time),pt+1)
+        ax1 = plt.gca()
+        sstr=datenum2date(prof_time[pt][0])
+        estr=datenum2date(prof_time[pt][1])
+        plt.title(sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC')
+        obsid= np.squeeze(np.argwhere((obs['halo']['mday']>=prof_time[pt][0]) & (obs['halo']['mday']<prof_time[pt][1])))
+        plt.plot(np.nanmean(obs['halo']['u'][:,obsid],1),obs['halo']['height'][:,0], color = 'k', linewidth = 3, label = 'Halo', zorder = obs_zorder)
+        ax1.fill_betweenx(obs['halo']['height'][:,0],np.nanmean(obs['halo']['u'][:,obsid],1) - np.nanstd(obs['halo']['u'][:,obsid],1),
+            np.nanmean(obs['halo']['u'][:,obsid],1) + np.nanstd(obs['halo']['u'][:,obsid],1), color = 'lightgrey', alpha = 0.5)
+        # plt.xlim([0,0.2])
+        plt.plot(np.nanmean(obs['halo']['u'][:,obsid],1) - np.nanstd(obs['halo']['u'][:,obsid],1),obs['halo']['height'][:,0],
+            '--', color = 'k', linewidth = 0.5)
+        plt.plot(np.nanmean(obs['halo']['u'][:,obsid],1) + np.nanstd(obs['halo']['u'][:,obsid],1), obs['halo']['height'][:,0],
+            '--', color = 'k', linewidth = 0.5)
+        #adding RS data
+        obsid= np.squeeze(np.argwhere((obs['sondes']['mday']>=prof_time[pt][0]-1/24) & (obs['sondes']['mday']<prof_time[pt][1])))
+        plt.plot(obs['sondes']['u'][:,obsid],obs['sondes']['Z'], color = 'grey', linewidth = 3, label = 'RS', zorder = obs_zorder)
+
+        if pum==True:
+            for m in range(0,len(um_data)):
+                id=  np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
+                ax1.fill_betweenx(um_data[m]['height'],np.nanmean(um_data[m]['uwind'][id,:],0) - np.nanstd(um_data[m]['uwind'][id,:],0),
+                    np.nanmean(um_data[m]['uwind'][id,:],0) + np.nanstd(um_data[m]['uwind'][id,:],0), color = fcols[m], alpha = 0.05)
+                plt.plot(np.nanmean(um_data[m]['uwind'][id,:],0) - np.nanstd(um_data[m]['uwind'][id,:],0), um_data[m]['height'],
+                    '--', color =lcols[m], linewidth = 0.5)
+                plt.plot(np.nanmean(um_data[m]['uwind'][id,:],0) + np.nanstd(um_data[m]['uwind'][id,:],0),um_data[m]['height'],
+                    '--', color = lcols[m], linewidth = 0.5)
+        if pmonc==True:
+            tvar=[]
+            zvar=[]
+            for m in range(0,len(monc_data)):
+                tvar+=[monc_data[m]['tvar']['u_wind_mean']]
+                zvar+=[monc_data[m]['zvar']['u_wind_mean']]
+                id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
+                ax1.fill_betweenx(monc_data[m][zvar[m]],np.nanmean(monc_data[m]['u_wind_mean'][id,:],0) - np.nanstd(monc_data[m]['u_wind_mean'][id,:],0),
+                    np.nanmean(monc_data[m]['u_wind_mean'][id,:],0) + np.nanstd(monc_data[m]['u_wind_mean'][id,:],0), color = fcolsmonc[m], alpha = 0.05)
+                plt.plot(np.nanmean(monc_data[m]['u_wind_mean'][id,:],0) - np.nanstd(monc_data[m]['u_wind_mean'][id,:],0), monc_data[m][zvar[m]],
+                    '--', color =lcolsmonc[m], linewidth = 0.5)
+                plt.plot(np.nanmean(monc_data[m]['u_wind_mean'][id,:],0) + np.nanstd(monc_data[m]['u_wind_mean'][id,:],0), monc_data[m][zvar[m]],
+                    '--', color = lcolsmonc[m], linewidth = 0.5)
+        if pum==True:
+            for m in range(0,len(um_data)):
+                id= np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
+                plt.plot(np.nanmean(um_data[m]['uwind'][id,:],0),um_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
+        if pmonc==True:
+            for m in range(0,len(monc_data)):
+                id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
+                plt.plot(np.nanmean(monc_data[m]['u_wind_mean'][id,:],0),monc_data[m][zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+        if pt == 1:
+            plt.legend(bbox_to_anchor=(1.2, 1.1), loc=4, ncol=4)
+        plt.xlabel('u [m/s]')
+        plt.ylabel('Z [km]')
+        plt.xlim([-20,-5])
+        plt.ylim(ylims)
+        plt.yticks(yticks)
+        ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
+        ax1.set_yticklabels(ytlabels)
+
+    for pt in range(0,len(prof_time)):
+        plt.subplot(2,len(prof_time),pt+4)
+        ax1 = plt.gca()
+        obsid= np.squeeze(np.argwhere((obs['halo']['mday']>=prof_time[pt][0]) & (obs['halo']['mday']<prof_time[pt][1])))
+        plt.plot(np.nanmean(obs['halo']['v'][:,obsid],1),obs['halo']['height'][:,0], color = 'k', linewidth = 3, label = 'Halo', zorder = obs_zorder)
+        ax1.fill_betweenx(obs['halo']['height'][:,0],np.nanmean(obs['halo']['v'][:,obsid],1) - np.nanstd(obs['halo']['v'][:,obsid],1),
+            np.nanmean(obs['halo']['v'][:,obsid],1) + np.nanstd(obs['halo']['v'][:,obsid],1), color = 'lightgrey', alpha = 0.5)
+        plt.plot(np.nanmean(obs['halo']['v'][:,obsid],1) - np.nanstd(obs['halo']['v'][:,obsid],1),obs['halo']['height'][:,0],
+            '--', color = 'k', linewidth = 0.5)
+        plt.plot(np.nanmean(obs['halo']['v'][:,obsid],1) + np.nanstd(obs['halo']['v'][:,obsid],1), obs['halo']['height'][:,0],
+            '--', color = 'k', linewidth = 0.5)
+        #adding RS data
+        obsid= np.squeeze(np.argwhere((obs['sondes']['mday']>=prof_time[pt][0]-1/24) & (obs['sondes']['mday']<prof_time[pt][1])))
+        plt.plot(obs['sondes']['v'][:,obsid],obs['sondes']['Z'], color = 'grey', linewidth = 3, label = 'RS', zorder = obs_zorder)
+
+        if pum==True:
+            for m in range(0,len(um_data)):
+                id=  np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
+                ax1.fill_betweenx(um_data[m]['height'],np.nanmean(um_data[m]['vwind'][id,:],0) - np.nanstd(um_data[m]['vwind'][id,:],0),
+                    np.nanmean(um_data[m]['vwind'][id,:],0) + np.nanstd(um_data[m]['vwind'][id,:],0), color = fcols[m], alpha = 0.05)
+                plt.plot(np.nanmean(um_data[m]['vwind'][id,:],0) - np.nanstd(um_data[m]['vwind'][id,:],0), um_data[m]['height'],
+                    '--', color =lcols[m], linewidth = 0.5)
+                plt.plot(np.nanmean(um_data[m]['vwind'][id,:],0) + np.nanstd(um_data[m]['vwind'][id,:],0),um_data[m]['height'],
+                    '--', color = lcols[m], linewidth = 0.5)
+        if pmonc==True:
+            tvar=[]
+            zvar=[]
+            for m in range(0,len(monc_data)):
+                tvar+=[monc_data[m]['tvar']['v_wind_mean']]
+                zvar+=[monc_data[m]['zvar']['v_wind_mean']]
+                id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
+                ax1.fill_betweenx(monc_data[m][zvar[m]],np.nanmean(monc_data[m]['v_wind_mean'][id,:],0) - np.nanstd(monc_data[m]['v_wind_mean'][id,:],0),
+                    np.nanmean(monc_data[m]['v_wind_mean'][id,:],0) + np.nanstd(monc_data[m]['v_wind_mean'][id,:],0), color = fcolsmonc[m], alpha = 0.05)
+                plt.plot(np.nanmean(monc_data[m]['v_wind_mean'][id,:],0) - np.nanstd(monc_data[m]['v_wind_mean'][id,:],0), monc_data[m][zvar[m]],
+                    '--', color =lcolsmonc[m], linewidth = 0.5)
+                plt.plot(np.nanmean(monc_data[m]['v_wind_mean'][id,:],0) + np.nanstd(monc_data[m]['v_wind_mean'][id,:],0), monc_data[m][zvar[m]],
+                    '--', color = lcolsmonc[m], linewidth = 0.5)
+        if pum==True:
+            for m in range(0,len(um_data)):
+                id= np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
+                plt.plot(np.nanmean(um_data[m]['vwind'][id,:],0),um_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
+        if pmonc==True:
+            for m in range(0,len(monc_data)):
+                id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
+                plt.plot(np.nanmean(monc_data[m]['v_wind_mean'][id,:],0),monc_data[m][zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+        plt.xlabel('v [m/s]')
+        plt.ylabel('Z [km]')
+        plt.xlim([-5,10])
+        plt.ylim(ylims)
+        plt.yticks(yticks)
+        ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
+        ax1.set_yticklabels(ytlabels)
+    dstr=datenum2date(dates[1])
+    # plt.grid('on')
+    if pmonc==True:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_windcomp-profile'  + '_split.png'
+    else:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) +'_windcomp-profile'  + '_split.png'
+
+    plt.savefig(fileout,dpi=300)
+    
     print ('')
     print ('Finished plotting! :)')
     print ('')
