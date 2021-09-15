@@ -1430,13 +1430,13 @@ def plot_tke_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon,
         ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
         ax1.set_yticklabels(ytlabels)
     dstr=datenum2date(dates[1])
-    plt.show()
     # plt.grid('on')
     if pmonc==True:
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_tke-profile'  + '_split.png'
     else:
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) +'_tke-profile'  + '_split.png'
     plt.savefig(fileout,dpi=300)
+    plt.show()
 
 
     ####TKE DISSIPATION PLOTTING OBS & MONC
@@ -1514,12 +1514,12 @@ def plot_tke_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon,
         ax1.set_yticklabels(ytlabels)
 
     dstr=datenum2date(dates[1])
-    plt.show()
     if pmonc==True:
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_diss-profile'  + '_split.png'
     else:
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) +'_diss-profile'  + '_split.png'
     plt.savefig(fileout,dpi=300)
+    plt.show()
 
 
     print ('')
