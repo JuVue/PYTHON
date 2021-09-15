@@ -1030,13 +1030,13 @@ def plot_wind_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon
         estr=datenum2date(prof_time[pt][1])
         plt.title(sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC')
         obsid= np.squeeze(np.argwhere((obs['halo']['mday']>=prof_time[pt][0]) & (obs['halo']['mday']<prof_time[pt][1])))
-        plt.plot(np.nanmean(obs['halo']['ws'][:,obsid],1),obs['halo']['Z'], color = 'k', linewidth = 3, label = 'Halo', zorder = obs_zorder)
-        ax1.fill_betweenx(obs['halo']['Z'],np.nanmean(obs['halo']['ws'][:,obsid],1) - np.nanstd(obs['halo']['ws'][:,obsid],1),
+        plt.plot(np.nanmean(obs['halo']['ws'][:,obsid],1),obs['halo']['height'][:,0], color = 'k', linewidth = 3, label = 'Halo', zorder = obs_zorder)
+        ax1.fill_betweenx(obs['halo']['height'],np.nanmean(obs['halo']['ws'][:,obsid],1) - np.nanstd(obs['halo']['ws'][:,obsid],1),
             np.nanmean(obs['halo']['ws'][:,obsid],1) + np.nanstd(obs['halo']['ws'][:,obsid],1), color = 'lightgrey', alpha = 0.5)
         # plt.xlim([0,0.2])
-        plt.plot(np.nanmean(obs['halo']['ws'][:,obsid],1) - np.nanstd(obs['halo']['ws'][:,obsid],1),obs['halo']['Z'],
+        plt.plot(np.nanmean(obs['halo']['ws'][:,obsid],1) - np.nanstd(obs['halo']['ws'][:,obsid],1),obs['halo']['height'][:,0],
             '--', color = 'k', linewidth = 0.5)
-        plt.plot(np.nanmean(obs['halo']['ws'][:,obsid],1) + np.nanstd(obs['halo']['ws'][:,obsid],1), obs['halo']['Z'],
+        plt.plot(np.nanmean(obs['halo']['ws'][:,obsid],1) + np.nanstd(obs['halo']['ws'][:,obsid],1), obs['halo']['height'][:,0],
             '--', color = 'k', linewidth = 0.5)
         #adding RS data
         obsid= np.squeeze(np.argwhere((obs['sondes']['mday']>=prof_time[pt][0]-1/24) & (obs['sondes']['mday']<prof_time[pt][1])))
@@ -1996,6 +1996,8 @@ def main():
     print ('**************************')
     print ('Load wind profiles Lidar')
     obs['halo'] = readMatlabStruct(obs_halo_dir + 'WindData_VAD_v2.0.mat')
+    for var in obs['halo'].keys():
+        obs['halo'][var]=np.squeeze(obs['halo'][var])
 
     #print ('Load foremast data from John...')
     #obs['foremast'] = Dataset(obs_acas_dir + '/ACAS_AO2018_foremast_30min_v2_0.nc','r')
