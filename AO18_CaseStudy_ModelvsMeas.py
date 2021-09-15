@@ -1077,7 +1077,7 @@ def plot_wind_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon
 
         plt.xlabel('ws [m/s]')
         plt.ylabel('Z [km]')
-        plt.xlim([0 15])
+        plt.xlim([0, 15])
         # plt.yticks(np.arange(0,5.01e3,0.5e3))
         # ax1.set_yticklabels([0,' ',1,' ',2,' ',3,' ',4,' ',5])
         plt.ylim(ylims)
