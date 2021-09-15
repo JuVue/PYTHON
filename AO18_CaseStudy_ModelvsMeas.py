@@ -2423,17 +2423,16 @@ def main():
 
     print ('**************************')
     print ('Load wind profiles Lidar')
-    obs['halo'] = readMatlabStruct(obs_halo_dir + 'WindData_VAD_v2.0.mat')
     for var in obs['halo'].keys():
         obs['halo'][var]=np.squeeze(obs['halo'][var])
 
     print ('**************************')
     print ('Load dissipation profiles sandeep')
-    obs['dissL'] = readMatlabStruct(obs_diss_dir + 'LIDARattributes_' + strdate + '.mat')
+    obs['dissL'] = readMatlabStruct(obs_diss_dir + 'LIDARattributes_struct_' + strdate + '.mat')
     for var in obs['dissL'].keys():
         obs['dissL'][var]=np.squeeze(obs['dissL'][var])
     obs['dissL']['mday']= date2datenum(dtime.datetime.strptime(strdate,'%Y%m%d')) + obs['dissL']['atime']/24
-    obs['dissR'] = readMatlabStruct(obs_diss_dir + 'RADARattributes_' + strdate + '.mat')
+    obs['dissR'] = readMatlabStruct(obs_diss_dir + 'RADARattributes_struct_' + strdate + '.mat')
     for var in obs['dissR'].keys():
         obs['dissR'][var]=np.squeeze(obs['dissR'][var])
     obs['dissR']['mday']= date2datenum(dtime.datetime.strptime(strdate,'%Y%m%d')) + obs['dissR']['atime']/24
