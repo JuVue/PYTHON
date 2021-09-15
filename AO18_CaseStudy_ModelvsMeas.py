@@ -27,7 +27,7 @@ sys.path.insert(1, './py_functions/')
 from time_functions import datenum2date, date2datenum, calcTime_Mat2DOY, calcTime_Date2DOY
 from readMAT import readMatlabStruct
 from manipFuncts import intersect_mtlb
-from physFuncts import calcSH_mr, calcSH_wvp, calcvp,calcsvp,calcRH,calcDewPoint,calcP
+from physFuncts import calcSH_mr, calcSH_wvp, calcvp,calcsvp,calcRH,calcDewPoint,calcP,windcomp2windvec
 #from physFuncts import calcThetaE, calcThetaVL
 #from pyFixes import py3_FixNPLoad
 
@@ -983,7 +983,6 @@ def plot_wind_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon
     yticks=np.arange(0,2e3,0.5e3)
     ytlabels=yticks/1e3
 
-    if
     print ('******')
     print ('')
     print ('Plotting wind mean profiles split times:')
@@ -2127,6 +2126,8 @@ def main():
     #     obsid= np.squeeze(np.argwhere((obs['dec']['mday']>=prof_time[pt][0]) & (obs['dec']['mday']<prof_time[pt][1])))
     #     b.append(obs['dec']['cbase_sandeep'][obsid])
     embed()
+
+    ws,wd
     # -------------------------------------------------------------
     # Plot paper figures
     # -------------------------------------------------------------
