@@ -1323,7 +1323,7 @@ def plot_tke_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon,
             monc_data[m]['tke_mean']=0.5*(monc_data[m]['uu_mean']+monc_data[m]['vv_mean']+monc_data[m]['ww_mean'])
             monc_data[m]['tke_plus-sg_mean']=0.5*(monc_data[m]['uu_mean']+monc_data[m]['uusg_mean']+
                                           monc_data[m]['vv_mean']+monc_data[m]['vvsg_mean']+
-                                          monc_data[m]['ww_mean']+monc_data[m]['wwvsg_mean'])
+                                          monc_data[m]['ww_mean']+monc_data[m]['wwsg_mean'])
 
 
 
@@ -1333,7 +1333,7 @@ def plot_tke_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon,
 
     print ('******')
     print ('')
-    print ('Plotting wind mean profiles split times:')
+    print ('Plotting tke mean profiles split times:')
     print ('')
 
     ###----------------------------------------------------------------
@@ -1384,11 +1384,11 @@ def plot_tke_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon,
         if pum==True:
             for m in range(0,len(um_data)):
                 id=  np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
-                ax1.fill_betweenx(um_data[m]['height'],np.nanmean(um_data[m]['tke'][id,:],0) - np.nanstd(um_data[m]['tke'][id,:],0),
+                ax1.fill_betweenx(um_data[m]['height2'],np.nanmean(um_data[m]['tke'][id,:],0) - np.nanstd(um_data[m]['tke'][id,:],0),
                     np.nanmean(um_data[m]['tke'][id,:],0) + np.nanstd(um_data[m]['tke'][id,:],0), color = fcols[m], alpha = 0.05)
-                plt.plot(np.nanmean(um_data[m]['tke'][id,:],0) - np.nanstd(um_data[m]['tke'][id,:],0), um_data[m]['height'],
+                plt.plot(np.nanmean(um_data[m]['tke'][id,:],0) - np.nanstd(um_data[m]['tke'][id,:],0), um_data[m]['height2'],
                     '--', color =lcols[m], linewidth = 0.5)
-                plt.plot(np.nanmean(um_data[m]['tke'][id,:],0) + np.nanstd(um_data[m]['tke'][id,:],0),um_data[m]['height'],
+                plt.plot(np.nanmean(um_data[m]['tke'][id,:],0) + np.nanstd(um_data[m]['tke'][id,:],0),um_data[m]['height2'],
                     '--', color = lcols[m], linewidth = 0.5)
         if pmonc==True:
             tvar=[]
@@ -1406,7 +1406,7 @@ def plot_tke_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon,
         if pum==True:
             for m in range(0,len(um_data)):
                 id= np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
-                plt.plot(np.nanmean(um_data[m]['tke'][id,:],0),um_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
+                plt.plot(np.nanmean(um_data[m]['tke'][id,:],0),um_data[m]['height2'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
         if pmonc==True:
             for m in range(0,len(monc_data)):
                 id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
@@ -2075,6 +2075,7 @@ def main():
         um_data[m]['time'] = datenum + (nc[m].variables['forecast_time'][:]/24.0)
         ### define height arrays explicitly
         um_data[m]['height'] = nc[m].variables['height'][:]
+        um_data[m]['height2'] = nc[m].variables['height2'][:]
         for var in nc[m].variables: print(var)
 
         print ('Starting on t=0 RA2M data:')
