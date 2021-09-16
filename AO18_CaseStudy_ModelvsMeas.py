@@ -1166,7 +1166,6 @@ def plot_wind_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon
 
     plt.savefig(fileout,dpi=300)
 
-    embed()
     #####  windcomps   ########
     plt.figure(figsize=(18,12))
     plt.subplots_adjust(top = 0.85, bottom = 0.1, right = 0.92, left = 0.08,hspace=0.3)
@@ -1211,19 +1210,19 @@ def plot_wind_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon
                     '--', color =lcolsmonc[m], linewidth = 0.5)
                 plt.plot(np.nanmean(monc_data[m]['u_wind_mean'][id,:],0) + np.nanstd(monc_data[m]['u_wind_mean'][id,:],0), monc_data[m][zvar[m]],
                     '--', color = lcolsmonc[m], linewidth = 0.5)
-        if pum==True:
-            for m in range(0,len(um_data)):
-                id= np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
-                plt.plot(np.nanmean(um_data[m]['uwind'][id,:],0),um_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
         if pmonc==True:
             for m in range(0,len(monc_data)):
                 id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
                 plt.plot(np.nanmean(monc_data[m]['u_wind_mean'][id,:],0),monc_data[m][zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+        if pum==True:
+            for m in range(0,len(um_data)):
+                id= np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
+                plt.plot(np.nanmean(um_data[m]['uwind'][id,:],0),um_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
         if pt == 1:
             plt.legend(bbox_to_anchor=(1.2, 1.1), loc=4, ncol=4)
         plt.xlabel('u [m/s]')
         plt.ylabel('Z [km]')
-        plt.xlim([-20,5])
+    #    plt.xlim([-20,5])
         plt.ylim(ylims)
         plt.yticks(yticks)
         ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
@@ -1266,14 +1265,14 @@ def plot_wind_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon
                     '--', color =lcolsmonc[m], linewidth = 0.5)
                 plt.plot(np.nanmean(monc_data[m]['v_wind_mean'][id,:],0) + np.nanstd(monc_data[m]['v_wind_mean'][id,:],0), monc_data[m][zvar[m]],
                     '--', color = lcolsmonc[m], linewidth = 0.5)
-        if pum==True:
-            for m in range(0,len(um_data)):
-                id= np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
-                plt.plot(np.nanmean(um_data[m]['vwind'][id,:],0),um_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
         if pmonc==True:
             for m in range(0,len(monc_data)):
                 id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
                 plt.plot(np.nanmean(monc_data[m]['v_wind_mean'][id,:],0),monc_data[m][zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+        if pum==True:
+            for m in range(0,len(um_data)):
+                id= np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
+                plt.plot(np.nanmean(um_data[m]['vwind'][id,:],0),um_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
         plt.xlabel('v [m/s]')
         plt.ylabel('Z [km]')
         plt.xlim([-5,10])
