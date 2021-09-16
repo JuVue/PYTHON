@@ -2427,7 +2427,7 @@ def main():
 
     print ('**************************')
     print ('Load wind profiles Lidar')
-    obs['halo'] = readMatlabStruct(obs_diss_dir + 'LIDARattributes_struct_' + strdate + '.mat')
+    obs['halo'] = readMatlabStruct(obs_halo_dir + 'WindData_VAD_v2.0.mat')
     for var in obs['halo'].keys():
         obs['halo'][var]=np.squeeze(obs['halo'][var])
 
