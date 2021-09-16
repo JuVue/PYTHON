@@ -214,7 +214,7 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel, m_out
             hspace = 0.3, wspace = 0.2)
     plt.subplot(141)
     plt.plot(monc_data[0]['u_wind_mean'][0,:],monc_data[0]['zn'],label = 't=0h')
-    plt.plot(data['sonde']['u'], data['sonde']['v'])
+    plt.plot(data['sonde']['u'], data['sonde']['Z'])
     plt.title('t=0h')
     plt.subplot(142)
     plt.plot(monc_data[0]['u_wind_mean'][st_id,:],monc_data[0]['zn'],label = 't=8h')
