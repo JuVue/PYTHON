@@ -3258,7 +3258,8 @@ def main():
                # '28B_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_AccumSolAero-CASIM-100-Twomey/'
                # '29A_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_AccumSolAero-CASIM-20-ARG/',
                # '29B_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_AccumSolAero-CASIM-20-allAct/',
-               '30A_20180913T0000Z_8hSpinUp_8-14hUVRelax0600_14-24hUVRelax1200_8-24h0.1Cooper_FixedNd10/',
+               # '30A_20180913T0000Z_8hSpinUp_8-14hUVRelax0600_14-24hUVRelax1200_8-24h0.1Cooper_FixedNd10/',
+               '31A_20180913T0000Z_8hSpinUp_8-14hUVRelax0600_14-24hUVRelax1200_8-24h0.1Cooper_FixedNd10/',
             #'4_control_20180913T0000Z_Wsub-1.5/',
             ]
     #################################################################
@@ -3374,6 +3375,9 @@ def main():
         elif m_out_dir[m][:3] == '30A':
             mlabel.append('MONC_0.1Cooper_FixedNd10_uvRelax')
             moutstr.append('MONC-30A')
+        elif m_out_dir[m][:3] == '31A':
+            mlabel.append('MONC_0.1Cooper_FixedNd10_uvRelax')
+            moutstr.append('MONC-31A')               
         else:
             label.append('undefined_label')
             moutstr.append('')
