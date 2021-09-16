@@ -78,7 +78,7 @@ def calc_TWC(obs_data,thresholding, **args):
         ####-------------------------------------------------------------------------
         ### next look at values above 4 km
         ###     find Z indices >= 4km, then set twc_thresh values to 1e-7
-        um_lt1km = np.where(obs_data[m]['height'][0,:]>=4e3)
+        um_lt1km = np.where(obs_data['height'][0,:]>=4e3)
         twc_thresh_um[um_lt1km] = 1e-7
 
         ### find heights not yet assigned
