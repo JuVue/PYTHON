@@ -832,7 +832,7 @@ def plot_lwcProfiles(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,dates, 
     print ('')
 
 
-    obs_data,um_data,monc_data=calc_TWC(obs_data, thresholding um_data=um_data,monc_data=monc_data)
+    obs_data,um_data,monc_data=calc_TWC(obs_data, thresholding, um_data=um_data,monc_data=monc_data)
     embed()
     # ###----------------------------------------------------------------
     # ###         Calculate total water content
