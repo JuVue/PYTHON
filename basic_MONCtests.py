@@ -687,7 +687,7 @@ def main():
         data['sonde+' + str(i+1)]['Z'] = sondes['Z']
         data['sonde+' + str(i+1)]['u'][data['sonde+' + str(i+1)]['u'] > 1e3] = np.nan
         data['sonde+' + str(i+1)]['v'][data['sonde+' + str(i+1)]['v'] > 1e3] = np.nan
-        data['sonde+' + str(i+1)]['v'][data['sonde+' + str(i+1)]['v'] < 1e3] = np.nan
+        # data['sonde+' + str(i+1)]['v'][data['sonde+' + str(i+1)]['v'] < 1e3] = np.nan
 
 
     ##################################################################################################################################
