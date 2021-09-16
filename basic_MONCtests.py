@@ -606,7 +606,7 @@ def main():
     ## Choose sonde for initialisation:
     ## -------------------------------------------------------------
     data = {}
-    data['sonde_option'] = '20180912T1800' # '20180912T1800' #'20180913T0000'#
+    data['sonde_option'] = '20180913T0000' # '20180912T1800' #'20180913T0000'#
 
     if data['sonde_option'] == '20180912T1800':
         numindex = 0
