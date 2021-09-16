@@ -215,15 +215,16 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel, m_out
     plt.subplot(141)
     plt.plot(data['sonde']['u'], data['sonde']['Z'], 'k--')
     plt.plot(monc_data[0]['u_wind_mean'][0,:],monc_data[0]['zn'],label = 't=0h')
+    plt.plot(monc_data[0]['u_wind_mean'][-1,:],monc_data[0]['zn'],label = 't=0h')
     if np.size(monc_data[0]['u_wind_mean'],0) >= st_id:
         plt.plot(monc_data[0]['u_wind_mean'][int(st_id/2.),:],monc_data[0]['zn'],label = 't=' + str(st_ts/2.) + 's')
-        plt.plot(monc_data[0]['u_wind_mean'][int(st_id-1),:],monc_data[0]['zn'],label = 't=' + str(st_ts - 1) + 's')    
+        plt.plot(monc_data[0]['u_wind_mean'][int(st_id-1),:],monc_data[0]['zn'],label = 't=' + str(st_ts - 1) + 's')
     plt.ylabel('Z [m]')
     plt.xlabel('U [m/s]')
     plt.ylim([0,2.5e3])
     plt.title('t=0h')
     plt.subplot(142)
-    if np.size(monc_data[0]['v_wind_mean'],0) >= st_id:
+    if np.size(monc_data[0]['u_wind_mean'],0) >= st_id:
         plt.plot(data['sonde']['u'], data['sonde']['Z'], 'k--')
         plt.plot(monc_data[0]['u_wind_mean'][st_id,:],monc_data[0]['zn'],label = 't=8h')
         plt.title('t=' + str(checkpoint1) + 'h')
@@ -255,6 +256,7 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel, m_out
     plt.subplot(141)
     plt.plot(data['sonde']['v'], data['sonde']['Z'], 'k--')
     plt.plot(monc_data[0]['v_wind_mean'][0,:],monc_data[0]['zn'],label = 't=0h')
+    plt.plot(monc_data[0]['v_wind_mean'][-1,:],monc_data[0]['zn'],label = 't=0h')
     if np.size(monc_data[0]['v_wind_mean'],0) >= st_id:
         plt.plot(monc_data[0]['v_wind_mean'][int(st_id/2.),:],monc_data[0]['zn'],label = 't=' + str(st_ts/2.) + 's')
         plt.plot(monc_data[0]['v_wind_mean'][int(st_id-1),:],monc_data[0]['zn'],label = 't=' + str(st_ts - 1) + 's')
