@@ -133,9 +133,9 @@ def calc_TWC(obs_data,thresholding, **args):
 
     if ((pum==True) and (pmonc==True)):
         return obs_data,um_data,monc_data
-    elif (pum==True)):
+    elif (pum==True):
         return obs_data,um_data
-    elif (pmonc==True)):
+    elif (pmonc==True):
         return obs_data,monc_data
     else:
         return obs_data
