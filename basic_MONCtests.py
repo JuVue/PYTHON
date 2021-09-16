@@ -224,7 +224,7 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel, m_out
     #     plt.plot(monc_data[0]['u_wind_mean'][int(cp_id)+1,:],monc_data[0]['zn'],label = 'checkpoint restart+1')
     plt.subplot(144)
     plt.plot(monc_data[0]['u_wind_mean'][-1,:],monc_data[0]['zn'],label = 't=24h')
-    plt.label('t=24h')
+    plt.title('t=24h')
     plt.xlabel('U [m/s]')
     plt.ylabel('Z [m]')
     plt.legend()
