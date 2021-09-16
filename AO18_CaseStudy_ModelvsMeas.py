@@ -1593,7 +1593,7 @@ def plot_tke_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon,
 
         plt.xlabel('$\epsilon$ [m$^2$ s$^{-3}$]')
         plt.ylabel('Z [km]')
-        plt.xlim([-8 0])
+        plt.xlim([-8 ,0])
         plt.ylim(ylims)
         plt.yticks(yticks)
         ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
