@@ -30,7 +30,7 @@ from manipFuncts import int2list
 # from conversionFuncts import reGrid_Sondes
 
 
-def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel, m_out_dir  ):
+def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel, m_out_dir, data  ):
 
 
     print ('******')
@@ -670,7 +670,7 @@ def main():
     # print (monc_data[0]['time2'].shape)
     # print (monc_data[0]['time2'])
 
-    figure = plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel, m_out_dir )
+    figure = plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel, m_out_dir, data )
 
     # -------------------------------------------------------------
     # FIN.
