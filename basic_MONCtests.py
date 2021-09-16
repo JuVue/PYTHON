@@ -210,10 +210,11 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel, m_out
 
     ### u profiles
     fig = plt.figure(figsize=(14,5))
-    plt.subplots_adjust(top = 0.9, bottom = 0.1, right = 0.9, left = 0.1,
-            hspace = 0.3, wspace = 0.1)
+    plt.subplots_adjust(top = 0.9, bottom = 0.1, right = 0.95, left = 0.05,
+            hspace = 0.3, wspace = 0.2)
     plt.subplot(141)
     plt.plot(monc_data[0]['u_wind_mean'][0,:],monc_data[0]['zn'],label = 't=0h')
+    plt.plot(data['sonde']['u'], data['sonde']['v'])
     plt.title('t=0h')
     plt.subplot(142)
     plt.plot(monc_data[0]['u_wind_mean'][st_id,:],monc_data[0]['zn'],label = 't=8h')
