@@ -1842,6 +1842,159 @@ def plot_iwcProfiles_split(obs_data,twcvar,twcstr, thresholding, plots_out_dir,d
     print ('')
     print ('******')
 
+def plot_twcProfiles_split(obs_data,twcvar,twcstr, thresholding, plots_out_dir,dates,prof_time, **args): #, lon, lat):
+
+    obs_zorder = 1
+
+    if bool(args):
+        for n in range(0,len(args)):
+            if  list(args.keys())[n] == 'monc_data':
+                monc_data=args[list(args.keys())[n]]
+                obs_zorder += len(monc_data)
+                pmonc =True
+            elif list(args.keys())[n] == 'mlabel':
+                mlabel = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'moutstr':
+                moutstr= args[list(args.keys())[n]]
+            elif  list(args.keys())[n] == 'um_data':
+                um_data=args[list(args.keys())[n]]
+                obs_zorder += len(um_data)
+                pum =True
+            elif list(args.keys())[n] == 'label':
+                label = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'outstr':
+                outstr= args[list(args.keys())[n]]
+
+    ylims=[0,2]
+    yticks=np.arange(0,2e3,0.5e3)
+    ytlabels=yticks/1e3
+
+
+    print ('******')
+    print ('')
+    print ('Plotting TWC mean profiles split times:' + twcvar)
+    print ('')
+
+    ###----------------------------------------------------------------
+    ###         Calculate total water content
+    ###----------------------------------------------------------------
+    obs_data,um_data,monc_data=calc_TWC(obs_data, thresholding, um_data=um_data,monc_data=monc_data)
+
+    if pmonc==True:
+        twc_zvar=[]
+        twc_tvar=[]
+        for m in range(0,len(monc_data)):
+            twc_zvar+=[monc_data[m]['zvar']['twc_tot_mean']]
+            twc_tvar+=[monc_data[m]['tvar']['twc_tot_mean']]
+
+    ###----------------------------------------------------------------
+    ###         Plot figure - Mean profiles
+    ###----------------------------------------------------------------
+
+    SMALL_SIZE = 12
+    MED_SIZE = 14
+    LARGE_SIZE = 16
+
+    plt.rc('font',size=MED_SIZE)
+    plt.rc('axes',titlesize=MED_SIZE)
+    plt.rc('axes',labelsize=MED_SIZE)
+    plt.rc('xtick',labelsize=MED_SIZE)
+    plt.rc('ytick',labelsize=MED_SIZE)
+    plt.rc('legend',fontsize=SMALL_SIZE)
+    # plt.subplots_adjust(top = 0.95, bottom = 0.12, right = 0.95, left = 0.15,
+    #         hspace = 0.4, wspace = 0.1)
+    ###define colors
+    lcols=['lightseagreen','steelblue','royalblue','darkblue']
+    fcols=['lightcyan','lightblue','skyblue','blue']
+    lcolsmonc=['gold','darkgoldenrod','darkorange','orangered','firebrick']
+    fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
+    ### define axis instance
+    ####IWC
+    plt.figure(figsize=(14,7))
+    plt.subplots_adjust(top = 0.8, bottom = 0.1, right = 0.98, left = 0.08)
+
+    for pt in range(0,len(prof_time)):
+        plt.subplot(1,len(prof_time),pt+1)
+        ax1 = plt.gca()
+        sstr=datenum2date(prof_time[pt][0])
+        estr=datenum2date(prof_time[pt][1])
+        plt.title(sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC')
+        obsid= np.squeeze(np.argwhere((obs_data['time']>=prof_time[pt][0]) & (obs_data['time']<prof_time[pt][1])))
+        plt.plot(np.nanmean(obs_data['twc'][obsid,:],0)*1e3,np.nanmean(obs_data['height'],0), color = 'k', linewidth = 3, label = 'Obs_UMgrid'  + twcstr, zorder = obs_zorder)
+        ax1.fill_betweenx(np.nanmean(obs_data['height'],0),np.nanmean(obs_data['twc'][obsid,:],0)*1e3 - np.nanstd(obs_data['twc'][obsid,:],0)*1e3,
+            np.nanmean(obs_data['twc'][obsid,:],0)*1e3 + np.nanstd(obs_data['twc'][obsid,:],0)*1e3, color = 'lightgrey', alpha = 0.5)
+        # plt.xlim([0,0.2])
+        plt.plot(np.nanmean(obs_data['twc'][obsid,:],0)*1e3 - np.nanstd(obs_data['twc'][obsid,:],0)*1e3, np.nanmean(obs_data['height'],0),
+            '--', color = 'k', linewidth = 0.5)
+        plt.plot(np.nanmean(obs_data['twc'][obsid,:],0)*1e3 + np.nanstd(obs_data['twc'][obsid,:],0)*1e3, np.nanmean(obs_data['height'],0),
+            '--', color = 'k', linewidth = 0.5)
+        if pum==True:
+            for m in range(0,len(um_data)):
+                id=  np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
+                ax1.fill_betweenx(np.nanmean(um_data[m]['height'],0),np.nanmean(um_data[m]['model_twc'][id,:],0)*1e3 - np.nanstd(um_data[m]['model_twc'][id,:]*1e3,0),
+                    np.nanmean(um_data[m]['model_twc'][id,:],0)*1e3 + np.nanstd(um_data[m]['model_twc'][id,:],0)*1e3, color = fcols[m], alpha = 0.05)
+                plt.plot(np.nanmean(um_data[m]['model_twc'][id,:],0)*1e3 - np.nanstd(um_data[m]['model_twc'][id,:],0)*1e3, np.nanmean(um_data[m]['height'],0),
+                    '--', color =lcols[m], linewidth = 0.5)
+                plt.plot(np.nanmean(um_data[m]['model_twc'][id,:],0)*1e3 + np.nanstd(um_data[m]['model_twc'][id,:],0)*1e3, np.nanmean(um_data[m]['height'],0),
+                    '--', color = lcols[m], linewidth = 0.5)
+        if pmonc==True:
+            for m in range(0,len(monc_data)):
+                id= np.squeeze(np.argwhere((monc_data[m][twc_tvar[m]]>=prof_time[pt][0]) & (monc_data[m][twc_tvar[m]]<prof_time[pt][1])))
+                ax1.fill_betweenx(monc_data[m][twc_zvar[m]],np.nanmean(monc_data[m]['model_twc'][id,:],0)*1e3 - np.nanstd(monc_data[m]['model_twc'][id,:]*1e3,0),
+                    np.nanmean(monc_data[m]['model_twc'][id,:],0)*1e3 + np.nanstd(monc_data[m]['model_twc'][id,:],0)*1e3, color = fcolsmonc[m], alpha = 0.05)
+                plt.plot(np.nanmean(monc_data[m]['model_twc'][id,:],0)*1e3 - np.nanstd(monc_data[m]['model_twc'][id,:],0)*1e3, monc_data[m][twc_zvar[m]],
+                    '--', color =lcolsmonc[m], linewidth = 0.5)
+                plt.plot(np.nanmean(monc_data[m]['model_twc'][id,:],0)*1e3 + np.nanstd(monc_data[m]['model_twc'][id,:],0)*1e3, monc_data[m][twc_zvar[m]],
+                    '--', color = lcolsmonc[m], linewidth = 0.5)
+        if pum==True:
+            for m in range(0,len(um_data)):
+                id= np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
+                plt.plot(np.nanmean(um_data[m]['model_twc'][id,:],0)*1e3,np.nanmean(um_data[m]['height'],0), color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
+        if pmonc==True:
+            for m in range(0,len(monc_data)):
+                id= np.squeeze(np.argwhere((monc_data[m][twc_tvar[m]]>=prof_time[pt][0]) & (monc_data[m][twc_tvar[m]]<prof_time[pt][1])))
+                plt.plot(np.nanmean(monc_data[m]['model_twc'][id,:],0)*1e3,monc_data[m][twc_zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+        if pt == 1:
+            plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=2)
+
+
+        plt.xlabel('Total water content [g m$^{-3}$]')
+        plt.ylabel('Z [km]')
+        # plt.ylim([0,5e3])
+        # plt.yticks(np.arange(0,5.01e3,0.5e3))
+        # ax1.set_yticklabels([0,' ',1,' ',2,' ',3,' ',4,' ',5])
+        plt.ylim(ylims)
+        plt.yticks(yticks)
+        ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
+        ax1.set_yticklabels(ytlabels)
+        plt.xlim([0,0.45])
+        plt.xticks(np.arange(0,0.41,0.05))
+        #ax1.set_xticklabels([0,' ',0.015,' ',0.03,' ',0.045,' ',0.06])
+        ax1.xaxis.set_minor_locator(ticker.MultipleLocator(0.025))
+
+
+    dstr=datenum2date(dates[1])
+    # plt.grid('on')
+    if thresholding == True:
+        if pmonc==True:
+            fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_TWC-MTThresh' + twcstr + '_split.png'
+        else:
+            fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_TWC-MTThresh'+ twcstr + '_split.png'
+    else:
+        if pmonc==True:
+            fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_TWC' + twcstr + '_split.png'
+        else:
+            fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_TWC'+ twcstr + '_split.png'
+
+    plt.savefig(fileout, dpi=300)
+    plt.close()
+    # plt.show()
+    print ('')
+    print ('Finished plotting! :)')
+    print ('')
+    print ('******')
+
+
 def plot_NisgProfiles_split(obs_data, lwcvar, lwcstr, thresholding, plots_out_dir, dates, prof_time, **args): #, lon, lat):
 
     obs_zorder = 1
@@ -3237,6 +3390,7 @@ def main():
     #figure = plot_lwcProfiles_split(obs_data, lwcvar,lwcstr,thresholding, plots_out_dir,dates, prof_times,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_NisgProfiles_split(obs_data, lwcvar,lwcstr,thresholding, plots_out_dir,dates, prof_times,um_data=um_data,raw_data=raw_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_iwcProfiles_split(obs_data, twcvar,twcstr,thresholding, plots_out_dir,dates, prof_times,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_twcProfiles_split(obs_data, twcvar,twcstr,thresholding, plots_out_dir,dates, prof_times,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
 
     # -------------------------------------------------------------
