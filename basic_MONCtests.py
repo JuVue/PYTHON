@@ -210,8 +210,8 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel, m_out
 
     ### u profiles
     fig = plt.figure(figsize=(14,5))
-    plt.subplots_adjust(top = 0.9, bottom = 0.1, right = 0.95, left = 0.05,
-            hspace = 0.3, wspace = 0.2)
+    plt.subplots_adjust(top = 0.9, bottom = 0.1, right = 0.98, left = 0.08,
+            hspace = 0.3, wspace = 0.3)
     plt.subplot(141)
     plt.plot(data['sonde']['u'], data['sonde']['Z'], 'k--')
     plt.plot(monc_data[0]['u_wind_mean'][0,:],monc_data[0]['zn'],label = 't=0h')
@@ -222,20 +222,21 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel, m_out
     plt.plot(monc_data[0]['u_wind_mean'][st_id,:],monc_data[0]['zn'],label = 't=8h')
     plt.title('t=' + str(checkpoint1) + 'h')
     plt.ylim([0,2.5e3])
-
     plt.subplot(143)
     if np.size(monc_data[0]['u_wind_mean'],0) >= cp_id:
         plt.title('t=' + str(checkpoint2) + 'h')
+        plt.plot(data['sonde+1']['u'], data['sonde+1']['Z'], 'k--')
         plt.plot(monc_data[0]['u_wind_mean'][cp_id,:],monc_data[0]['zn'],label = 't=14h')
         plt.ylim([0,2.5e3])
     #     plt.plot(monc_data[0]['u_wind_mean'][int(cp_id)+1,:],monc_data[0]['zn'],label = 'checkpoint restart+1')
     plt.subplot(144)
+    plt.plot(data['sonde+2']['u'], data['sonde+2']['Z'], 'k--')
     plt.plot(monc_data[0]['u_wind_mean'][-1,:],monc_data[0]['zn'],label = 't=24h')
     plt.title('t=24h')
     plt.ylim([0,2.5e3])
     plt.xlabel('U [m/s]')
     plt.ylabel('Z [m]')
-    plt.legend()
+    # plt.legend()
     fileout = plots_out_dir + moutstr[0] + '_Uprofiles_' + mlabel[0] + '.png'
     plt.savefig(fileout)
     plt.close()
