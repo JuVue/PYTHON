@@ -304,6 +304,7 @@ def main():
         monc_root_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/MONC/output/'
         #monc_avg_dir = '/gws/nopw/j04/ncas_radar_vol1/jutta/MONC/output/'
         monc_avg_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/MONC/output/'
+        obs_root_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/Obs/'
 
     elif machine =='LEEDS':
         ### Set output directory for plots
@@ -555,6 +556,54 @@ def main():
             monc_data[m].pop(time_var_list[2])
 
     print (' Monc data Loaded!')
+
+    #################################################################
+    ###     READ IN OBS DATA
+    #################################################################
+    sondes = readMatlabStruct(obs_root_dir + 'radiosondes/SondeData_h10int_V02.mat')
+
+    print ('')
+    print (sondes.keys())
+
+    ## -------------------------------------------------------------
+    ## Choose sonde for initialisation:
+    ## -------------------------------------------------------------
+    data = {}
+    data['sonde_option'] = '20180912T1800' # '20180912T1800' #'20180913T0000'#
+
+    if data['sonde_option'] == '20180912T1800':
+        numindex = 0
+    elif data['sonde_option'] == '20180913T0000':
+        numindex = 1
+    elif data['sonde_option'] == '20180913T0600':
+        numindex = 2
+
+    ## -------------------------------------------------------------
+    ## Load radiosonde (relative to 20180912 1200UTC
+    ## -------------------------------------------------------------
+    index256 = np.where(np.logical_or(np.round(sondes['doy'][:,:]) == 256., np.round(sondes['doy'][:,:]) == 257.))
+
+    print (sondes['doy'][:,index256[1][numindex]])
+    data['sonde'] = {}
+    for k in sondes.keys():
+        if k == 'Z': continue
+        data['sonde'][k] = sondes[k][:,index256[1][numindex]]
+    data['sonde']['Z'] = sondes['Z']
+    data['sonde']['u'][data['sonde']['u'] > 1e3] = np.nan
+    data['sonde']['v'][data['sonde']['v'] > 1e3] = np.nan
+
+    ### load subsequent sondes
+    for i in np.arange(0,3):
+        data['sonde+' + str(i+1)] = {}
+        print ('sonde+' + str(i+1))
+        print (sondes['doy'][:,index256[1][i+1+numindex]])
+        for k in sondes.keys():
+            if k == 'Z': continue
+            data['sonde+' + str(i+1)][k] = sondes[k][:,index256[1][i+1+numindex]]
+        data['sonde+' + str(i+1)]['Z'] = sondes['Z']
+        data['sonde+' + str(i+1)]['u'][data['sonde+' + str(i+1)]['u'] > 1e3] = np.nan
+        data['sonde+' + str(i+1)]['v'][data['sonde+' + str(i+1)]['v'] > 1e3] = np.nan
+
     ##################################################################################################################################
     ## -------------------------------------------------------------
     ## remove spin up time from monc data
