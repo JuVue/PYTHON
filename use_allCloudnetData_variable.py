@@ -39,7 +39,7 @@ def calc_TWC(obs_data,thresholding, **args):
                 pmonc =True
             elif  list(args.keys())[n] == 'um_data':
                 um_data=args[list(args.keys())[n]]
-                    pum =True
+                pum =True
 
     ###----------------------------------------------------------------
     ###         Calculate total water content
