@@ -42,12 +42,15 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel, m_out
     checkpoint = []
 
     if monc_spin == 21600.:
-        checkpoint = 12 # checkpoint restart at 12h
+        checkpoint2 = 12 # checkpoint restart at 12h
     elif monc_spin == 28800.:
-        checkpoint = 14 # checkpoint restart at 14h
+        checkpoint1 = 8 # checkpoint restart at 8h
+        checkpoint2 = 14 # checkpoint restart at 14h
 
-    cp_id = int(checkpoint*4) - 1
-    cp_ts = np.float(checkpoint)*3600.
+    st_id = int(checkpoint1*4) - 1
+    st_ts = np.float(checkpoint1)*3600.
+    cp_id = int(checkpoint2*4) - 1
+    cp_ts = np.float(checkpoint2)*3600.
 
     SMALL_SIZE = 12
     MED_SIZE = 14
@@ -206,14 +209,22 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel, m_out
 
 
     ### u profiles
-    fig = plt.figure(figsize=(6,5))
+    fig = plt.figure(figsize=(10,5))
     plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.9, left = 0.15,
             hspace = 0.3, wspace = 0.1)
-    plt.plot(monc_data[0]['u_wind_mean'][0,:],monc_data[0]['zn'],label = 'start')
-    # if np.size(monc_data[0]['u_wind_mean'],0) >= cp_id:
-    #     plt.plot(monc_data[0]['u_wind_mean'][cp_id,:],monc_data[0]['zn'],label = 'checkpoint restart')
+    plt.subplot(141)
+    plt.plot(monc_data[0]['u_wind_mean'][0,:],monc_data[0]['zn'],label = 't=0h')
+    plt.title('t=0h')
+    plt.subplot(142)
+    plt.plot(monc_data[0]['u_wind_mean'][st_id,:],monc_data[0]['zn'],label = 't=8h')
+    plt.title('t=' + str(checkpoint1) + 'h')
+    if np.size(monc_data[0]['u_wind_mean'],0) >= cp_id:
+        plt.title('t=' + str(checkpoint2) + 'h')
+        plt.plot(monc_data[0]['u_wind_mean'][cp_id,:],monc_data[0]['zn'],label = 't=14h')
     #     plt.plot(monc_data[0]['u_wind_mean'][int(cp_id)+1,:],monc_data[0]['zn'],label = 'checkpoint restart+1')
-    # plt.plot(monc_data[0]['u_wind_mean'][-1,:],monc_data[0]['zn'],label = 'end')
+    plt.subplot(144)
+    plt.plot(monc_data[0]['u_wind_mean'][-1,:],monc_data[0]['zn'],label = 't=24h')
+    plt.label('t=24h')
     plt.xlabel('U [m/s]')
     plt.ylabel('Z [m]')
     plt.legend()
