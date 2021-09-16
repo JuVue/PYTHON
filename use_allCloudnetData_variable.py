@@ -89,9 +89,8 @@ def calc_TWC(obs_data,thresholding, **args):
         y = [1e3, 4e3]
         f = interp1d(y, x)
         twc_thresh_um[um_intZs] = f(obs_data['height'][0,um_intZs].data)
-        embed()
-        for t in range(0,np.size(um_data[m]['model_twc'],0)):
-            for k in range(0,np.size(um_data[m]['model_twc'],1)):
+        for t in range(0,np.size(obs_data['twc'],0)):
+            for k in range(0,np.size(obs_data['twc'],1)):
                 if obs_data['twc'][t,k] < twc_thresh_um[k]:
                     obs_data['twc'][t,k] = np.nan
                     obs_data['lwc'][t,k] = np.nan
