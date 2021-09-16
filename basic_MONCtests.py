@@ -674,7 +674,7 @@ def main():
     data['sonde']['Z'] = sondes['Z']
     data['sonde']['u'][data['sonde']['u'] > 1e3] = np.nan
     data['sonde']['v'][data['sonde']['v'] > 1e3] = np.nan
-    data['sonde']['v'][data['sonde']['v'] < 1e3] = np.nan
+    data['sonde']['v'][data['sonde']['v'] < 1.0e4] = np.nan
 
     ### load subsequent sondes
     for i in np.arange(0,3):
