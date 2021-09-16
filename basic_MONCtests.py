@@ -60,6 +60,7 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel, m_out
     plt.rc('ytick',labelsize=MED_SIZE)
     plt.rc('legend',fontsize=MED_SIZE)
 
+    ### theta
     fig = plt.figure(figsize=(6,5))
     plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.9, left = 0.15,
             hspace = 0.3, wspace = 0.1)
@@ -96,6 +97,7 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel, m_out
     # plt.savefig(fileout)
     # plt.close()
 
+    ### liquid mass
     fig = plt.figure(figsize=(9,4))
     plt.subplots_adjust(top = 0.93, bottom = 0.14, right = 0.98, left = 0.12,
             hspace = 0.3, wspace = 0.26)
@@ -122,6 +124,7 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel, m_out
     plt.savefig(fileout)
     plt.close()
 
+    ### ice mass
     fig = plt.figure(figsize=(8,7))
     plt.subplots_adjust(top = 0.93, bottom = 0.11, right = 0.98, left = 0.12,
             hspace = 0.3, wspace = 0.26)
@@ -161,6 +164,7 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel, m_out
     plt.savefig(fileout)
     plt.close()
 
+    ### ice number
     fig = plt.figure(figsize=(8,7))
     plt.subplots_adjust(top = 0.93, bottom = 0.11, right = 0.98, left = 0.12,
             hspace = 0.3, wspace = 0.26)
@@ -197,6 +201,23 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel, m_out
     plt.title('N$_{g}$ [/L]')
     plt.colorbar()
     fileout = plots_out_dir + moutstr[0] + '_ICNCTimeseries_' + mlabel[0] + '.png'
+    plt.savefig(fileout)
+    plt.close()
+
+
+    ### u profiles
+    fig = plt.figure(figsize=(6,5))
+    plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.9, left = 0.15,
+            hspace = 0.3, wspace = 0.1)
+    plt.plot(monc_data[0]['u_wind_mean'][0,:],monc_data[0]['zn'],label = 'start')
+    if np.size(monc_data[0]['u_wind_mean'],0) >= cp_id:
+        plt.plot(monc_data[0]['u_wind_mean'][cp_id,:],monc_data[0]['zn'],label = 'checkpoint restart')
+        plt.plot(monc_data[0]['u_wind_mean'][int(cp_id)+1,:],monc_data[0]['zn'],label = 'checkpoint restart+1')
+    plt.plot(monc_data[0]['u_wind_mean'][-1,:],monc_data[0]['zn'],label = 'end')
+    plt.xlabel('U [m/s]')
+    plt.ylabel('Z [m]')
+    plt.legend()
+    fileout = plots_out_dir + moutstr[0] + '_Uprofiles_' + mlabel[0] + '.png'
     plt.savefig(fileout)
     plt.close()
 
