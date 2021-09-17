@@ -1446,7 +1446,6 @@ def plot_tke_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon,
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) +'_tke-profile'  + '_split.png'
     plt.savefig(fileout,dpi=300)
 
-    embed()
     ####TKE DISSIPATION PLOTTING OBS & MONC
     plt.figure(figsize=(18,8))
     plt.subplots_adjust(top = 0.8, bottom = 0.1, right = 0.92, left = 0.08)
@@ -1461,7 +1460,7 @@ def plot_tke_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon,
         obsid= np.squeeze(np.argwhere((obs['dissL']['mday']>=prof_time[pt][0]) & (obs['dissL']['mday']<prof_time[pt][1])))
         a=10**np.nanmean(obs['dissL']['epsilon_corr'][:,obsid],1)
         a[a>0.1]=np.NaN
-        plt.plot(a,obs['dissL']['height'], color = 'k', linewidth = 3, label = 'lidar', zorder = obs_zorder)
+        plt.plot(a,obs['dissL']['height'], color = 'k', linewidth = 2, label = 'lidar', zorder = obs_zorder)
         a=10**np.nanmean(obs['dissL']['eps_interpMONC'][:,obsid],1)
         plt.plot(a,obs['dissL']['height_MONC'], color = 'green', linewidth = 2, label = 'lidar MONC', zorder = obs_zorder)
         ax1.fill_betweenx(obs['dissL']['height'],10**(np.nanmean(obs['dissL']['epsilon_corr'][:,obsid],1) - np.nanstd(obs['dissL']['epsilon_corr'][:,obsid],1)),
