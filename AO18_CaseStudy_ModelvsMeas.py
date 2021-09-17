@@ -15,6 +15,7 @@ import matplotlib.dates as mdates
 import matplotlib.ticker as ticker
 import matplotlib.cm as mpl_cm
 from matplotlib.colors import ListedColormap, LinearSegmentedColormap,LogNorm
+from scipy.interpolate import interp1d
 
 #import matplotlib.cm as mpl_cm
 import os
@@ -1330,17 +1331,23 @@ def plot_tke_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon,
     # same for radar data
     a=obs['dissL']['epsilon_L']
     b=obs['dissL']['epsilon_Lepserr']
-    a[a>=0]=np.NaN
+    obs['dissL']['height']=obs['dissL']['Lranges']*1000
+    a[a>=-1]=np.NaN
     a[a<=-8]=np.NaN
     a[b>=350]=np.NaN
-    eL=np.transpose(a)
     obs['dissL']['epsilon_corr']=np.transpose(a)
-    obs['dissL']['height']=obs['dissL']['Lranges']*1000
-    del a,b
+    #interpolate to monc_grid
+    hh=np.array(monc_data[0][monc_data[0]['zvar']['dissipation_mean']])
+    aint = np.ones((a.shape[0],hh.shape[0]))*np.NaN
+    interp_eps = interp1d(np.squeeze(obs['dissL']['height']), np.squeeze(a))
+    aint[:,2:] = interp_eps(hh[2:])
+#    eL=np.transpose(a)
+    obs['dissL']['eps_interpMONC']=np.transpose(aint)
+    obs['dissL']['height_MONC']=hh
+    del a,b,aint
 
     a=obs['dissR']['epsilon_R']
     b=obs['dissR']['epsilon_Repserr']
-
     a[a>=0]=np.NaN
     a[a<=-8]=np.NaN
     a[b>=350]=np.NaN
@@ -1426,7 +1433,7 @@ def plot_tke_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon,
 
         plt.xlabel('tke [m$^2$ s$^{-2}$')
         plt.ylabel('Z [km]')
-        plt.xlim([0, 1.5])
+        #plt.xlim([0, 1.5])
         plt.ylim(ylims)
         plt.yticks(yticks)
         ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
@@ -1444,45 +1451,37 @@ def plot_tke_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon,
     plt.figure(figsize=(18,8))
     plt.subplots_adjust(top = 0.8, bottom = 0.1, right = 0.92, left = 0.08)
     for pt in range(0,len(prof_time)):
-        plt.subplot(1,len(prof_time),pt+1)
+        ax=plt.subplot(1,len(prof_time),pt+1)
         ax1 = plt.gca()
+        ax.set_xscale('log')
         sstr=datenum2date(prof_time[pt][0])
         estr=datenum2date(prof_time[pt][1])
         plt.title(sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC')
+        #lidar
         obsid= np.squeeze(np.argwhere((obs['dissL']['mday']>=prof_time[pt][0]) & (obs['dissL']['mday']<prof_time[pt][1])))
-        plt.plot(10**np.nanmean(obs['dissL']['epsilon_corr'][:,obsid],1),obs['dissL']['height'], color = 'k', linewidth = 3, label = 'lidar', zorder = obs_zorder)
-        plt.plot(np.nanmean(10**obs['dissL']['epsilon_corr'][:,obsid],1),obs['dissL']['height'], color = 'grey', linewidth = 3, label = 'lidar', zorder = obs_zorder)
-        #plt.plot(np.nanmean(eL[:,obsid],1),obs['dissL']['height'], color = 'k', linewidth = 3, label = 'lidar', zorder = obs_zorder)
-        # ax1.fill_betweenx(obs['dissL']['height'],10**(np.nanmean(obs['dissL']['epsilon_corr'][:,obsid],1) - np.nanstd(obs['dissL']['epsilon_corr'][:,obsid],1)),
-        #     10**(np.nanmean(obs['dissL']['epsilon_corr'][:,obsid],1) + np.nanstd(obs['dissL']['epsilon_corr'][:,obsid],1)), color = 'lightgrey', alpha = 0.5)
-        # plt.plot(10**(np.nanmean(obs['dissL']['epsilon_corr'][:,obsid],1) - np.nanstd(obs['dissL']['epsilon_corr'][:,obsid],1)),obs['dissL']['height'],
-        #     '--', color = 'k', linewidth = 0.5)
-        # plt.plot(10**(np.nanmean(obs['dissL']['epsilon_corr'][:,obsid],1) + np.nanstd(obs['dissL']['epsilon_corr'][:,obsid],1)), obs['dissL']['height'],
-        #     '--', color = 'k', linewidth = 0.5)
+        a=10**np.nanmean(obs['dissL']['epsilon_corr'][:,obsid],1)
+        a[a>0.1]=np.NaN
+        plt.plot(a,obs['dissL']['height'], color = 'k', linewidth = 3, label = 'lidar', zorder = obs_zorder)
+        a=10**np.nanmean(obs['dissL']['eps_interpMONC'][:,obsid],1)
+        plt.plot(a,obs['dissL']['height_MONC'], color = 'green', linewidth = 2, label = 'lidar MONC', zorder = obs_zorder)
+        ax1.fill_betweenx(obs['dissL']['height'],10**(np.nanmean(obs['dissL']['epsilon_corr'][:,obsid],1) - np.nanstd(obs['dissL']['epsilon_corr'][:,obsid],1)),
+            10**(np.nanmean(obs['dissL']['epsilon_corr'][:,obsid],1) + np.nanstd(obs['dissL']['epsilon_corr'][:,obsid],1)), color = 'grey', alpha = 0.5)
+        plt.plot(10**(np.nanmean(obs['dissL']['epsilon_corr'][:,obsid],1) - np.nanstd(obs['dissL']['epsilon_corr'][:,obsid],1)),obs['dissL']['height'],
+            '--', color = 'k', linewidth = 0.5)
+        plt.plot(10**(np.nanmean(obs['dissL']['epsilon_corr'][:,obsid],1) + np.nanstd(obs['dissL']['epsilon_corr'][:,obsid],1)), obs['dissL']['height'],
+            '--', color = 'k', linewidth = 0.5)
 
         #radar
         obsid= np.squeeze(np.argwhere((obs['dissR']['mday']>=prof_time[pt][0]) & (obs['dissR']['mday']<prof_time[pt][1])))
-        plt.plot(10**np.nanmean(obs['dissR']['epsilon_corr'][:,obsid],1),obs['dissR']['height'], color = 'grey', linewidth = 3, label = 'dissR', zorder = obs_zorder)
+        a=10**np.nanmean(obs['dissR']['epsilon_corr'][:,obsid],1)
+        plt.plot(a,obs['dissR']['height'], color = 'grey', linewidth = 3, label = 'radar', zorder = obs_zorder)
         #plt.plot(np.nanmean(eR[:,obsid],1),obs['dissR']['height'], color = 'grey', linewidth = 3, label = 'dissR', zorder = obs_zorder)
-        # ax1.fill_betweenx(obs['dissR']['height'],10**(np.nanmean(obs['dissR']['epsilon_corr'][:,obsid],1) - np.nanstd(obs['dissR']['epsilon_corr'][:,obsid],1)),
-        #     10**(np.nanmean(obs['dissR']['epsilon_corr'][:,obsid],1) + np.nanstd(obs['dissR']['epsilon_corr'][:,obsid],1)), color = 'lightgrey', alpha = 0.5)
-        # plt.plot(10**(np.nanmean(obs['dissR']['epsilon_corr'][:,obsid],1) - np.nanstd(obs['dissR']['epsilon_corr'][:,obsid],1)),obs['dissR']['height'],
-        #     '--', color = 'k', linewidth = 0.5)
-        # plt.plot(10**(np.nanmean(obs['dissR']['epsilon_corr'][:,obsid],1) + np.nanstd(obs['dissR']['epsilon_corr'][:,obsid],1)), obs['dissR']['height'],
-        #     '--', color = 'k', linewidth = 0.5)
-            # #adding RS data
-        # obsid= np.squeeze(np.argwhere((obs['sondes']['mday']>=prof_time[pt][0]-1/24) & (obs['sondes']['mday']<prof_time[pt][1])))
-        # plt.plot(obs['sondes']['ws'][:,obsid],obs['sondes']['Z'], color = 'grey', linewidth = 3, label = 'RS', zorder = obs_zorder)
-        #
-        # if pum==True:
-        #     for m in range(0,len(um_data)):
-        #         id=  np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
-        #         ax1.fill_betweenx(um_data[m]['height2'],np.nanmean(um_data[m]['tke'][id,:],0) - np.nanstd(um_data[m]['tke'][id,:],0),
-        #             np.nanmean(um_data[m]['tke'][id,:],0) + np.nanstd(um_data[m]['tke'][id,:],0), color = fcols[m], alpha = 0.05)
-        #         plt.plot(np.nanmean(um_data[m]['tke'][id,:],0) - np.nanstd(um_data[m]['tke'][id,:],0), um_data[m]['height2'],
-        #             '--', color =lcols[m], linewidth = 0.5)
-        #         plt.plot(np.nanmean(um_data[m]['tke'][id,:],0) + np.nanstd(um_data[m]['tke'][id,:],0),um_data[m]['height2'],
-        #             '--', color = lcols[m], linewidth = 0.5)
+        ax1.fill_betweenx(obs['dissR']['height'],10**(np.nanmean(obs['dissR']['epsilon_corr'][:,obsid],1) - np.nanstd(obs['dissR']['epsilon_corr'][:,obsid],1)),
+            10**(np.nanmean(obs['dissR']['epsilon_corr'][:,obsid],1) + np.nanstd(obs['dissR']['epsilon_corr'][:,obsid],1)), color = 'lightgrey', alpha = 0.5)
+        plt.plot(10**(np.nanmean(obs['dissR']['epsilon_corr'][:,obsid],1) - np.nanstd(obs['dissR']['epsilon_corr'][:,obsid],1)),obs['dissR']['height'],
+            '--', color = 'k', linewidth = 0.5)
+        plt.plot(10**(np.nanmean(obs['dissR']['epsilon_corr'][:,obsid],1) + np.nanstd(obs['dissR']['epsilon_corr'][:,obsid],1)), obs['dissR']['height'],
+            '--', color = 'k', linewidth = 0.5)
 
         if pmonc==True:
             tvar=[]
@@ -1497,10 +1496,6 @@ def plot_tke_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon,
         #             '--', color =lcolsmonc[m], linewidth = 0.5)
         #         plt.plot(np.nanmean(monc_data[m]['dissipation_mean'][id,:],0) + np.nanstd(monc_data[m]['dissipation_mean'][id,:],0), monc_data[m][zvar[m]],
         #             '--', color = lcolsmonc[m], linewidth = 0.5)
-        # # if pum==True:
-        #     for m in range(0,len(um_data)):
-        #         id= np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
-        #         plt.plot(np.nanmean(um_data[m]['tke'][id,:],0),um_data[m]['height2'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
         if pmonc==True:
             for m in range(0,len(monc_data)):
                 id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
@@ -1511,12 +1506,11 @@ def plot_tke_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon,
 
         plt.xlabel('log$\epsilon$ [m$^2$ s$^{-3}$]')
         plt.ylabel('Z [km]')
-        plt.xlim([1e-6, 1e-2])
+        plt.xlim([1e-7, 1e-1])
         plt.ylim(ylims)
         plt.yticks(yticks)
         ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
         ax1.set_yticklabels(ytlabels)
-
     dstr=datenum2date(dates[1])
     if pmonc==True:
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_logeps-profile'  + '_split.png'
@@ -1537,26 +1531,23 @@ def plot_tke_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon,
         obsid= np.squeeze(np.argwhere((obs['dissL']['mday']>=prof_time[pt][0]) & (obs['dissL']['mday']<prof_time[pt][1])))
         plt.plot(np.nanmean(obs['dissL']['epsilon_corr'][:,obsid],1),obs['dissL']['height'], color = 'k', linewidth = 3, label = 'lidar', zorder = obs_zorder)
         #plt.plot(np.nanmean(eL[:,obsid],1),obs['dissL']['height'], color = 'k', linewidth = 3, label = 'lidar', zorder = obs_zorder)
-        # ax1.fill_betweenx(obs['dissL']['height'],10**(np.nanmean(obs['dissL']['epsilon_corr'][:,obsid],1) - np.nanstd(obs['dissL']['epsilon_corr'][:,obsid],1)),
-        #     10**(np.nanmean(obs['dissL']['epsilon_corr'][:,obsid],1) + np.nanstd(obs['dissL']['epsilon_corr'][:,obsid],1)), color = 'lightgrey', alpha = 0.5)
-        # plt.plot(10**(np.nanmean(obs['dissL']['epsilon_corr'][:,obsid],1) - np.nanstd(obs['dissL']['epsilon_corr'][:,obsid],1)),obs['dissL']['height'],
-        #     '--', color = 'k', linewidth = 0.5)
-        # plt.plot(10**(np.nanmean(obs['dissL']['epsilon_corr'][:,obsid],1) + np.nanstd(obs['dissL']['epsilon_corr'][:,obsid],1)), obs['dissL']['height'],
-        #     '--', color = 'k', linewidth = 0.5)
+        ax1.fill_betweenx(obs['dissL']['height'],(np.nanmean(obs['dissL']['epsilon_corr'][:,obsid],1) - np.nanstd(obs['dissL']['epsilon_corr'][:,obsid],1)),
+            (np.nanmean(obs['dissL']['epsilon_corr'][:,obsid],1) + np.nanstd(obs['dissL']['epsilon_corr'][:,obsid],1)), color = 'lightgrey', alpha = 0.5)
+        plt.plot((np.nanmean(obs['dissL']['epsilon_corr'][:,obsid],1) - np.nanstd(obs['dissL']['epsilon_corr'][:,obsid],1)),obs['dissL']['height'],
+            '--', color = 'k', linewidth = 0.5)
+        plt.plot((np.nanmean(obs['dissL']['epsilon_corr'][:,obsid],1) + np.nanstd(obs['dissL']['epsilon_corr'][:,obsid],1)), obs['dissL']['height'],
+            '--', color = 'k', linewidth = 0.5)
 
         #radar
         obsid= np.squeeze(np.argwhere((obs['dissR']['mday']>=prof_time[pt][0]) & (obs['dissR']['mday']<prof_time[pt][1])))
         plt.plot(np.nanmean(obs['dissR']['epsilon_corr'][:,obsid],1),obs['dissR']['height'], color = 'grey', linewidth = 3, label = 'dissR', zorder = obs_zorder)
         #plt.plot(np.nanmean(eR[:,obsid],1),obs['dissR']['height'], color = 'grey', linewidth = 3, label = 'dissR', zorder = obs_zorder)
-        # ax1.fill_betweenx(obs['dissR']['height'],10**(np.nanmean(obs['dissR']['epsilon_corr'][:,obsid],1) - np.nanstd(obs['dissR']['epsilon_corr'][:,obsid],1)),
-        #     10**(np.nanmean(obs['dissR']['epsilon_corr'][:,obsid],1) + np.nanstd(obs['dissR']['epsilon_corr'][:,obsid],1)), color = 'lightgrey', alpha = 0.5)
-        # plt.plot(10**(np.nanmean(obs['dissR']['epsilon_corr'][:,obsid],1) - np.nanstd(obs['dissR']['epsilon_corr'][:,obsid],1)),obs['dissR']['height'],
-        #     '--', color = 'k', linewidth = 0.5)
-        # plt.plot(10**(np.nanmean(obs['dissR']['epsilon_corr'][:,obsid],1) + np.nanstd(obs['dissR']['epsilon_corr'][:,obsid],1)), obs['dissR']['height'],
-        #     '--', color = 'k', linewidth = 0.5)
-            # #adding RS data
-        # obsid= np.squeeze(np.argwhere((obs['sondes']['mday']>=prof_time[pt][0]-1/24) & (obs['sondes']['mday']<prof_time[pt][1])))
-        # plt.plot(obs['sondes']['ws'][:,obsid],obs['sondes']['Z'], color = 'grey', linewidth = 3, label = 'RS', zorder = obs_zorder)
+        ax1.fill_betweenx(obs['dissR']['height'],(np.nanmean(obs['dissR']['epsilon_corr'][:,obsid],1) - np.nanstd(obs['dissR']['epsilon_corr'][:,obsid],1)),
+            (np.nanmean(obs['dissR']['epsilon_corr'][:,obsid],1) + np.nanstd(obs['dissR']['epsilon_corr'][:,obsid],1)), color = 'lightgrey', alpha = 0.5)
+        plt.plot((np.nanmean(obs['dissR']['epsilon_corr'][:,obsid],1) - np.nanstd(obs['dissR']['epsilon_corr'][:,obsid],1)),obs['dissR']['height'],
+            '--', color = 'k', linewidth = 0.5)
+        plt.plot((np.nanmean(obs['dissR']['epsilon_corr'][:,obsid],1) + np.nanstd(obs['dissR']['epsilon_corr'][:,obsid],1)), obs['dissR']['height'],
+            '--', color = 'k', linewidth = 0.5)
         #
         # if pum==True:
         #     for m in range(0,len(um_data)):
@@ -2163,17 +2154,17 @@ def main():
     # out_dir3 = '24_u-cc324_RA2T_CON/'
 
     out_dir = ['23_u-cc278_RA1M_CASIM/',
-              '30_u-cg179_RA1M_CASIM/',
-              '26_u-cd847_RA1M_CASIM/',
-              '27_u-ce112_RA1M_CASIM/'
+              # '30_u-cg179_RA1M_CASIM/',
+              # '26_u-cd847_RA1M_CASIM/',
+              # '27_u-ce112_RA1M_CASIM/'
               ]
 #    out_dir = [  '30_u-cg179_RA1M_CASIM/' ]
     ### CHOOSE MONC RUNS
     m_out_dir =[#'22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/'
-                '27C_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper/',
-                '27D_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd25/',
-                '27E_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd10/',
-                '27F_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd5/',
+                # '27C_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper/',
+                # '27D_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd25/',
+                # '27E_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd10/',
+                # '27F_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd5/',
                 '30A_20180913T0000Z_8hSpinUp_8-14hUVRelax0600_14-24hUVRelax1200_8-24h0.1Cooper_FixedNd10/'
                 ]
     # m_out_dir = ['5_control_20180913T0000Z_Wsub-1.5_Fletcher/',
