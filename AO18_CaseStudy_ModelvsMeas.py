@@ -1431,7 +1431,7 @@ def plot_tke_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon,
         if pt == 1:
             plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=4)
 
-        plt.xlabel('tke [m$^2$ s$^{-2}$')
+        plt.xlabel('tke [m$^2$ s$^{-2}$'])
         plt.ylabel('Z [km]')
         #plt.xlim([0, 1.5])
         plt.ylim(ylims)
@@ -2527,9 +2527,14 @@ def main():
 
     print ('...')
 
-        #################################################################
-        ## create labels for figure legends - done here so only needs to be done once!
-        #################################################################
+    #################################################################
+    ## interpolating observation to MONC GRID
+    #################################################################
+
+
+    #################################################################
+    ## create labels for figure legends - done here so only needs to be done once!
+    #################################################################
     label=[]
     outstr=[]
     for m in range(0, len(out_dir)):
@@ -2654,7 +2659,7 @@ def main():
     #     estr=datenum2date(prof_time[pt][1])
     #     obsid= np.squeeze(np.argwhere((obs['dec']['mday']>=prof_time[pt][0]) & (obs['dec']['mday']<prof_time[pt][1])))
     #     b.append(obs['dec']['cbase_sandeep'][obsid])
-
+    embed()
     # -------------------------------------------------------------
     # Plot paper figures
     # -------------------------------------------------------------
