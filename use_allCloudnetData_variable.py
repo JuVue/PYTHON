@@ -2483,6 +2483,333 @@ def plot_monc_comparison(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): 
     print ('')
     print ('******')
 
+def UM_MONC_Nisg(obs_data, lwcvar, lwcstr, plots_out_dir, dates, prof_time, **args): #, lon, lat):
+
+    obs_zorder = 1
+
+    if bool(args):
+        for n in range(0,len(args)):
+            if  list(args.keys())[n] == 'monc_data':
+                monc_data=args[list(args.keys())[n]]
+                obs_zorder += len(monc_data)
+                pmonc =True
+            elif list(args.keys())[n] == 'mlabel':
+                mlabel = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'moutstr':
+                moutstr= args[list(args.keys())[n]]
+            elif  list(args.keys())[n] == 'um_data':
+                um_data=args[list(args.keys())[n]]
+                obs_zorder += len(um_data)
+                pum =True
+            elif  list(args.keys())[n] == 'raw_data':
+                raw_data=args[list(args.keys())[n]]
+                obs_zorder += len(raw_data)
+                praw = True
+            elif list(args.keys())[n] == 'label':
+                label = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'outstr':
+                outstr= args[list(args.keys())[n]]
+
+    ylims=[0,2]
+    yticks=np.arange(0,2e3,0.5e3)
+    ytlabels=yticks/1e3
+
+
+    print ('******')
+    print ('')
+    print ('Plotting UM raw versus Cloudnet-processed, with MONC for reference:')
+    print ('')
+    # print (raw_data[0].keys())
+
+    ###----------------------------------------------------------------
+    ###         Data fixes
+    ###----------------------------------------------------------------
+
+    for m in range(0,len(raw_data)):
+        raw_data[m]['rho'] = calcAirDensity(raw_data[m]['temperature'].data, raw_data[m]['pressure'].data / 1e2)
+
+    if praw==True:
+        for m in range(0,len(raw_data)):
+            raw_data[m]['qnice'][raw_data[m]['qnice'] < 0] = 0.0
+            raw_data[m]['qice'][raw_data[m]['qice'] < 0] = 0.0
+            raw_data[m]['qsnow'][raw_data[m]['qsnow'] < 0] = 0.0
+            raw_data[m]['qicecrystals'][raw_data[m]['qicecrystals'] < 0] = 0.0
+
+
+    ###----------------------------------------------------------------
+    ###         Calculate total water content
+    ###----------------------------------------------------------------
+    obs_data['twc'] = obs_data['lwc'] + obs_data['iwc']
+    obs_data['twc_ad'] = obs_data['lwc_adiabatic'] + obs_data['iwc']
+    obs_data['twc_ad_nolwp'] = obs_data['lwc_adiabatic_inc_nolwp'] + obs_data['iwc']
+    if pum==True:
+        for m in range(0,len(um_data)):
+            um_data[m]['model_twc'] = um_data[m]['model_lwc'] + um_data[m]['model_iwc']
+    if pmonc==True:
+        lwc_zvar=[]
+        lwc_tvar=[]
+        nisg_zvar=[]
+        nisg_tvar=[]
+        for m in range(0,len(monc_data)):
+            monc_data[m]['model_twc'] = monc_data[m]['twc_tot_mean']
+            monc_data[m]['model_lwc'] = monc_data[m]['lwc_tot_mean']
+            lwc_zvar+=[monc_data[m]['zvar']['lwc_tot_mean']]
+            lwc_tvar+=[monc_data[m]['tvar']['lwc_tot_mean']]
+            nisg_zvar+=[monc_data[m]['zvar']['nisg_tot_mean']]
+            nisg_tvar+=[monc_data[m]['tvar']['nisg_tot_mean']]
+    if praw==True:
+        for m in range(0,len(raw_data)):
+            raw_data[m]['qt'] = raw_data[m]['qliq'] + raw_data[m]['qice']
+            raw_data[m]['lwc'] = raw_data[m]['qliq'] * raw_data[m]['rho']
+            raw_data[m]['iwc'] = raw_data[m]['qice'] * raw_data[m]['rho']
+            raw_data[m]['twc'] = raw_data[m]['lwc'] + raw_data[m]['iwc']
+
+    ###----------------------------------------------------------------
+    ###         Plot figure - Mean profiles
+    ###----------------------------------------------------------------
+
+    SMALL_SIZE = 12
+    MED_SIZE = 14
+    LARGE_SIZE = 16
+
+    plt.rc('font',size=MED_SIZE)
+    plt.rc('axes',titlesize=MED_SIZE)
+    plt.rc('axes',labelsize=MED_SIZE)
+    plt.rc('xtick',labelsize=MED_SIZE)
+    plt.rc('ytick',labelsize=MED_SIZE)
+    plt.rc('legend',fontsize=SMALL_SIZE)
+    # plt.subplots_adjust(top = 0.95, bottom = 0.12, right = 0.95, left = 0.15,
+    #         hspace = 0.4, wspace = 0.1)
+    ###define colors
+    lcols=['lightseagreen','steelblue','royalblue','darkblue']
+    fcols=['lightcyan','lightblue','skyblue','blue']
+    lcolsmonc=['gold','darkgoldenrod','darkorange','orangered','firebrick']
+    fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
+    ### define axis instance
+    ####LWC
+    plt.figure(figsize=(10,14))
+    plt.subplots_adjust(top = 0.95, bottom = 0.1, right = 0.98, left = 0.08)
+
+    for m in range(0,len(raw_data)):
+        plt.subplot(len(raw_data), 1, m+1)
+        ax1 = plt.gca()
+        # plt.plot(np.nanmean(obs_data['iwc'],0)*1e3,np.nanmean(obs_data['height'],0), color = 'k', linewidth = 3, label = 'Obs_UMgrid', zorder = obs_zorder)
+        if praw==True:
+            # plt.plot(np.nanmean(raw_data[m]['iwc'],0)*1e3,raw_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m] + '_Raw', zorder = 1)
+            plt.pcolor(raw_data[m]['time'][:],raw_data[m]['height'][:],np.transpose(raw_data[m]['qnice'][:])/1e3,
+                vmin=0.,vmax=1.0,
+                )
+        plt.xlabel('N$_{isg}$ [L$^{-1}$]')
+        plt.ylabel('Z [km]')
+        plt.ylim(ylims)
+        plt.yticks(yticks)
+        ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
+        ax1.set_yticklabels(ytlabels)
+        plt.xlim([dates[0], dates[1]])
+        ax1.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+        ax1.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+        ax1.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+        plt.colorbar()
+        if pmonc==True:
+            ax2 = ax1.twinx()
+            plt.plot(monc_data[0]['time'],monc_data[0]['nisg_tot_mean']*1e3, color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+            ax2.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+            ax2.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+            ax2.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+        # plt.legend()
+
+    # plt.subplot(122)
+    # ax1 = plt.gca()
+    # # plt.plot(np.nanmean(obs_data['iwc'],0)*1e3,np.nanmean(obs_data['height'],0), color = 'k', linewidth = 3, label = 'Obs_UMgrid', zorder = obs_zorder)
+    # if praw==True:
+    #     for m in range(0,len(raw_data)):
+    #         plt.plot(np.nanmean(raw_data[m]['qice'],0)*1e3,raw_data[m]['height'], color = lcols[m], linewidth = 3, label = 'Qice', zorder = 1)
+    #         plt.plot(np.nanmean(raw_data[m]['qsnow'],0)*1e3,raw_data[m]['height'], '--', color = lcols[m], linewidth = 3, label = 'Qsnow', zorder = 1)
+    #         plt.plot(np.nanmean(raw_data[m]['qicecrystals'],0)*1e3,raw_data[m]['height'], '-.', color = lcols[m], linewidth = 3, label = 'Qicecrystals', zorder = 1)
+    # if pmonc==True:
+    #     for m in range(0,len(monc_data)):
+    #         plt.plot(np.nanmean(monc_data[m]['q_ice_mass_mean'],0)*1e3,monc_data[m][iwc_zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m] + '_qice', zorder = 1)
+    #         plt.plot(np.nanmean(monc_data[m]['q_snow_mass_mean'],0)*1e3,monc_data[m][iwc_zvar[m]], '--', color = lcolsmonc[m], linewidth = 3, label = mlabel[m] + '_qsnow', zorder = 1)
+    #         plt.plot(np.nanmean(monc_data[m]['q_graupel_mass_mean'],0)*1e3,monc_data[m][iwc_zvar[m]], '-.', color = lcolsmonc[m], linewidth = 3, label = mlabel[m] + '_qgraupel', zorder = 1)
+    # plt.xlabel('Q$_{ice/snow/icecrystals}$ [g m$^{-3}$]')
+    # plt.ylabel('Z [km]')
+    # plt.ylim(ylims)
+    # plt.yticks(yticks)
+    # ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
+    # ax1.set_yticklabels(ytlabels)
+    # plt.legend()
+
+    # plt.xlim([0,0.005])
+
+    dstr=datenum2date(dates[1])
+    fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_UM-MONC_' + '_'.join(outstr) + '_NISG-TS.png'
+    plt.savefig(fileout, dpi=300)
+    plt.close()
+    # plt.show()
+    print ('')
+    print ('Finished plotting! :)')
+    print ('')
+    print ('******')
+
+def UM_SanityCheck(obs_data, lwcvar, lwcstr, plots_out_dir, dates, prof_time, **args): #, lon, lat):
+
+    obs_zorder = 1
+
+    if bool(args):
+        for n in range(0,len(args)):
+            if  list(args.keys())[n] == 'monc_data':
+                monc_data=args[list(args.keys())[n]]
+                obs_zorder += len(monc_data)
+                pmonc =True
+            elif list(args.keys())[n] == 'mlabel':
+                mlabel = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'moutstr':
+                moutstr= args[list(args.keys())[n]]
+            elif  list(args.keys())[n] == 'um_data':
+                um_data=args[list(args.keys())[n]]
+                obs_zorder += len(um_data)
+                pum =True
+            elif  list(args.keys())[n] == 'raw_data':
+                raw_data=args[list(args.keys())[n]]
+                obs_zorder += len(raw_data)
+                praw = True
+            elif list(args.keys())[n] == 'label':
+                label = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'outstr':
+                outstr= args[list(args.keys())[n]]
+
+    ylims=[0,2]
+    yticks=np.arange(0,2e3,0.5e3)
+    ytlabels=yticks/1e3
+
+
+    print ('******')
+    print ('')
+    print ('Plotting UM raw versus Cloudnet-processed, with MONC for reference:')
+    print ('')
+    # print (raw_data[0].keys())
+
+    ###----------------------------------------------------------------
+    ###         Data fixes
+    ###----------------------------------------------------------------
+
+    for m in range(0,len(raw_data)):
+        raw_data[m]['rho'] = calcAirDensity(raw_data[m]['temperature'].data, raw_data[m]['pressure'].data / 1e2)
+
+    if praw==True:
+        for m in range(0,len(raw_data)):
+            raw_data[m]['qnice'][raw_data[m]['qnice'] < 0] = 0.0
+            raw_data[m]['qice'][raw_data[m]['qice'] < 0] = 0.0
+            raw_data[m]['qsnow'][raw_data[m]['qsnow'] < 0] = 0.0
+            raw_data[m]['qicecrystals'][raw_data[m]['qicecrystals'] < 0] = 0.0
+
+
+    ###----------------------------------------------------------------
+    ###         Calculate total water content
+    ###----------------------------------------------------------------
+    obs_data['twc'] = obs_data['lwc'] + obs_data['iwc']
+    obs_data['twc_ad'] = obs_data['lwc_adiabatic'] + obs_data['iwc']
+    obs_data['twc_ad_nolwp'] = obs_data['lwc_adiabatic_inc_nolwp'] + obs_data['iwc']
+    if pum==True:
+        for m in range(0,len(um_data)):
+            um_data[m]['model_twc'] = um_data[m]['model_lwc'] + um_data[m]['model_iwc']
+    if pmonc==True:
+        lwc_zvar=[]
+        lwc_tvar=[]
+        iwc_zvar=[]
+        iwc_tvar=[]
+        for m in range(0,len(monc_data)):
+            monc_data[m]['model_twc'] = monc_data[m]['twc_tot_mean']
+            monc_data[m]['model_lwc'] = monc_data[m]['lwc_tot_mean']
+            lwc_zvar+=[monc_data[m]['zvar']['lwc_tot_mean']]
+            lwc_tvar+=[monc_data[m]['tvar']['lwc_tot_mean']]
+            iwc_zvar+=[monc_data[m]['zvar']['iwc_tot_mean']]
+            iwc_tvar+=[monc_data[m]['tvar']['iwc_tot_mean']]
+    if praw==True:
+        for m in range(0,len(raw_data)):
+            raw_data[m]['qt'] = raw_data[m]['qliq'] + raw_data[m]['qice']
+            raw_data[m]['lwc'] = raw_data[m]['qliq'] * raw_data[m]['rho']
+            raw_data[m]['iwc'] = raw_data[m]['qice'] * raw_data[m]['rho']
+            raw_data[m]['twc'] = raw_data[m]['lwc'] + raw_data[m]['iwc']
+
+    ###----------------------------------------------------------------
+    ###         Plot figure - Mean profiles
+    ###----------------------------------------------------------------
+
+    SMALL_SIZE = 12
+    MED_SIZE = 14
+    LARGE_SIZE = 16
+
+    plt.rc('font',size=MED_SIZE)
+    plt.rc('axes',titlesize=MED_SIZE)
+    plt.rc('axes',labelsize=MED_SIZE)
+    plt.rc('xtick',labelsize=MED_SIZE)
+    plt.rc('ytick',labelsize=MED_SIZE)
+    plt.rc('legend',fontsize=SMALL_SIZE)
+    # plt.subplots_adjust(top = 0.95, bottom = 0.12, right = 0.95, left = 0.15,
+    #         hspace = 0.4, wspace = 0.1)
+    ###define colors
+    lcols=['lightseagreen','steelblue','royalblue','darkblue']
+    fcols=['lightcyan','lightblue','skyblue','blue']
+    lcolsmonc=['gold','darkgoldenrod','darkorange','orangered','firebrick']
+    fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
+    ### define axis instance
+    ####LWC
+    plt.figure(figsize=(14,7))
+    plt.subplots_adjust(top = 0.95, bottom = 0.1, right = 0.98, left = 0.08)
+
+    plt.subplot(121)
+    ax1 = plt.gca()
+    plt.plot(np.nanmean(obs_data['iwc'],0)*1e3,np.nanmean(obs_data['height'],0), color = 'k', linewidth = 3, label = 'Obs_UMgrid', zorder = obs_zorder)
+    if praw==True:
+        for m in range(0,len(raw_data)):
+            plt.plot(np.nanmean(raw_data[m]['iwc'],0)*1e3,raw_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m] + '_Raw', zorder = 1)
+    if pum==True:
+        for m in range(0,len(um_data)):
+            plt.plot(np.nanmean(um_data[m]['model_iwc'],0)*1e3,np.nanmean(um_data[m]['height'],0), '--', color = lcols[m], linewidth = 3, label = label[m] + '_Cloudnet', zorder = 1)
+    if pmonc==True:
+        for m in range(0,len(monc_data)):
+            plt.plot(np.nanmean(monc_data[m]['iwc_tot_mean'],0)*1e3,monc_data[m][iwc_zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+    plt.xlabel('IWC [g m$^{-3}$]')
+    plt.ylabel('Z [km]')
+    plt.ylim(ylims)
+    plt.yticks(yticks)
+    ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
+    ax1.set_yticklabels(ytlabels)
+    plt.legend()
+
+    plt.subplot(122)
+    ax1 = plt.gca()
+    # plt.plot(np.nanmean(obs_data['iwc'],0)*1e3,np.nanmean(obs_data['height'],0), color = 'k', linewidth = 3, label = 'Obs_UMgrid', zorder = obs_zorder)
+    if praw==True:
+        for m in range(0,len(raw_data)):
+            plt.plot(np.nanmean(raw_data[m]['qice'],0)*1e3,raw_data[m]['height'], color = lcols[m], linewidth = 3, label = 'Qice', zorder = 1)
+            plt.plot(np.nanmean(raw_data[m]['qsnow'],0)*1e3,raw_data[m]['height'], '--', color = lcols[m], linewidth = 3, label = 'Qsnow', zorder = 1)
+            plt.plot(np.nanmean(raw_data[m]['qicecrystals'],0)*1e3,raw_data[m]['height'], '-.', color = lcols[m], linewidth = 3, label = 'Qicecrystals', zorder = 1)
+    if pmonc==True:
+        for m in range(0,len(monc_data)):
+            plt.plot(np.nanmean(monc_data[m]['q_ice_mass_mean'],0)*1e3,monc_data[m][iwc_zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m] + '_qice', zorder = 1)
+            plt.plot(np.nanmean(monc_data[m]['q_snow_mass_mean'],0)*1e3,monc_data[m][iwc_zvar[m]], '--', color = lcolsmonc[m], linewidth = 3, label = mlabel[m] + '_qsnow', zorder = 1)
+            plt.plot(np.nanmean(monc_data[m]['q_graupel_mass_mean'],0)*1e3,monc_data[m][iwc_zvar[m]], '-.', color = lcolsmonc[m], linewidth = 3, label = mlabel[m] + '_qgraupel', zorder = 1)
+    plt.xlabel('Q$_{ice/snow/icecrystals}$ [g m$^{-3}$]')
+    plt.ylabel('Z [km]')
+    plt.ylim(ylims)
+    plt.yticks(yticks)
+    ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
+    ax1.set_yticklabels(ytlabels)
+    plt.legend()
+
+    # plt.xlim([0,0.005])
+
+    dstr=datenum2date(dates[1])
+    fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Cloudnet-UMraw_' + '_'.join(outstr) + '_IWC_Qice.png'
+    plt.savefig(fileout, dpi=300)
+    plt.close()
+    # plt.show()
+    print ('')
+    print ('Finished plotting! :)')
+    print ('')
+    print ('******')
 
 def interpCloudnet(obs_data):
     #interpolates missing times up to 1 hour
@@ -2841,8 +3168,8 @@ def main():
     #           '25_u-cc568_RA2M_CON/']
     out_dir = ['23_u-cc278_RA1M_CASIM/',
                '30_u-cg179_RA1M_CASIM/',
-               '26_u-cd847_RA1M_CASIM/',
-               '27_u-ce112_RA1M_CASIM/',
+               # '26_u-cd847_RA1M_CASIM/',
+               # '27_u-ce112_RA1M_CASIM/',
                ]
 
     # out_dir = ['23_u-cc278_RA1M_CASIM/']
@@ -2859,8 +3186,9 @@ def main():
                # '26B_20180913T0000Z_6hSpinUp_12h0600-0000thTend_20h1200-0600thTend_6-20h0-Cooper/',
                # '27A_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24hCooper/',
                # '27B_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.5Cooper/',
-               '27C_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper/',
-               '27D_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd25/',
+               # '27C_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper/',
+               # '27C_CASIMvn0.3.4-MONCr8166-test/',
+               # '27D_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd25/',
                '27E_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd10/',
                '27F_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd5/',
                '30A_20180913T0000Z_8hSpinUp_8-14hUVRelax0600_14-24hUVRelax1200_8-24h0.1Cooper_FixedNd10/']
@@ -2868,6 +3196,8 @@ def main():
                # '28B_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_AccumSolAero-CASIM-100-Twomey/'
                # '29A_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_AccumSolAero-CASIM-20-ARG/',
                # '29B_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_AccumSolAero-CASIM-20-allAct/',
+               # '30A_20180913T0000Z_8hSpinUp_8-14hUVRelax0600_14-24hUVRelax1200_8-24h0.1Cooper_FixedNd10/',
+               '31A_20180913T0000Z_8hSpinUp_8-14hUVRelax0600_14-24hUVRelax1200_8-24h0.1Cooper_FixedNd10/',
             #'4_control_20180913T0000Z_Wsub-1.5/',
     #################################################################
     ## create labels for figure legends - done here so only needs to be done once!
@@ -2900,28 +3230,28 @@ def main():
     mlabel=[]
     moutstr=[]
     for m in range(0, len(m_out_dir)):
-        # if m_out_dir[m][:1] == '3':
-        #     mlabel.append('MONC nosub')
-        #     moutstr.append('Mnowsub')
-        # elif m_out_dir[m][:1] == '4':
-        #     mlabel.append('MONC Wsub1.5')
-        #     moutstr.append('Mwsub')
-        # elif m_out_dir[m][:1] == '5':
-        #     mlabel.append('MONC Wsub1.5 \n Fletcher')
-        #     moutstr.append('Mwsubfle')
-        # elif m_out_dir[m][:1] == '6':
-        #     mlabel.append('MONC Wsub1.5-1km')
-        #     moutstr.append('Mwsub1.5-1km')
-        # elif m_out_dir[m][:1] == '7':
-        #     mlabel.append('MONC Wsub1.5-1km \n solACC-100')
-        #     moutstr.append('Mwsub1kmsolACC100')
-        # elif m_out_dir[m][:1] == '8':
-        #     mlabel.append('MONC Wsub1.0-1km')
-        #     moutstr.append('Mwsub1.0-1km')
-        # elif m_out_dir[m][:1] == '9':
-        #     mlabel.append('MONC Wsub0.5-1km')
-        #     moutstr.append('Mwsub0.5-1km')
-        if m_out_dir[m][:2] == '20':
+        if m_out_dir[m][:2] == '3_':
+            mlabel.append('MONC nosub')
+            moutstr.append('Mnowsub')
+        elif m_out_dir[m][:1] == '4':
+            mlabel.append('MONC Wsub1.5')
+            moutstr.append('Mwsub')
+        elif m_out_dir[m][:1] == '5':
+            mlabel.append('MONC Wsub1.5 \n Fletcher')
+            moutstr.append('Mwsubfle')
+        elif m_out_dir[m][:1] == '6':
+            mlabel.append('MONC Wsub1.5-1km')
+            moutstr.append('Mwsub1.5-1km')
+        elif m_out_dir[m][:1] == '7':
+            mlabel.append('MONC Wsub1.5-1km \n solACC-100')
+            moutstr.append('Mwsub1kmsolACC100')
+        elif m_out_dir[m][:1] == '8':
+            mlabel.append('MONC Wsub1.0-1km')
+            moutstr.append('Mwsub1.0-1km')
+        elif m_out_dir[m][:1] == '9':
+            mlabel.append('MONC Wsub0.5-1km')
+            moutstr.append('Mwsub0.5-1km')
+        elif m_out_dir[m][:2] == '20':
             mlabel.append('MONC qinit2 800m \n thqvTend noice')
             moutstr.append('qin2-thqvTend-noice')
         elif m_out_dir[m][:2] == '22':
@@ -2949,8 +3279,12 @@ def main():
             mlabel.append('MONC_0.5Cooper_FixedNd50')
             moutstr.append('MONC-27B')
         elif m_out_dir[m][:3] == '27C':
-            mlabel.append('MONC_0.1Cooper_FixedNd50')
-            moutstr.append('MONC-27C')
+            if m_out_dir[m][-5:] == 'test/':
+                mlabel.append('MONC_0.1Cooper_FixedNd10_vnTest')
+                moutstr.append('MONC-27C-test')
+            else:
+                mlabel.append('MONC_0.1Cooper_FixedNd50')
+                moutstr.append('MONC-27C')
         elif m_out_dir[m][:3] == '27D':
             mlabel.append('MONC_0.1Cooper_FixedNd25')
             moutstr.append('MONC-27D')
@@ -2960,6 +3294,9 @@ def main():
         elif m_out_dir[m][:3] == '27F':
             mlabel.append('MONC_0.1Cooper_FixedNd5')
             moutstr.append('MONC-27F')
+        elif m_out_dir[m][:3] == '27G':
+            mlabel.append('MONC_0.1Cooper_FixedNd10_5KDecouple')
+            moutstr.append('MONC-27G')
         elif m_out_dir[m][:3] == '28A':
             mlabel.append('MONC_0.1Cooper_CASIM-100-ARG')
             moutstr.append('MONC-28A')
@@ -2973,15 +3310,18 @@ def main():
             mlabel.append('MONC_0.1Cooper_CASIM-20-allAct')
             moutstr.append('MONC-29B')
         elif m_out_dir[m][:3] == '30A':
-            mlabel.append('MONC_0.1Cooper \n UVRelax FixedNd10')
+            mlabel.append('MONC_0.1Cooper_FixedNd10_uvRelax')
             moutstr.append('MONC-30A')
+        elif m_out_dir[m][:3] == '31A':
+            mlabel.append('MONC_0.1Cooper_FixedNd10_uvRelax')
+            moutstr.append('MONC-31A')
         else:
             label.append('undefined_label')
             moutstr.append('')
 
     #---- MONC SPIN UP TIME
     spin6 = ['26']
-    spin8 = ['27','28','29','30']
+    spin8 = ['27','28','29','30','31']
 
     if m_out_dir[0][:2] in spin6:
         monc_spin = 6 *60 *60
@@ -3383,7 +3723,7 @@ def main():
     #
     ### select if Michaels cloud mask should be used for plotting profiles
     thresholding =True
-        # -------------------------------------------------------------
+    # -------------------------------------------------------------
     # Cloudnet plot: Plot Cv statistics from drift period
     # -------------------------------------------------------------
     #figure = plot_CvProfiles(um_data, ifs_data, misc_data, ra2t_data, obs_data, month_flag, missing_files, cn_um_out_dir, doy, obs, obs_switch)
@@ -3407,6 +3747,12 @@ def main():
     #figure = plot_IWCTimeseries(obs_data, plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_monc_comparison(obs_data,  lwcvar,lwcstr, plots_out_dir, dates, um_data=um_data,label=label, outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
+
+    # -------------------------------------------------------------
+    # UM Checks
+    # -------------------------------------------------------------
+    # figure = UM_SanityCheck(obs_data, lwcvar, lwcstr, plots_out_dir,dates, prof_times,um_data=um_data,raw_data=raw_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    # figure = UM_MONC_Nisg(obs_data, lwcvar, lwcstr, plots_out_dir,dates, prof_times,um_data=um_data,raw_data=raw_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
     # -------------------------------------------------------------
     # plot LWP timeseries

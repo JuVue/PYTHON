@@ -30,7 +30,7 @@ from manipFuncts import int2list
 # from conversionFuncts import reGrid_Sondes
 
 
-def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel, m_out_dir  ):
+def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel, m_out_dir, data  ):
 
 
     print ('******')
@@ -42,12 +42,15 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel, m_out
     checkpoint = []
 
     if monc_spin == 21600.:
-        checkpoint = 12 # checkpoint restart at 12h
+        checkpoint2 = 12 # checkpoint restart at 12h
     elif monc_spin == 28800.:
-        checkpoint = 14 # checkpoint restart at 14h
+        checkpoint1 = 8 # checkpoint restart at 8h
+        checkpoint2 = 14 # checkpoint restart at 14h
 
-    cp_id = int(checkpoint*4) - 1
-    cp_ts = np.float(checkpoint)*3600.
+    st_id = int(checkpoint1*4) - 1
+    st_ts = np.float(checkpoint1)*3600.
+    cp_id = int(checkpoint2*4) - 1
+    cp_ts = np.float(checkpoint2)*3600.
 
     SMALL_SIZE = 12
     MED_SIZE = 14
@@ -60,6 +63,7 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel, m_out
     plt.rc('ytick',labelsize=MED_SIZE)
     plt.rc('legend',fontsize=MED_SIZE)
 
+    ### theta
     fig = plt.figure(figsize=(6,5))
     plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.9, left = 0.15,
             hspace = 0.3, wspace = 0.1)
@@ -96,6 +100,7 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel, m_out
     # plt.savefig(fileout)
     # plt.close()
 
+    ### liquid mass
     fig = plt.figure(figsize=(9,4))
     plt.subplots_adjust(top = 0.93, bottom = 0.14, right = 0.98, left = 0.12,
             hspace = 0.3, wspace = 0.26)
@@ -122,6 +127,7 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel, m_out
     plt.savefig(fileout)
     plt.close()
 
+    ### ice mass
     fig = plt.figure(figsize=(8,7))
     plt.subplots_adjust(top = 0.93, bottom = 0.11, right = 0.98, left = 0.12,
             hspace = 0.3, wspace = 0.26)
@@ -161,6 +167,7 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel, m_out
     plt.savefig(fileout)
     plt.close()
 
+    ### ice number
     fig = plt.figure(figsize=(8,7))
     plt.subplots_adjust(top = 0.93, bottom = 0.11, right = 0.98, left = 0.12,
             hspace = 0.3, wspace = 0.26)
@@ -197,6 +204,94 @@ def plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel, m_out
     plt.title('N$_{g}$ [/L]')
     plt.colorbar()
     fileout = plots_out_dir + moutstr[0] + '_ICNCTimeseries_' + mlabel[0] + '.png'
+    plt.savefig(fileout)
+    plt.close()
+
+
+    ### u profiles
+    fig = plt.figure(figsize=(14,5))
+    plt.subplots_adjust(top = 0.9, bottom = 0.1, right = 0.98, left = 0.08,
+            hspace = 0.3, wspace = 0.3)
+    plt.subplot(141)
+    plt.plot(data['sonde']['u'], data['sonde']['Z'], 'k--')
+    plt.plot(monc_data[0]['u_wind_mean'][0,:],monc_data[0]['zn'],label = 't=0h')
+    plt.plot(monc_data[0]['u_wind_mean'][-1,:],monc_data[0]['zn'],label = 't=[-1]h')
+    if np.size(monc_data[0]['u_wind_mean'],0) >= st_id:
+        plt.plot(monc_data[0]['u_wind_mean'][int(st_id/2.),:],monc_data[0]['zn'],label = 't=' + str(st_ts/2.) + 's')
+        plt.plot(monc_data[0]['u_wind_mean'][int(st_id-1),:],monc_data[0]['zn'],label = 't=' + str(st_ts - 1) + 's')
+    plt.ylabel('Z [m]')
+    plt.xlabel('U [m/s]')
+    plt.ylim([0,2.5e3])
+    plt.title('t=0h')
+    plt.subplot(142)
+    if np.size(monc_data[0]['u_wind_mean'],0) >= st_id:
+        plt.plot(data['sonde']['u'], data['sonde']['Z'], 'k--')
+        plt.plot(monc_data[0]['u_wind_mean'][st_id,:],monc_data[0]['zn'],label = 't=8h')
+        plt.title('t=' + str(checkpoint1) + 'h')
+        plt.ylim([0,2.5e3])
+        plt.xlabel('U [m/s]')
+    plt.subplot(143)
+    if np.size(monc_data[0]['u_wind_mean'],0) >= cp_id:
+        plt.title('t=' + str(checkpoint2) + 'h')
+        plt.plot(data['sonde+1']['u'], data['sonde+1']['Z'], 'k--')
+        plt.plot(monc_data[0]['u_wind_mean'][cp_id,:],monc_data[0]['zn'],label = 't=14h')
+        plt.ylim([0,2.5e3])
+        plt.xlabel('U [m/s]')
+    #     plt.plot(monc_data[0]['u_wind_mean'][int(cp_id)+1,:],monc_data[0]['zn'],label = 'checkpoint restart+1')
+    plt.subplot(144)
+    plt.plot(data['sonde+2']['u'], data['sonde+2']['Z'], 'k--')
+    plt.plot(monc_data[0]['u_wind_mean'][-1,:],monc_data[0]['zn'],label = 't=24h')
+    plt.title('t=24h')
+    plt.ylim([0,2.5e3])
+    plt.xlabel('U [m/s]')
+    # plt.legend()
+    fileout = plots_out_dir + moutstr[0] + '_Uprofiles_' + mlabel[0] + '.png'
+    plt.savefig(fileout)
+    plt.close()
+
+    ### v profiles
+    fig = plt.figure(figsize=(14,5))
+    plt.subplots_adjust(top = 0.9, bottom = 0.1, right = 0.98, left = 0.08,
+            hspace = 0.3, wspace = 0.3)
+    plt.subplot(141)
+    plt.plot(data['sonde']['v'], data['sonde']['Z'], 'k--')
+    plt.plot(monc_data[0]['v_wind_mean'][0,:],monc_data[0]['zn'],label = 't=0h')
+    plt.plot(monc_data[0]['v_wind_mean'][-1,:],monc_data[0]['zn'],label = 't=[]-1]h')
+    if np.size(monc_data[0]['v_wind_mean'],0) >= st_id:
+        plt.plot(monc_data[0]['v_wind_mean'][int(st_id/2.),:],monc_data[0]['zn'],label = 't=' + str(st_ts/2.) + 's')
+        plt.plot(monc_data[0]['v_wind_mean'][int(st_id-1),:],monc_data[0]['zn'],label = 't=' + str(st_ts - 1) + 's')
+    plt.ylabel('Z [m]')
+    plt.ylim([0,2.5e3])
+    plt.xlim([-5,8])
+    plt.title('t=0h')
+    plt.xlabel('V [m/s]')
+    plt.legend()
+    plt.subplot(142)
+    if np.size(monc_data[0]['v_wind_mean'],0) >= st_id:
+        plt.plot(data['sonde']['v'], data['sonde']['Z'], 'k--')
+        plt.plot(monc_data[0]['v_wind_mean'][st_id,:],monc_data[0]['zn'],label = 't=8h')
+        plt.title('t=' + str(checkpoint1) + 'h')
+        plt.ylim([0,2.5e3])
+        plt.xlim([-5,8])
+        plt.xlabel('V [m/s]')
+    plt.subplot(143)
+    if np.size(monc_data[0]['v_wind_mean'],0) >= cp_id:
+        plt.title('t=' + str(checkpoint2) + 'h')
+        plt.plot(data['sonde+1']['v'], data['sonde+1']['Z'], 'k--')
+        plt.plot(monc_data[0]['v_wind_mean'][cp_id,:],monc_data[0]['zn'],label = 't=14h')
+        plt.ylim([0,2.5e3])
+        plt.xlim([-5,8])
+        plt.xlabel('V [m/s]')
+    #     plt.plot(monc_data[0]['u_wind_mean'][int(cp_id)+1,:],monc_data[0]['zn'],label = 'checkpoint restart+1')
+    plt.subplot(144)
+    plt.plot(data['sonde+2']['v'], data['sonde+2']['Z'], 'k--')
+    plt.plot(monc_data[0]['v_wind_mean'][-1,:],monc_data[0]['zn'],label = 't=24h')
+    plt.title('t=24h')
+    plt.ylim([0,2.5e3])
+    plt.xlim([-5,8])
+    plt.xlabel('V [m/s]')
+    # plt.legend()
+    fileout = plots_out_dir + moutstr[0] + '_Vprofiles_' + mlabel[0] + '.png'
     plt.savefig(fileout)
     plt.close()
 
@@ -304,6 +399,7 @@ def main():
         monc_root_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/MONC/output/'
         #monc_avg_dir = '/gws/nopw/j04/ncas_radar_vol1/jutta/MONC/output/'
         monc_avg_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/MONC/output/'
+        obs_root_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/Obs/'
 
     elif machine =='LEEDS':
         ### Set output directory for plots
@@ -331,12 +427,16 @@ def main():
                # '27B_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.5Cooper/',
                # '27C_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper/',
                # '27D_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd25/',
-               '27E_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd10/',
+               # '27E_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd10/',
+               # '27E_CASIMvn0.3.4-MONCr8166-test/',
                # '27F_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd5/',
+               # '27G_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd10_5KDecouple14-24h/',
                # '28A_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_AccumSolAero-CASIM-100-ARG/',
                # '28B_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_AccumSolAero-CASIM-100-Twomey/',
                # '29A_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_AccumSolAero-CASIM-20-ARG/',
                # '29B_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_AccumSolAero-CASIM-20-allAct/',
+               # '30A_20180913T0000Z_8hSpinUp_8-14hUVRelax0600_14-24hUVRelax1200_8-24h0.1Cooper_FixedNd10/',
+               '31A_20180913T0000Z_8hSpinUp_8-14hUVRelax0600_14-24hUVRelax1200_8-24h0.1Cooper_FixedNd10/',
                ]
             #'4_control_20180913T0000Z_Wsub-1.5/',
     #################################################################
@@ -345,7 +445,7 @@ def main():
     mlabel=[]
     moutstr=[]
     for m in range(0, len(m_out_dir)):
-        if m_out_dir[m][:1] == '3':
+        if m_out_dir[m][:2] == '3_':
             mlabel.append('MONC nosub')
             moutstr.append('Mnowsub')
         elif m_out_dir[m][:1] == '4':
@@ -394,8 +494,12 @@ def main():
             mlabel.append('MONC_0.5Cooper_FixedNd50')
             moutstr.append('MONC-27B')
         elif m_out_dir[m][:3] == '27C':
-            mlabel.append('MONC_0.1Cooper_FixedNd50')
-            moutstr.append('MONC-27C')
+            if m_out_dir[m][-5:] == 'test/':
+                mlabel.append('MONC_0.1Cooper_FixedNd10_vnTest')
+                moutstr.append('MONC-27C-test')
+            else:
+                mlabel.append('MONC_0.1Cooper_FixedNd50')
+                moutstr.append('MONC-27C')
         elif m_out_dir[m][:3] == '27D':
             mlabel.append('MONC_0.1Cooper_FixedNd25')
             moutstr.append('MONC-27D')
@@ -405,6 +509,9 @@ def main():
         elif m_out_dir[m][:3] == '27F':
             mlabel.append('MONC_0.1Cooper_FixedNd5')
             moutstr.append('MONC-27F')
+        elif m_out_dir[m][:3] == '27G':
+            mlabel.append('MONC_0.1Cooper_FixedNd10_5KDecouple')
+            moutstr.append('MONC-27G')
         elif m_out_dir[m][:3] == '28A':
             mlabel.append('MONC_0.1Cooper_CASIM-100-ARG')
             moutstr.append('MONC-28A')
@@ -417,13 +524,19 @@ def main():
         elif m_out_dir[m][:3] == '29B':
             mlabel.append('MONC_0.1Cooper_CASIM-20-allAct')
             moutstr.append('MONC-29B')
+        elif m_out_dir[m][:3] == '30A':
+            mlabel.append('MONC_0.1Cooper_FixedNd10_uvRelax')
+            moutstr.append('MONC-30A')
+        elif m_out_dir[m][:3] == '31A':
+            mlabel.append('MONC_0.1Cooper_FixedNd10_uvRelax')
+            moutstr.append('MONC-31A')
         else:
             label.append('undefined_label')
             moutstr.append('')
 
     #---- MONC SPIN UP TIME
     spin6 = ['26']
-    spin8 = ['27','28','29']
+    spin8 = ['27','28','29','30','31']
 
     if m_out_dir[0][:2] in spin6:
         monc_spin = 6 *60 *60
@@ -450,20 +563,23 @@ def main():
     ###1d variables, 2d variables (time,height), 3d variables (time,x,y), 4d variables(time,x,y,z)
     ### time1 = 'time_series_30_600',time2='time_series_30_60'
     monc_var_list =[['z', 'zn','LWP_mean','IWP_mean','SWP_mean','TOT_IWP_mean','GWP_mean'],
+                    ['u_wind_mean', 'v_wind_mean'],
                     ['theta_mean','total_cloud_fraction', 'liquid_cloud_fraction','ice_cloud_fraction'],
-                    ['liquid_mmr_mean','ice_mmr_mean','graupel_mmr_mean','snow_mmr_mean']]
+                    ['liquid_mmr_mean','ice_mmr_mean','graupel_mmr_mean','snow_mmr_mean'],
                 #    ['vwp','lwp','rwp','iwp','swp','gwp','tot_iwp'],
                 #    ['q_vapour','q_cloud_liquid_mass','q_rain_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
+                    ]
 
 
     monc_var_3d_list =['T_mean','p_mean','th_mean','rho_mean','q_vapour_mean',
                         'q_cloud_liquid_mass_mean','q_ice_mass_mean','q_snow_mass_mean','q_graupel_mass_mean',
                         'q_cloud_liquid_number_mean','q_ice_number_mean','q_snow_number_mean','q_graupel_number_mean',
-                        'twc_tot_mean','iwc_tot_mean','lwc_tot_mean','nisg_tot_mean','ndrop_tot_mean']
+                        'twc_tot_mean','iwc_tot_mean','lwc_tot_mean','nisg_tot_mean','ndrop_tot_mean',
                         #'z', 'zn', 'u_mean', 'v_mean', 'w_mean', 'q_vapour_mean',
                         # 'time1', 'time2', 'p_mean', 'T_mean', 'th_mean', 'rho_mean',
                         # 'q_cloud_liquid_mass_mean', 'q_ice_mass_mean', 'q_snow_mass_mean',
-                        # 'q_graupel_mass_mean', 'iwc_tot_mean', 'lwc_tot_mean', 'twc_tot_mean', 'zvar', 'tvar']
+                        # 'q_graupel_mass_mean', 'iwc_tot_mean', 'lwc_tot_mean', 'twc_tot_mean', 'zvar', 'tvar',
+                        ]
     ncm = {}
     monc_data = {}
     for m in range(0, len(m_out_dir)):
@@ -542,6 +658,57 @@ def main():
             monc_data[m].pop(time_var_list[2])
 
     print (' Monc data Loaded!')
+
+    #################################################################
+    ###     READ IN OBS DATA
+    #################################################################
+    sondes = readMatlabStruct(obs_root_dir + 'radiosondes/SondeData_h10int_V02.mat')
+
+    print ('')
+    print (sondes.keys())
+
+    ## -------------------------------------------------------------
+    ## Choose sonde for initialisation:
+    ## -------------------------------------------------------------
+    data = {}
+    data['sonde_option'] = '20180913T0000' # '20180912T1800' #'20180913T0000'#
+
+    if data['sonde_option'] == '20180912T1800':
+        numindex = 0
+    elif data['sonde_option'] == '20180913T0000':
+        numindex = 1
+    elif data['sonde_option'] == '20180913T0600':
+        numindex = 2
+
+    ## -------------------------------------------------------------
+    ## Load radiosonde (relative to 20180912 1200UTC
+    ## -------------------------------------------------------------
+    index256 = np.where(np.logical_or(np.round(sondes['doy'][:,:]) == 256., np.round(sondes['doy'][:,:]) == 257.))
+
+    print (sondes['doy'][:,index256[1][numindex]])
+    data['sonde'] = {}
+    for k in sondes.keys():
+        if k == 'Z': continue
+        data['sonde'][k] = sondes[k][:,index256[1][numindex]]
+    data['sonde']['Z'] = sondes['Z']
+    data['sonde']['u'][data['sonde']['u'] > 1e3] = np.nan
+    data['sonde']['v'][data['sonde']['v'] > 1e3] = np.nan
+    # data['sonde']['v'][data['sonde']['v'] < 1.0e4] = np.nan
+
+    ### load subsequent sondes
+    for i in np.arange(0,3):
+        data['sonde+' + str(i+1)] = {}
+        print ('sonde+' + str(i+1))
+        print (sondes['doy'][:,index256[1][i+1+numindex]])
+        for k in sondes.keys():
+            if k == 'Z': continue
+            data['sonde+' + str(i+1)][k] = sondes[k][:,index256[1][i+1+numindex]]
+        data['sonde+' + str(i+1)]['Z'] = sondes['Z']
+        data['sonde+' + str(i+1)]['u'][data['sonde+' + str(i+1)]['u'] > 1e3] = np.nan
+        data['sonde+' + str(i+1)]['v'][data['sonde+' + str(i+1)]['v'] > 1e3] = np.nan
+        # data['sonde+' + str(i+1)]['v'][data['sonde+' + str(i+1)]['v'] < 1e3] = np.nan
+
+
     ##################################################################################################################################
     ## -------------------------------------------------------------
     ## remove spin up time from monc data
@@ -571,7 +738,7 @@ def main():
     # print (monc_data[0]['time2'].shape)
     # print (monc_data[0]['time2'])
 
-    figure = plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel, m_out_dir )
+    figure = plot_basicTests( monc_data, monc_spin, plots_out_dir, moutstr, mlabel, m_out_dir, data )
 
     # -------------------------------------------------------------
     # FIN.
