@@ -1431,7 +1431,7 @@ def plot_tke_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon,
         if pt == 1:
             plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=4)
 
-        plt.xlabel('tke [m$^2$ s$^{-2}$]'')
+        plt.xlabel('tke [m$^2$ s$^{-2}$]')
         plt.ylabel('Z [km]')
         #plt.xlim([0, 1.5])
         plt.ylim(ylims)
