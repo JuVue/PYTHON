@@ -2663,6 +2663,7 @@ def main():
     ### T profiles: hatpro, sondes
     ### wind profiles: halo, sondes
 
+    embed()
     #interpolate hatpro data to monc_grid
     var_list_int = ['temperature','pottemp','rh', ]
     monc_height=np.array(monc_data[0][monc_data[0]['zvar']['T_mean']])
