@@ -2153,9 +2153,9 @@ def main():
     # out_dir3 = '24_u-cc324_RA2T_CON/'
 
     out_dir = ['23_u-cc278_RA1M_CASIM/',
-              # '30_u-cg179_RA1M_CASIM/',
-              # '26_u-cd847_RA1M_CASIM/',
-              # '27_u-ce112_RA1M_CASIM/'
+               '30_u-cg179_RA1M_CASIM/',
+               '26_u-cd847_RA1M_CASIM/',
+               '27_u-ce112_RA1M_CASIM/'
               ]
 #    out_dir = [  '30_u-cg179_RA1M_CASIM/' ]
     ### CHOOSE MONC RUNS
@@ -2527,10 +2527,6 @@ def main():
 
     print ('...')
 
-    #################################################################
-    ## interpolating observation to MONC GRID
-    #################################################################
-
 
     #################################################################
     ## create labels for figure legends - done here so only needs to be done once!
@@ -2659,7 +2655,39 @@ def main():
     #     estr=datenum2date(prof_time[pt][1])
     #     obsid= np.squeeze(np.argwhere((obs['dec']['mday']>=prof_time[pt][0]) & (obs['dec']['mday']<prof_time[pt][1])))
     #     b.append(obs['dec']['cbase_sandeep'][obsid])
-    embed()
+
+    #################################################################
+    ## interpolating observation to MONC GRID
+    ## comment the next section if original height resolution should be plotted
+    #################################################################
+    ### T profiles: hatpro, sondes
+    ### wind profiles: halo, sondes
+
+    #interpolate hatpro data to monc_grid
+    var_list_int = ['temperature','pottemp','rh', ]
+    monc_height=np.array(monc_data[0][monc_data[0]['zvar']['T_mean']])
+    for var in var_list_int:
+        aint = np.ones((obs['hatpro_temp'][var].shape[0],monc_height.shape[0]))*np.NaN
+        interp_var = interp1d(np.squeeze(obs['hatpro_temp']['Z']), np.squeeze(obs['hatpro_temp'][var]))
+        aint[:,:] = interp_eps(monc_height[:])
+        obs['hatpro_temp'][var]=aint
+        obs['hatpro_temp']['Z_org']=np.squeeze(obs['hatpro_temp']['Z'])
+        obs['hatpro_temp'][Z]= monc_height
+    #interpolate halo data to monc_grid
+    var_list_int = ['ws','wd','u','v' ]
+    monc_height=np.array(monc_data[0][monc_data[0]['zvar']['ws_mean']])
+    for var in var_list_int:
+        aint = np.ones((obs['halo'][var].shape[0],monc_height.shape[0]))*np.NaN
+        interp_var = interp1d(np.squeeze(obs['halo']['height']), np.squeeze(obs['halo'][var]))
+        aint[:,:] = interp_eps(monc_height[:])
+        obs['halo'][var]=aint
+        obs['halo']['height_org']=np.squeeze(obs['halo']['height'])
+        obs['halo']['height']= monc_height
+
+    #interpolate dissipation data to monc_grid
+    ## done in plot_tke_profiles_split after quality control of the data
+
+
     # -------------------------------------------------------------
     # Plot paper figures
     # -------------------------------------------------------------
@@ -2670,14 +2698,10 @@ def main():
     #figure = plot_wind_profiles_split(obs,plots_out_dir,dates, prof_time,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     figure = plot_tke_profiles_split(obs,plots_out_dir,dates, prof_time,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_Theta_profiles_split(obs,plots_out_dir,dates, prof_time,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    #figure = plot_BLDepth_SMLDepth(obs,plot_out_dir, dates, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-
-
-
-
-    #figure = plot_T_Timeseries(obs,plot_out_dir, dates,prof_time, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    #figure = plot_Theta_Timeseries(obs,plot_out_dir, dates,prof_time, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    #figure = plot_q_Timeseries(obs,plot_out_dir, dates,prof_time, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_BLDepth_SMLDepth(obs,plot_out_dir, dates, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_T_Timeseries(obs,plot_out_dir, dates,prof_time, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_Theta_Timeseries(obs,plot_out_dir, dates,prof_time, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_q_Timeseries(obs,plot_out_dir, dates,prof_time, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
 
 
