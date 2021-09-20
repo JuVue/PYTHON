@@ -3190,13 +3190,8 @@ def main():
                # '27C_CASIMvn0.3.4-MONCr8166-test/',
                # '27D_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd25/',
                '27E_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd10/',
-<<<<<<< HEAD
-               # '27F_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd5/',
-               # '27G_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd10_5KDecouple14-24h/',
-=======
                '27F_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd5/',
                '30A_20180913T0000Z_8hSpinUp_8-14hUVRelax0600_14-24hUVRelax1200_8-24h0.1Cooper_FixedNd10/']
->>>>>>> c0cb7c3aace7c6dc98589ac2423853e133e379d7
                # '28A_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_AccumSolAero-CASIM-100-ARG/',
                # '28B_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_AccumSolAero-CASIM-100-Twomey/'
                # '29A_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_AccumSolAero-CASIM-20-ARG/',
@@ -3235,7 +3230,6 @@ def main():
     mlabel=[]
     moutstr=[]
     for m in range(0, len(m_out_dir)):
-<<<<<<< HEAD
         if m_out_dir[m][:2] == '3_':
             mlabel.append('MONC nosub')
             moutstr.append('Mnowsub')
@@ -3258,30 +3252,6 @@ def main():
             mlabel.append('MONC Wsub0.5-1km')
             moutstr.append('Mwsub0.5-1km')
         elif m_out_dir[m][:2] == '20':
-=======
-        # if m_out_dir[m][:1] == '3':
-        #     mlabel.append('MONC nosub')
-        #     moutstr.append('Mnowsub')
-        # elif m_out_dir[m][:1] == '4':
-        #     mlabel.append('MONC Wsub1.5')
-        #     moutstr.append('Mwsub')
-        # elif m_out_dir[m][:1] == '5':
-        #     mlabel.append('MONC Wsub1.5 \n Fletcher')
-        #     moutstr.append('Mwsubfle')
-        # elif m_out_dir[m][:1] == '6':
-        #     mlabel.append('MONC Wsub1.5-1km')
-        #     moutstr.append('Mwsub1.5-1km')
-        # elif m_out_dir[m][:1] == '7':
-        #     mlabel.append('MONC Wsub1.5-1km \n solACC-100')
-        #     moutstr.append('Mwsub1kmsolACC100')
-        # elif m_out_dir[m][:1] == '8':
-        #     mlabel.append('MONC Wsub1.0-1km')
-        #     moutstr.append('Mwsub1.0-1km')
-        # elif m_out_dir[m][:1] == '9':
-        #     mlabel.append('MONC Wsub0.5-1km')
-        #     moutstr.append('Mwsub0.5-1km')
-        if m_out_dir[m][:2] == '20':
->>>>>>> c0cb7c3aace7c6dc98589ac2423853e133e379d7
             mlabel.append('MONC qinit2 800m \n thqvTend noice')
             moutstr.append('qin2-thqvTend-noice')
         elif m_out_dir[m][:2] == '22':
@@ -3340,27 +3310,18 @@ def main():
             mlabel.append('MONC_0.1Cooper_CASIM-20-allAct')
             moutstr.append('MONC-29B')
         elif m_out_dir[m][:3] == '30A':
-<<<<<<< HEAD
             mlabel.append('MONC_0.1Cooper_FixedNd10_uvRelax')
             moutstr.append('MONC-30A')
         elif m_out_dir[m][:3] == '31A':
             mlabel.append('MONC_0.1Cooper_FixedNd10_uvRelax')
             moutstr.append('MONC-31A')
-=======
-            mlabel.append('MONC_0.1Cooper \n UVRelax FixedNd10')
-            moutstr.append('MONC-30A')
->>>>>>> c0cb7c3aace7c6dc98589ac2423853e133e379d7
         else:
             label.append('undefined_label')
             moutstr.append('')
 
     #---- MONC SPIN UP TIME
     spin6 = ['26']
-<<<<<<< HEAD
     spin8 = ['27','28','29','30','31']
-=======
-    spin8 = ['27','28','29','30']
->>>>>>> c0cb7c3aace7c6dc98589ac2423853e133e379d7
 
     if m_out_dir[0][:2] in spin6:
         monc_spin = 6 *60 *60
