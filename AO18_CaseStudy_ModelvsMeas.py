@@ -15,6 +15,7 @@ import matplotlib.dates as mdates
 import matplotlib.ticker as ticker
 import matplotlib.cm as mpl_cm
 from matplotlib.colors import ListedColormap, LinearSegmentedColormap,LogNorm
+from scipy.interpolate import interp1d
 
 #import matplotlib.cm as mpl_cm
 import os
@@ -27,7 +28,7 @@ sys.path.insert(1, './py_functions/')
 from time_functions import datenum2date, date2datenum, calcTime_Mat2DOY, calcTime_Date2DOY
 from readMAT import readMatlabStruct
 from manipFuncts import intersect_mtlb
-from physFuncts import calcSH_mr, calcSH_wvp, calcvp,calcsvp,calcRH,calcDewPoint,calcP
+from physFuncts import calcSH_mr, calcSH_wvp, calcvp,calcsvp,calcRH,calcDewPoint,calcP,windcomp2windvec
 #from physFuncts import calcThetaE, calcThetaVL
 #from pyFixes import py3_FixNPLoad
 
@@ -214,7 +215,6 @@ def plot_lwp(obs_data, plot_out_dir, dates,**args ):
     fileout = os.path.join(plot_out_dir,date.strftime('%Y%m%d') + '_lwp_ts.png')
     plt.savefig(fileout)
 
-
 def plot_BLDepth_SMLDepth(obs_data, plot_out_dir, dates,**args ):
 
     numsp=1
@@ -339,8 +339,6 @@ def plot_BLDepth_SMLDepth(obs_data, plot_out_dir, dates,**args ):
     fileout = os.path.join(plot_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_BLdepth-SML.png')
     plt.savefig(fileout)
 
-
-
 def plot_T_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, lat):
     obs_zorder = 1
 
@@ -450,7 +448,6 @@ def plot_T_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
         if pt == 1:
             plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=4)
 
-
         plt.xlabel('Temperature [K]')
         plt.ylabel('Z [km]')
         plt.xlim([260,271])
@@ -531,10 +528,11 @@ def plot_Theta_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lo
     lcolsmonc=['gold','darkgoldenrod','darkorange','orangered','firebrick']
     fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
 
+    cols=(len(um_data)+len(monc_data)+1)/2
     #plot RS, monc,um separately only first monc/um run
-    plt.figure(figsize=(18,8))
-    plt.subplots_adjust(top = 0.8, bottom = 0.1, right = 0.92, left = 0.08)
-    plt.subplot(1,3,1)
+    plt.figure(figsize=(18,10))
+    plt.subplots_adjust(top = 0.9, bottom = 0.1, right = 0.92, left = 0.08, hspace=0.5)
+    plt.subplot(2,cols,1)
     ax1 = plt.gca()
     for pt in range(0,len(prof_time)):
         lnmrks=['-','--','-.']
@@ -556,54 +554,56 @@ def plot_Theta_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lo
     plt.xlim([267,275])
     plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=4)
 
-    plt.subplot(1,3,2)
-    ax1 = plt.gca()
-    plt.title(label[0])
-    for pt in range(0,len(prof_time)):
-        sstr=datenum2date(prof_time[pt][0])
-        estr=datenum2date(prof_time[pt][1])
-        lstr=sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC'
-        lnmrks=['-','--','-.']
-        if pum==True:
-            for m in range(0,1):
-                id= np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
-                plt.plot(np.nanmean(um_data[m]['theta'][id,:],0),um_data[m]['height'], color = lcols[pt], linewidth = 3, label = lstr, zorder = 1)
-    plt.ylim(ylims)
-    plt.yticks(yticks)
-    ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
-    ax1.set_yticklabels(ytlabels)
-    plt.xlabel('Theta [K]')
-    plt.ylabel('Z [km]')
-    plt.xlim([267,275])
+    for m in range(0,len(um_data)):
+        plt.subplot(2,cols,m+2)
+        ax1 = plt.gca()
+        plt.title(label[m])
+        for pt in range(0,len(prof_time)):
+            sstr=datenum2date(prof_time[pt][0])
+            estr=datenum2date(prof_time[pt][1])
+            lstr=sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC'
+            lnmrks=['-','--','-.']
+            if pum==True:
+                for m in range(0,1):
+                    id= np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
+                    plt.plot(np.nanmean(um_data[m]['theta'][id,:],0),um_data[m]['height'], color = lcols[pt], linewidth = 3, label = lstr, zorder = 1)
+        plt.ylim(ylims)
+        plt.yticks(yticks)
+        ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
+        ax1.set_yticklabels(ytlabels)
+        plt.xlabel('Theta [K]')
+        plt.ylabel('Z [km]')
+        plt.xlim([267,275])
 
-    plt.subplot(1,3,3)
-    plt.title(mlabel[0])
-    ax1 = plt.gca()
-    for pt in range(0,len(prof_time)):
-        sstr=datenum2date(prof_time[pt][0])
-        estr=datenum2date(prof_time[pt][1])
-        lstr=sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC'
-        if pmonc==True:
-            tvar=[]
-            zvar=[]
-            for m in range(0,1):
-                tvar+=[monc_data[m]['tvar']['th_mean']]
-                zvar+=[monc_data[m]['zvar']['th_mean']]
-                id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
-                plt.plot(np.nanmean(monc_data[m]['th_mean'][id,:],0),monc_data[m][zvar[m]], color = lcols[pt],linewidth = 3, label = lstr, zorder = 1)
-    plt.ylim(ylims)
-    plt.yticks(yticks)
-    ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
-    ax1.set_yticklabels(ytlabels)
-    plt.xlabel('Theta [K]')
-    plt.ylabel('Z [km]')
-    plt.xlim([267,275])
+    for m in range(0,len(monc_data)):
+        plt.subplot(2,cols,len(um_data)+2+m)
+        plt.title(mlabel[m])
+        ax1 = plt.gca()
+        for pt in range(0,len(prof_time)):
+            sstr=datenum2date(prof_time[pt][0])
+            estr=datenum2date(prof_time[pt][1])
+            lstr=sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC'
+            if pmonc==True:
+                tvar=[]
+                zvar=[]
+                for m in range(0,1):
+                    tvar+=[monc_data[m]['tvar']['th_mean']]
+                    zvar+=[monc_data[m]['zvar']['th_mean']]
+                    id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
+                    plt.plot(np.nanmean(monc_data[m]['th_mean'][id,:],0),monc_data[m][zvar[m]], color = lcols[pt],linewidth = 3, label = lstr, zorder = 1)
+        plt.ylim(ylims)
+        plt.yticks(yticks)
+        ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
+        ax1.set_yticklabels(ytlabels)
+        plt.xlabel('Theta [K]')
+        plt.ylabel('Z [km]')
+        plt.xlim([267,275])
     dstr=datenum2date(dates[1])
     # plt.grid('on')
     if pmonc==True:
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' +outstr[0] + '_' +moutstr[0] + '_theta-profile'  + '_platform_split.png'
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' '_'.join(outstr) + '_' +'_'.join(moutstr) +  '_theta-profile'  + '_models_split.png'
     else:
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + +outstr[0] +'_theta-profile'  + '_platform_split.png'
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_theta-profile'  + '_models_split.png'
 
     plt.savefig(fileout,dpi=300)
 
@@ -790,11 +790,12 @@ def plot_q_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
     fcols=['lightcyan','lightblue','skyblue','blue']
     lcolsmonc=['gold','darkgoldenrod','darkorange','orangered','firebrick']
     fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
+    cols=(len(um_data)+len(monc_data)+1)/2
 
     #plot RS, monc,um separately only first monc/um run
     plt.figure(figsize=(18,8))
-    plt.subplots_adjust(top = 0.8, bottom = 0.1, right = 0.92, left = 0.08)
-    plt.subplot(1,3,1)
+    plt.subplots_adjust(top = 0.9, bottom = 0.1, right = 0.92, left = 0.08,hspace=0.5)
+    plt.subplot(2,cols,1)
     ax1 = plt.gca()
     for pt in range(0,len(prof_time)):
         lnmrks=['-','--','-.']
@@ -814,55 +815,58 @@ def plot_q_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
     plt.xlabel('spec. hum [g/kg]')
     plt.ylabel('Z [km]')
     plt.xlim([1, 3])
-    plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=4)
-    plt.subplot(1,3,2)
-    ax1 = plt.gca()
-    plt.title(label[0])
-    for pt in range(0,len(prof_time)):
-        sstr=datenum2date(prof_time[pt][0])
-        estr=datenum2date(prof_time[pt][1])
-        lstr=sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC'
-        lnmrks=['-','--','-.']
-        if pum==True:
-            for m in range(0,1):
-                id= np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
-                plt.plot(np.nanmean(um_data[m]['q'][id,:]*1000,0),um_data[m]['height'], color = lcols[pt], linewidth = 3, label = lstr, zorder = 1)
-    plt.ylim(ylims)
-    plt.yticks(yticks)
-    ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
-    ax1.set_yticklabels(ytlabels)
-    plt.xlabel('spec. hum [g/kg]')
-    plt.ylabel('Z [km]')
-    plt.xlim([1, 3])
+    plt.legend(bbox_to_anchor=(5, 1.5), loc=4, ncol=4)
 
-    plt.subplot(1,3,3)
-    plt.title(mlabel[0])
-    ax1 = plt.gca()
-    for pt in range(0,len(prof_time)):
-        sstr=datenum2date(prof_time[pt][0])
-        estr=datenum2date(prof_time[pt][1])
-        lstr=sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC'
-        if pmonc==True:
-            tvar=[]
-            zvar=[]
-            for m in range(0,1):
-                tvar+=[monc_data[m]['tvar']['q_vapour_mean']]
-                zvar+=[monc_data[m]['zvar']['q_vapour_mean']]
-                id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
-                plt.plot(np.nanmean(monc_data[m]['sh'][id,:],0),monc_data[m][zvar[m]], color = lcols[pt],linewidth = 3, label = lstr, zorder = 1)
-    plt.ylim(ylims)
-    plt.yticks(yticks)
-    ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
-    ax1.set_yticklabels(ytlabels)
-    plt.xlabel('spec. hum [g/kg]')
-    plt.ylabel('Z [km]')
-    plt.xlim([1, 3])
+    for m in range(0,len(um_data)):
+        plt.subplot(2,cols,m+2)
+        ax1 = plt.gca()
+        plt.title(label[m])
+        for pt in range(0,len(prof_time)):
+            sstr=datenum2date(prof_time[pt][0])
+            estr=datenum2date(prof_time[pt][1])
+            lstr=sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC'
+            lnmrks=['-','--','-.']
+            if pum==True:
+                for m in range(0,1):
+                    id= np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
+                    plt.plot(np.nanmean(um_data[m]['q'][id,:]*1000,0),um_data[m]['height'], color = lcols[pt], linewidth = 3, label = lstr, zorder = 1)
+        plt.ylim(ylims)
+        plt.yticks(yticks)
+        ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
+        ax1.set_yticklabels(ytlabels)
+        plt.xlabel('spec. hum [g/kg]')
+        plt.ylabel('Z [km]')
+        plt.xlim([1, 3])
+
+    for m in range(0,len(monc_data)):
+        plt.subplot(2,cols,len(um_data)+2+m)
+        plt.title(mlabel[m])
+        ax1 = plt.gca()
+        for pt in range(0,len(prof_time)):
+            sstr=datenum2date(prof_time[pt][0])
+            estr=datenum2date(prof_time[pt][1])
+            lstr=sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC'
+            if pmonc==True:
+                tvar=[]
+                zvar=[]
+                for m in range(0,1):
+                    tvar+=[monc_data[m]['tvar']['q_vapour_mean']]
+                    zvar+=[monc_data[m]['zvar']['q_vapour_mean']]
+                    id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
+                    plt.plot(np.nanmean(monc_data[m]['sh'][id,:],0),monc_data[m][zvar[m]], color = lcols[pt],linewidth = 3, label = lstr, zorder = 1)
+        plt.ylim(ylims)
+        plt.yticks(yticks)
+        ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
+        ax1.set_yticklabels(ytlabels)
+        plt.xlabel('spec. hum [g/kg]')
+        plt.ylabel('Z [km]')
+        plt.xlim([1, 3])
     dstr=datenum2date(dates[1])
     # plt.grid('on')
     if pmonc==True:
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' +outstr[0] + '_' +moutstr[0] + '_q-profile'  + '_platform_split.png'
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' '_'.join(outstr) + '_' +'_'.join(moutstr) + '_q-profile'  + '_models_split.png'
     else:
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + +outstr[0] +'_q-profile'  + '_platform_split.png'
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) + '_' + '_q-profile'  + '_models_split.png'
 
     plt.savefig(fileout,dpi=300)
     print ('')
@@ -954,6 +958,654 @@ def plot_q_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, l
     print ('')
     print ('******')
 
+def plot_wind_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, lat):
+    obs_zorder = 1
+
+    if bool(args):
+        for n in range(0,len(args)):
+            if  list(args.keys())[n] == 'monc_data':
+                monc_data=args[list(args.keys())[n]]
+                obs_zorder += len(monc_data)
+                pmonc =True
+            elif list(args.keys())[n] == 'mlabel':
+                mlabel = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'moutstr':
+                moutstr= args[list(args.keys())[n]]
+            elif  list(args.keys())[n] == 'um_data':
+                um_data=args[list(args.keys())[n]]
+                obs_zorder += len(um_data)
+                pum =True
+            elif list(args.keys())[n] == 'label':
+                label = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'outstr':
+                outstr= args[list(args.keys())[n]]
+
+
+    if pmonc == True:
+        for m in range(0,len(monc_data)):
+            monc_data[m]['ws'],monc_data[m]['wd']=windcomp2windvec(monc_data[m]['u_wind_mean'],monc_data[m]['v_wind_mean'])
+
+    if pum == True:
+        for m in range(0,len(um_data)):
+            um_data[m]['ws'],um_data[m]['wd']=windcomp2windvec(um_data[m]['uwind'],um_data[m]['vwind'])
+
+    ylims=[0,2]
+    yticks=np.arange(0,2e3,0.5e3)
+    ytlabels=yticks/1e3
+
+    print ('******')
+    print ('')
+    print ('Plotting wind mean profiles split times:')
+    print ('')
+
+    ###----------------------------------------------------------------
+    ###         Plot figure - Mean profiles
+    ###----------------------------------------------------------------
+
+    SMALL_SIZE = 12
+    MED_SIZE = 14
+    LARGE_SIZE = 16
+
+    plt.rc('font',size=MED_SIZE)
+    plt.rc('axes',titlesize=MED_SIZE)
+    plt.rc('axes',labelsize=MED_SIZE)
+    plt.rc('xtick',labelsize=MED_SIZE)
+    plt.rc('ytick',labelsize=MED_SIZE)
+    plt.rc('legend',fontsize=SMALL_SIZE)
+    # plt.subplots_adjust(top = 0.95, bottom = 0.12, right = 0.95, left = 0.15,
+    #         hspace = 0.4, wspace = 0.1)
+    ###define colors
+    lcols=['lightseagreen','steelblue','royalblue','darkblue']
+    fcols=['lightcyan','lightblue','skyblue','blue']
+    lcolsmonc=['gold','darkgoldenrod','darkorange','orangered','firebrick']
+    fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
+    ### define axis instance
+
+    ####ws using halo VAD profiles for observations
+    plt.figure(figsize=(18,8))
+    plt.subplots_adjust(top = 0.8, bottom = 0.1, right = 0.92, left = 0.08)
+    for pt in range(0,len(prof_time)):
+        plt.subplot(1,len(prof_time),pt+1)
+        ax1 = plt.gca()
+        sstr=datenum2date(prof_time[pt][0])
+        estr=datenum2date(prof_time[pt][1])
+        plt.title(sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC')
+        obsid= np.squeeze(np.argwhere((obs['halo']['mday']>=prof_time[pt][0]) & (obs['halo']['mday']<prof_time[pt][1])))
+        plt.plot(np.nanmean(obs['halo']['ws'][:,obsid],1),obs['halo']['height'][:,0], color = 'k', linewidth = 3, label = 'Halo', zorder = obs_zorder)
+        ax1.fill_betweenx(obs['halo']['height'][:,0],np.nanmean(obs['halo']['ws'][:,obsid],1) - np.nanstd(obs['halo']['ws'][:,obsid],1),
+            np.nanmean(obs['halo']['ws'][:,obsid],1) + np.nanstd(obs['halo']['ws'][:,obsid],1), color = 'lightgrey', alpha = 0.5)
+        # plt.xlim([0,0.2])
+        plt.plot(np.nanmean(obs['halo']['ws'][:,obsid],1) - np.nanstd(obs['halo']['ws'][:,obsid],1),obs['halo']['height'][:,0],
+            '--', color = 'k', linewidth = 0.5)
+        plt.plot(np.nanmean(obs['halo']['ws'][:,obsid],1) + np.nanstd(obs['halo']['ws'][:,obsid],1), obs['halo']['height'][:,0],
+            '--', color = 'k', linewidth = 0.5)
+        #adding RS data
+        obsid= np.squeeze(np.argwhere((obs['sondes']['mday']>=prof_time[pt][0]-1/24) & (obs['sondes']['mday']<prof_time[pt][1])))
+        plt.plot(obs['sondes']['ws'][:,obsid],obs['sondes']['Z'], color = 'grey', linewidth = 3, label = 'RS', zorder = obs_zorder)
+
+        if pum==True:
+            for m in range(0,len(um_data)):
+                id=  np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
+                ax1.fill_betweenx(um_data[m]['height'],np.nanmean(um_data[m]['ws'][id,:],0) - np.nanstd(um_data[m]['ws'][id,:],0),
+                    np.nanmean(um_data[m]['ws'][id,:],0) + np.nanstd(um_data[m]['ws'][id,:],0), color = fcols[m], alpha = 0.05)
+                plt.plot(np.nanmean(um_data[m]['ws'][id,:],0) - np.nanstd(um_data[m]['ws'][id,:],0), um_data[m]['height'],
+                    '--', color =lcols[m], linewidth = 0.5)
+                plt.plot(np.nanmean(um_data[m]['ws'][id,:],0) + np.nanstd(um_data[m]['ws'][id,:],0),um_data[m]['height'],
+                    '--', color = lcols[m], linewidth = 0.5)
+        if pmonc==True:
+            tvar=[]
+            zvar=[]
+            for m in range(0,len(monc_data)):
+                tvar+=[monc_data[m]['tvar']['u_wind_mean']]
+                zvar+=[monc_data[m]['zvar']['u_wind_mean']]
+                id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
+                ax1.fill_betweenx(monc_data[m][zvar[m]],np.nanmean(monc_data[m]['ws'][id,:],0) - np.nanstd(monc_data[m]['ws'][id,:],0),
+                    np.nanmean(monc_data[m]['ws'][id,:],0) + np.nanstd(monc_data[m]['ws'][id,:],0), color = fcolsmonc[m], alpha = 0.05)
+                plt.plot(np.nanmean(monc_data[m]['ws'][id,:],0) - np.nanstd(monc_data[m]['ws'][id,:],0), monc_data[m][zvar[m]],
+                    '--', color =lcolsmonc[m], linewidth = 0.5)
+                plt.plot(np.nanmean(monc_data[m]['ws'][id,:],0) + np.nanstd(monc_data[m]['ws'][id,:],0), monc_data[m][zvar[m]],
+                    '--', color = lcolsmonc[m], linewidth = 0.5)
+        if pum==True:
+            for m in range(0,len(um_data)):
+                id= np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
+                plt.plot(np.nanmean(um_data[m]['ws'][id,:],0),um_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
+        if pmonc==True:
+            for m in range(0,len(monc_data)):
+                id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
+                plt.plot(np.nanmean(monc_data[m]['ws'][id,:],0),monc_data[m][zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+        if pt == 1:
+            plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=4)
+
+        plt.xlabel('ws [m/s]')
+        plt.ylabel('Z [km]')
+        plt.xlim([0, 18])
+        # plt.yticks(np.arange(0,5.01e3,0.5e3))
+        # ax1.set_yticklabels([0,' ',1,' ',2,' ',3,' ',4,' ',5])
+        plt.ylim(ylims)
+        plt.yticks(yticks)
+        ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
+        ax1.set_yticklabels(ytlabels)
+        # plt.xlim([0,0.05])
+        # plt.xticks(np.arange(0,0.051,0.015))
+        #ax1.set_xticklabels([0,' ',0.015,' ',0.03,' ',0.045,' ',0.06])
+        # ax1.xaxis.set_minor_locator(ticker.MultipleLocator(0.0075))
+    dstr=datenum2date(dates[1])
+    # plt.grid('on')
+    if pmonc==True:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_ws-profile'  + '_split.png'
+    else:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) +'_ws-profile'  + '_split.png'
+    plt.savefig(fileout,dpi=300)
+    #####  WD   ########
+    plt.figure(figsize=(18,8))
+    plt.subplots_adjust(top = 0.8, bottom = 0.1, right = 0.92, left = 0.08)
+    for pt in range(0,len(prof_time)):
+        plt.subplot(1,len(prof_time),pt+1)
+        ax1 = plt.gca()
+        sstr=datenum2date(prof_time[pt][0])
+        estr=datenum2date(prof_time[pt][1])
+        plt.title(sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC')
+        obsid= np.squeeze(np.argwhere((obs['halo']['mday']>=prof_time[pt][0]) & (obs['halo']['mday']<prof_time[pt][1])))
+        plt.plot(np.nanmean(obs['halo']['wd'][:,obsid],1),obs['halo']['height'][:,0], color = 'k', linewidth = 3, label = 'Halo', zorder = obs_zorder)
+        ax1.fill_betweenx(obs['halo']['height'][:,0],np.nanmean(obs['halo']['wd'][:,obsid],1) - np.nanstd(obs['halo']['wd'][:,obsid],1),
+            np.nanmean(obs['halo']['wd'][:,obsid],1) + np.nanstd(obs['halo']['wd'][:,obsid],1), color = 'lightgrey', alpha = 0.5)
+        # plt.xlim([0,0.2])
+        plt.plot(np.nanmean(obs['halo']['wd'][:,obsid],1) - np.nanstd(obs['halo']['wd'][:,obsid],1),obs['halo']['height'][:,0],
+            '--', color = 'k', linewidth = 0.5)
+        plt.plot(np.nanmean(obs['halo']['wd'][:,obsid],1) + np.nanstd(obs['halo']['wd'][:,obsid],1), obs['halo']['height'][:,0],
+            '--', color = 'k', linewidth = 0.5)
+        #adding RS data
+        obsid= np.squeeze(np.argwhere((obs['sondes']['mday']>=prof_time[pt][0]-1/24) & (obs['sondes']['mday']<prof_time[pt][1])))
+        plt.plot(obs['sondes']['wd'][:,obsid],obs['sondes']['Z'], color = 'grey', linewidth = 3, label = 'RS', zorder = obs_zorder)
+
+        if pum==True:
+            for m in range(0,len(um_data)):
+                id=  np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
+                ax1.fill_betweenx(um_data[m]['height'],np.nanmean(um_data[m]['wd'][id,:],0) - np.nanstd(um_data[m]['wd'][id,:],0),
+                    np.nanmean(um_data[m]['wd'][id,:],0) + np.nanstd(um_data[m]['wd'][id,:],0), color = fcols[m], alpha = 0.05)
+                plt.plot(np.nanmean(um_data[m]['wd'][id,:],0) - np.nanstd(um_data[m]['wd'][id,:],0), um_data[m]['height'],
+                    '--', color =lcols[m], linewidth = 0.5)
+                plt.plot(np.nanmean(um_data[m]['wd'][id,:],0) + np.nanstd(um_data[m]['wd'][id,:],0),um_data[m]['height'],
+                    '--', color = lcols[m], linewidth = 0.5)
+        if pmonc==True:
+            tvar=[]
+            zvar=[]
+            for m in range(0,len(monc_data)):
+                tvar+=[monc_data[m]['tvar']['u_wind_mean']]
+                zvar+=[monc_data[m]['zvar']['u_wind_mean']]
+                id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
+                ax1.fill_betweenx(monc_data[m][zvar[m]],np.nanmean(monc_data[m]['wd'][id,:],0) - np.nanstd(monc_data[m]['wd'][id,:],0),
+                    np.nanmean(monc_data[m]['wd'][id,:],0) + np.nanstd(monc_data[m]['wd'][id,:],0), color = fcolsmonc[m], alpha = 0.05)
+                plt.plot(np.nanmean(monc_data[m]['wd'][id,:],0) - np.nanstd(monc_data[m]['wd'][id,:],0), monc_data[m][zvar[m]],
+                    '--', color =lcolsmonc[m], linewidth = 0.5)
+                plt.plot(np.nanmean(monc_data[m]['wd'][id,:],0) + np.nanstd(monc_data[m]['wd'][id,:],0), monc_data[m][zvar[m]],
+                    '--', color = lcolsmonc[m], linewidth = 0.5)
+        if pum==True:
+            for m in range(0,len(um_data)):
+                id= np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
+                plt.plot(np.nanmean(um_data[m]['wd'][id,:],0),um_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
+        if pmonc==True:
+            for m in range(0,len(monc_data)):
+                id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
+                plt.plot(np.nanmean(monc_data[m]['wd'][id,:],0),monc_data[m][zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+        if pt == 1:
+            plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=4)
+
+        plt.xlabel('wd [deg]')
+        plt.ylabel('Z [km]')
+        plt.xlim([0, 360])
+        plt.ylim(ylims)
+        plt.yticks(yticks)
+        ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
+        ax1.set_yticklabels(ytlabels)
+    dstr=datenum2date(dates[1])
+    # plt.grid('on')
+    if pmonc==True:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_wd-profile'  + '_split.png'
+    else:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) +'_wd-profile'  + '_split.png'
+
+    plt.savefig(fileout,dpi=300)
+
+    #####  windcomps   ########
+    plt.figure(figsize=(18,12))
+    plt.subplots_adjust(top = 0.85, bottom = 0.1, right = 0.92, left = 0.08,hspace=0.3)
+    for pt in range(0,len(prof_time)):
+        plt.subplot(2,len(prof_time),pt+1)
+        ax1 = plt.gca()
+        sstr=datenum2date(prof_time[pt][0])
+        estr=datenum2date(prof_time[pt][1])
+        plt.title(sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC')
+        obsid= np.squeeze(np.argwhere((obs['halo']['mday']>=prof_time[pt][0]) & (obs['halo']['mday']<prof_time[pt][1])))
+        plt.plot(np.nanmean(obs['halo']['u'][:,obsid],1),obs['halo']['height'][:,0], color = 'k', linewidth = 3, label = 'Halo', zorder = obs_zorder)
+        ax1.fill_betweenx(obs['halo']['height'][:,0],np.nanmean(obs['halo']['u'][:,obsid],1) - np.nanstd(obs['halo']['u'][:,obsid],1),
+            np.nanmean(obs['halo']['u'][:,obsid],1) + np.nanstd(obs['halo']['u'][:,obsid],1), color = 'lightgrey', alpha = 0.5)
+        # plt.xlim([0,0.2])
+        plt.plot(np.nanmean(obs['halo']['u'][:,obsid],1) - np.nanstd(obs['halo']['u'][:,obsid],1),obs['halo']['height'][:,0],
+            '--', color = 'k', linewidth = 0.5)
+        plt.plot(np.nanmean(obs['halo']['u'][:,obsid],1) + np.nanstd(obs['halo']['u'][:,obsid],1), obs['halo']['height'][:,0],
+            '--', color = 'k', linewidth = 0.5)
+        #adding RS data
+        obsid= np.squeeze(np.argwhere((obs['sondes']['mday']>=prof_time[pt][0]-1/24) & (obs['sondes']['mday']<prof_time[pt][1])))
+        plt.plot(obs['sondes']['u'][:,obsid],obs['sondes']['Z'], color = 'grey', linewidth = 3, label = 'RS', zorder = obs_zorder)
+
+        if pum==True:
+            for m in range(0,len(um_data)):
+                id=  np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
+                ax1.fill_betweenx(um_data[m]['height'],np.nanmean(um_data[m]['uwind'][id,:],0) - np.nanstd(um_data[m]['uwind'][id,:],0),
+                    np.nanmean(um_data[m]['uwind'][id,:],0) + np.nanstd(um_data[m]['uwind'][id,:],0), color = fcols[m], alpha = 0.05)
+                plt.plot(np.nanmean(um_data[m]['uwind'][id,:],0) - np.nanstd(um_data[m]['uwind'][id,:],0), um_data[m]['height'],
+                    '--', color =lcols[m], linewidth = 0.5)
+                plt.plot(np.nanmean(um_data[m]['uwind'][id,:],0) + np.nanstd(um_data[m]['uwind'][id,:],0),um_data[m]['height'],
+                    '--', color = lcols[m], linewidth = 0.5)
+        if pmonc==True:
+            tvar=[]
+            zvar=[]
+            for m in range(0,len(monc_data)):
+                tvar+=[monc_data[m]['tvar']['u_wind_mean']]
+                zvar+=[monc_data[m]['zvar']['u_wind_mean']]
+                id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
+                ax1.fill_betweenx(monc_data[m][zvar[m]],np.nanmean(monc_data[m]['u_wind_mean'][id,:],0) - np.nanstd(monc_data[m]['u_wind_mean'][id,:],0),
+                    np.nanmean(monc_data[m]['u_wind_mean'][id,:],0) + np.nanstd(monc_data[m]['u_wind_mean'][id,:],0), color = fcolsmonc[m], alpha = 0.05)
+                plt.plot(np.nanmean(monc_data[m]['u_wind_mean'][id,:],0) - np.nanstd(monc_data[m]['u_wind_mean'][id,:],0), monc_data[m][zvar[m]],
+                    '--', color =lcolsmonc[m], linewidth = 0.5)
+                plt.plot(np.nanmean(monc_data[m]['u_wind_mean'][id,:],0) + np.nanstd(monc_data[m]['u_wind_mean'][id,:],0), monc_data[m][zvar[m]],
+                    '--', color = lcolsmonc[m], linewidth = 0.5)
+        if pmonc==True:
+            for m in range(0,len(monc_data)):
+                id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
+                plt.plot(np.nanmean(monc_data[m]['u_wind_mean'][id,:],0),monc_data[m][zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+        if pum==True:
+            for m in range(0,len(um_data)):
+                id= np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
+                plt.plot(np.nanmean(um_data[m]['uwind'][id,:],0),um_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
+        if pt == 1:
+            plt.legend(bbox_to_anchor=(1.2, 1.1), loc=4, ncol=4)
+        plt.xlabel('u [m/s]')
+        plt.ylabel('Z [km]')
+    #    plt.xlim([-20,5])
+        plt.ylim(ylims)
+        plt.yticks(yticks)
+        ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
+        ax1.set_yticklabels(ytlabels)
+
+    for pt in range(0,len(prof_time)):
+        plt.subplot(2,len(prof_time),pt+4)
+        ax1 = plt.gca()
+        obsid= np.squeeze(np.argwhere((obs['halo']['mday']>=prof_time[pt][0]) & (obs['halo']['mday']<prof_time[pt][1])))
+        plt.plot(np.nanmean(obs['halo']['v'][:,obsid],1),obs['halo']['height'][:,0], color = 'k', linewidth = 3, label = 'Halo', zorder = obs_zorder)
+        ax1.fill_betweenx(obs['halo']['height'][:,0],np.nanmean(obs['halo']['v'][:,obsid],1) - np.nanstd(obs['halo']['v'][:,obsid],1),
+            np.nanmean(obs['halo']['v'][:,obsid],1) + np.nanstd(obs['halo']['v'][:,obsid],1), color = 'lightgrey', alpha = 0.5)
+        plt.plot(np.nanmean(obs['halo']['v'][:,obsid],1) - np.nanstd(obs['halo']['v'][:,obsid],1),obs['halo']['height'][:,0],
+            '--', color = 'k', linewidth = 0.5)
+        plt.plot(np.nanmean(obs['halo']['v'][:,obsid],1) + np.nanstd(obs['halo']['v'][:,obsid],1), obs['halo']['height'][:,0],
+            '--', color = 'k', linewidth = 0.5)
+        #adding RS data
+        obsid= np.squeeze(np.argwhere((obs['sondes']['mday']>=prof_time[pt][0]-1/24) & (obs['sondes']['mday']<prof_time[pt][1])))
+        plt.plot(obs['sondes']['v'][:,obsid],obs['sondes']['Z'], color = 'grey', linewidth = 3, label = 'RS', zorder = obs_zorder)
+
+        if pum==True:
+            for m in range(0,len(um_data)):
+                id=  np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
+                ax1.fill_betweenx(um_data[m]['height'],np.nanmean(um_data[m]['vwind'][id,:],0) - np.nanstd(um_data[m]['vwind'][id,:],0),
+                    np.nanmean(um_data[m]['vwind'][id,:],0) + np.nanstd(um_data[m]['vwind'][id,:],0), color = fcols[m], alpha = 0.05)
+                plt.plot(np.nanmean(um_data[m]['vwind'][id,:],0) - np.nanstd(um_data[m]['vwind'][id,:],0), um_data[m]['height'],
+                    '--', color =lcols[m], linewidth = 0.5)
+                plt.plot(np.nanmean(um_data[m]['vwind'][id,:],0) + np.nanstd(um_data[m]['vwind'][id,:],0),um_data[m]['height'],
+                    '--', color = lcols[m], linewidth = 0.5)
+        if pmonc==True:
+            tvar=[]
+            zvar=[]
+            for m in range(0,len(monc_data)):
+                tvar+=[monc_data[m]['tvar']['v_wind_mean']]
+                zvar+=[monc_data[m]['zvar']['v_wind_mean']]
+                id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
+                ax1.fill_betweenx(monc_data[m][zvar[m]],np.nanmean(monc_data[m]['v_wind_mean'][id,:],0) - np.nanstd(monc_data[m]['v_wind_mean'][id,:],0),
+                    np.nanmean(monc_data[m]['v_wind_mean'][id,:],0) + np.nanstd(monc_data[m]['v_wind_mean'][id,:],0), color = fcolsmonc[m], alpha = 0.05)
+                plt.plot(np.nanmean(monc_data[m]['v_wind_mean'][id,:],0) - np.nanstd(monc_data[m]['v_wind_mean'][id,:],0), monc_data[m][zvar[m]],
+                    '--', color =lcolsmonc[m], linewidth = 0.5)
+                plt.plot(np.nanmean(monc_data[m]['v_wind_mean'][id,:],0) + np.nanstd(monc_data[m]['v_wind_mean'][id,:],0), monc_data[m][zvar[m]],
+                    '--', color = lcolsmonc[m], linewidth = 0.5)
+        if pmonc==True:
+            for m in range(0,len(monc_data)):
+                id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
+                plt.plot(np.nanmean(monc_data[m]['v_wind_mean'][id,:],0),monc_data[m][zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+        if pum==True:
+            for m in range(0,len(um_data)):
+                id= np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
+                plt.plot(np.nanmean(um_data[m]['vwind'][id,:],0),um_data[m]['height'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
+        plt.xlabel('v [m/s]')
+        plt.ylabel('Z [km]')
+        plt.xlim([-5,10])
+        plt.ylim(ylims)
+        plt.yticks(yticks)
+        ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
+        ax1.set_yticklabels(ytlabels)
+    dstr=datenum2date(dates[1])
+    # plt.grid('on')
+    if pmonc==True:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_windcomp-profile'  + '_split.png'
+    else:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) +'_windcomp-profile'  + '_split.png'
+
+    plt.savefig(fileout,dpi=300)
+
+    print ('')
+    print ('Finished plotting! :)')
+    print ('')
+    print ('******')
+
+
+def plot_tke_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, lat):
+    obs_zorder = 1
+
+    if bool(args):
+        for n in range(0,len(args)):
+            if  list(args.keys())[n] == 'monc_data':
+                monc_data=args[list(args.keys())[n]]
+                obs_zorder += len(monc_data)
+                pmonc =True
+            elif list(args.keys())[n] == 'mlabel':
+                mlabel = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'moutstr':
+                moutstr= args[list(args.keys())[n]]
+            elif  list(args.keys())[n] == 'um_data':
+                um_data=args[list(args.keys())[n]]
+                obs_zorder += len(um_data)
+                pum =True
+            elif list(args.keys())[n] == 'label':
+                label = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'outstr':
+                outstr= args[list(args.keys())[n]]
+
+    if pmonc == True:
+        for m in range(0,len(monc_data)):
+            monc_data[m]['tke_mean']=0.5*(monc_data[m]['uu_mean']+monc_data[m]['vv_mean']+monc_data[m]['ww_mean'])
+            monc_data[m]['tke_plus-sg_mean']=0.5*(monc_data[m]['uu_mean']+monc_data[m]['uusg_mean']+
+                                          monc_data[m]['vv_mean']+monc_data[m]['vvsg_mean']+
+                                          monc_data[m]['ww_mean']+monc_data[m]['wwsg_mean'])
+
+
+    #quality control of dissipation data following sandeeps SCRIPT
+    # epsilonL >=0 or epsilonL<=-8 o epsilonL error >=350 set to NaN
+    # same for radar data
+    a=obs['dissL']['epsilon_L']
+    b=obs['dissL']['epsilon_Lepserr']
+    obs['dissL']['height']=obs['dissL']['Lranges']*1000
+    a[a>=-1]=np.NaN
+    a[a<=-8]=np.NaN
+    a[b>=350]=np.NaN
+    obs['dissL']['epsilon_corr']=np.transpose(a)
+    #interpolate to monc_grid
+    hh=np.array(monc_data[0][monc_data[0]['zvar']['dissipation_mean']])
+    aint = np.ones((a.shape[0],hh.shape[0]))*np.NaN
+    interp_eps = interp1d(np.squeeze(obs['dissL']['height']), np.squeeze(a))
+    aint[:,2:] = interp_eps(hh[2:])
+#    eL=np.transpose(a)
+    obs['dissL']['eps_interpMONC']=np.transpose(aint)
+    obs['dissL']['height_MONC']=hh
+    del a,b,aint
+
+    a=obs['dissR']['epsilon_R']
+    b=obs['dissR']['epsilon_Repserr']
+    a[a>=0]=np.NaN
+    a[a<=-8]=np.NaN
+    a[b>=350]=np.NaN
+    eR=np.transpose(a)
+    obs['dissR']['epsilon_corr']=np.transpose(a)
+    obs['dissR']['height']=obs['dissR']['Rranges']*1000
+
+    ylims=[0,2]
+    yticks=np.arange(0,2e3,0.5e3)
+    ytlabels=yticks/1e3
+
+    print ('******')
+    print ('')
+    print ('Plotting tke mean profiles split times:')
+    print ('')
+
+    ###----------------------------------------------------------------
+    ###         Plot figure - Mean profiles
+    ###----------------------------------------------------------------
+
+    SMALL_SIZE = 12
+    MED_SIZE = 14
+    LARGE_SIZE = 16
+
+    plt.rc('font',size=MED_SIZE)
+    plt.rc('axes',titlesize=MED_SIZE)
+    plt.rc('axes',labelsize=MED_SIZE)
+    plt.rc('xtick',labelsize=MED_SIZE)
+    plt.rc('ytick',labelsize=MED_SIZE)
+    plt.rc('legend',fontsize=SMALL_SIZE)
+    # plt.subplots_adjust(top = 0.95, bottom = 0.12, right = 0.95, left = 0.15,
+    #         hspace = 0.4, wspace = 0.1)
+    ###define colors
+    lcols=['lightseagreen','steelblue','royalblue','darkblue']
+    fcols=['lightcyan','lightblue','skyblue','blue']
+    lcolsmonc=['gold','darkgoldenrod','darkorange','orangered','firebrick']
+    fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
+    ### define axis instance
+
+    ####TKE WITHOUT OBSERVATIONS
+    plt.figure(figsize=(18,8))
+    plt.subplots_adjust(top = 0.8, bottom = 0.1, right = 0.92, left = 0.08)
+    for pt in range(0,len(prof_time)):
+        plt.subplot(1,len(prof_time),pt+1)
+        ax1 = plt.gca()
+        sstr=datenum2date(prof_time[pt][0])
+        estr=datenum2date(prof_time[pt][1])
+        plt.title(sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC')
+
+        if pum==True:
+            for m in range(0,len(um_data)):
+                id=  np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
+                ax1.fill_betweenx(um_data[m]['height2'],np.nanmean(um_data[m]['tke'][id,:],0) - np.nanstd(um_data[m]['tke'][id,:],0),
+                    np.nanmean(um_data[m]['tke'][id,:],0) + np.nanstd(um_data[m]['tke'][id,:],0), color = fcols[m], alpha = 0.05)
+                plt.plot(np.nanmean(um_data[m]['tke'][id,:],0) - np.nanstd(um_data[m]['tke'][id,:],0), um_data[m]['height2'],
+                    '--', color =lcols[m], linewidth = 0.5)
+                plt.plot(np.nanmean(um_data[m]['tke'][id,:],0) + np.nanstd(um_data[m]['tke'][id,:],0),um_data[m]['height2'],
+                    '--', color = lcols[m], linewidth = 0.5)
+        if pmonc==True:
+            tvar=[]
+            zvar=[]
+            for m in range(0,len(monc_data)):
+                tvar+=[monc_data[m]['tvar']['u_wind_mean']]
+                zvar+=[monc_data[m]['zvar']['u_wind_mean']]
+                id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
+                ax1.fill_betweenx(monc_data[m][zvar[m]],np.nanmean(monc_data[m]['tke_mean'][id,:],0) - np.nanstd(monc_data[m]['tke_mean'][id,:],0),
+                    np.nanmean(monc_data[m]['tke_mean'][id,:],0) + np.nanstd(monc_data[m]['tke_mean'][id,:],0), color = fcolsmonc[m], alpha = 0.05)
+                plt.plot(np.nanmean(monc_data[m]['tke_mean'][id,:],0) - np.nanstd(monc_data[m]['tke_mean'][id,:],0), monc_data[m][zvar[m]],
+                    '--', color =lcolsmonc[m], linewidth = 0.5)
+                plt.plot(np.nanmean(monc_data[m]['tke_mean'][id,:],0) + np.nanstd(monc_data[m]['tke_mean'][id,:],0), monc_data[m][zvar[m]],
+                    '--', color = lcolsmonc[m], linewidth = 0.5)
+        if pum==True:
+            for m in range(0,len(um_data)):
+                id= np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
+                plt.plot(np.nanmean(um_data[m]['tke'][id,:],0),um_data[m]['height2'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
+        if pmonc==True:
+            for m in range(0,len(monc_data)):
+                id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
+                plt.plot(np.nanmean(monc_data[m]['tke_mean'][id,:],0),monc_data[m][zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+                plt.plot(np.nanmean(monc_data[m]['tke_plus-sg_mean'][id,:],0),monc_data[m][zvar[m]], '-.', color = lcolsmonc[m], linewidth = 2, label = mlabel[m], zorder = 1)
+        if pt == 1:
+            plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=4)
+
+        plt.xlabel('tke [m$^2$ s$^{-2}$]'')
+        plt.ylabel('Z [km]')
+        #plt.xlim([0, 1.5])
+        plt.ylim(ylims)
+        plt.yticks(yticks)
+        ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
+        ax1.set_yticklabels(ytlabels)
+    dstr=datenum2date(dates[1])
+    # plt.grid('on')
+    if pmonc==True:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_tke-profile'  + '_split.png'
+    else:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) +'_tke-profile'  + '_split.png'
+    plt.savefig(fileout,dpi=300)
+
+    ####TKE DISSIPATION PLOTTING OBS & MONC
+    plt.figure(figsize=(18,8))
+    plt.subplots_adjust(top = 0.8, bottom = 0.1, right = 0.92, left = 0.08)
+    for pt in range(0,len(prof_time)):
+        ax=plt.subplot(1,len(prof_time),pt+1)
+        ax1 = plt.gca()
+        ax.set_xscale('log')
+        sstr=datenum2date(prof_time[pt][0])
+        estr=datenum2date(prof_time[pt][1])
+        plt.title(sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC')
+        #lidar
+        obsid= np.squeeze(np.argwhere((obs['dissL']['mday']>=prof_time[pt][0]) & (obs['dissL']['mday']<prof_time[pt][1])))
+        a=10**np.nanmean(obs['dissL']['epsilon_corr'][:,obsid],1)
+        a[a>0.1]=np.NaN
+        plt.plot(a,obs['dissL']['height'], color = 'k', linewidth = 2, label = 'lidar', zorder = obs_zorder)
+        a=10**np.nanmean(obs['dissL']['eps_interpMONC'][:,obsid],1)
+        plt.plot(a,obs['dissL']['height_MONC'], color = 'green', linewidth = 2, label = 'lidar MONC', zorder = obs_zorder)
+        ax1.fill_betweenx(obs['dissL']['height'],10**(np.nanmean(obs['dissL']['epsilon_corr'][:,obsid],1) - np.nanstd(obs['dissL']['epsilon_corr'][:,obsid],1)),
+            10**(np.nanmean(obs['dissL']['epsilon_corr'][:,obsid],1) + np.nanstd(obs['dissL']['epsilon_corr'][:,obsid],1)), color = 'grey', alpha = 0.5)
+        plt.plot(10**(np.nanmean(obs['dissL']['epsilon_corr'][:,obsid],1) - np.nanstd(obs['dissL']['epsilon_corr'][:,obsid],1)),obs['dissL']['height'],
+            '--', color = 'k', linewidth = 0.5)
+        plt.plot(10**(np.nanmean(obs['dissL']['epsilon_corr'][:,obsid],1) + np.nanstd(obs['dissL']['epsilon_corr'][:,obsid],1)), obs['dissL']['height'],
+            '--', color = 'k', linewidth = 0.5)
+
+        #radar
+        obsid= np.squeeze(np.argwhere((obs['dissR']['mday']>=prof_time[pt][0]) & (obs['dissR']['mday']<prof_time[pt][1])))
+        a=10**np.nanmean(obs['dissR']['epsilon_corr'][:,obsid],1)
+        plt.plot(a,obs['dissR']['height'], color = 'grey', linewidth = 3, label = 'radar', zorder = obs_zorder)
+        #plt.plot(np.nanmean(eR[:,obsid],1),obs['dissR']['height'], color = 'grey', linewidth = 3, label = 'dissR', zorder = obs_zorder)
+        ax1.fill_betweenx(obs['dissR']['height'],10**(np.nanmean(obs['dissR']['epsilon_corr'][:,obsid],1) - np.nanstd(obs['dissR']['epsilon_corr'][:,obsid],1)),
+            10**(np.nanmean(obs['dissR']['epsilon_corr'][:,obsid],1) + np.nanstd(obs['dissR']['epsilon_corr'][:,obsid],1)), color = 'lightgrey', alpha = 0.5)
+        plt.plot(10**(np.nanmean(obs['dissR']['epsilon_corr'][:,obsid],1) - np.nanstd(obs['dissR']['epsilon_corr'][:,obsid],1)),obs['dissR']['height'],
+            '--', color = 'k', linewidth = 0.5)
+        plt.plot(10**(np.nanmean(obs['dissR']['epsilon_corr'][:,obsid],1) + np.nanstd(obs['dissR']['epsilon_corr'][:,obsid],1)), obs['dissR']['height'],
+            '--', color = 'k', linewidth = 0.5)
+
+        if pmonc==True:
+            tvar=[]
+            zvar=[]
+            for m in range(0,len(monc_data)):
+                tvar+=[monc_data[m]['tvar']['dissipation_mean']]
+                zvar+=[monc_data[m]['zvar']['dissipation_mean']]
+                id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
+        #         ax1.fill_betweenx(monc_data[m][zvar[m]],np.nanmean(monc_data[m]['dissipation_mean'][id,:],0) - np.nanstd(monc_data[m]['dissipation_mean'][id,:],0),
+        #             np.nanmean(monc_data[m]['dissipation_mean'][id,:],0) + np.nanstd(monc_data[m]['dissipation_mean'][id,:],0), color = fcolsmonc[m], alpha = 0.05)
+        #         plt.plot(np.nanmean(monc_data[m]['dissipation_mean'][id,:],0) - np.nanstd(monc_data[m]['dissipation_mean'][id,:],0), monc_data[m][zvar[m]],
+        #             '--', color =lcolsmonc[m], linewidth = 0.5)
+        #         plt.plot(np.nanmean(monc_data[m]['dissipation_mean'][id,:],0) + np.nanstd(monc_data[m]['dissipation_mean'][id,:],0), monc_data[m][zvar[m]],
+        #             '--', color = lcolsmonc[m], linewidth = 0.5)
+        if pmonc==True:
+            for m in range(0,len(monc_data)):
+                id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
+                #plt.plot(np.log10(np.nanmean(monc_data[m]['dissipation_mean'][id,:],0)),monc_data[m][zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+                plt.plot(np.nanmean(monc_data[m]['dissipation_mean'][id,:],0),monc_data[m][zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+        if pt == 1:
+            plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=4)
+
+        plt.xlabel('log$\epsilon$ [m$^2$ s$^{-3}$]')
+        plt.ylabel('Z [km]')
+        plt.xlim([1e-7, 1e-1])
+        plt.ylim(ylims)
+        plt.yticks(yticks)
+        ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
+        ax1.set_yticklabels(ytlabels)
+    dstr=datenum2date(dates[1])
+    if pmonc==True:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_logeps-profile'  + '_split.png'
+    else:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) +'_logeps-profile'  + '_split.png'
+    plt.savefig(fileout,dpi=300)
+
+
+    ####TKE DISSIPATION PLOTTING OBS & MONC
+    plt.figure(figsize=(18,8))
+    plt.subplots_adjust(top = 0.8, bottom = 0.1, right = 0.92, left = 0.08)
+    for pt in range(0,len(prof_time)):
+        plt.subplot(1,len(prof_time),pt+1)
+        ax1 = plt.gca()
+        sstr=datenum2date(prof_time[pt][0])
+        estr=datenum2date(prof_time[pt][1])
+        plt.title(sstr.strftime("%H") +'-' + estr.strftime("%H") + ' UTC')
+        obsid= np.squeeze(np.argwhere((obs['dissL']['mday']>=prof_time[pt][0]) & (obs['dissL']['mday']<prof_time[pt][1])))
+        plt.plot(np.nanmean(obs['dissL']['epsilon_corr'][:,obsid],1),obs['dissL']['height'], color = 'k', linewidth = 3, label = 'lidar', zorder = obs_zorder)
+        #plt.plot(np.nanmean(eL[:,obsid],1),obs['dissL']['height'], color = 'k', linewidth = 3, label = 'lidar', zorder = obs_zorder)
+        ax1.fill_betweenx(obs['dissL']['height'],(np.nanmean(obs['dissL']['epsilon_corr'][:,obsid],1) - np.nanstd(obs['dissL']['epsilon_corr'][:,obsid],1)),
+            (np.nanmean(obs['dissL']['epsilon_corr'][:,obsid],1) + np.nanstd(obs['dissL']['epsilon_corr'][:,obsid],1)), color = 'lightgrey', alpha = 0.5)
+        plt.plot((np.nanmean(obs['dissL']['epsilon_corr'][:,obsid],1) - np.nanstd(obs['dissL']['epsilon_corr'][:,obsid],1)),obs['dissL']['height'],
+            '--', color = 'k', linewidth = 0.5)
+        plt.plot((np.nanmean(obs['dissL']['epsilon_corr'][:,obsid],1) + np.nanstd(obs['dissL']['epsilon_corr'][:,obsid],1)), obs['dissL']['height'],
+            '--', color = 'k', linewidth = 0.5)
+
+        #radar
+        obsid= np.squeeze(np.argwhere((obs['dissR']['mday']>=prof_time[pt][0]) & (obs['dissR']['mday']<prof_time[pt][1])))
+        plt.plot(np.nanmean(obs['dissR']['epsilon_corr'][:,obsid],1),obs['dissR']['height'], color = 'grey', linewidth = 3, label = 'dissR', zorder = obs_zorder)
+        #plt.plot(np.nanmean(eR[:,obsid],1),obs['dissR']['height'], color = 'grey', linewidth = 3, label = 'dissR', zorder = obs_zorder)
+        ax1.fill_betweenx(obs['dissR']['height'],(np.nanmean(obs['dissR']['epsilon_corr'][:,obsid],1) - np.nanstd(obs['dissR']['epsilon_corr'][:,obsid],1)),
+            (np.nanmean(obs['dissR']['epsilon_corr'][:,obsid],1) + np.nanstd(obs['dissR']['epsilon_corr'][:,obsid],1)), color = 'lightgrey', alpha = 0.5)
+        plt.plot((np.nanmean(obs['dissR']['epsilon_corr'][:,obsid],1) - np.nanstd(obs['dissR']['epsilon_corr'][:,obsid],1)),obs['dissR']['height'],
+            '--', color = 'k', linewidth = 0.5)
+        plt.plot((np.nanmean(obs['dissR']['epsilon_corr'][:,obsid],1) + np.nanstd(obs['dissR']['epsilon_corr'][:,obsid],1)), obs['dissR']['height'],
+            '--', color = 'k', linewidth = 0.5)
+        #
+        # if pum==True:
+        #     for m in range(0,len(um_data)):
+        #         id=  np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
+        #         ax1.fill_betweenx(um_data[m]['height2'],np.nanmean(um_data[m]['tke'][id,:],0) - np.nanstd(um_data[m]['tke'][id,:],0),
+        #             np.nanmean(um_data[m]['tke'][id,:],0) + np.nanstd(um_data[m]['tke'][id,:],0), color = fcols[m], alpha = 0.05)
+        #         plt.plot(np.nanmean(um_data[m]['tke'][id,:],0) - np.nanstd(um_data[m]['tke'][id,:],0), um_data[m]['height2'],
+        #             '--', color =lcols[m], linewidth = 0.5)
+        #         plt.plot(np.nanmean(um_data[m]['tke'][id,:],0) + np.nanstd(um_data[m]['tke'][id,:],0),um_data[m]['height2'],
+        #             '--', color = lcols[m], linewidth = 0.5)
+
+        if pmonc==True:
+            tvar=[]
+            zvar=[]
+            for m in range(0,len(monc_data)):
+                tvar+=[monc_data[m]['tvar']['dissipation_mean']]
+                zvar+=[monc_data[m]['zvar']['dissipation_mean']]
+                id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
+        #         ax1.fill_betweenx(monc_data[m][zvar[m]],np.nanmean(monc_data[m]['dissipation_mean'][id,:],0) - np.nanstd(monc_data[m]['dissipation_mean'][id,:],0),
+        #             np.nanmean(monc_data[m]['dissipation_mean'][id,:],0) + np.nanstd(monc_data[m]['dissipation_mean'][id,:],0), color = fcolsmonc[m], alpha = 0.05)
+        #         plt.plot(np.nanmean(monc_data[m]['dissipation_mean'][id,:],0) - np.nanstd(monc_data[m]['dissipation_mean'][id,:],0), monc_data[m][zvar[m]],
+        #             '--', color =lcolsmonc[m], linewidth = 0.5)
+        #         plt.plot(np.nanmean(monc_data[m]['dissipation_mean'][id,:],0) + np.nanstd(monc_data[m]['dissipation_mean'][id,:],0), monc_data[m][zvar[m]],
+        #             '--', color = lcolsmonc[m], linewidth = 0.5)
+        # # if pum==True:
+        #     for m in range(0,len(um_data)):
+        #         id= np.squeeze(np.argwhere((um_data[m]['time']>=prof_time[pt][0]) & (um_data[m]['time']<prof_time[pt][1])))
+        #         plt.plot(np.nanmean(um_data[m]['tke'][id,:],0),um_data[m]['height2'], color = lcols[m], linewidth = 3, label = label[m], zorder = 1)
+        if pmonc==True:
+            for m in range(0,len(monc_data)):
+                id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
+                #plt.plot(np.log10(np.nanmean(monc_data[m]['dissipation_mean'][id,:],0)),monc_data[m][zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+                plt.plot(np.log10(np.nanmean(monc_data[m]['dissipation_mean'][id,:],0)),monc_data[m][zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+        if pt == 1:
+            plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=4)
+
+        plt.xlabel('$\epsilon$ [m$^2$ s$^{-3}$]')
+        plt.ylabel('Z [km]')
+        plt.xlim([-8 ,0])
+        plt.ylim(ylims)
+        plt.yticks(yticks)
+        ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
+        ax1.set_yticklabels(ytlabels)
+
+    dstr=datenum2date(dates[1])
+    if pmonc==True:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_eps-profile'  + '_split.png'
+    else:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) +'_eps-profile'  + '_split.png'
+    plt.savefig(fileout,dpi=300)
+
+    print ('')
+    print ('Finished plotting! :)')
+    print ('')
+    print ('******')
+
+
+
+
 def plot_T_Timeseries(obs,plots_out_dir, dates,prof_time, **args): #, lon, lat):
 
     numsp=1
@@ -1002,14 +1654,13 @@ def plot_T_Timeseries(obs,plots_out_dir, dates,prof_time, **args): #, lon, lat):
     print ('')
     print ('Plotting T timeseries for CaseStudy:')
     print ('')
-    embed()
-    clev=np.arange(258,271,0.5)
+    clev=np.arange(259,270,0.5)
     #####PlotLwc###############################################
     yheight=3
     rows=int(np.ceil(numsp/2))
     fig = plt.figure(figsize=(18,yheight*rows+1))
-    plt.subplots_adjust(top = 0.92, bottom = 0.06, right = 0.92, left = 0.08,
-            hspace = 0.4, wspace = 0.2)
+    plt.subplots_adjust(top = 0.9, bottom = 0.06, right = 0.92, left = 0.08,
+            hspace = 0.38, wspace = 0.2)
     plt.subplot(rows,2,1)
     ax = plt.gca()
     img = plt.contourf(obs['hatpro_temp']['mday'], np.squeeze(obs['hatpro_temp']['Z']), obs['hatpro_temp']['temperature'],
@@ -1026,7 +1677,7 @@ def plot_T_Timeseries(obs,plots_out_dir, dates,prof_time, **args): #, lon, lat):
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
     #nans = ax.get_ylim()
     ax2 = ax.twinx()
-    ax2.set_ylabel('Measurements', rotation = 270, labelpad = 27,labelsize=SMALL_SIZE)
+    ax2.set_ylabel('Measurements', rotation = 270, labelpad = 27,fontsize=SMALL_SIZE)
     ax2.set_yticks([])
     #plt.title('Obs-' + obs_switch + 'grid')
     cbaxes = fig.add_axes([0.225, 0.95, 0.6, 0.015])
@@ -1049,11 +1700,11 @@ def plot_T_Timeseries(obs,plots_out_dir, dates,prof_time, **args): #, lon, lat):
             ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
             ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
             ax2 = ax.twinx()
-            ax2.set_ylabel(label[m], rotation = 270, labelpad = 27,labelsize=SMALL_SIZE)
+            ax2.set_ylabel(label[m], rotation = 270, labelpad = 27,fontsize=SMALL_SIZE)
             ax2.set_yticks([])
             # plt.colorbar()
-            if m== numsp:
-                plt.xlabel('Date')
+            if m==numsp:
+                plt.xlabel('Time [UTC]')
 
     if pmonc==True:
         tvar=[]
@@ -1075,17 +1726,19 @@ def plot_T_Timeseries(obs,plots_out_dir, dates,prof_time, **args): #, lon, lat):
             ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
             ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
             ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
-            plt.xlabel('Time (UTC)')
+            plt.xlim([dates[0], dates[1]])
+            if m==len(monc_data)-1:
+                plt.xlabel('Time [UTC]')
             ax2 = ax.twinx()
-            ax2.set_ylabel(mlabel[m], rotation = 270, labelpad = 27,labelsize=SMALL_SIZE)
+            ax2.set_ylabel(mlabel[m], rotation = 270, labelpad = 27,fontsize=SMALL_SIZE)
             ax2.set_yticks([])
 
     dstr=datenum2date(dates[1])
     if pmonc == True:
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) +'_' + '_'.join(moutstr) + '_T-Timeseries'+ lwcstr + '.png'
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) +'_' + '_'.join(moutstr) + '_T-Timeseries'+ '.png'
     else:
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_T-Timeseries'+ lwcstr + '.png'
-    plt.savefig(fileout)
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_T-Timeseries' + '.png'
+    plt.savefig(fileout,dpi=300)
     plt.close()
 
     print ('')
@@ -1093,7 +1746,302 @@ def plot_T_Timeseries(obs,plots_out_dir, dates,prof_time, **args): #, lon, lat):
     print ('')
     print ('******')
 
+def plot_Theta_Timeseries(obs,plots_out_dir, dates,prof_time, **args): #, lon, lat):
 
+    numsp=1
+    if bool(args):
+        for n in range(0,len(args)):
+            if  list(args.keys())[n] == 'monc_data':
+                monc_data=args[list(args.keys())[n]]
+                numsp += len(monc_data)
+                pmonc=True
+            elif list(args.keys())[n] == 'mlabel':
+                mlabel = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'moutstr':
+                moutstr= args[list(args.keys())[n]]
+            elif  list(args.keys())[n] == 'um_data':
+                um_data=args[list(args.keys())[n]]
+                numsp += len(um_data)
+                pum=True
+            elif list(args.keys())[n] == 'label':
+                label = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'outstr':
+                outstr= args[list(args.keys())[n]]
+
+
+    ylims=[0,3]
+    yticks=np.arange(0,3e3,0.5e3)
+    ytlabels=yticks/1e3
+
+    SMALL_SIZE = 10
+    MED_SIZE = 14
+    LARGE_SIZE = 16
+
+    plt.rc('font',size=MED_SIZE)
+    plt.rc('axes',titlesize=MED_SIZE)
+    plt.rc('axes',labelsize=MED_SIZE)
+    plt.rc('xtick',labelsize=MED_SIZE)
+    plt.rc('ytick',labelsize=MED_SIZE)
+    plt.rc('legend',fontsize=MED_SIZE)
+
+    viridis = mpl_cm.get_cmap('viridis', 256) # nice colormap purple to yellow
+    newcolors = viridis(np.linspace(0, 1, 256)) #assgin new colormap with viridis colors
+    greyclr = np.array([0.1, 0.1, 0.1, 0.1])
+    newcolors[:1, :] = greyclr   # make first 20 colors greyclr
+    newcmp = ListedColormap(newcolors)
+
+    print ('******')
+    print ('')
+    print ('Plotting Theta timeseries for CaseStudy:')
+    print ('')
+
+    clev=np.arange(267,290, 0.2)
+    #####PlotLwc###############################################
+    yheight=3
+    rows=int(np.ceil(numsp/2))
+    fig = plt.figure(figsize=(18,yheight*rows+1))
+    plt.subplots_adjust(top = 0.9, bottom = 0.06, right = 0.92, left = 0.08,
+            hspace = 0.38, wspace = 0.2)
+    plt.subplot(rows,2,1)
+    ax = plt.gca()
+    img = plt.contourf(obs['hatpro_temp']['mday'], np.squeeze(obs['hatpro_temp']['Z']), obs['hatpro_temp']['pottemp'],
+        levels=clev,cmap = newcmp)
+    for pt in range(0,len(prof_time)):
+        plt.plot([prof_time[pt][0],prof_time[pt][0]],np.array(ylims)*1e3,'--k')
+    plt.ylabel('Z [km]')
+    plt.ylim(ylims)
+    plt.yticks(yticks)
+    ax.set_yticklabels(ytlabels)
+    plt.xlim([dates[0], dates[1]])
+    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+    #nans = ax.get_ylim()
+    ax2 = ax.twinx()
+    ax2.set_ylabel('Measurements', rotation = 270, labelpad = 27,fontsize=SMALL_SIZE)
+    ax2.set_yticks([])
+    #plt.title('Obs-' + obs_switch + 'grid')
+    cbaxes = fig.add_axes([0.225, 0.95, 0.6, 0.015])
+    cb = plt.colorbar(img, cax = cbaxes, orientation = 'horizontal')
+    plt.title('Theta [K]')
+    if pum==True:
+        for m in range(0,len(um_data)):
+            plt.subplot(rows,2,m+2)
+            ax = plt.gca()
+            plt.contourf(um_data[m]['time'], np.squeeze(um_data[m]['height']), np.transpose(um_data[m]['theta']),
+                levels=clev,cmap = newcmp)
+            for pt in range(0,len(prof_time)):
+                plt.plot([prof_time[pt][0],prof_time[pt][0]],np.array(ylims)*1e3,'--k')
+            plt.ylabel('Z [km]')
+            plt.ylim(ylims)
+            plt.yticks(yticks)
+            ax.set_yticklabels(ytlabels)
+            plt.xlim([dates[0], dates[1]])
+            ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+            ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+            ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+            ax2 = ax.twinx()
+            ax2.set_ylabel(label[m], rotation = 270, labelpad = 27,fontsize=SMALL_SIZE)
+            ax2.set_yticks([])
+            # plt.colorbar()
+            if m==numsp:
+                plt.xlabel('Time [UTC]')
+
+    if pmonc==True:
+        tvar=[]
+        zvar=[]
+        for m in range(0,len(monc_data)):
+            tvar+=[monc_data[m]['tvar']['T_mean']]
+            zvar+=[monc_data[m]['zvar']['T_mean']]
+            plt.subplot(rows,2,numsp-len(monc_data)+1+m)
+            ax = plt.gca()
+            # ax.set_facecolor('aliceblue')
+            plt.contourf(monc_data[m][tvar[m]], np.squeeze(monc_data[m][zvar[m]][:]), np.transpose(monc_data[m]['th_mean']),
+            levels=clev,cmap = newcmp)
+            for pt in range(0,len(prof_time)):
+                plt.plot([prof_time[pt][0],prof_time[pt][0]],np.array(ylims)*1e3,'--k')
+            plt.ylabel('Z [km]')
+            plt.ylim(ylims)
+            plt.yticks(yticks)
+            ax.set_yticklabels(ytlabels)
+            ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+            ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+            ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+            plt.xlim([dates[0], dates[1]])
+            if m==len(monc_data)-1:
+                plt.xlabel('Time [UTC]')
+            ax2 = ax.twinx()
+            ax2.set_ylabel(mlabel[m], rotation = 270, labelpad = 27,fontsize=SMALL_SIZE)
+            ax2.set_yticks([])
+
+    dstr=datenum2date(dates[1])
+    if pmonc == True:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) +'_' + '_'.join(moutstr) + '_Theta-Timeseries'+ '.png'
+    else:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_Theta-Timeseries' + '.png'
+    plt.savefig(fileout,dpi=300)
+    plt.close()
+
+    print ('')
+    print ('Finished plotting! :)')
+    print ('')
+    print ('******')
+
+def plot_q_Timeseries(obs,plots_out_dir, dates,prof_time, **args): #, lon, lat):
+
+    numsp=1
+    if bool(args):
+        for n in range(0,len(args)):
+            if  list(args.keys())[n] == 'monc_data':
+                monc_data=args[list(args.keys())[n]]
+                numsp += len(monc_data)
+                pmonc=True
+            elif list(args.keys())[n] == 'mlabel':
+                mlabel = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'moutstr':
+                moutstr= args[list(args.keys())[n]]
+            elif  list(args.keys())[n] == 'um_data':
+                um_data=args[list(args.keys())[n]]
+                numsp += len(um_data)
+                pum=True
+            elif list(args.keys())[n] == 'label':
+                label = args[list(args.keys())[n]]
+            elif list(args.keys())[n] == 'outstr':
+                outstr= args[list(args.keys())[n]]
+
+    if pmonc==True:
+        for m in range(0,len(monc_data)):
+            monc_data[m]['sh']=calcSH_mr(monc_data[m]['q_vapour_mean'],monc_data[m]['p_mean'])
+            monc_data[m]['svp']=calcsvp(monc_data[m]['T_mean'])
+            monc_data[m]['dp']=calcDewPoint(monc_data[m]['q_vapour_mean'],monc_data[m]['p_mean'])
+
+    if pum==True:
+        for m in range(0,len(um_data)):
+            um_data[m]['rh_calc']=calcRH(um_data[m]['temperature'],um_data[m]['pressure']/100,um_data[m]['q'])
+            um_data[m]['svp_calc']=calcsvp(um_data[m]['temperature'])
+            um_data[m]['dp_calc']=calcDewPoint(um_data[m]['q'],um_data[m]['pressure'])
+
+    obs['hatpro_temp']['svp']=calcsvp(obs['hatpro_temp']['temperature'])
+    obs['hatpro_temp']['p']=calcP(obs['hatpro_temp']['temperature'],obs['hatpro_temp']['pottemp'])
+    obs['hatpro_temp']['vp']=obs['hatpro_temp']['rh']*obs['hatpro_temp']['svp']/100
+    obs['hatpro_temp']['sh']=calcSH_wvp(obs['hatpro_temp']['vp'],obs['hatpro_temp']['p'])
+
+    ylims=[0,3]
+    yticks=np.arange(0,3e3,0.5e3)
+    ytlabels=yticks/1e3
+
+    SMALL_SIZE = 10
+    MED_SIZE = 14
+    LARGE_SIZE = 16
+
+    plt.rc('font',size=MED_SIZE)
+    plt.rc('axes',titlesize=MED_SIZE)
+    plt.rc('axes',labelsize=MED_SIZE)
+    plt.rc('xtick',labelsize=MED_SIZE)
+    plt.rc('ytick',labelsize=MED_SIZE)
+    plt.rc('legend',fontsize=MED_SIZE)
+
+    viridis = mpl_cm.get_cmap('viridis', 256) # nice colormap purple to yellow
+    newcolors = viridis(np.linspace(0, 1, 256)) #assgin new colormap with viridis colors
+    greyclr = np.array([0.1, 0.1, 0.1, 0.1])
+    newcolors[:1, :] = greyclr   # make first 20 colors greyclr
+    newcmp = ListedColormap(newcolors)
+
+    print ('******')
+    print ('')
+    print ('Plotting q timeseries for CaseStudy:')
+    print ('')
+    clev=np.arange(0 ,2.8, 0.05)
+    #####PlotLwc###############################################
+    yheight=3
+    rows=int(np.ceil(numsp/2))
+    fig = plt.figure(figsize=(18,yheight*rows+1))
+    plt.subplots_adjust(top = 0.9, bottom = 0.06, right = 0.92, left = 0.08,
+            hspace = 0.38, wspace = 0.2)
+    plt.subplot(rows,2,1)
+    ax = plt.gca()
+    img = plt.contourf(obs['hatpro_temp']['mday'], np.squeeze(obs['hatpro_temp']['Z']), obs['hatpro_temp']['sh'],
+        levels=clev,cmap = newcmp)
+    for pt in range(0,len(prof_time)):
+        plt.plot([prof_time[pt][0],prof_time[pt][0]],np.array(ylims)*1e3,'--k')
+    plt.ylabel('Z [km]')
+    plt.ylim(ylims)
+    plt.yticks(yticks)
+    ax.set_yticklabels(ytlabels)
+    plt.xlim([dates[0], dates[1]])
+    ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+    #nans = ax.get_ylim()
+    ax2 = ax.twinx()
+    ax2.set_ylabel('Measurements', rotation = 270, labelpad = 27,fontsize=SMALL_SIZE)
+    ax2.set_yticks([])
+    #plt.title('Obs-' + obs_switch + 'grid')
+    cbaxes = fig.add_axes([0.225, 0.95, 0.6, 0.015])
+    cb = plt.colorbar(img, cax = cbaxes, orientation = 'horizontal')
+    plt.title('spec. hum. [g/kg]')
+    if pum==True:
+        for m in range(0,len(um_data)):
+            plt.subplot(rows,2,m+2)
+            ax = plt.gca()
+            plt.contourf(um_data[m]['time'], np.squeeze(um_data[m]['height']), np.transpose(um_data[m]['q'])*1000,
+                levels=clev,cmap = newcmp)
+            for pt in range(0,len(prof_time)):
+                plt.plot([prof_time[pt][0],prof_time[pt][0]],np.array(ylims)*1e3,'--k')
+            plt.ylabel('Z [km]')
+            plt.ylim(ylims)
+            plt.yticks(yticks)
+            ax.set_yticklabels(ytlabels)
+            plt.xlim([dates[0], dates[1]])
+            ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+            ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+            ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+            ax2 = ax.twinx()
+            ax2.set_ylabel(label[m], rotation = 270, labelpad = 27,fontsize=SMALL_SIZE)
+            ax2.set_yticks([])
+            # plt.colorbar()
+            if m==numsp:
+                plt.xlabel('Time [UTC]')
+
+    if pmonc==True:
+        tvar=[]
+        zvar=[]
+        for m in range(0,len(monc_data)):
+            tvar+=[monc_data[m]['tvar']['T_mean']]
+            zvar+=[monc_data[m]['zvar']['T_mean']]
+            plt.subplot(rows,2,numsp-len(monc_data)+1+m)
+            ax = plt.gca()
+            # ax.set_facecolor('aliceblue')
+            plt.contourf(monc_data[m][tvar[m]], np.squeeze(monc_data[m][zvar[m]][:]), np.transpose(monc_data[m]['sh']),
+            levels=clev,cmap = newcmp)
+            for pt in range(0,len(prof_time)):
+                plt.plot([prof_time[pt][0],prof_time[pt][0]],np.array(ylims)*1e3,'--k')
+            plt.ylabel('Z [km]')
+            plt.ylim(ylims)
+            plt.yticks(yticks)
+            ax.set_yticklabels(ytlabels)
+            ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
+            ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+            ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
+            plt.xlim([dates[0], dates[1]])
+            if m==len(monc_data)-1:
+                plt.xlabel('Time [UTC]')
+            ax2 = ax.twinx()
+            ax2.set_ylabel(mlabel[m], rotation = 270, labelpad = 27,fontsize=SMALL_SIZE)
+            ax2.set_yticks([])
+
+    dstr=datenum2date(dates[1])
+    if pmonc == True:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) +'_' + '_'.join(moutstr) + '_q-Timeseries'+ '.png'
+    else:
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_q-Timeseries' + '.png'
+    plt.savefig(fileout,dpi=300)
+    plt.close()
+
+    print ('')
+    print ('Finished plotting! :)')
+    print ('')
+    print ('******')
 
 def removeSpinUp(monc_data,monc_spin):
     print('')
@@ -1175,6 +2123,8 @@ def main():
         obs_albedo_dir='/nfs/a96/MOCCHA/working/data/'
         obs_rad_dir='/gws/nopw/j04/ncas_radar_vol1/jutta/DATA/OBS/radiation/'
         obs_dec_dir = '/gws/nopw/j04/ncas_radar_vol1/jutta/DATA/OBS/HATPRO/'
+        obs_halo_dir = '/gws/nopw/j04/ncas_radar_vol1/jutta/DATA/OBS/halo/'
+        obs_diss_dir = '/gws/nopw/j04/ncas_radar_vol1/jutta/DATA/OBS/dissipation_sandeep/'
         inv_dir = '/gws/nopw/j04/ncas_radar_vol1/jutta/DATA/Inversions/'
         monc_root_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/MONC/output/'
         #monc_avg_dir = '/gws/nopw/j04/ncas_radar_vol1/jutta/MONC/output/'
@@ -1203,16 +2153,19 @@ def main():
     # out_dir3 = '24_u-cc324_RA2T_CON/'
 
     out_dir = ['23_u-cc278_RA1M_CASIM/',
-               '30_u-cg179_RA1M_CASIM/',
-              '26_u-cd847_RA1M_CASIM/',
-              '27_u-ce112_RA1M_CASIM/']
+              # '30_u-cg179_RA1M_CASIM/',
+              # '26_u-cd847_RA1M_CASIM/',
+              # '27_u-ce112_RA1M_CASIM/'
+              ]
 #    out_dir = [  '30_u-cg179_RA1M_CASIM/' ]
     ### CHOOSE MONC RUNS
     m_out_dir =[#'22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/'
-                '27C_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper/',
-                '27D_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd25/',
-                '27E_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd10/',
-                '27F_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd5/']
+                # '27C_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper/',
+                # '27D_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd25/',
+                # '27E_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd10/',
+                # '27F_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd5/',
+                '30A_20180913T0000Z_8hSpinUp_8-14hUVRelax0600_14-24hUVRelax1200_8-24h0.1Cooper_FixedNd10/'
+                ]
     # m_out_dir = ['5_control_20180913T0000Z_Wsub-1.5_Fletcher/',
     #             '6_control_20180913T0000Z_Wsub-1.5-1km/',
     #             '7_20180913T0000Z_Wsub-1.5-1km_solAccum-100_inuc-0_iact-3/']
@@ -1230,7 +2183,7 @@ def main():
 
     #---- MONC SPIN UP TIME
     spin6 = ['26']
-    spin8 = ['27','28','29']
+    spin8 = ['27','28','29','30']
 
     if m_out_dir[0][:2] in spin6:
         monc_spin = 6 *60 *60
@@ -1268,7 +2221,11 @@ def main():
     for var in nc[0].variables: print(var)
     var_list1 = ['u_10m','v_10m', 'air_temperature_at_1.5m','q_1.5m','rh_1.5m','visibility','dew_point_temperature_at_1.5m','LWP','IWP',
                 'surface_net_SW_radiation','surface_net_LW_radiation','surface_downwelling_LW_radiation','surface_downwelling_SW_radiation',
-                'sensible_heat_flux','latent_heat_flux', 'bl_depth','bl_type','temperature','theta','q','pressure']
+                'sensible_heat_flux','latent_heat_flux', 'bl_depth','bl_type','temperature','theta','q','pressure',
+                'uwind','vwind','turbulent_mixing_height_after_bl','h_decoupled_layer_base','h_sc_cloud_base','tke'
+
+
+                ]
                 #PLOT FROM CLOUDNET:
                 #'temperature','q','pressure','bl_depth','bl_type','qliq','qice','uwind','vwind','wwind',
                 #'cloud_fraction','radr_refl','rainfall_flux','snowfall_flux',]#
@@ -1280,6 +2237,7 @@ def main():
         um_data[m]['time'] = datenum + (nc[m].variables['forecast_time'][:]/24.0)
         ### define height arrays explicitly
         um_data[m]['height'] = nc[m].variables['height'][:]
+        um_data[m]['height2'] = nc[m].variables['height2'][:]
         for var in nc[m].variables: print(var)
 
         print ('Starting on t=0 RA2M data:')
@@ -1325,7 +2283,10 @@ def main():
     #                 'graupel_mmr_mean']]
                 #    ['vwp','lwp','rwp','iwp','swp','gwp','tot_iwp'],
                 #    ['q_vapour','q_cloud_liquid_mass','q_rain_mass','q_ice_mass','q_snow_mass','q_graupel_mass']]
-    monc_var_list =[['z', 'zn','LWP_mean','IWP_mean','SWP_mean','TOT_IWP_mean','GWP_mean']]
+    monc_var_list =[['z', 'zn','LWP_mean','IWP_mean','SWP_mean','TOT_IWP_mean','GWP_mean'],
+                    ['uu_mean','vv_mean','ww_mean','uusg_mean','vvsg_mean','wwsg_mean','tkesg_mean','tke_tendency','dissipation_mean'],
+                    ['u_wind_mean','v_wind_mean']
+                    ]
                 #    ['theta_mean','total_cloud_fraction', 'liquid_cloud_fraction','ice_cloud_fraction'],
                 #    ['liquid_mmr_mean','ice_mmr_mean','graupel_mmr_mean','snow_mmr_mean']]
                 #    ['vwp','lwp','rwp','iwp','swp','gwp','tot_iwp'],
@@ -1419,7 +2380,6 @@ def main():
     ## -------------------------------------------------------------
     ## remove spin up time from monc data
     ## -------------------------------------------------------------
-    embed()
     monc_data=removeSpinUp(monc_data,monc_spin)
 
     ## -------------------------------------------------------------
@@ -1523,18 +2483,37 @@ def main():
     print('')
     print(obs['ice_rad'].keys())
     print(obs['ship_rad'].keys())
+
     print('')
+    print ('**************************')
     print ('Load radiosonde data from Jutta...')
     obs['sondes'] = readMatlabStruct(obs_rs_dir + '/SondeData_h10int_V03.mat')
     for var in obs['sondes'].keys():
         obs['sondes'][var]=np.squeeze(obs['sondes'][var])
     print(obs['sondes'].keys())
-    print ('**************************')
+
     print ('Load RS observations inversion height data from Jutta...')
     obs['inversions'] = readMatlabStruct(obs_rs_dir + '/InversionHeights_RSh05int_final_V03.mat')
     for var in obs['inversions'].keys():
         obs['inversions'][var]=np.squeeze(obs['inversions'][var])
     print(obs['inversions'].keys())
+
+    print ('**************************')
+    print ('Load wind profiles Lidar')
+    obs['halo'] = readMatlabStruct(obs_halo_dir + 'WindData_VAD_v2.0.mat')
+    for var in obs['halo'].keys():
+        obs['halo'][var]=np.squeeze(obs['halo'][var])
+
+    print ('**************************')
+    print ('Load dissipation profiles sandeep')
+    obs['dissL'] = readMatlabStruct(obs_diss_dir + 'LIDARattributes_struct_' + strdate + '.mat')
+    for var in obs['dissL'].keys():
+        obs['dissL'][var]=np.squeeze(obs['dissL'][var])
+    obs['dissL']['mday']= date2datenum(dtime.datetime.strptime(strdate,'%Y%m%d')) + obs['dissL']['atime']/24
+    obs['dissR'] = readMatlabStruct(obs_diss_dir + 'RADARattributes_struct_' + strdate + '.mat')
+    for var in obs['dissR'].keys():
+        obs['dissR'][var]=np.squeeze(obs['dissR'][var])
+    obs['dissR']['mday']= date2datenum(dtime.datetime.strptime(strdate,'%Y%m%d')) + obs['dissR']['atime']/24
 
     #print ('Load foremast data from John...')
     #obs['foremast'] = Dataset(obs_acas_dir + '/ACAS_AO2018_foremast_30min_v2_0.nc','r')
@@ -1548,9 +2527,14 @@ def main():
 
     print ('...')
 
-        #################################################################
-        ## create labels for figure legends - done here so only needs to be done once!
-        #################################################################
+    #################################################################
+    ## interpolating observation to MONC GRID
+    #################################################################
+
+
+    #################################################################
+    ## create labels for figure legends - done here so only needs to be done once!
+    #################################################################
     label=[]
     outstr=[]
     for m in range(0, len(out_dir)):
@@ -1567,10 +2551,10 @@ def main():
             label.append('UM_CASIM-AP')
             outstr.append('CASIM-AP')
         elif out_dir[m][:10] == '27_u-ce112':
-            label.append('UM_CASIM-AP-PasProc')
+            label.append('UM_CASIM-AP \n PasProc')
             outstr.append('CASIM-AP-PasProc')
         elif out_dir[m][:10] == '30_u-cg179':
-            label.append('UM_CASIM-100-PasProc')
+            label.append('UM_CASIM-100 \n PasProc')
             outstr.append('CASIM100-PasProc')
         else:
             label.append('undefined_label')
@@ -1579,28 +2563,28 @@ def main():
     mlabel=[]
     moutstr=[]
     for m in range(0, len(m_out_dir)):
-        if m_out_dir[m][:1] == '3':
-            mlabel.append('MONC nosub')
-            moutstr.append('Mnowsub')
-        elif m_out_dir[m][:1] == '4':
-            mlabel.append('MONC Wsub1.5')
-            moutstr.append('Mwsub')
-        elif m_out_dir[m][:1] == '5':
-            mlabel.append('MONC Wsub1.5 \n Fletcher')
-            moutstr.append('Mwsubfle')
-        elif m_out_dir[m][:1] == '6':
-            mlabel.append('MONC Wsub1.5-1km')
-            moutstr.append('Mwsub1.5-1km')
-        elif m_out_dir[m][:1] == '7':
-            mlabel.append('MONC Wsub1.5-1km \n solACC-100')
-            moutstr.append('Mwsub1kmsolACC100')
-        elif m_out_dir[m][:1] == '8':
-            mlabel.append('MONC Wsub1.0-1km')
-            moutstr.append('Mwsub1.0-1km')
-        elif m_out_dir[m][:1] == '9':
-            mlabel.append('MONC Wsub0.5-1km')
-            moutstr.append('Mwsub0.5-1km')
-        elif m_out_dir[m][:2] == '20':
+        # if m_out_dir[m][:1] == '3':
+        #     mlabel.append('MONC nosub')
+        #     moutstr.append('Mnowsub')
+        # elif m_out_dir[m][:1] == '4':
+        #     mlabel.append('MONC Wsub1.5')
+        #     moutstr.append('Mwsub')
+        # elif m_out_dir[m][:1] == '5':
+        #     mlabel.append('MONC Wsub1.5 \n Fletcher')
+        #     moutstr.append('Mwsubfle')
+        # elif m_out_dir[m][:1] == '6':
+        #     mlabel.append('MONC Wsub1.5-1km')
+        #     moutstr.append('Mwsub1.5-1km')
+        # elif m_out_dir[m][:1] == '7':
+        #     mlabel.append('MONC Wsub1.5-1km \n solACC-100')
+        #     moutstr.append('Mwsub1kmsolACC100')
+        # elif m_out_dir[m][:1] == '8':
+        #     mlabel.append('MONC Wsub1.0-1km')
+        #     moutstr.append('Mwsub1.0-1km')
+        # elif m_out_dir[m][:1] == '9':
+        #     mlabel.append('MONC Wsub0.5-1km')
+        #     moutstr.append('Mwsub0.5-1km')
+        if m_out_dir[m][:2] == '20':
             mlabel.append('MONC qinit2 800m \n thqvTend noice')
             moutstr.append('qin2-thqvTend-noice')
         elif m_out_dir[m][:2] == '22':
@@ -1628,36 +2612,38 @@ def main():
             mlabel.append('MONC_0.5Cooper_FixedNd50')
             moutstr.append('MONC-27B')
         elif m_out_dir[m][:3] == '27C':
-            mlabel.append('MONC_0.1Cooper_FixedNd50')
+            mlabel.append('MONC_0.1Cooper FixedNd50')
             moutstr.append('MONC-27C')
         elif m_out_dir[m][:3] == '27D':
-            mlabel.append('MONC_0.1Cooper_FixedNd25')
+            mlabel.append('MONC_0.1Cooper FixedNd25')
             moutstr.append('MONC-27D')
         elif m_out_dir[m][:3] == '27E':
-            mlabel.append('MONC_0.1Cooper_FixedNd10')
+            mlabel.append('MONC_0.1Cooper FixedNd10')
             moutstr.append('MONC-27E')
         elif m_out_dir[m][:3] == '27F':
-            mlabel.append('MONC_0.1Cooper_FixedNd5')
+            mlabel.append('MONC_0.1Cooper FixedNd5')
             moutstr.append('MONC-27F')
         elif m_out_dir[m][:3] == '28A':
-            mlabel.append('MONC_0.1Cooper_CASIM-100-ARG')
+            mlabel.append('MONC_0.1Cooper CASIM-100-ARG')
             moutstr.append('MONC-28A')
         elif m_out_dir[m][:3] == '28B':
-            mlabel.append('MONC_0.1Cooper_CASIM-100-Twomey')
+            mlabel.append('MONC_0.1Cooper CASIM-100-Twomey')
             moutstr.append('MONC-28B')
         elif m_out_dir[m][:3] == '29A':
-            mlabel.append('MONC_0.1Cooper_CASIM-20-ARG')
+            mlabel.append('MONC_0.1Cooper CASIM-20-ARG')
             moutstr.append('MONC-29A')
         elif m_out_dir[m][:3] == '29B':
-            mlabel.append('MONC_0.1Cooper_CASIM-20-allAct')
+            mlabel.append('MONC_0.1Cooper CASIM-20-allAct')
             moutstr.append('MONC-29B')
+        elif m_out_dir[m][:3] == '30A':
+            mlabel.append('MONC_0.1Cooper \n UVRelax FixedNd10')
+            moutstr.append('MONC-30A')
         else:
             label.append('undefined_label')
             moutstr.append('')
 
 
 
-    # embed()
     #
     # #sfml height from hatpro
     # a=[]
@@ -1673,7 +2659,7 @@ def main():
     #     estr=datenum2date(prof_time[pt][1])
     #     obsid= np.squeeze(np.argwhere((obs['dec']['mday']>=prof_time[pt][0]) & (obs['dec']['mday']<prof_time[pt][1])))
     #     b.append(obs['dec']['cbase_sandeep'][obsid])
-
+    embed()
     # -------------------------------------------------------------
     # Plot paper figures
     # -------------------------------------------------------------
@@ -1681,10 +2667,21 @@ def main():
     #figure = plot_lwp(obs,plot_out_dir, dates, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_T_profiles_split(obs,plots_out_dir,dates, prof_time,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_q_profiles_split(obs,plots_out_dir,dates, prof_time,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    #figure = plot_wind_profiles_split(obs,plots_out_dir,dates, prof_time,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_tke_profiles_split(obs,plots_out_dir,dates, prof_time,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_Theta_profiles_split(obs,plots_out_dir,dates, prof_time,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_BLDepth_SMLDepth(obs,plot_out_dir, dates, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
-    figure = plot_T_Timeseries(obs,plot_out_dir, dates,prof_time, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+
+
+
+    #figure = plot_T_Timeseries(obs,plot_out_dir, dates,prof_time, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    #figure = plot_Theta_Timeseries(obs,plot_out_dir, dates,prof_time, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    #figure = plot_q_Timeseries(obs,plot_out_dir, dates,prof_time, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+
+
+
+
 
     ### example plot list from Gillians Script:
     #figure = plot_radiation(obs,plot_out_dir, dates,plot_out_dir, um_data=um_data,label=label,outsr=outsr, monc_data=monc_data,mlabel=mlabel,moutsr=moutsr)
