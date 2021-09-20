@@ -196,10 +196,9 @@ def calcvp(T):
     #converting K
     T[T<100] =T[T<100] + 273.15
 
-    vappres =np.exp((-6867.7/T)-(5.2952*np.log(T))+56.658);
+    vappres =np.exp((-6867.7/T)-(5.2952*np.log(T))+56.658)
 
     return vappres
-
 
 def polysvp(t,type):
 
@@ -368,3 +367,22 @@ def calcP(T,Theta):
     p=p0/np.power(Theta/T,1/kd)
 
     return p
+
+def windcomp2windvec(u_ms,v_ms):
+    # windcomp2windvec.m will convert wind komponents into horizontal wind
+    # velocitiy and direction
+    # input: u,v
+    # output: wsp, wd
+
+    #Check to make sure sizes of the vectors are the same
+    #if (uc.shape != vc.shape):
+    #    print('u vector and v vector must be the same size')
+
+    #calculate wind velocity
+    wsp = np.sqrt(u_ms*u_ms +v_ms*v_ms)
+    wind_dir_trig = np.arctan2(u_ms/wsp, v_ms/wsp)  # arctan needs normalized wind components
+    wind_dir_trig_to_degrees = wind_dir_trig * 180/np.pi ## convert back to degrees from radians
+    wind_dir_trig_from_degrees = wind_dir_trig_to_degrees + 180 ## convert to met. wind directions
+    wd = wind_dir_trig_from_degrees
+    wd[wd==0]=360.
+    return wsp,wd
