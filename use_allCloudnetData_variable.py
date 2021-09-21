@@ -341,33 +341,35 @@ def plot_LWCTimeseries(obs_data,obs_dec,lwcvar,lwcstr, plots_out_dir, dates, **a
     obs_data['lwc'][obs_data['lwc'] <= 0] = np.nan
     obs_data['lwc_adiabatic'][obs_data['lwc_adiabatic'] <= 0] = np.nan
     obs_data['lwc_adiabatic_inc_nolwp'][obs_data['lwc_adiabatic_inc_nolwp'] <= 0] = np.nan
-    obs_data['ctop_lwc0.2']=[]
-    obs_data['cbase_lwc0.2']=[]
+    obs_data['ctop_lwc0.1']=[]
+    obs_data['cbase_lwc0.1']=[]
     for i in range(0,obs_data['lwc'].shape[0]):
         id=next((x[0] for x in enumerate(obs_data[lwcvar][i,:]) if x[1] >= 0.1*1e-3),np.nan)
         if not np.isnan(id):
-            obs_data['cbase_lwc0.2']=np.append(obs_data['cbase_lwc0.2'],obs_data['height'][i,id])
-            ide=id+next((x[0] for x in enumerate(obs_data[lwcvar][i,id:]) if np.isnan(x[1])),np.NaN)
-            obs_data['ctop_lwc0.2']=np.append(obs_data['ctop_lwc0.2'],obs_data['height'][i,ide] )
+            obs_data['cbase_lwc0.1']=np.append(obs_data['cbase_lwc0.1'],obs_data['height'][i,id])
+#            ide=id-1+next((x[0] for x in enumerate(obs_data[lwcvar][i,id:]) if np.isnan(x[1])),np.NaN)
+            ide=id-1+next((x[0] for x in enumerate(obs_data[lwcvar][i,id:]) if (x[1] < 0.1*1e-3 or np.isnan(x[1])) ),np.NaN)
+            obs_data['ctop_lwc0.1']=np.append(obs_data['ctop_lwc0.1'],obs_data['height'][i,ide] )
         else:
-            obs_data['cbase_lwc0.2']=np.append(obs_data['cbase_lwc0.2'],np.nan)
-            obs_data['ctop_lwc0.2']=np.append(obs_data['ctop_lwc0.2'],np.nan )
+            obs_data['cbase_lwc0.1']=np.append(obs_data['cbase_lwc0.1'],np.nan)
+            obs_data['ctop_lwc0.1']=np.append(obs_data['ctop_lwc0.1'],np.nan )
 
 
     if pum==True:
         for m in range(0,len(um_data)):
             um_data[m]['model_lwc'][um_data[m]['model_lwc'] <= 0.0] = np.nan
-            um_data[m]['cbase_lwc0.2']=[]
-            um_data[m]['ctop_lwc0.2']=[]
+            um_data[m]['cbase_lwc0.1']=[]
+            um_data[m]['ctop_lwc0.1']=[]
             for i in range(0,um_data[m]['lwc'].shape[0]):
                 id=next((x[0] for x in enumerate(um_data[m]['model_lwc'][i,:]) if x[1] >= 0.1*1e-3),np.NaN)
                 if not np.isnan(id):
-                    um_data[m]['cbase_lwc0.2']=np.append(um_data[m]['cbase_lwc0.2'],um_data[m]['height'][i,id] )
-                    ide=id+next((x[0] for x in enumerate(um_data[m]['model_lwc'][i,id:])  if np.isnan(x[1])),np.NaN)
-                    um_data[m]['ctop_lwc0.2']=np.append(um_data[m]['ctop_lwc0.2'],um_data[m]['height'][i,ide])
+                    um_data[m]['cbase_lwc0.1']=np.append(um_data[m]['cbase_lwc0.1'],um_data[m]['height'][i,id] )
+                    #ide=id-1+next((x[0] for x in enumerate(um_data[m]['model_lwc'][i,id:])  if np.isnan(x[1])),np.NaN)
+                    ide=id-1+next((x[0] for x in enumerate(um_data[m]['model_lwc'][i,id:])  if (x[1] < 0.1*1e-3 or np.isnan(x[1])) ),np.NaN)
+                    um_data[m]['ctop_lwc0.1']=np.append(um_data[m]['ctop_lwc0.1'],um_data[m]['height'][i,ide])
                 else:
-                    um_data[m]['cbase_lwc0.2']=np.append(um_data[m]['cbase_lwc0.2'],np.nan)
-                    um_data[m]['ctop_lwc0.2']=np.append(um_data[m]['ctop_lwc0.2'],np.nan )
+                    um_data[m]['cbase_lwc0.1']=np.append(um_data[m]['cbase_lwc0.1'],np.nan)
+                    um_data[m]['ctop_lwc0.1']=np.append(um_data[m]['ctop_lwc0.1'],np.nan )
 
     if pmonc==True:
         lwc_tvar=[]
@@ -378,25 +380,25 @@ def plot_LWCTimeseries(obs_data,obs_dec,lwcvar,lwcstr, plots_out_dir, dates, **a
             monc_data[m]['model_lwc'][monc_data[m]['model_lwc'] <= 0.0] = np.nan
             lwc_tvar+=[monc_data[m]['tvar']['lwc_tot_mean']]
             lwc_zvar+=[monc_data[m]['zvar']['lwc_tot_mean']]
-            monc_data[m]['cbase_lwc0.2']=[]
-            monc_data[m]['ctop_lwc0.2']=[]
+            monc_data[m]['cbase_lwc0.1']=[]
+            monc_data[m]['ctop_lwc0.1']=[]
             for i in range(0,monc_data[m]['model_lwc'].shape[0]):
                 id=next((x[0] for x in enumerate(monc_data[m]['model_lwc'][i,:]) if x[1] >= 0.1*1e-3),np.NaN)
                 if not np.isnan(id):
-                    monc_data[m]['cbase_lwc0.2']=np.append(monc_data[m]['cbase_lwc0.2'],monc_data[m][lwc_zvar[m]][id] )
-                    ide=id+next((x[0] for x in enumerate(monc_data[m]['model_lwc'][i,id:])  if np.isnan(x[1])),np.NaN)
-                    monc_data[m]['ctop_lwc0.2']=np.append(monc_data[m]['ctop_lwc0.2'],monc_data[m][lwc_zvar[m]][ide])
+                    monc_data[m]['cbase_lwc0.1']=np.append(monc_data[m]['cbase_lwc0.1'],monc_data[m][lwc_zvar[m]][id] )
+                    # ide=id-1+next((x[0] for x in enumerate(monc_data[m]['model_lwc'][i,id:])  if np.isnan(x[1])),np.NaN)
+                    ide=id-1+next((x[0] for x in enumerate(monc_data[m]['model_lwc'][i,id:]) if (x[1] < 0.1*1e-3 or np.isnan(x[1])) ),np.NaN)
+                    monc_data[m]['ctop_lwc0.1']=np.append(monc_data[m]['ctop_lwc0.1'],monc_data[m][lwc_zvar[m]][ide])
                 else:
-                    monc_data[m]['cbase_lwc0.2']=np.append(monc_data[m]['cbase_lwc0.2'],np.nan)
-                    monc_data[m]['ctop_lwc0.2']=np.append(monc_data[m]['ctop_lwc0.2'],np.nan )
+                    monc_data[m]['cbase_lwc0.1']=np.append(monc_data[m]['cbase_lwc0.1'],np.nan)
+                    monc_data[m]['ctop_lwc0.1']=np.append(monc_data[m]['ctop_lwc0.1'],np.nan )
 
     print ('******')
     print ('')
     print ('Plotting LWC timeseries for whole drift period:')
     print ('')
-    embed()
     cmax=0.3
-    clev=np.arange(0.0,0.45,0.05)
+    clev=np.arange(0.0,0.45,0.025)
     #####PlotLwc###############################################
     yheight=3
     fig = plt.figure(figsize=(9.5,yheight*numsp+1))
@@ -408,7 +410,8 @@ def plot_LWCTimeseries(obs_data,obs_dec,lwcvar,lwcstr, plots_out_dir, dates, **a
     ax = plt.gca()
     img = plt.contourf(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(obs_data[lwcvar])*1e3,
         levels=clev,cmap = newcmp)
-    plt.plot(obs_data['time'],obs_data['cbase_lwc0.2'], linewidth=1,color='black')
+    plt.plot(obs_data['time'],obs_data['cbase_lwc0.1'], linewidth=2,color='black')
+    plt.plot(obs_data['time'],obs_data['ctop_lwc0.1'], linewidth=2,color='black')
     plt.plot(obs_dec['mday'],obs_dec['cbase_sandeep'], linewidth=1,color='grey')
     plt.plot(obs_dec['mday'],obs_dec['ctop_sandeep'], linewidth=1,color='grey')
     nans = ax.get_ylim()
@@ -435,8 +438,8 @@ def plot_LWCTimeseries(obs_data,obs_dec,lwcvar,lwcstr, plots_out_dir, dates, **a
             plt.contourf(um_data[m]['time'], np.squeeze(um_data[m]['height'][0,:]), np.transpose(um_data[m]['model_lwc'])*1e3,
                 levels=clev,cmap = newcmp)
             nans = ax.get_ylim()
-            plt.plot(um_data[m]['time'],um_data[m]['cbase_lwc0.2'], linewidth=1,color='black')
-            plt.plot(um_data[m]['time'],um_data[m]['ctop_lwc0.2'], linewidth=1,color='black')
+            plt.plot(um_data[m]['time'],um_data[m]['cbase_lwc0.1'], linewidth=2,color='black')
+            plt.plot(um_data[m]['time'],um_data[m]['ctop_lwc0.1'], linewidth=2,color='black')
             plt.ylabel('Z [km]')
             plt.ylim(ylims)
             plt.yticks(yticks)
@@ -459,8 +462,8 @@ def plot_LWCTimeseries(obs_data,obs_dec,lwcvar,lwcstr, plots_out_dir, dates, **a
             # ax.set_facecolor('aliceblue')
             plt.contourf(monc_data[m][lwc_tvar[m]]/60/60, np.squeeze(monc_data[m][lwc_zvar[m]][:]), np.transpose(monc_data[m]['model_lwc'])*1e3,
             levels=clev,cmap = newcmp)
-            plt.plot(monc_data[m][lwc_tvar[m]],monc_data[m]['cbase_lwc0.2'], linewidth=1,color='black')
-            plt.plot(monc_data[m][lwc_tvar[m]],monc_data[m]['ctop_lwc0.2'], linewidth=1,color='black')
+            plt.plot(monc_data[m][lwc_tvar[m]]/60/60,monc_data[m]['cbase_lwc0.1'], linewidth=2,color='black')
+            plt.plot(monc_data[m][lwc_tvar[m]]/60/60,monc_data[m]['ctop_lwc0.1'], linewidth=2,color='black')
             plt.ylabel('Z [km]')
             plt.ylim(ylims)
             plt.yticks(yticks)
@@ -523,9 +526,35 @@ def plot_IWCTimeseries( obs_data,obs_dec, plots_out_dir, dates,**args): #, lon, 
     ytlabels=yticks/1e3
 
     obs_data['iwc'][obs_data['iwc'] <= 0.0] = np.nan
+    obs_data['lwc'][obs_data['lwc'] <= 0] = np.nan
+    obs_data['ctop_lwc0.1']=[]
+    obs_data['cbase_lwc0.1']=[]
+    for i in range(0,obs_data['lwc'].shape[0]):
+        id=next((x[0] for x in enumerate(obs_data[lwcvar][i,:]) if x[1] >= 0.1*1e-3),np.nan)
+        if not np.isnan(id):
+            obs_data['cbase_lwc0.1']=np.append(obs_data['cbase_lwc0.1'],obs_data['height'][i,id])
+            ide=id-1+next((x[0] for x in enumerate(obs_data[lwcvar][i,id:]) if (x[1] < 0.1*1e-3 or np.isnan(x[1])) ),np.NaN)
+            obs_data['ctop_lwc0.1']=np.append(obs_data['ctop_lwc0.1'],obs_data['height'][i,ide] )
+        else:
+            obs_data['cbase_lwc0.1']=np.append(obs_data['cbase_lwc0.1'],np.nan)
+            obs_data['ctop_lwc0.1']=np.append(obs_data['ctop_lwc0.1'],np.nan )
+
     if pum ==True:
         for m in range(0,len(um_data)):
             um_data[m]['model_iwc'][um_data[m]['model_iwc'] <= 0.0] = np.nan
+            um_data[m]['model_lwc'][um_data[m]['model_lwc'] <= 0.0] = np.nan
+            um_data[m]['cbase_lwc0.1']=[]
+            um_data[m]['ctop_lwc0.1']=[]
+            for i in range(0,um_data[m]['lwc'].shape[0]):
+                id=next((x[0] for x in enumerate(um_data[m]['model_lwc'][i,:]) if x[1] >= 0.1*1e-3),np.NaN)
+                if not np.isnan(id):
+                    um_data[m]['cbase_lwc0.1']=np.append(um_data[m]['cbase_lwc0.1'],um_data[m]['height'][i,id] )
+                    #ide=id-1+next((x[0] for x in enumerate(um_data[m]['model_lwc'][i,id:])  if np.isnan(x[1])),np.NaN)
+                    ide=id-1+next((x[0] for x in enumerate(um_data[m]['model_lwc'][i,id:])  if (x[1] < 0.1*1e-3 or np.isnan(x[1])) ),np.NaN)
+                    um_data[m]['ctop_lwc0.1']=np.append(um_data[m]['ctop_lwc0.1'],um_data[m]['height'][i,ide])
+                else:
+                    um_data[m]['cbase_lwc0.1']=np.append(um_data[m]['cbase_lwc0.1'],np.nan)
+                    um_data[m]['ctop_lwc0.1']=np.append(um_data[m]['ctop_lwc0.1'],np.nan )
 
     if pmonc ==True :
         iwc_tvar=[]
@@ -534,10 +563,24 @@ def plot_IWCTimeseries( obs_data,obs_dec, plots_out_dir, dates,**args): #, lon, 
             #monc_data[m]['model_iwc']= (monc_data[m]['ice_mmr_mean']+monc_data[m]['graupel_mmr_mean']+monc_data[m]['snow_mmr_mean'])*monc_data[m]['rho']
             monc_data[m]['model_iwc']= (monc_data[m]['iwc_tot_mean'])
             monc_data[m]['model_iwc'][monc_data[m]['model_iwc'] <= 0.0] = np.nan
-            #iwc_tvar=monc_data[m]['tvar']['ice_mmr_mean']
-            #iwc_zvar=monc_data[m]['zvar']['ice_mmr_mean']
             iwc_tvar+=[monc_data[m]['tvar']['iwc_tot_mean']]
             iwc_zvar+=[monc_data[m]['zvar']['iwc_tot_mean']]
+
+            monc_data[m]['model_lwc']=monc_data[m]['lwc_tot_mean'].copy()
+            monc_data[m]['model_lwc'][monc_data[m]['model_lwc'] <= 0.0] = np.nan
+            monc_data[m]['cbase_lwc0.1']=[]
+            monc_data[m]['ctop_lwc0.1']=[]
+            for i in range(0,monc_data[m]['model_lwc'].shape[0]):
+                id=next((x[0] for x in enumerate(monc_data[m]['model_lwc'][i,:]) if x[1] >= 0.1*1e-3),np.NaN)
+                if not np.isnan(id):
+                    monc_data[m]['cbase_lwc0.1']=np.append(monc_data[m]['cbase_lwc0.1'],monc_data[m][iwc_zvar[m]][id] )
+                    # ide=id-1+next((x[0] for x in enumerate(monc_data[m]['model_lwc'][i,id:])  if np.isnan(x[1])),np.NaN)
+                    ide=id-1+next((x[0] for x in enumerate(monc_data[m]['model_lwc'][i,id:]) if (x[1] < 0.1*1e-3 or np.isnan(x[1])) ),np.NaN)
+                    monc_data[m]['ctop_lwc0.1']=np.append(monc_data[m]['ctop_lwc0.1'],monc_data[m][iwc_zvar[m]][ide])
+                else:
+                    monc_data[m]['cbase_lwc0.1']=np.append(monc_data[m]['cbase_lwc0.1'],np.nan)
+                    monc_data[m]['ctop_lwc0.1']=np.append(monc_data[m]['ctop_lwc0.1'],np.nan )
+
 
     print ('******')
     print ('')
@@ -581,8 +624,10 @@ def plot_IWCTimeseries( obs_data,obs_dec, plots_out_dir, dates,**args): #, lon, 
     ax = plt.gca()
     img = plt.contourf(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(obs_data['iwc'])*1e3,
             levels=clev, norm = LogNorm(),cmap = newcmp)
-    plt.plot(obs_dec['mday'],obs_dec['cbase_sandeep'], linewidth=1,color='black')
-    plt.plot(obs_dec['mday'],obs_dec['ctop_sandeep'], linewidth=1,color='black')
+    plt.plot(obs_data['time'],obs_data['cbase_lwc0.1'], linewidth=2,color='black')
+    plt.plot(obs_data['time'],obs_data['ctop_lwc0.1'], linewidth=2,color='black')
+    plt.plot(obs_dec['mday'],obs_dec['cbase_sandeep'], linewidth=1,color='grey')
+    plt.plot(obs_dec['mday'],obs_dec['ctop_sandeep'], linewidth=1,color='grey')
 
     plt.ylabel('Z [km]')
     plt.ylim(ylims)
@@ -606,6 +651,8 @@ def plot_IWCTimeseries( obs_data,obs_dec, plots_out_dir, dates,**args): #, lon, 
             plt.contourf(um_data[m]['time'], np.squeeze(um_data[m]['height'][0,:]), np.transpose(um_data[m]['model_iwc'])*1e3,
                 levels=clev,norm = LogNorm(),cmap = newcmp)
                 #cmap = newcmp)
+            plt.plot(um_data[m]['time'],um_data[m]['cbase_lwc0.1'], linewidth=2,color='black')
+            plt.plot(um_data[m]['time'],um_data[m]['ctop_lwc0.1'], linewidth=2,color='black')
             plt.ylabel('Z [km]')
             plt.ylim(ylims)
             plt.yticks(yticks)
@@ -631,6 +678,8 @@ def plot_IWCTimeseries( obs_data,obs_dec, plots_out_dir, dates,**args): #, lon, 
             plt.contourf(monc_data[m][iwc_tvar[m]]/60/60, np.squeeze(monc_data[m][iwc_zvar[m]][:]), np.transpose(monc_data[m]['model_iwc'])*1e3,
             levels=clev,norm = LogNorm(),cmap = newcmp)
     #        cmap=newcmp,vmin = 0.0, vmax = cmax)
+            plt.plot(monc_data[m][iwc_tvar[m]]/60/60,monc_data[m]['cbase_lwc0.1'], linewidth=2,color='black')
+            plt.plot(monc_data[m][iwc_tvar[m]]/60/60,monc_data[m]['ctop_lwc0.1'], linewidth=2,color='black')
             plt.ylabel('Z [km]')
             plt.ylim(ylims)
             plt.yticks(yticks)
@@ -703,20 +752,61 @@ def plot_TWCTimeseries(obs_data,obs_dec,twcvar,twcstr,plots_out_dir, dates,  **a
     obs_data['twc'] = obs_data['lwc'] + obs_data['iwc']
     obs_data['twc_ad'] = obs_data['lwc_adiabatic'] + obs_data['iwc']
     obs_data['twc_ad_nolwp'] = obs_data['lwc_adiabatic_inc_nolwp'] + obs_data['iwc']
+    obs_data['lwc'][obs_data['lwc'] <= 0] = np.nan
+    obs_data['ctop_lwc0.1']=[]
+    obs_data['cbase_lwc0.1']=[]
+    for i in range(0,obs_data['lwc'].shape[0]):
+        id=next((x[0] for x in enumerate(obs_data['lwc''][i,:]) if x[1] >= 0.1*1e-3),np.nan)
+        if not np.isnan(id):
+            obs_data['cbase_lwc0.1']=np.append(obs_data['cbase_lwc0.1'],obs_data['height'][i,id])
+#            ide=id-1+next((x[0] for x in enumerate(obs_data[lwcvar][i,id:]) if np.isnan(x[1])),np.NaN)
+            ide=id-1+next((x[0] for x in enumerate(obs_data[lwcvar][i,id:]) if (x[1] < 0.1*1e-3 or np.isnan(x[1])) ),np.NaN)
+            obs_data['ctop_lwc0.1']=np.append(obs_data['ctop_lwc0.1'],obs_data['height'][i,ide] )
+        else:
+            obs_data['cbase_lwc0.1']=np.append(obs_data['cbase_lwc0.1'],np.nan)
+            obs_data['ctop_lwc0.1']=np.append(obs_data['ctop_lwc0.1'],np.nan )
+
     if pum==True:
         for m in range(0,len(um_data)):
             um_data[m]['model_twc'] = um_data[m]['model_lwc'] + um_data[m]['model_iwc']
+            um_data[m]['model_lwc'][um_data[m]['model_lwc'] <= 0.0] = np.nan
+            um_data[m]['cbase_lwc0.1']=[]
+            um_data[m]['ctop_lwc0.1']=[]
+            for i in range(0,um_data[m]['lwc'].shape[0]):
+                id=next((x[0] for x in enumerate(um_data[m]['model_lwc'][i,:]) if x[1] >= 0.1*1e-3),np.NaN)
+                if not np.isnan(id):
+                    um_data[m]['cbase_lwc0.1']=np.append(um_data[m]['cbase_lwc0.1'],um_data[m]['height'][i,id] )
+                    #ide=id-1+next((x[0] for x in enumerate(um_data[m]['model_lwc'][i,id:])  if np.isnan(x[1])),np.NaN)
+                    ide=id-1+next((x[0] for x in enumerate(um_data[m]['model_lwc'][i,id:])  if (x[1] < 0.1*1e-3 or np.isnan(x[1])) ),np.NaN)
+                    um_data[m]['ctop_lwc0.1']=np.append(um_data[m]['ctop_lwc0.1'],um_data[m]['height'][i,ide])
+                else:
+                    um_data[m]['cbase_lwc0.1']=np.append(um_data[m]['cbase_lwc0.1'],np.nan)
+                    um_data[m]['ctop_lwc0.1']=np.append(um_data[m]['ctop_lwc0.1'],np.nan )
 
     if pmonc==True:
         twc_tvar=[]
         twc_zvar=[]
         for m in range(0,len(monc_data)):
-            #monc_data[m]['model_iwc']= (monc_data[m]['ice_mmr_mean']+monc_data[m]['graupel_mmr_mean']+monc_data[m]['snow_mmr_mean'])*monc_data[m]['rho']
-            #monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
-            #monc_data[m]['model_twc'] = monc_data[m]['model_lwc'] +monc_data[m]['model_iwc']
             monc_data[m]['model_twc'] = monc_data[m]['twc_tot_mean']
             twc_tvar+=[monc_data[m]['tvar']['twc_tot_mean']]
             twc_zvar+=[monc_data[m]['zvar']['twc_tot_mean']]
+            monc_data[m]['model_lwc']=monc_data[m]['lwc_tot_mean'].copy()
+            monc_data[m]['model_lwc'][monc_data[m]['model_lwc'] <= 0.0] = np.nan
+            lwc_tvar+=[monc_data[m]['tvar']['lwc_tot_mean']]
+            lwc_zvar+=[monc_data[m]['zvar']['lwc_tot_mean']]
+            monc_data[m]['cbase_lwc0.1']=[]
+            monc_data[m]['ctop_lwc0.1']=[]
+            for i in range(0,monc_data[m]['model_lwc'].shape[0]):
+                id=next((x[0] for x in enumerate(monc_data[m]['model_lwc'][i,:]) if x[1] >= 0.1*1e-3),np.NaN)
+                if not np.isnan(id):
+                    monc_data[m]['cbase_lwc0.1']=np.append(monc_data[m]['cbase_lwc0.1'],monc_data[m][lwc_zvar[m]][id] )
+                    # ide=id-1+next((x[0] for x in enumerate(monc_data[m]['model_lwc'][i,id:])  if np.isnan(x[1])),np.NaN)
+                    ide=id-1+next((x[0] for x in enumerate(monc_data[m]['model_lwc'][i,id:]) if (x[1] < 0.1*1e-3 or np.isnan(x[1])) ),np.NaN)
+                    monc_data[m]['ctop_lwc0.1']=np.append(monc_data[m]['ctop_lwc0.1'],monc_data[m][lwc_zvar[m]][ide])
+                else:
+                    monc_data[m]['cbase_lwc0.1']=np.append(monc_data[m]['cbase_lwc0.1'],np.nan)
+                    monc_data[m]['ctop_lwc0.1']=np.append(monc_data[m]['ctop_lwc0.1'],np.nan )
+
 
     twc0 = np.transpose(obs_data[twcvar])*1e3
 
@@ -757,9 +847,10 @@ def plot_TWCTimeseries(obs_data,obs_dec,twcvar,twcstr,plots_out_dir, dates,  **a
         #levels=clev,cmap = newcmp)
         levels=clevs, norm = LogNorm(),
         cmap = newcmp)
-    plt.plot(obs_dec['mday'],obs_dec['cbase_sandeep'], linewidth=1,color='black')
-    plt.plot(obs_dec['mday'],obs_dec['ctop_sandeep'], linewidth=1,color='black')
-    # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
+    plt.plot(obs_data['time'],obs_data['cbase_lwc0.1'], linewidth=2,color='black')
+    plt.plot(obs_data['time'],obs_data['ctop_lwc0.1'], linewidth=2,color='black')
+    plt.plot(obs_dec['mday'],obs_dec['cbase_sandeep'], linewidth=1,color='grey')
+    plt.plot(obs_dec['mday'],obs_dec['ctop_sandeep'], linewidth=1,color='grey')
     nans = ax.get_ylim()
     plt.ylabel('Z [km]')
     plt.ylim(ylims)
@@ -784,6 +875,8 @@ def plot_TWCTimeseries(obs_data,obs_dec,twcvar,twcstr,plots_out_dir, dates,  **a
             plt.contourf(um_data[m]['time'], np.squeeze(um_data[m]['height'][0,:]), np.transpose(um_data[m]['model_twc'])*1e3,
                 levels=clevs, norm = LogNorm(),
                 cmap = newcmp)
+            plt.plot(um_data[m]['time'],um_data[m]['cbase_lwc0.1'], linewidth=2,color='black')
+            plt.plot(um_data[m]['time'],um_data[m]['ctop_lwc0.1'], linewidth=2,color='black')
             nans = ax.get_ylim()
             plt.ylabel('Z [km]')
             plt.ylim(ylims)
@@ -808,7 +901,8 @@ def plot_TWCTimeseries(obs_data,obs_dec,twcvar,twcstr,plots_out_dir, dates,  **a
             plt.contourf(monc_data[m][twc_tvar[m]][:]/60/60, np.squeeze(monc_data[m][twc_zvar[m]][:]), np.transpose(monc_data[m]['model_twc'])*1e3,
             levels=clevs, norm = LogNorm(),
             cmap = newcmp)
-            # )
+            plt.plot(monc_data[m][lwc_tvar[m]]/60/60,monc_data[m]['cbase_lwc0.1'], linewidth=2,color='black')
+            plt.plot(monc_data[m][lwc_tvar[m]]/60/60,monc_data[m]['ctop_lwc0.1'], linewidth=2,color='black')
             plt.ylabel('Z [km]')
             plt.ylim(ylims)
             plt.yticks(yticks)
