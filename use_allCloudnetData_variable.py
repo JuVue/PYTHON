@@ -138,7 +138,7 @@ def calc_TWC(obs_data,thresholding, **args):
     else:
         return obs_data
 
-def plot_CvTimeseries(obs_data, plots_out_dir,dates,  **args):
+def plot_CvTimeseries(obs_data,obs_dec, plots_out_dir,dates,  **args):
 
     numsp=1
     if bool(args):
@@ -289,7 +289,7 @@ def plot_CvTimeseries(obs_data, plots_out_dir,dates,  **args):
     print ('')
     print ('******')
 
-def plot_LWCTimeseries(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): #, lon, lat):
+def plot_LWCTimeseries(obs_data,obs_dec,lwcvar,lwcstr, plots_out_dir, dates, **args): #, lon, lat):
 
     numsp=1
     if bool(args):
@@ -453,7 +453,7 @@ def plot_LWCTimeseries(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): #,
     print ('')
     print ('******')
 
-def plot_IWCTimeseries( obs_data, plots_out_dir, dates,**args): #, lon, lat):
+def plot_IWCTimeseries( obs_data,obs_dec, plots_out_dir, dates,**args): #, lon, lat):
 
     numsp=1
     if bool(args):
@@ -3760,10 +3760,10 @@ def main():
     # -------------------------------------------------------------
     # Cloudnet plot: Plot contour timeseries
     # -------------------------------------------------------------
-    figure = plot_CvTimeseries(obs_data,plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    figure = plot_LWCTimeseries(obs_data,  lwcvar,lwcstr, plots_out_dir, dates, um_data=um_data,label=label, outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    #figure = plot_CvTimeseries(obs_data,obs_dec,plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_LWCTimeseries(obs_data,obs_dec,  lwcvar,lwcstr, plots_out_dir, dates, um_data=um_data,label=label, outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     figure = plot_TWCTimeseries( obs_data,obs_dec, twcvar,twcstr, plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    #figure = plot_IWCTimeseries(obs_data, plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_IWCTimeseries(obs_data,obs_dec, plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_monc_comparison(obs_data,  lwcvar,lwcstr, plots_out_dir, dates, um_data=um_data,label=label, outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
 
