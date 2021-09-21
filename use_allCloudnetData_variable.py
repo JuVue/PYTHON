@@ -367,7 +367,7 @@ def plot_LWCTimeseries(obs_data,obs_dec,lwcvar,lwcstr, plots_out_dir, dates, **a
             lwc_zvar+=[monc_data[m]['zvar']['lwc_tot_mean']]
             for i in range(0,monc_data['model_lwc'].shape[0]):
                 id=next(x[0] for x in enumerate(monc_data['model_lwc'][i,:]) if x[1] >= 0.2*1e-3)
-                monc_data['cbase_lwc0.2'][i]=um_data[lwc_zvar[m][i,id]  ### 0.2
+                monc_data['cbase_lwc0.2'][i]=um_data[lwc_zvar[m]][i,id]  ### 0.2
 
     print ('******')
     print ('')
