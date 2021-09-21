@@ -341,7 +341,7 @@ def plot_LWCTimeseries(obs_data,obs_dec,lwcvar,lwcstr, plots_out_dir, dates, **a
     obs_data['lwc'][obs_data['lwc'] <= 0] = np.nan
     obs_data['lwc_adiabatic'][obs_data['lwc_adiabatic'] <= 0] = np.nan
     obs_data['lwc_adiabatic_inc_nolwp'][obs_data['lwc_adiabatic_inc_nolwp'] <= 0] = np.nan
-    for i in range(0,obs_data['lwc'].shape[0])
+    for i in range(0,obs_data['lwc'].shape[0]):
         id=next(x[0] for x in enumerate(obs_data[lwcvar][i,:]) if x[1] >= 0.2*1e-3)
         obs_data['cbase_lwc0.2'][i]=obs_data['height'][i,id]  ### 0.2
         ide=next(x[0] for x in enumerate(obs_data[lwcvar][i,id:]) if np.isnan(x[1]))
@@ -349,7 +349,7 @@ def plot_LWCTimeseries(obs_data,obs_dec,lwcvar,lwcstr, plots_out_dir, dates, **a
     if pum==True:
         for m in range(0,len(um_data)):
                 um_data[m]['model_lwc'][um_data[m]['model_lwc'] <= 0.0] = np.nan
-                for i in range(0,um_data['lwc'].shape[0]
+                for i in range(0,um_data['lwc'].shape[0]):
                     id=next(x[0] for x in enumerate(um_data['model_lwc'][i,:]) if x[1] >= 0.2*1e-3)
                     um_data['cbase_lwc0.2'][i]=um_data['height'][i,id]  ### 0.2
                     ide=next(x[0] for x in enumerate(um_data['model_lwc'][i,id:])  if np.isnan(x[1]))
@@ -365,7 +365,7 @@ def plot_LWCTimeseries(obs_data,obs_dec,lwcvar,lwcstr, plots_out_dir, dates, **a
             monc_data[m]['model_lwc'][monc_data[m]['model_lwc'] <= 0.0] = np.nan
             lwc_tvar+=[monc_data[m]['tvar']['lwc_tot_mean']]
             lwc_zvar+=[monc_data[m]['zvar']['lwc_tot_mean']]
-            for i in range(0,monc_data['model_lwc'].shape[0]
+            for i in range(0,monc_data['model_lwc'].shape[0]):
                 id=next(x[0] for x in enumerate(monc_data['model_lwc'][i,:]) if x[1] >= 0.2*1e-3)
                 monc_data['cbase_lwc0.2'][i]=um_data[lwc_zvar[m][i,id]  ### 0.2
 
