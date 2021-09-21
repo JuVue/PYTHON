@@ -394,7 +394,7 @@ def plot_LWCTimeseries(obs_data,obs_dec,lwcvar,lwcstr, plots_out_dir, dates, **a
     print ('')
     print ('Plotting LWC timeseries for whole drift period:')
     print ('')
-
+    embed()
     cmax=0.3
     clev=np.arange(0.0,0.45,0.05)
     #####PlotLwc###############################################
@@ -411,7 +411,6 @@ def plot_LWCTimeseries(obs_data,obs_dec,lwcvar,lwcstr, plots_out_dir, dates, **a
     plt.plot(obs_data['time'],obs_data['cbase_lwc0.2'], linewidth=1,color='black')
     plt.plot(obs_dec['mday'],obs_dec['cbase_sandeep'], linewidth=1,color='grey')
     plt.plot(obs_dec['mday'],obs_dec['ctop_sandeep'], linewidth=1,color='grey')
-
     nans = ax.get_ylim()
     plt.ylabel('Z [km]')
     plt.ylim(ylims)
