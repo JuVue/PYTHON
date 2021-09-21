@@ -756,7 +756,7 @@ def plot_TWCTimeseries(obs_data,obs_dec,twcvar,twcstr,plots_out_dir, dates,  **a
     obs_data['ctop_lwc0.1']=[]
     obs_data['cbase_lwc0.1']=[]
     for i in range(0,obs_data['lwc'].shape[0]):
-        id=next((x[0] for x in enumerate(obs_data['lwc''][i,:]) if x[1] >= 0.1*1e-3),np.nan)
+        id=next((x[0] for x in enumerate(obs_data['lwc'][i,:]) if x[1] >= 0.1*1e-3),np.nan)
         if not np.isnan(id):
             obs_data['cbase_lwc0.1']=np.append(obs_data['cbase_lwc0.1'],obs_data['height'][i,id])
 #            ide=id-1+next((x[0] for x in enumerate(obs_data[lwcvar][i,id:]) if np.isnan(x[1])),np.NaN)
@@ -2476,7 +2476,6 @@ def plot_lwp(obs_data, plots_out_dir, dates,**args ):
     print ('')
 
     dstr=datenum2date(dates[0])
-#    from IPython import embed; embed()
     dstr=datenum2date(dates[1])
     if pmonc==True:
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_LWP.png'
@@ -2967,7 +2966,6 @@ def interpCloudnet(obs_data):
         times = np.copy(obs_data['time'].data)
         height = np.copy(obs_data['height'][0,:])        ### height array constant in time, so just take first column
         nans,id=nanhelper(cv)
-    #    from IPython import embed; embed()
         #for i in range(0,len(height)):
         for i in range(0,len(height)):
             tmp=id(~nans[:,i])
