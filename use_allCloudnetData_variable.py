@@ -374,6 +374,9 @@ def plot_LWCTimeseries(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): #,
     ax = plt.gca()
     img = plt.contourf(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(obs_data[lwcvar])*1e3,
         levels=clev,cmap = newcmp)
+    plt.plot(obs_dec['mday'],obs_dec['cbase_sandeep'], linewidth=1,color='black')
+    plt.plot(obs_dec['mday'],obs_dec['ctop_sandeep'], linewidth=1,color='black')
+
     nans = ax.get_ylim()
     plt.ylabel('Z [km]')
     plt.ylim(ylims)
@@ -540,6 +543,9 @@ def plot_IWCTimeseries( obs_data, plots_out_dir, dates,**args): #, lon, lat):
     ax = plt.gca()
     img = plt.contourf(obs_data['time'], np.squeeze(obs_data['height'][0,:]), np.transpose(obs_data['iwc'])*1e3,
             levels=clev, norm = LogNorm(),cmap = newcmp)
+    plt.plot(obs_dec['mday'],obs_dec['cbase_sandeep'], linewidth=1,color='black')
+    plt.plot(obs_dec['mday'],obs_dec['ctop_sandeep'], linewidth=1,color='black')
+
     plt.ylabel('Z [km]')
     plt.ylim(ylims)
     plt.yticks(yticks)
@@ -701,7 +707,6 @@ def plot_TWCTimeseries(obs_data,obs_dec,twcvar,twcstr,plots_out_dir, dates,  **a
             1e-2,0.25e-1,0.5e-1,0.75e-1,
             1e-1,0.25e-0,0.5e-0,0.75e-0,1e-0]
     #####Plot Twc###############################################
-    embed()
     yheight=3
     fig = plt.figure(figsize=(9.5,yheight*numsp+1))
     plt.subplots_adjust(top = 0.92, bottom = 0.06, right = 0.92, left = 0.08,
@@ -714,8 +719,8 @@ def plot_TWCTimeseries(obs_data,obs_dec,twcvar,twcstr,plots_out_dir, dates,  **a
         #levels=clev,cmap = newcmp)
         levels=clevs, norm = LogNorm(),
         cmap = newcmp)
-    plt.plot(obs_dec['mday'],obs_dec['cbase_sandeep'],'.','black')
-    plt.plot(obs_dec['mday'],obs_dec['ctop'],'.','black')
+    plt.plot(obs_dec['mday'],obs_dec['cbase_sandeep'], linewidth=1,color='black')
+    plt.plot(obs_dec['mday'],obs_dec['ctop_sandeep'], linewidth=1,color='black')
     # plt.plot(np.squeeze(obs['inversions']['doy']),np.squeeze(obs['inversions']['invbase']), 'k', linewidth = 1.0)
     nans = ax.get_ylim()
     plt.ylabel('Z [km]')
@@ -3755,8 +3760,8 @@ def main():
     # -------------------------------------------------------------
     # Cloudnet plot: Plot contour timeseries
     # -------------------------------------------------------------
-    # figure = plot_CvTimeseries(obs_data,plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    #figure = plot_LWCTimeseries(obs_data,  lwcvar,lwcstr, plots_out_dir, dates, um_data=um_data,label=label, outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_CvTimeseries(obs_data,plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_LWCTimeseries(obs_data,  lwcvar,lwcstr, plots_out_dir, dates, um_data=um_data,label=label, outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     figure = plot_TWCTimeseries( obs_data,obs_dec, twcvar,twcstr, plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_IWCTimeseries(obs_data, plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_monc_comparison(obs_data,  lwcvar,lwcstr, plots_out_dir, dates, um_data=um_data,label=label, outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
