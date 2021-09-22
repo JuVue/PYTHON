@@ -173,6 +173,10 @@ def calc_TWC(thresholding, **args):
 
 def get_CloudBoundaries( **args):
 
+    pmonc=False
+    pobs=False
+    pum=False
+
     if bool(args):
         for n in range(0,len(args)):
             if  list(args.keys())[n] == 'monc_data':
@@ -406,7 +410,8 @@ def plot_CvTimeseries(obs_data,obs_dec, plots_out_dir,dates,  **args):
     print ('******')
 
 def plot_LWCTimeseries(obs_data,obs_dec,lwcvar,lwcstr, plots_out_dir, dates, **args): #, lon, lat):
-
+    pmonc=False
+    pum=False
     numsp=1
     if bool(args):
         for n in range(0,len(args)):
@@ -585,7 +590,8 @@ def plot_LWCTimeseries(obs_data,obs_dec,lwcvar,lwcstr, plots_out_dir, dates, **a
     print ('******')
 
 def plot_IWCTimeseries( obs_data,obs_dec, plots_out_dir, dates,**args): #, lon, lat):
-
+    pmonc=False
+    pum=False
     numsp=1
     if bool(args):
         for n in range(0,len(args)):
@@ -775,7 +781,8 @@ def plot_IWCTimeseries( obs_data,obs_dec, plots_out_dir, dates,**args): #, lon, 
     print ('******')
 
 def plot_TWCTimeseries(obs_data,obs_dec,twcvar,twcstr,plots_out_dir, dates,  **args):
-
+    pmonc=False
+    pum=False
     numsp=1
     if bool(args):
         for n in range(0,len(args)):
@@ -969,6 +976,8 @@ def plot_TWCTimeseries(obs_data,obs_dec,twcvar,twcstr,plots_out_dir, dates,  **a
     print ('******')
 
 def plot_lwcProfiles(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,dates, **args): #, lon, lat):
+    pmonc=False
+    pum=False
 
     obs_zorder = 1
 
@@ -1104,6 +1113,8 @@ def plot_lwcProfiles(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,dates, 
     print ('******')
 
 def plot_iwcProfiles(obs_data, twcvar,twcstr, thresholding,plots_out_dir,dates, **args): #, lon, lat):
+    pmonc=False
+    pum=False
 
     obs_zorder = 1
 
@@ -1237,7 +1248,8 @@ def plot_iwcProfiles(obs_data, twcvar,twcstr, thresholding,plots_out_dir,dates, 
     print ('******')
 
 def plot_twcProfiles( obs_data,twcvar,twcstr, thresholding, plots_out_dir,dates, **args): #, lon, lat):
-
+    pmonc=False
+    pum=False
     obs_zorder = 1
 
     if bool(args):
@@ -1370,6 +1382,8 @@ def plot_twcProfiles( obs_data,twcvar,twcstr, thresholding, plots_out_dir,dates,
     print ('')
 
 def plot_NdropProfiles_split(obs_data, lwcvar, lwcstr, thresholding, plots_out_dir, dates, prof_time, **args): #, lon, lat):
+    pmonc=False
+    pum=False
 
     obs_zorder = 1
 
@@ -1620,6 +1634,8 @@ def plot_NdropProfiles_split(obs_data, lwcvar, lwcstr, thresholding, plots_out_d
     print ('******')
 
 def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,dates,prof_time, **args): #, lon, lat):
+    pmonc=False
+    pum=False
 
     obs_zorder = 1
 
@@ -1773,6 +1789,8 @@ def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,d
     print ('******')
 
 def plot_iwcProfiles_split(obs_data,twcvar,twcstr, thresholding, plots_out_dir,dates,prof_time, **args): #, lon, lat):
+    pmonc=False
+    pum=False
 
     obs_zorder = 1
 
@@ -1925,6 +1943,8 @@ def plot_iwcProfiles_split(obs_data,twcvar,twcstr, thresholding, plots_out_dir,d
     print ('******')
 
 def plot_twcProfiles_split(obs_data,twcvar,twcstr, thresholding, plots_out_dir,dates,prof_time, **args): #, lon, lat):
+    pmonc=False
+    pum=False
 
     obs_zorder = 1
 
@@ -2078,6 +2098,8 @@ def plot_twcProfiles_split(obs_data,twcvar,twcstr, thresholding, plots_out_dir,d
 
 
 def plot_NisgProfiles_split(obs_data, lwcvar, lwcstr, thresholding, plots_out_dir, dates, prof_time, **args): #, lon, lat):
+    pmonc=False
+    pum=False
 
     obs_zorder = 1
 
@@ -2333,6 +2355,8 @@ def plot_NisgProfiles_split(obs_data, lwcvar, lwcstr, thresholding, plots_out_di
     print ('******')
 
 def plot_lwp(obs_data, plots_out_dir, dates,**args ):
+    pmonc=False
+    pum=False
 
     numsp=1
     if bool(args):
@@ -2424,6 +2448,8 @@ def plot_lwp(obs_data, plots_out_dir, dates,**args ):
 
 
 def plot_monc_comparison(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): #, lon, lat):
+    pmonc=False
+    pum=False
 
     numsp=1
     if bool(args):
@@ -2560,6 +2586,8 @@ def plot_monc_comparison(obs_data,lwcvar,lwcstr, plots_out_dir, dates, **args): 
     print ('******')
 
 def UM_MONC_Nisg(obs_data, lwcvar, lwcstr, plots_out_dir, dates, prof_time, **args): #, lon, lat):
+    pmonc=False
+    pum=False
 
     obs_zorder = 1
 
@@ -2728,6 +2756,8 @@ def UM_MONC_Nisg(obs_data, lwcvar, lwcstr, plots_out_dir, dates, prof_time, **ar
     print ('******')
 
 def UM_SanityCheck(obs_data, lwcvar, lwcstr, plots_out_dir, dates, prof_time, **args): #, lon, lat):
+    pmonc=False
+    pum=False
 
     obs_zorder = 1
 
