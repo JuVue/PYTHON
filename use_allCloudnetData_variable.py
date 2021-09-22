@@ -414,6 +414,20 @@ def plot_LWCTimeseries(obs_data,obs_dec,lwcvar,lwcstr, plots_out_dir, dates, **a
     obs_data['lwc'][obs_data['lwc'] <= 0] = np.nan
     obs_data['lwc_adiabatic'][obs_data['lwc_adiabatic'] <= 0] = np.nan
     obs_data['lwc_adiabatic_inc_nolwp'][obs_data['lwc_adiabatic_inc_nolwp'] <= 0] = np.nan
+
+   if pum==True:
+    for m in range(0,len(um_data)):
+        um_data[m]['model_lwc'][um_data[m]['model_lwc'] <= 0.0] = np.nan
+
+    if pmonc==True:
+        lwc_tvar=[]
+        lwc_zvar=[]
+        for m in range(0,len(monc_data)):
+            #monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
+            monc_data[m]['model_lwc']=monc_data[m]['lwc_tot_mean'].copy()
+            monc_data[m]['model_lwc'][monc_data[m]['model_lwc'] <= 0.0] = np.nan
+            lwc_tvar+=[monc_data[m]['tvar']['lwc_tot_mean']]
+            lwc_zvar+=[monc_data[m]['zvar']['lwc_tot_mean']]
     ###----------------------------------------------------------------
     ###         Get cloud boundaries using lwc >= 0.1 g/m3
     ###----------------------------------------------------------------
