@@ -251,7 +251,7 @@ def plot_BLDepth_SMLDepth(obs_data, plot_out_dir, dates,**args ):
     plt.rc('xtick',labelsize=MED_SIZE)
     plt.rc('ytick',labelsize=MED_SIZE)
     plt.rc('legend',fontsize=MED_SIZE)
-    plt.subplots_adjust(top = 0.95, bottom = 0.05, right = 0.95, left = 0.05,
+    plt.subplots_adjust(top = 0.8, bottom = 0.05, right = 0.95, left = 0.05,
             hspace = 0.4, wspace = 0.13)
 
     lcols=['lightseagreen','steelblue','royalblue','darkblue']
@@ -265,23 +265,23 @@ def plot_BLDepth_SMLDepth(obs_data, plot_out_dir, dates,**args ):
     ### Build figure (timeseries)
     ### -------------------------------
     fig = plt.figure(figsize=(10,12 ))
-    ax  = fig.add_axes([0.1,0.7,0.8,0.2])   # left, bottom, width, height
-    yB = [-10, 120]
+    plt.subplot(1,3,1)
+    #yB = [-10, 120]
     lines=[]
     ax.fill_between(np.squeeze(obs_data['dec']['mday']),np.squeeze(obs_data['dec']['cbase_sandeep']),np.squeeze(obs_data['dec']['ct']), color = 'skyblue', alpha = 0.3)
-    lines +=plt.plot(obs_data['hatpro_temp']['mday'], obs_data['hatpro_temp']['invbase'], color = 'k', label = 'OBS inv')
-    lines +=plt.plot(obs_data['hatpro_temp']['mday'], obs_data['hatpro_temp']['decbase'],'-', color = 'gray', label = 'OBS sml')
+    lines +=plt.plot(obs_data['hatpro_temp']['mday'], obs_data['hatpro_temp']['invbase'],linewidth=2,color = 'k', label = 'OBS inv')
+    lines +=plt.plot(obs_data['hatpro_temp']['mday'], obs_data['hatpro_temp']['decbase'],'-', linewidth=2,color = 'gray', label = 'OBS sml')
     #legend1=plt.legend(loc='best')
     for m in range(0,len(um_data)):
         #plt.plot(um_data[m]['time'], um_data[m]['bl_depth'], 'o',color = lcols[m], label = 'model bl')
-        lines +=plt.plot(um_data[m]['inv']['mday'], um_data[m]['inv']['invbase'], color = lcols[m], label = 'invbase')
+        lines +=plt.plot(um_data[m]['inv']['mday'], um_data[m]['inv']['invbase'], linewidth=2,color = lcols[m], label = 'invbase')
     for m in range(0,len(monc_data)):
-        lines +=plt.plot(monc_data[m]['inv']['mday'], monc_data[m]['inv']['invbase'], color = lcolsmonc[m], label = 'invbase')
+        lines +=plt.plot(monc_data[m]['inv']['mday'], monc_data[m]['inv']['invbase'],linewidth=2, color = lcolsmonc[m], label = 'invbase')
     plt.ylabel('Height [m]')
     llabels= ['Obs inv','OBS sml']
     llabels+=label
     llabels+=mlabel
-    fig.legend(lines,llabels, bbox_to_anchor=(0.1, 0.93, 0.8, .05),loc=3, ncol=4)
+    fig.legend(lines,llabels, bbox_to_anchor=(0.1, 0.85, 0.8, .15),loc=3, ncol=4)
     #plt.gca().add_artist(legend1)
     ax.set_xlim([dates[0], dates[1]])
     plt.grid(which='both')
@@ -289,20 +289,19 @@ def plot_BLDepth_SMLDepth(obs_data, plot_out_dir, dates,**args ):
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
     plt.title('Main inversion')
-    ax  = fig.add_axes([0.1,0.4,0.8,0.2])   # left, bottom, width, height
+    plt.subplot(1,3,2)
     ax = plt.gca()
-    yB = [-10, 120]
     lines=[]
     ax.fill_between(np.squeeze(obs_data['dec']['mday']),np.squeeze(obs_data['dec']['cbase_sandeep']),np.squeeze(obs_data['dec']['ct']), color = 'skyblue', alpha = 0.3)
-    lines+=plt.plot(obs_data['hatpro_temp']['mday'], obs_data['hatpro_temp']['invbase'], color = 'k', label = 'inv')
-    lines+= plt.plot(obs_data['hatpro_temp']['mday'], obs_data['hatpro_temp']['decbase'],'-', color = 'gray', label = 'sml')
+    lines+=plt.plot(obs_data['hatpro_temp']['mday'], obs_data['hatpro_temp']['invbase'],linewidth=2, color = 'k', label = 'inv')
+    lines+= plt.plot(obs_data['hatpro_temp']['mday'], obs_data['hatpro_temp']['decbase'],'-',linewidth=2, color = 'gray', label = 'sml')
     #legend1=plt.legend(loc='best')
     for m in range(0,len(um_data)):
         #plt.plot(um_data[m]['time'], um_data[m]['bl_depth'], 'o',color = lcols[m], label = 'model bl')
-        lines+=plt.plot(um_data[m]['inv']['mday'], um_data[m]['inv']['decbase'],'-', color = lcols[m], label = 'sml')
+        lines+=plt.plot(um_data[m]['inv']['mday'], um_data[m]['inv']['decbase'],'-', linewidth=2,color = lcols[m], label = 'sml')
         #if m ==0: legend1=plt.legend(loc='best')
     for m in range(0,len(monc_data)):
-        lines+=plt.plot(monc_data[m]['inv']['mday'], monc_data[m]['inv']['decbase'],'-', color = lcolsmonc[m], label = 'sml')
+        lines+=plt.plot(monc_data[m]['inv']['mday'], monc_data[m]['inv']['decbase'],'-',linewidth=2, color = lcolsmonc[m], label = 'sml')
     plt.ylabel('Height [m]')
     ax.set_xlim([dates[0], dates[1]])
     plt.grid(which='both')
@@ -312,15 +311,14 @@ def plot_BLDepth_SMLDepth(obs_data, plot_out_dir, dates,**args ):
     plt.title('sml height')
     #ax.set_xlim([datenum, edatenum])
 
-    ax  = fig.add_axes([0.1,0.1,0.8,0.2])   # left, bottom, width, height
+    plt.subplot(1,3,3)
     ax = plt.gca()
-    yB = [-10, 120]
     lines=[]
     ax.fill_between(np.squeeze(obs_data['dec']['mday']),np.squeeze(obs_data['dec']['cbase_sandeep']),np.squeeze(obs_data['dec']['ct']), color = 'skyblue', alpha = 0.3)
-    plt.plot(obs_data['hatpro_temp']['mday'], obs_data['hatpro_temp']['invbase'], color = 'k', label = 'inv')
-    lines+= plt.plot(obs_data['hatpro_temp']['mday'], obs_data['hatpro_temp']['decbase'],'-', color = 'gray', label = 'sml')
+    plt.plot(obs_data['hatpro_temp']['mday'], obs_data['hatpro_temp']['invbase'], linewidth=2,color = 'k', label = 'inv')
+    lines+= plt.plot(obs_data['hatpro_temp']['mday'], obs_data['hatpro_temp']['decbase'],'-', linewidth=2,color = 'gray', label = 'sml')
     for m in range(0,len(um_data)):
-        lines+=plt.plot(um_data[m]['time'], um_data[m]['bl_depth'], '-',color = lcols[m], label = 'model bl')
+        lines+=plt.plot(um_data[m]['time'], um_data[m]['bl_depth'], '-',linewidth=2,color = lcols[m], label = 'model bl')
         #if m ==0: legend1=plt.legend(loc='best')
     plt.ylabel('Height [m]')
     ax.set_xlim([dates[0], dates[1]])
@@ -335,10 +333,10 @@ def plot_BLDepth_SMLDepth(obs_data, plot_out_dir, dates,**args ):
     print ('')
     print ('Finished plotting! :)')
     print ('')
-
     dstr=datenum2date(dates[0])
     fileout = os.path.join(plot_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_BLdepth-SML.png')
     plt.savefig(fileout)
+    plt.show()
 
 def plot_T_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon, lat):
     obs_zorder = 1
@@ -1432,7 +1430,8 @@ def plot_tke_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon,
                 plt.plot(np.nanmean(monc_data[m]['tke_mean'][id,:],0),monc_data[m][zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
                 plt.plot(np.nanmean(monc_data[m]['tke_plus-sg_mean'][id,:],0),monc_data[m][zvar[m]], '-.', color = lcolsmonc[m], linewidth = 2, label = mlabel[m], zorder = 1)
                 cbase=np.nanmean(monc_data[m]['cbase_lwc0.1'][id])
-                plt.plot([1.2+0.05*m,1.2+0.05*m],[cbase,cbase], '-x', color = lcolsmonc[m], linewidth = 2)
+                ctop=np.nanmean(monc_data[m]['ctop_lwc0.1'][id])
+                plt.plot([1.2+0.05*m,1.2+0.05*m],[cbase,ctop], '-x', color = lcolsmonc[m], linewidth = 2)
         if pt == 1:
             plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=4)
 
@@ -1444,13 +1443,13 @@ def plot_tke_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon,
         ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
         ax1.set_yticklabels(ytlabels)
     dstr=datenum2date(dates[1])
-    plt.show()
     # plt.grid('on')
     if pmonc==True:
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_tke-profile'  + '_split.png'
     else:
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) +'_tke-profile'  + '_split.png'
     plt.savefig(fileout,dpi=300)
+    plt.show()
 
     ####TKE DISSIPATION PLOTTING OBS & MONC
     plt.figure(figsize=(18,8))
