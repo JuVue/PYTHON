@@ -167,7 +167,7 @@ def calc_TWC(thresholding, **args):
         return obs_data
 
 
-def get_CloudBoundaries(obs_data, **args):
+def get_CloudBoundaries( **args):
 
     if bool(args):
         for n in range(0,len(args)):
@@ -177,21 +177,25 @@ def get_CloudBoundaries(obs_data, **args):
             elif  list(args.keys())[n] == 'um_data':
                 um_data=args[list(args.keys())[n]]
                 pum =True
+            elif  list(args.keys())[n] == 'obs_data':
+                obs_data=args[list(args.keys())[n]]
+                pobs =True
 
     ###----------------------------------------------------------------
     ###         Get cloud boundaries using lwc >= 0.1 g/m3
     ###----------------------------------------------------------------
-    obs_data['ctop_lwc0.1']=[]
-    obs_data['cbase_lwc0.1']=[]
-    for i in range(0,obs_data['lwc'].shape[0]):
-        id=next((x[0] for x in enumerate(obs_data['lwc'][i,:]) if x[1] >= 0.1*1e-3),np.nan)
-        if not np.isnan(id):
-            obs_data['cbase_lwc0.1']=np.append(obs_data['cbase_lwc0.1'],obs_data['height'][i,id])
-            ide=id-1+next((x[0] for x in enumerate(obs_data['lwc'][i,id:]) if (x[1] < 0.1*1e-3 or np.isnan(x[1])) ),np.NaN)
-            obs_data['ctop_lwc0.1']=np.append(obs_data['ctop_lwc0.1'],obs_data['height'][i,ide] )
-        else:
-            obs_data['cbase_lwc0.1']=np.append(obs_data['cbase_lwc0.1'],np.nan)
-            obs_data['ctop_lwc0.1']=np.append(obs_data['ctop_lwc0.1'],np.nan )
+    if pobs==True:
+        obs_data['ctop_lwc0.1']=[]
+        obs_data['cbase_lwc0.1']=[]
+        for i in range(0,obs_data['lwc'].shape[0]):
+            id=next((x[0] for x in enumerate(obs_data['lwc'][i,:]) if x[1] >= 0.1*1e-3),np.nan)
+            if not np.isnan(id):
+                obs_data['cbase_lwc0.1']=np.append(obs_data['cbase_lwc0.1'],obs_data['height'][i,id])
+                ide=id-1+next((x[0] for x in enumerate(obs_data['lwc'][i,id:]) if (x[1] < 0.1*1e-3 or np.isnan(x[1])) ),np.NaN)
+                obs_data['ctop_lwc0.1']=np.append(obs_data['ctop_lwc0.1'],obs_data['height'][i,ide] )
+            else:
+                obs_data['cbase_lwc0.1']=np.append(obs_data['cbase_lwc0.1'],np.nan)
+                obs_data['ctop_lwc0.1']=np.append(obs_data['ctop_lwc0.1'],np.nan )
 
     if pum==True:
         for m in range(0,len(um_data)):
@@ -230,14 +234,21 @@ def get_CloudBoundaries(obs_data, **args):
                     monc_data[m]['cbase_lwc0.1']=np.append(monc_data[m]['cbase_lwc0.1'],np.nan)
                     monc_data[m]['ctop_lwc0.1']=np.append(monc_data[m]['ctop_lwc0.1'],np.nan )
 
-    if ((pum==True) and (pmonc==True)):
+    if ((pobs==True) and (pum==True) and (pmonc==True)):
         return obs_data,um_data,monc_data
-    elif (pum==True):
+    elif ((pobs==True) and (pum==True) ):
         return obs_data,um_data
-    elif (pmonc==True):
+    elif ((pobs==True) and (pmonc==True) ):
         return obs_data,monc_data
-    else:
+    if ((pmonc==True) and (pum==True) ):
+        return um_data,monc_data
+    elif (pum==True):
+        return um_data
+    elif (pmonc==True):
+        return monc_data
+    elif (pobs==True):
         return obs_data
+
 
 def plot_CvTimeseries(obs_data,obs_dec, plots_out_dir,dates,  **args):
 
@@ -990,7 +1001,7 @@ def plot_lwcProfiles(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,dates, 
     ###         Calculate total water content
     ###----------------------------------------------------------------
 
-    obs_data,um_data,monc_data=calc_TWC(obs_data, thresholding, um_data=um_data,monc_data=monc_data)
+    obs_data,um_data,monc_data=calc_TWC( thresholding,obs_data=obs_data, um_data=um_data,monc_data=monc_data)
     if pmonc==True:
         lwc_zvar=[]
         lwc_tvar=[]
@@ -1121,7 +1132,7 @@ def plot_iwcProfiles(obs_data, twcvar,twcstr, thresholding,plots_out_dir,dates, 
     print ('')
 
     #get TWC calculated
-    obs_data,um_data,monc_data=calc_TWC(obs_data, thresholding, um_data=um_data,monc_data=monc_data)
+    obs_data,um_data,monc_data=calc_TWC( thresholding, obs_data=obs_data,um_data=um_data,monc_data=monc_data)
 
     if pmonc==True:
         twc_zvar=[]
@@ -1255,7 +1266,7 @@ def plot_twcProfiles( obs_data,twcvar,twcstr, thresholding, plots_out_dir,dates,
     print ('')
 
     #get TWC calculated
-    obs_data,um_data,monc_data=calc_TWC(obs_data, thresholding, um_data=um_data,monc_data=monc_data)
+    obs_data,um_data,monc_data=calc_TWC(thresholding,obs_data=obs_data, um_data=um_data,monc_data=monc_data)
 
     if  pmonc==True:
         for m in range(0,len(monc_data)):
@@ -1641,7 +1652,7 @@ def plot_lwcProfiles_split(obs_data,lwcvar,lwcstr, thresholding, plots_out_dir,d
     ###         Calculate total water content
     ###----------------------------------------------------------------
 
-    obs_data,um_data,monc_data=calc_TWC(obs_data, thresholding, um_data=um_data,monc_data=monc_data)
+    obs_data,um_data,monc_data=calc_TWC( thresholding,obs_data=obs_data, um_data=um_data,monc_data=monc_data)
 
     if pmonc==True:
         lwc_zvar=[]
@@ -1793,7 +1804,7 @@ def plot_iwcProfiles_split(obs_data,twcvar,twcstr, thresholding, plots_out_dir,d
     ###----------------------------------------------------------------
     ###         Calculate total water content
     ###----------------------------------------------------------------
-    obs_data,um_data,monc_data=calc_TWC(obs_data, thresholding, um_data=um_data,monc_data=monc_data)
+    obs_data,um_data,monc_data=calc_TWC( thresholding,obs_data=obs_data, um_data=um_data,monc_data=monc_data)
 
     if pmonc==True:
         twc_zvar=[]
@@ -1945,7 +1956,7 @@ def plot_twcProfiles_split(obs_data,twcvar,twcstr, thresholding, plots_out_dir,d
     ###----------------------------------------------------------------
     ###         Calculate total water content
     ###----------------------------------------------------------------
-    obs_data,um_data,monc_data=calc_TWC(obs_data, thresholding, um_data=um_data,monc_data=monc_data)
+    obs_data,um_data,monc_data=calc_TWC( thresholding,obs_data=obs_data, um_data=um_data,monc_data=monc_data)
 
     if pmonc==True:
         twc_zvar=[]
