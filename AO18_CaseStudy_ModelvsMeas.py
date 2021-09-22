@@ -1432,7 +1432,7 @@ def plot_tke_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon,
                 plt.plot(np.nanmean(monc_data[m]['tke_mean'][id,:],0),monc_data[m][zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
                 plt.plot(np.nanmean(monc_data[m]['tke_plus-sg_mean'][id,:],0),monc_data[m][zvar[m]], '-.', color = lcolsmonc[m], linewidth = 2, label = mlabel[m], zorder = 1)
                 cbase=np.nanmean(monc_data[m]['cbase_lwc0.1'][id]
-                plt.plot([1.2+0.05*m,1.2+0.05*m][cbase,cbase], '-x', color = lcolsmonc[m], linewidth = 2)
+                plt.plot([1.2+0.05*m,1.2+0.05*m],[cbase,cbase], '-x', color = lcolsmonc[m], linewidth = 2)
         if pt == 1:
             plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=4)
 
