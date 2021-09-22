@@ -29,6 +29,7 @@ from time_functions import datenum2date, date2datenum, calcTime_Mat2DOY, calcTim
 from readMAT import readMatlabStruct
 from manipFuncts import intersect_mtlb
 from physFuncts import calcSH_mr, calcSH_wvp, calcvp,calcsvp,calcRH,calcDewPoint,calcP,windcomp2windvec
+from use_allCloudnetData_variable import calcTWC, get_CloudBoundaries
 #from physFuncts import calcThetaE, calcThetaVL
 #from pyFixes import py3_FixNPLoad
 
@@ -1324,7 +1325,8 @@ def plot_tke_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon,
             monc_data[m]['tke_plus-sg_mean']=0.5*(monc_data[m]['uu_mean']+monc_data[m]['uusg_mean']+
                                           monc_data[m]['vv_mean']+monc_data[m]['vvsg_mean']+
                                           monc_data[m]['ww_mean']+monc_data[m]['wwsg_mean'])
-
+        monc_data=calc_TWC(monc_data=monc_data)
+        monc_data=get_CloudBoundaries(monc_data=monc_data)
 
     #quality control of dissipation data following sandeeps SCRIPT
     # epsilonL >=0 or epsilonL<=-8 o epsilonL error >=350 set to NaN
@@ -1355,6 +1357,7 @@ def plot_tke_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon,
     obs['dissR']['epsilon_corr']=np.transpose(a)
     obs['dissR']['height']=obs['dissR']['Rranges']*1000
 
+    ###########################
     ylims=[0,2]
     yticks=np.arange(0,2e3,0.5e3)
     ytlabels=yticks/1e3
@@ -1428,17 +1431,20 @@ def plot_tke_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon,
                 id= np.squeeze(np.argwhere((monc_data[m][tvar[m]]>=prof_time[pt][0]) & (monc_data[m][tvar[m]]<prof_time[pt][1])))
                 plt.plot(np.nanmean(monc_data[m]['tke_mean'][id,:],0),monc_data[m][zvar[m]], color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
                 plt.plot(np.nanmean(monc_data[m]['tke_plus-sg_mean'][id,:],0),monc_data[m][zvar[m]], '-.', color = lcolsmonc[m], linewidth = 2, label = mlabel[m], zorder = 1)
+                cbase=np.nanmean(monc_data[m]['cbase_lwc0.1'][id]
+                plt.plot([1.2+0.05*m,1.2+0.05*m][cbase,cbase], '-x', color = lcolsmonc[m], linewidth = 2)
         if pt == 1:
             plt.legend(bbox_to_anchor=(1.5, 1.05), loc=4, ncol=4)
 
         plt.xlabel('tke [m$^2$ s$^{-2}$]')
         plt.ylabel('Z [km]')
-        #plt.xlim([0, 1.5])
+        plt.xlim([0, 1.5])
         plt.ylim(ylims)
         plt.yticks(yticks)
         ax1.yaxis.set_minor_locator(ticker.MultipleLocator(100))
         ax1.set_yticklabels(ytlabels)
     dstr=datenum2date(dates[1])
+    plt.show()
     # plt.grid('on')
     if pmonc==True:
         fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_tke-profile'  + '_split.png'
@@ -2640,22 +2646,6 @@ def main():
 
 
 
-    #
-    # #sfml height from hatpro
-    # a=[]
-    # for pt in range(0,len(prof_time)):
-    #     sstr=datenum2date(prof_time[pt][0])
-    #     estr=datenum2date(prof_time[pt][1])
-    #     obsid= np.squeeze(np.argwhere((obs['hatpro_temp']['mday']>=prof_time[pt][0]) & (obs['hatpro_temp']['mday']<prof_time[pt][1])))
-    #     a.append(obs['hatpro_temp']['sfmlbase'][obsid])
-    #
-    # b=[]
-    # for pt in range(0,len(prof_time)):
-    #     sstr=datenum2date(prof_time[pt][0])
-    #     estr=datenum2date(prof_time[pt][1])
-    #     obsid= np.squeeze(np.argwhere((obs['dec']['mday']>=prof_time[pt][0]) & (obs['dec']['mday']<prof_time[pt][1])))
-    #     b.append(obs['dec']['cbase_sandeep'][obsid])
-
     #################################################################
     ## interpolating observation to MONC GRID
     ## comment the next section if original height resolution should be plotted
@@ -2663,7 +2653,7 @@ def main():
     ### T profiles: hatpro, sondes
     ### wind profiles: halo, sondes
     #interpolate hatpro data to monc_grid
-    var_list_int = ['temperature','pottemp','rh', ]
+    var_list_int = ['temperature','pottemp','rh']
     monc_height=np.array(monc_data[0][monc_data[0]['zvar']['T_mean']])
     for var in var_list_int:
         aint = np.ones((obs['hatpro_temp'][var].shape[1],monc_height.shape[0]))*np.NaN
@@ -2698,9 +2688,9 @@ def main():
     figure = plot_tke_profiles_split(obs,plots_out_dir,dates, prof_time,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_Theta_profiles_split(obs,plots_out_dir,dates, prof_time,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     figure = plot_BLDepth_SMLDepth(obs,plot_out_dir, dates, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    figure = plot_T_Timeseries(obs,plot_out_dir, dates,prof_time, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    figure = plot_Theta_Timeseries(obs,plot_out_dir, dates,prof_time, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    figure = plot_q_Timeseries(obs,plot_out_dir, dates,prof_time, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    #figure = plot_T_Timeseries(obs,plot_out_dir, dates,prof_time, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    #figure = plot_Theta_Timeseries(obs,plot_out_dir, dates,prof_time, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    #figure = plot_q_Timeseries(obs,plot_out_dir, dates,prof_time, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
 
 
