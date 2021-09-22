@@ -265,7 +265,7 @@ def plot_BLDepth_SMLDepth(obs_data, plot_out_dir, dates,**args ):
     ### Build figure (timeseries)
     ### -------------------------------
     fig = plt.figure(figsize=(10,12 ))
-    plt.subplot(1,3,1)
+    plt.subplot(3,1,1)
     ax = plt.gca()
     #yB = [-10, 120]
     lines=[]
@@ -290,7 +290,7 @@ def plot_BLDepth_SMLDepth(obs_data, plot_out_dir, dates,**args ):
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
     plt.title('Main inversion')
-    plt.subplot(1,3,2)
+    plt.subplot(3,1,2)
     ax = plt.gca()
     lines=[]
     ax.fill_between(np.squeeze(obs_data['dec']['mday']),np.squeeze(obs_data['dec']['cbase_sandeep']),np.squeeze(obs_data['dec']['ct']), color = 'skyblue', alpha = 0.3)
@@ -312,7 +312,7 @@ def plot_BLDepth_SMLDepth(obs_data, plot_out_dir, dates,**args ):
     plt.title('sml height')
     #ax.set_xlim([datenum, edatenum])
 
-    plt.subplot(1,3,3)
+    plt.subplot(3,1,3)
     ax = plt.gca()
     lines=[]
     ax.fill_between(np.squeeze(obs_data['dec']['mday']),np.squeeze(obs_data['dec']['cbase_sandeep']),np.squeeze(obs_data['dec']['ct']), color = 'skyblue', alpha = 0.3)
