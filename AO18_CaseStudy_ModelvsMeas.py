@@ -1325,7 +1325,7 @@ def plot_tke_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon,
             monc_data[m]['tke_plus-sg_mean']=0.5*(monc_data[m]['uu_mean']+monc_data[m]['uusg_mean']+
                                           monc_data[m]['vv_mean']+monc_data[m]['vvsg_mean']+
                                           monc_data[m]['ww_mean']+monc_data[m]['wwsg_mean'])
-        monc_data=calc_TWC(monc_data=monc_data)
+        monc_data=calc_TWC(True,monc_data=monc_data)
         monc_data=get_CloudBoundaries(monc_data=monc_data)
 
     #quality control of dissipation data following sandeeps SCRIPT
