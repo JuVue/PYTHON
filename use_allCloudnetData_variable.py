@@ -894,8 +894,8 @@ def plot_TWCTimeseries(obs_data,obs_dec,twcvar,twcstr,plots_out_dir, dates,  **a
             plt.contourf(monc_data[m][twc_tvar[m]][:]/60/60, np.squeeze(monc_data[m][twc_zvar[m]][:]), np.transpose(monc_data[m]['model_twc'])*1e3,
             levels=clevs, norm = LogNorm(),
             cmap = newcmp)
-            plt.plot(monc_data[m][lwc_tvar[m]]/60/60,monc_data[m]['cbase_lwc0.1'], linewidth=2,color='black')
-            plt.plot(monc_data[m][lwc_tvar[m]]/60/60,monc_data[m]['ctop_lwc0.1'], linewidth=2,color='black')
+            plt.plot(monc_data[m][twc_tvar[m]]/60/60,monc_data[m]['cbase_lwc0.1'], linewidth=2,color='black')
+            plt.plot(monc_data[m][twc_tvar[m]]/60/60,monc_data[m]['ctop_lwc0.1'], linewidth=2,color='black')
             plt.ylabel('Z [km]')
             plt.ylim(ylims)
             plt.yticks(yticks)
