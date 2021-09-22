@@ -159,7 +159,7 @@ def get_CloudBoundaries(obs_data, **args):
         id=next((x[0] for x in enumerate(obs_data['lwc'][i,:]) if x[1] >= 0.1*1e-3),np.nan)
         if not np.isnan(id):
             obs_data['cbase_lwc0.1']=np.append(obs_data['cbase_lwc0.1'],obs_data['height'][i,id])
-            ide=id-1+next((x[0] for x in enumerate(obs_data[lwcvar][i,id:]) if (x[1] < 0.1*1e-3 or np.isnan(x[1])) ),np.NaN)
+            ide=id-1+next((x[0] for x in enumerate(obs_data['lwc'][i,id:]) if (x[1] < 0.1*1e-3 or np.isnan(x[1])) ),np.NaN)
             obs_data['ctop_lwc0.1']=np.append(obs_data['ctop_lwc0.1'],obs_data['height'][i,ide] )
         else:
             obs_data['cbase_lwc0.1']=np.append(obs_data['cbase_lwc0.1'],np.nan)
