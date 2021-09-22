@@ -139,7 +139,7 @@ def calc_TWC(obs_data,thresholding, **args):
         return obs_data
 
 
-def get_CloudBoundaries(obs_data,thresholding, **args):
+def get_CloudBoundaries(obs_data, **args):
 
     if bool(args):
         for n in range(0,len(args)):
