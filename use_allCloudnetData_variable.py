@@ -471,13 +471,13 @@ def plot_LWCTimeseries(obs_data,obs_dec,lwcvar,lwcstr, plots_out_dir, dates, **a
     ###         Get cloud boundaries using lwc >= 0.1 g/m3
     ###----------------------------------------------------------------
     if ((pum==True) and (pmonc==True)):
-        obs_data,um_data,monc_data=get_CloudBoundaries(obs_data,um_data=um_data,monc_data=monc_data)
+        obs_data,um_data,monc_data=get_CloudBoundaries(obs_data=obs_data,um_data=um_data,monc_data=monc_data)
     elif (pum==True):
-        obs_data,um_data=get_CloudBoundaries(obs_data,um_data=um_data)
+        obs_data,um_data=get_CloudBoundaries(obs_data=obs_data,um_data=um_data)
     elif (pmonc==True):
-        obs_data,monc_data=get_CloudBoundaries(obs_data,monc_data=monc_data)
+        obs_data,monc_data=get_CloudBoundaries(obs_data=obs_data,monc_data=monc_data)
     else:
-        obs_data=get_CloudBoundaries(obs_data)
+        obs_data=get_CloudBoundaries(obs_data=obs_data)
 
     print ('******')
     print ('')
@@ -633,13 +633,13 @@ def plot_IWCTimeseries( obs_data,obs_dec, plots_out_dir, dates,**args): #, lon, 
     ###         Get cloud boundaries using lwc >= 0.1 g/m3
     ###----------------------------------------------------------------
     if ((pum==True) and (pmonc==True)):
-        obs_data,um_data,monc_data=get_CloudBoundaries(obs_data,um_data=um_data,monc_data=monc_data)
+        obs_data,um_data,monc_data=get_CloudBoundaries(obs_data=obs_data,um_data=um_data,monc_data=monc_data)
     elif (pum==True):
-        obs_data,um_data=get_CloudBoundaries(obs_data,um_data=um_data)
+        obs_data,um_data=get_CloudBoundaries(obs_data=obs_data,um_data=um_data)
     elif (pmonc==True):
-        obs_data,monc_data=get_CloudBoundaries(obs_data,monc_data=monc_data)
+        obs_data,monc_data=get_CloudBoundaries(obs_data=obs_data,monc_data=monc_data)
     else:
-        obs_data=get_CloudBoundaries(obs_data)
+        obs_data=get_CloudBoundaries(obs_data=obs_data)
 
 
     print ('******')
@@ -831,13 +831,13 @@ def plot_TWCTimeseries(obs_data,obs_dec,twcvar,twcstr,plots_out_dir, dates,  **a
     ###         Get cloud boundaries using lwc >= 0.1 g/m3
     ###----------------------------------------------------------------
     if ((pum==True) and (pmonc==True)):
-        obs_data,um_data,monc_data=get_CloudBoundaries(obs_data,um_data=um_data,monc_data=monc_data)
+        obs_data,um_data,monc_data=get_CloudBoundaries(obs_data=obs_data,um_data=um_data,monc_data=monc_data)
     elif (pum==True):
-        obs_data,um_data=get_CloudBoundaries(obs_data,um_data=um_data)
+        obs_data,um_data=get_CloudBoundaries(obs_data=obs_data,um_data=um_data)
     elif (pmonc==True):
-        obs_data,monc_data=get_CloudBoundaries(obs_data,monc_data=monc_data)
+        obs_data,monc_data=get_CloudBoundaries(obs_data=obs_data,monc_data=monc_data)
     else:
-        obs_data=get_CloudBoundaries(obs_data)
+        obs_data=get_CloudBoundaries(obs_data=obs_data)
 
 
     twc0 = np.transpose(obs_data[twcvar])*1e3
