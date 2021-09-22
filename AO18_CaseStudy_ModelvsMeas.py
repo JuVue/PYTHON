@@ -266,6 +266,7 @@ def plot_BLDepth_SMLDepth(obs_data, plot_out_dir, dates,**args ):
     ### -------------------------------
     fig = plt.figure(figsize=(10,12 ))
     plt.subplot(1,3,1)
+    ax = plt.gca()
     #yB = [-10, 120]
     lines=[]
     ax.fill_between(np.squeeze(obs_data['dec']['mday']),np.squeeze(obs_data['dec']['cbase_sandeep']),np.squeeze(obs_data['dec']['ct']), color = 'skyblue', alpha = 0.3)
@@ -1387,7 +1388,6 @@ def plot_tke_profiles_split(obs, plots_out_dir,dates,prof_time, **args): #, lon,
     lcolsmonc=['gold','darkgoldenrod','darkorange','orangered','firebrick']
     fcolsmonc=['navajowhite','goldenrod','moccasin','lightsalmon','lightcoral']
     ### define axis instance
-    embed()
     ####TKE WITHOUT OBSERVATIONS
     plt.figure(figsize=(18,8))
     plt.subplots_adjust(top = 0.8, bottom = 0.1, right = 0.92, left = 0.08)
