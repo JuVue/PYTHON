@@ -414,7 +414,7 @@ def plot_LWCTimeseries(obs_data,obs_dec,lwcvar,lwcstr, plots_out_dir, dates, **a
     obs_data['lwc'][obs_data['lwc'] <= 0] = np.nan
     obs_data['lwc_adiabatic'][obs_data['lwc_adiabatic'] <= 0] = np.nan
     obs_data['lwc_adiabatic_inc_nolwp'][obs_data['lwc_adiabatic_inc_nolwp'] <= 0] = np.nan
-
+    embed()
     ###----------------------------------------------------------------
     ###         Get cloud boundaries using lwc >= 0.1 g/m3
     ###----------------------------------------------------------------
@@ -3981,8 +3981,8 @@ def main():
     # -------------------------------------------------------------
     #figure = plot_CvTimeseries(obs_data,obs_dec,plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     figure = plot_LWCTimeseries(obs_data,obs_dec,  lwcvar,lwcstr, plots_out_dir, dates, um_data=um_data,label=label, outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    figure = plot_TWCTimeseries( obs_data,obs_dec, twcvar,twcstr, plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    figure = plot_IWCTimeseries(obs_data,obs_dec, plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    #figure = plot_TWCTimeseries( obs_data,obs_dec, twcvar,twcstr, plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    #figure = plot_IWCTimeseries(obs_data,obs_dec, plots_out_dir, dates,  um_data=um_data,label=label,outstr=outstr,monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_monc_comparison(obs_data,  lwcvar,lwcstr, plots_out_dir, dates, um_data=um_data,label=label, outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
 
