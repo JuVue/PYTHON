@@ -2662,7 +2662,6 @@ def main():
     #################################################################
     ### T profiles: hatpro, sondes
     ### wind profiles: halo, sondes
-
     embed()
     #interpolate hatpro data to monc_grid
     var_list_int = ['temperature','pottemp','rh', ]
