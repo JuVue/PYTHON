@@ -32,6 +32,10 @@ from manipFuncts import int2list
 
 def calc_TWC(thresholding, **args):
 
+    pmonc=False
+    pobs=False
+    pum=False
+
     if bool(args):
         for n in range(0,len(args)):
             if  list(args.keys())[n] == 'monc_data':
