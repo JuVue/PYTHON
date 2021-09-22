@@ -415,7 +415,7 @@ def plot_LWCTimeseries(obs_data,obs_dec,lwcvar,lwcstr, plots_out_dir, dates, **a
     obs_data['lwc_adiabatic'][obs_data['lwc_adiabatic'] <= 0] = np.nan
     obs_data['lwc_adiabatic_inc_nolwp'][obs_data['lwc_adiabatic_inc_nolwp'] <= 0] = np.nan
 
-   if pum==True:
+    if pum==True:
        for m in range(0,len(um_data)):
            um_data[m]['model_lwc'][um_data[m]['model_lwc'] <= 0.0] = np.nan
 
