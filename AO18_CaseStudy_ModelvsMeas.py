@@ -2671,8 +2671,8 @@ def main():
         interp_var = interp1d(np.squeeze(obs['hatpro_temp']['Z']), np.squeeze(np.transpose(obs['hatpro_temp'][var])))
         aint[:,2:] = interp_var(monc_height[2:])
         obs['hatpro_temp'][var]=aint
-        obs['hatpro_temp']['Z_org']=np.squeeze(obs['hatpro_temp']['Z'])
-        obs['hatpro_temp']['Z']= monc_height
+    obs['hatpro_temp']['Z_org']=np.squeeze(obs['hatpro_temp']['Z'])
+    obs['hatpro_temp']['Z']= monc_height
     #interpolate halo data to monc_grid
     var_list_int = ['ws','wd','u','v' ]
     monc_height=np.array(monc_data[0][monc_data[0]['zvar']['ws_mean']])
@@ -2681,8 +2681,8 @@ def main():
         interp_var = interp1d(np.squeeze(obs['halo']['height']), np.squeeze(obs['halo'][var]))
         aint[:,:] = interp_var(monc_height[:])
         obs['halo'][var]=aint
-        obs['halo']['height_org']=np.squeeze(obs['halo']['height'])
-        obs['halo']['height']= monc_height
+    obs['halo']['height_org']=np.squeeze(obs['halo']['height'])
+    obs['halo']['height']= monc_height
 
     #interpolate dissipation data to monc_grid
     ## done in plot_tke_profiles_split after quality control of the data
