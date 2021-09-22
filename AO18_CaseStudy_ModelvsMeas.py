@@ -250,7 +250,7 @@ def plot_BLDepth_SMLDepth(obs_data, plot_out_dir, dates,**args ):
     plt.rc('axes',labelsize=MED_SIZE)
     plt.rc('xtick',labelsize=MED_SIZE)
     plt.rc('ytick',labelsize=MED_SIZE)
-    plt.rc('legend',fontsize=MED_SIZE)
+    plt.rc('legend',fontsize=SMALL_SIZE)
     plt.subplots_adjust(top = 0.8, bottom = 0.05, right = 0.95, left = 0.05,
             hspace = 0.4, wspace = 0.17)
 
@@ -282,7 +282,7 @@ def plot_BLDepth_SMLDepth(obs_data, plot_out_dir, dates,**args ):
     llabels= ['Obs inv','OBS sml']
     llabels+=label
     llabels+=mlabel
-    fig.legend(lines,llabels, bbox_to_anchor=(0.1, 0.9, 1.8, .15),loc=3, ncol=4)
+    fig.legend(lines,llabels, bbox_to_anchor=(0.1, 0.9, 1.3, .1),loc=3, ncol=4)
     #plt.gca().add_artist(legend1)
     ax.set_xlim([dates[0], dates[1]])
     plt.grid(which='both')
