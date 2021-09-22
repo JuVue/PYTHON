@@ -252,7 +252,7 @@ def plot_BLDepth_SMLDepth(obs_data, plot_out_dir, dates,**args ):
     plt.rc('ytick',labelsize=MED_SIZE)
     plt.rc('legend',fontsize=SMALL_SIZE)
     plt.subplots_adjust(top = 0.8, bottom = 0.05, right = 0.95, left = 0.05,
-            hspace = 0.4, wspace = 0.17)
+            hspace = 0.4, wspace = 0.4)
 
     lcols=['lightseagreen','steelblue','royalblue','darkblue']
     fcols=['lightcyan','lightblue','skyblue','blue']
@@ -299,10 +299,10 @@ def plot_BLDepth_SMLDepth(obs_data, plot_out_dir, dates,**args ):
     #legend1=plt.legend(loc='best')
     for m in range(0,len(um_data)):
         #plt.plot(um_data[m]['time'], um_data[m]['bl_depth'], 'o',color = lcols[m], label = 'model bl')
-        lines+=plt.plot(um_data[m]['inv']['mday'], um_data[m]['inv']['decbase'],'-', linewidth=2,color = lcols[m], label = 'sml')
+        lines+=plt.plot(um_data[m]['inv']['mday'], um_data[m]['inv']['decbase'],'-x', linewidth=2,color = lcols[m], label = 'sml')
         #if m ==0: legend1=plt.legend(loc='best')
     for m in range(0,len(monc_data)):
-        lines+=plt.plot(monc_data[m]['inv']['mday'], monc_data[m]['inv']['decbase'],'-',linewidth=2, color = lcolsmonc[m], label = 'sml')
+        lines+=plt.plot(monc_data[m]['inv']['mday'], monc_data[m]['inv']['decbase'],'-x',linewidth=2, color = lcolsmonc[m], label = 'sml')
     plt.ylabel('Height [m]')
     ax.set_xlim([dates[0], dates[1]])
     plt.grid(which='both')
