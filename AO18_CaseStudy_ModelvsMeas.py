@@ -29,7 +29,7 @@ from time_functions import datenum2date, date2datenum, calcTime_Mat2DOY, calcTim
 from readMAT import readMatlabStruct
 from manipFuncts import intersect_mtlb
 from physFuncts import calcSH_mr, calcSH_wvp, calcvp,calcsvp,calcRH,calcDewPoint,calcP,windcomp2windvec
-from use_allCloudnetData_variable import calcTWC, get_CloudBoundaries
+from use_allCloudnetData_variable import calc_TWC, get_CloudBoundaries
 #from physFuncts import calcThetaE, calcThetaVL
 #from pyFixes import py3_FixNPLoad
 
