@@ -138,6 +138,79 @@ def calc_TWC(obs_data,thresholding, **args):
     else:
         return obs_data
 
+
+def get_CloudBoundaries(obs_data,thresholding, **args):
+
+    if bool(args):
+        for n in range(0,len(args)):
+            if  list(args.keys())[n] == 'monc_data':
+                monc_data=args[list(args.keys())[n]]
+                pmonc =True
+            elif  list(args.keys())[n] == 'um_data':
+                um_data=args[list(args.keys())[n]]
+                pum =True
+
+    ###----------------------------------------------------------------
+    ###         Get cloud boundaries using lwc >= 0.1 g/m3
+    ###----------------------------------------------------------------
+    obs_data['ctop_lwc0.1']=[]
+    obs_data['cbase_lwc0.1']=[]
+    for i in range(0,obs_data['lwc'].shape[0]):
+        id=next((x[0] for x in enumerate(obs_data['lwc'][i,:]) if x[1] >= 0.1*1e-3),np.nan)
+        if not np.isnan(id):
+            obs_data['cbase_lwc0.1']=np.append(obs_data['cbase_lwc0.1'],obs_data['height'][i,id])
+            ide=id-1+next((x[0] for x in enumerate(obs_data[lwcvar][i,id:]) if (x[1] < 0.1*1e-3 or np.isnan(x[1])) ),np.NaN)
+            obs_data['ctop_lwc0.1']=np.append(obs_data['ctop_lwc0.1'],obs_data['height'][i,ide] )
+        else:
+            obs_data['cbase_lwc0.1']=np.append(obs_data['cbase_lwc0.1'],np.nan)
+            obs_data['ctop_lwc0.1']=np.append(obs_data['ctop_lwc0.1'],np.nan )
+
+    if pum==True:
+        for m in range(0,len(um_data)):
+            um_data[m]['model_lwc'][um_data[m]['model_lwc'] <= 0.0] = np.nan
+            um_data[m]['cbase_lwc0.1']=[]
+            um_data[m]['ctop_lwc0.1']=[]
+            for i in range(0,um_data[m]['lwc'].shape[0]):
+                id=next((x[0] for x in enumerate(um_data[m]['model_lwc'][i,:]) if x[1] >= 0.1*1e-3),np.NaN)
+                if not np.isnan(id):
+                    um_data[m]['cbase_lwc0.1']=np.append(um_data[m]['cbase_lwc0.1'],um_data[m]['height'][i,id] )
+                    ide=id-1+next((x[0] for x in enumerate(um_data[m]['model_lwc'][i,id:])  if (x[1] < 0.1*1e-3 or np.isnan(x[1])) ),np.NaN)
+                    um_data[m]['ctop_lwc0.1']=np.append(um_data[m]['ctop_lwc0.1'],um_data[m]['height'][i,ide])
+                else:
+                    um_data[m]['cbase_lwc0.1']=np.append(um_data[m]['cbase_lwc0.1'],np.nan)
+                    um_data[m]['ctop_lwc0.1']=np.append(um_data[m]['ctop_lwc0.1'],np.nan )
+
+    if pmonc==True:
+        lwc_tvar=[]
+        lwc_zvar=[]
+        for m in range(0,len(monc_data)):
+            #monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
+            monc_data[m]['model_lwc']=monc_data[m]['lwc_tot_mean'].copy()
+            monc_data[m]['model_lwc'][monc_data[m]['model_lwc'] <= 0.0] = np.nan
+            lwc_tvar+=[monc_data[m]['tvar']['lwc_tot_mean']]
+            lwc_zvar+=[monc_data[m]['zvar']['lwc_tot_mean']]
+            monc_data[m]['cbase_lwc0.1']=[]
+            monc_data[m]['ctop_lwc0.1']=[]
+            for i in range(0,monc_data[m]['model_lwc'].shape[0]):
+                id=next((x[0] for x in enumerate(monc_data[m]['model_lwc'][i,:]) if x[1] >= 0.1*1e-3),np.NaN)
+                if not np.isnan(id):
+                    monc_data[m]['cbase_lwc0.1']=np.append(monc_data[m]['cbase_lwc0.1'],monc_data[m][lwc_zvar[m]][id] )
+                    # ide=id-1+next((x[0] for x in enumerate(monc_data[m]['model_lwc'][i,id:])  if np.isnan(x[1])),np.NaN)
+                    ide=id-1+next((x[0] for x in enumerate(monc_data[m]['model_lwc'][i,id:]) if (x[1] < 0.1*1e-3 or np.isnan(x[1])) ),np.NaN)
+                    monc_data[m]['ctop_lwc0.1']=np.append(monc_data[m]['ctop_lwc0.1'],monc_data[m][lwc_zvar[m]][ide])
+                else:
+                    monc_data[m]['cbase_lwc0.1']=np.append(monc_data[m]['cbase_lwc0.1'],np.nan)
+                    monc_data[m]['ctop_lwc0.1']=np.append(monc_data[m]['ctop_lwc0.1'],np.nan )
+
+    if ((pum==True) and (pmonc==True)):
+        return obs_data,um_data,monc_data
+    elif (pum==True):
+        return obs_data,um_data
+    elif (pmonc==True):
+        return obs_data,monc_data
+    else:
+        return obs_data
+
 def plot_CvTimeseries(obs_data,obs_dec, plots_out_dir,dates,  **args):
 
     numsp=1
@@ -278,9 +351,9 @@ def plot_CvTimeseries(obs_data,obs_dec, plots_out_dir,dates,  **args):
 
     dstr=datenum2date(dates[1])
     if pmonc==True:
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + 'CvTimeseries.png'
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_' +'_'.join(moutstr) + '_CvTimeseries.png'
     else:
-        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + 'CvTimeseries.png'
+        fileout = plots_out_dir + dstr.strftime('%Y%m%d') + '_Obs-UMGrid_' + '_'.join(outstr) + '_CvTimeseries.png'
     print(fileout)
     plt.savefig(fileout)
 
@@ -341,57 +414,71 @@ def plot_LWCTimeseries(obs_data,obs_dec,lwcvar,lwcstr, plots_out_dir, dates, **a
     obs_data['lwc'][obs_data['lwc'] <= 0] = np.nan
     obs_data['lwc_adiabatic'][obs_data['lwc_adiabatic'] <= 0] = np.nan
     obs_data['lwc_adiabatic_inc_nolwp'][obs_data['lwc_adiabatic_inc_nolwp'] <= 0] = np.nan
-    obs_data['ctop_lwc0.1']=[]
-    obs_data['cbase_lwc0.1']=[]
-    for i in range(0,obs_data['lwc'].shape[0]):
-        id=next((x[0] for x in enumerate(obs_data[lwcvar][i,:]) if x[1] >= 0.1*1e-3),np.nan)
-        if not np.isnan(id):
-            obs_data['cbase_lwc0.1']=np.append(obs_data['cbase_lwc0.1'],obs_data['height'][i,id])
-#            ide=id-1+next((x[0] for x in enumerate(obs_data[lwcvar][i,id:]) if np.isnan(x[1])),np.NaN)
-            ide=id-1+next((x[0] for x in enumerate(obs_data[lwcvar][i,id:]) if (x[1] < 0.1*1e-3 or np.isnan(x[1])) ),np.NaN)
-            obs_data['ctop_lwc0.1']=np.append(obs_data['ctop_lwc0.1'],obs_data['height'][i,ide] )
-        else:
-            obs_data['cbase_lwc0.1']=np.append(obs_data['cbase_lwc0.1'],np.nan)
-            obs_data['ctop_lwc0.1']=np.append(obs_data['ctop_lwc0.1'],np.nan )
+
+    ###----------------------------------------------------------------
+    ###         Get cloud boundaries using lwc >= 0.1 g/m3
+    ###----------------------------------------------------------------
+    if ((pum==True) and (pmonc==True)):
+        obs_data,um_data,monc_data=get_CloudBoundaries(obs_data,um_data==um_data,monc_data==monc_data)
+    elif (pum==True):
+        obs_data,um_data=get_CloudBoundaries(obs_data,um_data==um_data)
+    elif (pmonc==True):
+        obs_data,monc_data=get_CloudBoundaries(obs_data,monc_data==monc_data)
+    else:
+        obs_data=get_CloudBoundaries(obs_data)
 
 
-    if pum==True:
-        for m in range(0,len(um_data)):
-            um_data[m]['model_lwc'][um_data[m]['model_lwc'] <= 0.0] = np.nan
-            um_data[m]['cbase_lwc0.1']=[]
-            um_data[m]['ctop_lwc0.1']=[]
-            for i in range(0,um_data[m]['lwc'].shape[0]):
-                id=next((x[0] for x in enumerate(um_data[m]['model_lwc'][i,:]) if x[1] >= 0.1*1e-3),np.NaN)
-                if not np.isnan(id):
-                    um_data[m]['cbase_lwc0.1']=np.append(um_data[m]['cbase_lwc0.1'],um_data[m]['height'][i,id] )
-                    #ide=id-1+next((x[0] for x in enumerate(um_data[m]['model_lwc'][i,id:])  if np.isnan(x[1])),np.NaN)
-                    ide=id-1+next((x[0] for x in enumerate(um_data[m]['model_lwc'][i,id:])  if (x[1] < 0.1*1e-3 or np.isnan(x[1])) ),np.NaN)
-                    um_data[m]['ctop_lwc0.1']=np.append(um_data[m]['ctop_lwc0.1'],um_data[m]['height'][i,ide])
-                else:
-                    um_data[m]['cbase_lwc0.1']=np.append(um_data[m]['cbase_lwc0.1'],np.nan)
-                    um_data[m]['ctop_lwc0.1']=np.append(um_data[m]['ctop_lwc0.1'],np.nan )
 
-    if pmonc==True:
-        lwc_tvar=[]
-        lwc_zvar=[]
-        for m in range(0,len(monc_data)):
-            #monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
-            monc_data[m]['model_lwc']=monc_data[m]['lwc_tot_mean'].copy()
-            monc_data[m]['model_lwc'][monc_data[m]['model_lwc'] <= 0.0] = np.nan
-            lwc_tvar+=[monc_data[m]['tvar']['lwc_tot_mean']]
-            lwc_zvar+=[monc_data[m]['zvar']['lwc_tot_mean']]
-            monc_data[m]['cbase_lwc0.1']=[]
-            monc_data[m]['ctop_lwc0.1']=[]
-            for i in range(0,monc_data[m]['model_lwc'].shape[0]):
-                id=next((x[0] for x in enumerate(monc_data[m]['model_lwc'][i,:]) if x[1] >= 0.1*1e-3),np.NaN)
-                if not np.isnan(id):
-                    monc_data[m]['cbase_lwc0.1']=np.append(monc_data[m]['cbase_lwc0.1'],monc_data[m][lwc_zvar[m]][id] )
-                    # ide=id-1+next((x[0] for x in enumerate(monc_data[m]['model_lwc'][i,id:])  if np.isnan(x[1])),np.NaN)
-                    ide=id-1+next((x[0] for x in enumerate(monc_data[m]['model_lwc'][i,id:]) if (x[1] < 0.1*1e-3 or np.isnan(x[1])) ),np.NaN)
-                    monc_data[m]['ctop_lwc0.1']=np.append(monc_data[m]['ctop_lwc0.1'],monc_data[m][lwc_zvar[m]][ide])
-                else:
-                    monc_data[m]['cbase_lwc0.1']=np.append(monc_data[m]['cbase_lwc0.1'],np.nan)
-                    monc_data[m]['ctop_lwc0.1']=np.append(monc_data[m]['ctop_lwc0.1'],np.nan )
+#     obs_data['ctop_lwc0.1']=[]
+#     obs_data['cbase_lwc0.1']=[]
+#     for i in range(0,obs_data['lwc'].shape[0]):
+#         id=next((x[0] for x in enumerate(obs_data[lwcvar][i,:]) if x[1] >= 0.1*1e-3),np.nan)
+#         if not np.isnan(id):
+#             obs_data['cbase_lwc0.1']=np.append(obs_data['cbase_lwc0.1'],obs_data['height'][i,id])
+# #            ide=id-1+next((x[0] for x in enumerate(obs_data[lwcvar][i,id:]) if np.isnan(x[1])),np.NaN)
+#             ide=id-1+next((x[0] for x in enumerate(obs_data[lwcvar][i,id:]) if (x[1] < 0.1*1e-3 or np.isnan(x[1])) ),np.NaN)
+#             obs_data['ctop_lwc0.1']=np.append(obs_data['ctop_lwc0.1'],obs_data['height'][i,ide] )
+#         else:
+#             obs_data['cbase_lwc0.1']=np.append(obs_data['cbase_lwc0.1'],np.nan)
+#             obs_data['ctop_lwc0.1']=np.append(obs_data['ctop_lwc0.1'],np.nan )
+#
+#     if pum==True:
+#         for m in range(0,len(um_data)):
+#             um_data[m]['model_lwc'][um_data[m]['model_lwc'] <= 0.0] = np.nan
+#             um_data[m]['cbase_lwc0.1']=[]
+#             um_data[m]['ctop_lwc0.1']=[]
+#             for i in range(0,um_data[m]['lwc'].shape[0]):
+#                 id=next((x[0] for x in enumerate(um_data[m]['model_lwc'][i,:]) if x[1] >= 0.1*1e-3),np.NaN)
+#                 if not np.isnan(id):
+#                     um_data[m]['cbase_lwc0.1']=np.append(um_data[m]['cbase_lwc0.1'],um_data[m]['height'][i,id] )
+#                     #ide=id-1+next((x[0] for x in enumerate(um_data[m]['model_lwc'][i,id:])  if np.isnan(x[1])),np.NaN)
+#                     ide=id-1+next((x[0] for x in enumerate(um_data[m]['model_lwc'][i,id:])  if (x[1] < 0.1*1e-3 or np.isnan(x[1])) ),np.NaN)
+#                     um_data[m]['ctop_lwc0.1']=np.append(um_data[m]['ctop_lwc0.1'],um_data[m]['height'][i,ide])
+#                 else:
+#                     um_data[m]['cbase_lwc0.1']=np.append(um_data[m]['cbase_lwc0.1'],np.nan)
+#                     um_data[m]['ctop_lwc0.1']=np.append(um_data[m]['ctop_lwc0.1'],np.nan )
+#
+#     if pmonc==True:
+#         lwc_tvar=[]
+#         lwc_zvar=[]
+#         for m in range(0,len(monc_data)):
+#             #monc_data[m]['model_lwc']= monc_data[m]['liquid_mmr_mean']*monc_data[m]['rho']
+#             monc_data[m]['model_lwc']=monc_data[m]['lwc_tot_mean'].copy()
+#             monc_data[m]['model_lwc'][monc_data[m]['model_lwc'] <= 0.0] = np.nan
+#             lwc_tvar+=[monc_data[m]['tvar']['lwc_tot_mean']]
+#             lwc_zvar+=[monc_data[m]['zvar']['lwc_tot_mean']]
+#             monc_data[m]['cbase_lwc0.1']=[]
+#             monc_data[m]['ctop_lwc0.1']=[]
+#             for i in range(0,monc_data[m]['model_lwc'].shape[0]):
+#                 id=next((x[0] for x in enumerate(monc_data[m]['model_lwc'][i,:]) if x[1] >= 0.1*1e-3),np.NaN)
+#                 if not np.isnan(id):
+#                     monc_data[m]['cbase_lwc0.1']=np.append(monc_data[m]['cbase_lwc0.1'],monc_data[m][lwc_zvar[m]][id] )
+#                     # ide=id-1+next((x[0] for x in enumerate(monc_data[m]['model_lwc'][i,id:])  if np.isnan(x[1])),np.NaN)
+#                     ide=id-1+next((x[0] for x in enumerate(monc_data[m]['model_lwc'][i,id:]) if (x[1] < 0.1*1e-3 or np.isnan(x[1])) ),np.NaN)
+#                     monc_data[m]['ctop_lwc0.1']=np.append(monc_data[m]['ctop_lwc0.1'],monc_data[m][lwc_zvar[m]][ide])
+#                 else:
+#                     monc_data[m]['cbase_lwc0.1']=np.append(monc_data[m]['cbase_lwc0.1'],np.nan)
+#                     monc_data[m]['ctop_lwc0.1']=np.append(monc_data[m]['ctop_lwc0.1'],np.nan )
 
     print ('******')
     print ('')
@@ -752,6 +839,8 @@ def plot_TWCTimeseries(obs_data,obs_dec,twcvar,twcstr,plots_out_dir, dates,  **a
     obs_data['twc'] = obs_data['lwc'] + obs_data['iwc']
     obs_data['twc_ad'] = obs_data['lwc_adiabatic'] + obs_data['iwc']
     obs_data['twc_ad_nolwp'] = obs_data['lwc_adiabatic_inc_nolwp'] + obs_data['iwc']
+
+
     obs_data['lwc'][obs_data['lwc'] <= 0] = np.nan
     obs_data['ctop_lwc0.1']=[]
     obs_data['cbase_lwc0.1']=[]
