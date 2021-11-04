@@ -2162,7 +2162,7 @@ def main():
                '26_u-cd847_RA1M_CASIM/',
                '27_u-ce112_RA1M_CASIM/'
               ]
-#    out_dir = [  '30_u-cg179_RA1M_CASIM/' ]
+    out_dir = [  '30_u-cg179_RA1M_CASIM/' ]
     ### CHOOSE MONC RUNS
     m_out_dir =[#'22_control_20180913T0000Z_qinit2-800m_rand-800m_thForcing-0000-0600_12hTim/'
                 # '27C_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper/',
@@ -2170,7 +2170,8 @@ def main():
                 # '27E_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd10/',
                 # '27F_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd5/',
                 '30A_20180913T0000Z_8hSpinUp_8-14hUVRelax0600_14-24hUVRelax1200_8-24h0.1Cooper_FixedNd10/'
-                ]
+                '33A-2_20180913T0000Z_8hSpinUp_0.1Cooper_FixedNd10_timevarTurbFluxes',
+                '33A_20180913T0000Z_8hSpinUp_0.1Cooper_FixedNd10_timevarTurbFluxes']
     # m_out_dir = ['5_control_20180913T0000Z_Wsub-1.5_Fletcher/',
     #             '6_control_20180913T0000Z_Wsub-1.5-1km/',
     #             '7_20180913T0000Z_Wsub-1.5-1km_solAccum-100_inuc-0_iact-3/']
@@ -2188,7 +2189,7 @@ def main():
 
     #---- MONC SPIN UP TIME
     spin6 = ['26']
-    spin8 = ['27','28','29','30']
+    spin8 = ['27','28','29','30','33']
 
     if m_out_dir[0][:2] in spin6:
         monc_spin = 6 *60 *60
@@ -2639,6 +2640,12 @@ def main():
         elif m_out_dir[m][:3] == '30A':
             mlabel.append('MONC_0.1Cooper \n UVRelax FixedNd10')
             moutstr.append('MONC-30A')
+        elif m_out_dir[m][:3] == '33A':
+            mlabel.append('MONC_0.1Cooper \n timevarTurbFluxes FixedNd10')
+            moutstr.append('MONC-33A')
+        elif m_out_dir[m][:5] == '33A-2':
+            mlabel.append('MONC_0.1Cooper \n timevarTurbFluxes FixedNd10')
+            moutstr.append('MONC-33A-2')
         else:
             label.append('undefined_label')
             moutstr.append('')
@@ -2681,15 +2688,15 @@ def main():
     # -------------------------------------------------------------
     #figure = plot_surfaceVariables(obs,plot_out_dir, dates, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     #figure = plot_lwp(obs,plot_out_dir, dates, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    #figure = plot_T_profiles_split(obs,plots_out_dir,dates, prof_time,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    #figure = plot_q_profiles_split(obs,plots_out_dir,dates, prof_time,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    #figure = plot_wind_profiles_split(obs,plots_out_dir,dates, prof_time,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    #figure = plot_tke_profiles_split(obs,plots_out_dir,dates, prof_time,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    #figure = plot_Theta_profiles_split(obs,plots_out_dir,dates, prof_time,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_T_profiles_split(obs,plots_out_dir,dates, prof_time,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_q_profiles_split(obs,plots_out_dir,dates, prof_time,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_wind_profiles_split(obs,plots_out_dir,dates, prof_time,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_tke_profiles_split(obs,plots_out_dir,dates, prof_time,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_Theta_profiles_split(obs,plots_out_dir,dates, prof_time,um_data=um_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
     figure = plot_BLDepth_SMLDepth(obs,plot_out_dir, dates, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    #figure = plot_T_Timeseries(obs,plot_out_dir, dates,prof_time, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    #figure = plot_Theta_Timeseries(obs,plot_out_dir, dates,prof_time, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    #figure = plot_q_Timeseries(obs,plot_out_dir, dates,prof_time, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_T_Timeseries(obs,plot_out_dir, dates,prof_time, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_Theta_Timeseries(obs,plot_out_dir, dates,prof_time, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = plot_q_Timeseries(obs,plot_out_dir, dates,prof_time, um_data=um_data,label=label,outstr=outstr, monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
 
 
