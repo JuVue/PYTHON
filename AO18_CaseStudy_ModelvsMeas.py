@@ -2169,9 +2169,8 @@ def main():
                 # '27D_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd25/',
                 # '27E_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd10/',
                 # '27F_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd5/',
-                '30A_20180913T0000Z_8hSpinUp_8-14hUVRelax0600_14-24hUVRelax1200_8-24h0.1Cooper_FixedNd10/'
-                '33A-2_20180913T0000Z_8hSpinUp_0.1Cooper_FixedNd10_timevarTurbFluxes',
-                '33A_20180913T0000Z_8hSpinUp_0.1Cooper_FixedNd10_timevarTurbFluxes']
+                #'30A_20180913T0000Z_8hSpinUp_8-14hUVRelax0600_14-24hUVRelax1200_8-24h0.1Cooper_FixedNd10/'
+                '33A-2_20180913T0000Z_8hSpinUp_0.1Cooper_FixedNd10_timevarTurbFluxes']
     # m_out_dir = ['5_control_20180913T0000Z_Wsub-1.5_Fletcher/',
     #             '6_control_20180913T0000Z_Wsub-1.5-1km/',
     #             '7_20180913T0000Z_Wsub-1.5-1km_solAccum-100_inuc-0_iact-3/']
