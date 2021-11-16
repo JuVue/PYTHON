@@ -107,7 +107,7 @@ def calc_TWC(thresholding, **args):
                     if obs_data['twc_ad_nolwp'][t,k] < twc_thresh_um[k]:
                         obs_data['twc_ad_nolwp'][t,k] = np.nan
                         obs_data['lwc_adiabatic_inc_nolwp'][t,k] = np.nan
-
+        embed()
         if pum==True:
             m=0 # use first um model run for height grid definition
             twc_thresh_um = np.zeros([np.size(um_data[m]['model_twc'],1)])
