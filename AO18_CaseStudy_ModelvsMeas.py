@@ -2463,7 +2463,7 @@ def main():
     print (obs['hatpro_temp'].keys())
     for var in obs['hatpro_temp'].keys():
         obs['hatpro_temp'][var]=np.squeeze(obs['hatpro_temp'][var])
-        obs['hatpro_temp'][var]=np.transpose(obs['hatpro_temp'][var])
+    #    obs['hatpro_temp'][var]=np.transpose(obs['hatpro_temp'][var])
 
     #print ('Load albedo estimates from Michael...')
     #obs['albedo'] = readMatlabStruct(obs_albedo_dir + 'MOCCHA_Albedo_estimates_Michael.mat')
@@ -2659,6 +2659,7 @@ def main():
     ### T profiles: hatpro, sondes
     ### wind profiles: halo, sondes
     #interpolate hatpro data to monc_grid
+    embed()
     var_list_int = ['temperature','pottemp','rh']
     monc_height=np.array(monc_data[0][monc_data[0]['zvar']['T_mean']])
     for var in var_list_int:
