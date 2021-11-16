@@ -3451,7 +3451,6 @@ def main():
         fname=glob.glob(monc_avg_dir + m_out_dir[m] +'3d*npy')
         monc_3d_filename.append(fname)
 
-    embed()
     ### -----------------------------------------------------------------
     ### CHOSEN RUN - CLOUDNET DATA
     cn_um_out_dir = ['cloud-fraction-metum-grid/2018/',
@@ -3689,7 +3688,6 @@ def main():
                         # 'q_graupel_mass_mean', 'iwc_tot_mean', 'lwc_tot_mean', 'twc_tot_mean', 'zvar', 'tvar']
     ncm = {}
     monc_data = {}
-    embed()
     for m in range(0, len(m_out_dir)):
         for n in range(0, len(monc_filename[m])):
             print(monc_filename[m][n])
