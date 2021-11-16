@@ -3693,11 +3693,13 @@ def main():
             print(monc_filename[m][n])
             ncm = Dataset(monc_filename[m][n],'r')
             if n == 0:
+                print('assigning zvar')
                 monc_data[m]={}
                 zvar={}
                 tvar={}
             full_var_list=[]
             time_var_list=[]
+            embed()
             for var in ncm.variables:
                 if 'time' in str(var):
                     print(var)
@@ -3708,6 +3710,7 @@ def main():
                 for j in range(0,len(full_var_list[c])):
                     var = full_var_list[c][j]
                     if n == 0:
+
                         monc_data[m][var] = ncm.variables[var][:]
                         zvar[var]=[]
                         tvar[var]=[]
