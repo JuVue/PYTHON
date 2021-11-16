@@ -111,9 +111,9 @@ def calc_TWC(thresholding, **args):
         if pum==True:
             m=0 # use first um model run for height grid definition
             twc_thresh_um = np.zeros([np.size(um_data[m]['model_twc'],1)])
-            um_lt1km = np.where(um_data[m]['height'][:]<=1e3)
+            um_lt1km = np.where(um_data[m]['height'][0,:]<=1e3)
             twc_thresh_um[um_lt1km] = 1e-6
-            um_lt1km = np.where(um_data[m]['height'][:]>=4e3)
+            um_lt1km = np.where(um_data[m]['height'][0,:]>=4e3)
             twc_thresh_um[um_lt1km] = 1e-7
             um_intZs = np.where(twc_thresh_um == 0.0)
 
