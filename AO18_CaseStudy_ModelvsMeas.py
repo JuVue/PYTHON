@@ -2666,7 +2666,7 @@ def main():
         aint = np.ones((obs['hatpro_temp'][var].shape[1],monc_height.shape[0]))*np.NaN
         interp_var = interp1d(np.squeeze(obs['hatpro_temp']['Z']), np.squeeze(np.transpose(obs['hatpro_temp'][var])))
         aint[:,2:] = interp_var(monc_height[2:])
-        obs['hatpro_temp'][var]=aint
+        obs['hatpro_temp'][var]=np.transpose(aint)
     obs['hatpro_temp']['Z_org']=np.squeeze(obs['hatpro_temp']['Z'])
     obs['hatpro_temp']['Z']= monc_height
     #interpolate halo data to monc_grid
