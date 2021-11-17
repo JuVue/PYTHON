@@ -2716,7 +2716,7 @@ def UM_MONC_Nisg(obs_data, lwcvar, lwcstr, plots_out_dir, dates, prof_time, **ar
         plt.colorbar()
         if pmonc==True:
             ax2 = ax1.twinx()
-            plt.plot(nisg_tvar[0],monc_data[0]['nisg_tot_mean']*1e3, color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
+            plt.plot(monc_data[0][nisg_tvar[0]],monc_data[0]['nisg_tot_mean']*1e3, color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
             ax2.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
             ax2.xaxis.set_major_locator(mdates.HourLocator(interval=2))
             ax2.xaxis.set_major_formatter(mdates.DateFormatter('%H%M'))
