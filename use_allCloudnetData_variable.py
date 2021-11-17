@@ -3874,8 +3874,8 @@ def main():
     # -------------------------------------------------------------
     # UM Checks
     # -------------------------------------------------------------
-    # figure = UM_SanityCheck(obs_data, lwcvar, lwcstr, plots_out_dir,dates, prof_times,um_data=um_data,raw_data=raw_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
-    # figure = UM_MONC_Nisg(obs_data, lwcvar, lwcstr, plots_out_dir,dates, prof_times,um_data=um_data,raw_data=raw_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = UM_SanityCheck(obs_data, lwcvar, lwcstr, plots_out_dir,dates, prof_times,um_data=um_data,raw_data=raw_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
+    figure = UM_MONC_Nisg(obs_data, lwcvar, lwcstr, plots_out_dir,dates, prof_times,um_data=um_data,raw_data=raw_data,label=label,outstr=outstr,  monc_data=monc_data,mlabel=mlabel,moutstr=moutstr)
 
     # -------------------------------------------------------------
     # plot LWP timeseries
