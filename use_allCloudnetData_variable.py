@@ -2716,7 +2716,6 @@ def UM_MONC_Nisg(obs_data, lwcvar, lwcstr, plots_out_dir, dates, prof_time, **ar
         plt.colorbar()
         if pmonc==True:
             ax2 = ax1.twinx()
-            embed()
             plt.plot(monc_data[0][nisg_tvar[0]],monc_data[0]['nisg_tot_mean']*1e3, color = lcolsmonc[m], linewidth = 3, label = mlabel[m], zorder = 1)
             ax2.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
             ax2.xaxis.set_major_locator(mdates.HourLocator(interval=2))
@@ -3278,6 +3277,7 @@ def main():
                 '26_u-cd847_RA1M_CASIM/',
                 '27_u-ce112_RA1M_CASIM/',
                ]
+    out_dir = []'30_u-cg179_RA1M_CASIM/']
 
     # out_dir = ['23_u-cc278_RA1M_CASIM/']
     ### CHOOSE MONC RUNS
@@ -3298,7 +3298,7 @@ def main():
                # '27D_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd25/',
                #'27E_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd10/',
                #'27F_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_FixedNd5/',
-               '30A_20180913T0000Z_8hSpinUp_8-14hUVRelax0600_14-24hUVRelax1200_8-24h0.1Cooper_FixedNd10/',
+               #'30A_20180913T0000Z_8hSpinUp_8-14hUVRelax0600_14-24hUVRelax1200_8-24h0.1Cooper_FixedNd10/',
                '33A-2_20180913T0000Z_8hSpinUp_0.1Cooper_FixedNd10_timevarTurbFluxes/',
                # '28A_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_AccumSolAero-CASIM-100-ARG/',
                # '28B_20180913T0000Z_8hSpinUp_14h0600-0000thTend_24h1200-0600thTend_8-24h0.1Cooper_AccumSolAero-CASIM-100-Twomey/'
