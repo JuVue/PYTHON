@@ -3277,7 +3277,7 @@ def main():
                 '26_u-cd847_RA1M_CASIM/',
                 '27_u-ce112_RA1M_CASIM/',
                ]
-    out_dir = []'30_u-cg179_RA1M_CASIM/']
+    out_dir = ['30_u-cg179_RA1M_CASIM/']
 
     # out_dir = ['23_u-cc278_RA1M_CASIM/']
     ### CHOOSE MONC RUNS
